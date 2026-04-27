@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAVA Gourmet | Vino, Gastronomía y Experiencias Sensoriales en Costa Rica</title>
+  <meta name="description" content="CAVA Gourmet es un ecosistema en Costa Rica dedicado al vino, la gastronomía, las catas privadas, el After Office y las experiencias sensoriales curadas por Nazareth Padilla." />
+  <meta name="theme-color" content="#18344F" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ivory: #F3E8D5;
+      --champagne: #D8C8AE;
+      --gold: #B8975A;
+      --gold-soft: #D4B47A;
+      --charcoal: #111111;
+      --carbon: #080808;
+      --midnight: #18344F;
+      --midnight-deep: #0E2236;
+      --soft-silver: #C8C2BB;
+      --ink: #221F1A;
+      --muted: #746A5E;
+
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-editorial: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Jost', Arial, sans-serif;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+      --ease-soft: cubic-bezier(.25, .46, .45, .94);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ivory);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: .25;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+    }
+
+    a { color: inherit; }
+
+    .cursor-dot,
+    .cursor-ring {
+      position: fixed;
+      left: 0;
+      top: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1200;
+      transform: translate(-50%, -50%);
+      display: none;
+    }
+
+    .cursor-dot { width: 5px; height: 5px; background: var(--gold); }
+    .cursor-ring { width: 34px; height: 34px; border: 1px solid rgba(184,151,90,.65); transition: width .25s, height .25s, opacity .25s; }
+    .cursor-ring.is-active { width: 54px; height: 54px; opacity: .85; }
+
+    @media (hover:hover) and (pointer:fine) {
+      body { cursor: none; }
+      a, button { cursor: none; }
+      .cursor-dot, .cursor-ring { display: block; }
+    }
+
+    .monogram {
+      width: 42px;
+      height: 42px;
+      display: inline-grid;
+      place-items: center;
+      color: var(--gold);
+      border: 1px solid rgba(184,151,90,.45);
+      border-radius: 50%;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    .monogram::before { content: "✥"; transform: translateY(-1px); }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 950;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.6rem clamp(1.25rem, 4vw, 4rem);
+      transition: all .5s var(--ease-soft);
+    }
+
+    nav.scrolled {
+      background: rgba(243,232,213,.9);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(184,151,90,.22);
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .brandmark {
+      display: inline-flex;
+      align-items: center;
+      gap: .9rem;
+      text-decoration: none;
+      color: var(--charcoal);
+    }
+
+    .brandmark-text {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: currentColor;
+      white-space: nowrap;
+    }
+
+    .brandmark-text span { color: var(--gold); }
+
+    .nav-links { list-style: none; display: flex; align-items: center; gap: 2.3rem; }
+    .nav-links a,
+    .nav-cta {
+      font-size: .68rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: rgba(17,17,17,.68);
+      transition: color .25s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      color: var(--charcoal);
+      border: 1px solid rgba(184,151,90,.75);
+      padding: .72rem 1.35rem;
+    }
+    .nav-cta:hover { color: var(--ivory); background: var(--gold); }
+
+    .hamburger { display: none; width: 42px; height: 42px; border: 1px solid rgba(184,151,90,.35); background: transparent; align-items: center; justify-content: center; }
+    .hamburger span, .hamburger span::before, .hamburger span::after { display:block; width:18px; height:1px; background: var(--charcoal); position:relative; transition:.3s; }
+    .hamburger span::before, .hamburger span::after { content:""; position:absolute; left:0; }
+    .hamburger span::before { top:-6px; }
+    .hamburger span::after { top:6px; }
+
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      background: var(--carbon);
+      color: var(--ivory);
+      display: grid;
+      place-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: .35s var(--ease-soft);
+    }
+    .mobile-menu.open { opacity: 1; visibility: visible; }
+    .mobile-menu ul { list-style:none; text-align:center; display:grid; gap:1.4rem; }
+    .mobile-menu a { font-family:var(--font-display); font-size:clamp(2rem, 10vw, 4rem); font-style:italic; text-decoration:none; color:var(--ivory); }
+
+    section { position: relative; }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+      font-size: .62rem;
+      font-weight: 400;
+      letter-spacing: .34em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .section-label::before { content:""; width: 32px; height: 1px; background: currentColor; }
+
+    #hero {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      background: var(--charcoal);
+      color: var(--ivory);
+      overflow: hidden;
+      padding: 10rem clamp(1.4rem, 5vw, 5rem) 6rem;
+    }
+
+    .hero-bg {
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(90deg, rgba(8,8,8,.95), rgba(8,8,8,.72) 45%, rgba(24,52,79,.36)),
+        radial-gradient(circle at 78% 42%, rgba(184,151,90,.22), transparent 32%),
+        linear-gradient(145deg, var(--charcoal), var(--midnight-deep));
+    }
+
+    .hero-bg::before {
+      content:"";
+      position:absolute;
+      right: clamp(-90px, -7vw, -20px);
+      top: 50%;
+      width: min(58vw, 760px);
+      aspect-ratio: 1;
+      transform: translateY(-50%);
+      border: 1px solid rgba(184,151,90,.14);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184,151,90,.05), transparent 62%);
+    }
+
+    .hero-bg::after {
+      content:"✥";
+      position:absolute;
+      right: 8vw;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-display);
+      font-size: clamp(14rem, 32vw, 32rem);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(216,200,174,.14);
+      opacity: .9;
+      line-height: 1;
+    }
+
+    .hero-inner { position: relative; z-index: 2; width: min(1300px, 100%); }
+    .hero-kicker { font-size:.65rem; letter-spacing:.36em; text-transform:uppercase; color:var(--gold-soft); margin-bottom:2rem; opacity:0; animation: fadeUp .9s var(--ease) .15s forwards; }
+    .hero-title { font-family: var(--font-display); font-size: clamp(4.6rem, 13vw, 12rem); font-weight:400; line-height:.88; letter-spacing:-.035em; opacity:0; animation: fadeUp 1s var(--ease) .3s forwards; }
+    .hero-title em { display:block; color: var(--champagne); font-style:italic; }
+    .hero-copy { margin-top:2rem; max-width: 570px; font-family: var(--font-editorial); font-size: clamp(1.15rem, 2vw, 1.65rem); font-style: italic; line-height:1.5; color: rgba(243,232,213,.7); opacity:0; animation: fadeUp 1s var(--ease) .5s forwards; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:1rem; margin-top:3rem; opacity:0; animation: fadeUp 1s var(--ease) .7s forwards; }
+
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height: 52px;
+      padding: .95rem 1.7rem;
+      text-decoration:none;
+      font-size:.65rem;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      transition:.35s var(--ease-soft);
+    }
+    .btn-primary { color:var(--charcoal); background: var(--gold); border:1px solid var(--gold); }
+    .btn-primary:hover { background: var(--gold-soft); border-color:var(--gold-soft); }
+    .btn-secondary { color:var(--ivory); border:1px solid rgba(243,232,213,.28); }
+    .btn-secondary:hover { border-color:var(--gold); color:var(--gold-soft); }
+
+    .scroll-mark { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); color:rgba(216,200,174,.48); font-size:.57rem; letter-spacing:.3em; text-transform:uppercase; writing-mode:vertical-rl; }
+
+    .container { width:min(1300px, 100%); margin-inline:auto; padding-inline: clamp(1.4rem, 5vw, 5rem); }
+
+    #brand { padding: 8rem 0; background: var(--ivory); overflow:hidden; }
+    #brand::before { content:"CAVA"; position:absolute; left:-5vw; top:50%; transform:translateY(-50%); font-family:var(--font-display); font-size:clamp(8rem, 22vw, 23rem); font-weight:700; color:transparent; -webkit-text-stroke:1px rgba(184,151,90,.09); pointer-events:none; }
+    .brand-grid { display:grid; grid-template-columns: 1.02fr .98fr; gap: clamp(3rem, 7vw, 8rem); align-items:center; }
+    .h2 { font-family:var(--font-display); font-size:clamp(2.5rem, 5vw, 5rem); font-weight:400; line-height:1.04; letter-spacing:-.03em; color:var(--charcoal); }
+    .h2 em { font-style:italic; color:var(--gold); }
+    .lead { margin-top:2rem; font-family:var(--font-editorial); font-size:1.22rem; color:var(--muted); line-height:1.85; }
+    .pillars { margin-top:3rem; border-top:1px solid rgba(184,151,90,.2); }
+    .pillar { display:grid; grid-template-columns: 44px 1fr auto; align-items:center; gap:1rem; padding:1.2rem 0; border-bottom:1px solid rgba(184,151,90,.2); }
+    .pillar small { font-family:var(--font-editorial); color:var(--gold); letter-spacing:.15em; }
+    .pillar span { font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink); }
+    .pillar i { font-style:normal; color:var(--gold); }
+
+    .quote-card { position:relative; min-height:540px; background:var(--charcoal); color:var(--ivory); padding: clamp(2rem, 5vw, 4rem); display:flex; align-items:flex-end; overflow:hidden; }
+    .quote-card::before { content:"✥"; position:absolute; top:7%; right:7%; font-size:18rem; color:transparent; -webkit-text-stroke:1px rgba(216,200,174,.13); line-height:1; }
+    .quote-card::after { content:""; position:absolute; inset:0; background: radial-gradient(circle at 70% 28%, rgba(184,151,90,.18), transparent 38%); }
+    .quote-content { position:relative; z-index:1; }
+    .quote-content p { font-family:var(--font-editorial); font-size:clamp(1.8rem, 3vw, 2.8rem); font-style:italic; line-height:1.15; color:rgba(243,232,213,.9); }
+    .quote-content cite { display:block; margin-top:1.5rem; font-style:normal; font-size:.63rem; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); }
+
+    #after-office { padding: 9rem 0; background: var(--midnight); color: var(--ivory); overflow:hidden; }
+    #after-office::before { content:"AFTER"; position:absolute; right:-7vw; top:0; font-family:var(--font-display); font-size:clamp(8rem, 18vw, 22rem); color:transparent; -webkit-text-stroke:1px rgba(216,200,174,.08); line-height:.8; }
+    #after-office::after { content:"✥"; position:absolute; left:5vw; bottom:6%; font-size:20rem; color:transparent; -webkit-text-stroke:1px rgba(216,200,174,.08); }
+    .after-grid { display:grid; grid-template-columns: .95fr 1.05fr; gap: clamp(3rem, 7vw, 8rem); align-items:center; }
+    .after-visual { min-height:620px; background: linear-gradient(180deg, rgba(17,17,17,.18), rgba(8,8,8,.72)), radial-gradient(circle at 50% 30%, rgba(216,200,174,.18), transparent 36%), linear-gradient(135deg, #0E2236, #080808); border:1px solid rgba(216,200,174,.18); position:relative; overflow:hidden; }
+    .after-visual::before { content:""; position:absolute; left:50%; top:46%; width:240px; height:240px; transform:translate(-50%, -50%); border-radius:50%; border:1px solid rgba(216,200,174,.22); box-shadow:0 0 80px rgba(184,151,90,.14); }
+    .after-visual::after { content:"CAVA"; position:absolute; bottom:2rem; left:2rem; font-family:var(--font-display); font-size:4.6rem; letter-spacing:.08em; color:rgba(216,200,174,.14); }
+    .after-content .section-label { color:var(--gold-soft); }
+    .after-content .h2 { color:var(--ivory); }
+    .after-content .h2 em { color:var(--champagne); }
+    .after-content .lead { color:rgba(243,232,213,.66); }
+    .micro-labels { display:flex; flex-wrap:wrap; gap:.65rem; margin:2.5rem 0 2.2rem; }
+    .micro-labels span { font-size:.58rem; letter-spacing:.25em; text-transform:uppercase; color:var(--champagne); border:1px solid rgba(216,200,174,.25); padding:.55rem .9rem; }
+
+    #experiences { padding: 8rem 0; background: var(--ivory); }
+    .section-head { display:flex; justify-content:space-between; align-items:flex-end; gap:2rem; margin-bottom:4rem; }
+    .section-head p { max-width:280px; font-family:var(--font-editorial); color:var(--muted); font-size:1.08rem; }
+    .exp-grid { display:grid; grid-template-columns: 1.25fr 1fr 1fr; gap:2px; }
+    .exp-card { min-height:420px; background:var(--charcoal); color:var(--ivory); padding:2rem; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end; border:1px solid rgba(184,151,90,.08); }
+    .exp-card.featured { grid-row: span 2; min-height:620px; background: linear-gradient(145deg, var(--midnight), var(--carbon)); }
+    .exp-card::before { content:"✥"; position:absolute; top:1.4rem; right:1.5rem; color:transparent; -webkit-text-stroke:1px rgba(216,200,174,.16); font-size:5rem; transition:.5s var(--ease-soft); }
+    .exp-card:hover::before { transform: rotate(18deg) scale(1.08); -webkit-text-stroke-color: rgba(216,200,174,.28); }
+    .exp-num { font-family:var(--font-editorial); color:var(--gold-soft); letter-spacing:.18em; font-size:.85rem; margin-bottom:auto; }
+    .exp-card h3 { font-family:var(--font-display); font-size:clamp(1.6rem, 2.8vw, 2.7rem); font-weight:400; line-height:1.08; margin-bottom:1rem; }
+    .exp-card h3 em { color:var(--champagne); font-style:italic; }
+    .exp-card p { color:rgba(243,232,213,.65); font-family:var(--font-editorial); font-size:1rem; line-height:1.65; max-width:360px; }
+    .text-link { margin-top:1.4rem; display:inline-flex; text-decoration:none; color:var(--gold-soft); font-size:.58rem; letter-spacing:.24em; text-transform:uppercase; }
+
+    #nazareth { padding: 8rem 0; background: var(--charcoal); color:var(--ivory); overflow:hidden; }
+    .naz-grid { display:grid; grid-template-columns:.95fr 1.05fr; gap:clamp(3rem, 7vw, 8rem); align-items:center; }
+    .portrait { min-height: 560px; position:relative; background:linear-gradient(160deg, #2b2418, #0b0b0b); border:1px solid rgba(216,200,174,.2); overflow:hidden; }
+    .portrait::before { content:"NP"; position:absolute; inset:0; display:grid; place-items:center; font-family:var(--font-display); font-size:13rem; font-style:italic; color:transparent; -webkit-text-stroke:1px rgba(216,200,174,.18); }
+    .portrait::after { content:"Reemplazar por retrato editorial de Nazareth"; position:absolute; bottom:2rem; left:2rem; right:2rem; font-size:.6rem; letter-spacing:.24em; text-transform:uppercase; color:rgba(216,200,174,.5); }
+    .naz-grid .h2 { color:var(--ivory); }
+    .naz-grid .lead { color:rgba(243,232,213,.62); }
+    .tags { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:2rem; }
+    .tags span { font-size:.58rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-soft); border:1px solid rgba(184,151,90,.35); padding:.5rem .85rem; }
+
+    #journal { padding:8rem 0; background:var(--ivory); overflow:hidden; }
+    .journal-grid { display:grid; grid-template-columns:.85fr 1.15fr; gap:clamp(3rem, 7vw, 8rem); align-items:start; }
+    .articles { display:grid; gap:1rem; }
+    .article-card { border-top:1px solid rgba(184,151,90,.25); padding:1.5rem 0; display:grid; grid-template-columns:90px 1fr; gap:1.5rem; }
+    .article-card small { color:var(--gold); letter-spacing:.2em; text-transform:uppercase; font-size:.58rem; }
+    .article-card h3 { font-family:var(--font-display); font-weight:400; font-size:1.35rem; color:var(--charcoal); }
+    .article-card p { font-family:var(--font-editorial); color:var(--muted); margin-top:.4rem; }
+
+    #contact { padding:8rem 0; background:var(--midnight-deep); color:var(--ivory); }
+    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(3rem, 7vw, 8rem); }
+    #contact .h2 { color:var(--ivory); }
+    #contact .lead { color:rgba(243,232,213,.62); }
+    .contact-list { border-top:1px solid rgba(216,200,174,.22); }
+    .contact-item { padding:1.8rem 0; border-bottom:1px solid rgba(216,200,174,.22); }
+    .contact-item small { display:block; font-size:.58rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-soft); margin-bottom:.35rem; }
+    .contact-item a { font-family:var(--font-display); font-size:1.35rem; text-decoration:none; color:var(--ivory); transition:.25s; }
+    .contact-item a:hover { color:var(--gold-soft); }
+
+    footer { padding: 3.5rem clamp(1.4rem, 5vw, 5rem); background: var(--carbon); color:rgba(243,232,213,.62); }
+    .footer-inner { width:min(1300px,100%); margin:auto; display:flex; justify-content:space-between; align-items:center; gap:2rem; flex-wrap:wrap; }
+    .footer-logo { font-family:var(--font-display); letter-spacing:.24em; text-transform:uppercase; color:var(--ivory); }
+    .footer-logo span { color:var(--gold); }
+    .footer-links { display:flex; gap:1.2rem; flex-wrap:wrap; }
+    .footer-links a { font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; text-decoration:none; color:rgba(243,232,213,.62); }
+    .footer-links a:hover { color:var(--gold-soft); }
+    .footer-copy { font-size:.62rem; letter-spacing:.12em; color:rgba(243,232,213,.34); }
+
+    .reveal { opacity:0; transform:translateY(32px); transition: opacity .85s var(--ease), transform .85s var(--ease); }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .delay-1 { transition-delay:.12s; }
+    .delay-2 { transition-delay:.24s; }
+    .delay-3 { transition-delay:.36s; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+
+    @media (max-width: 1020px) {
+      .nav-links, .nav-cta { display:none; }
+      .hamburger { display:flex; }
+      .brand-grid, .after-grid, .naz-grid, .journal-grid, .contact-grid { grid-template-columns:1fr; }
+      .after-visual { min-height:440px; order:2; }
+      .exp-grid { grid-template-columns:1fr 1fr; }
+      .exp-card.featured { grid-column:1 / -1; min-height:520px; }
+      .section-head { display:block; }
+      .section-head p { margin-top:1rem; }
+    }
+
+    @media (max-width: 640px) {
+      #hero { padding-top:8rem; }
+      .brandmark-text { font-size:.82rem; letter-spacing:.16em; }
+      .monogram { width:36px; height:36px; }
+      .hero-title { font-size: clamp(4rem, 22vw, 6rem); }
+      .hero-actions { flex-direction:column; align-items:stretch; }
+      .btn { width:100%; }
+      #brand, #after-office, #experiences, #nazareth, #journal, #contact { padding:5.5rem 0; }
+      .quote-card, .after-visual, .portrait { min-height:390px; }
+      .exp-grid { grid-template-columns:1fr; }
+      .article-card { grid-template-columns:1fr; gap:.4rem; }
+      .footer-inner { align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <ul>
+      <li><a href="#after-office" data-close-menu>After Office</a></li>
+      <li><a href="#brand" data-close-menu>La Marca</a></li>
+      <li><a href="#experiences" data-close-menu>Experiencias</a></li>
+      <li><a href="#nazareth" data-close-menu>Nazareth</a></li>
+      <li><a href="#contact" data-close-menu>Contacto</a></li>
+    </ul>
+  </div>
+
+  <nav id="mainNav">
+    <a href="#hero" class="brandmark" aria-label="CAVA Gourmet">
+      <span class="monogram" aria-hidden="true"></span>
+      <span class="brandmark-text">CAVA <span>·</span> Gourmet</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#after-office">After Office</a></li>
+      <li><a href="#brand">La Marca</a></li>
+      <li><a href="#experiences">Experiencias</a></li>
+      <li><a href="#nazareth">Nazareth</a></li>
+      <li><a href="#journal">Journal</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Conectar</a>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-controls="mobileMenu" aria-expanded="false"><span></span></button>
+  </nav>
+
+  <section id="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="hero-kicker">Costa Rica · Wine · Gourmet · Experiences</p>
+      <h1 class="hero-title">CAVA<br><em>Gourmet</em></h1>
+      <p class="hero-copy">Experiencias curadas de vino, gastronomía y descubrimiento sensorial.</p>
+      <div class="hero-actions">
+        <a href="#experiences" class="btn btn-primary">Explorar experiencias</a>
+        <a href="#after-office" class="btn btn-secondary">Descubrir After Office</a>
+      </div>
+    </div>
+    <div class="scroll-mark">Scroll</div>
+  </section>
+
+  <section id="after-office">
+    <div class="container after-grid">
+      <div class="after-visual reveal" aria-label="Ambiente visual de After Office by CAVA"></div>
+      <div class="after-content reveal delay-1">
+        <p class="section-label">Ritual insignia</p>
+        <h2 class="h2">After Office<br><em>by CAVA</em></h2>
+        <p class="lead">Durante los últimos años, After Office ha sido mucho más que un evento.</p>
+        <p class="lead">Es el punto donde convergen vino, mesa, conversación, música y hospitalidad para crear un ritual contemporáneo: una forma distinta de cerrar el día y abrir espacio para la conexión.</p>
+        <div class="micro-labels">
+          <span>Wine</span><span>Gastronomy</span><span>Music</span><span>Community</span>
+        </div>
+        <a href="#contact" class="btn btn-primary">Consultar próximas fechas</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="brand">
+    <div class="container brand-grid">
+      <div class="reveal">
+        <p class="section-label">Sobre CAVA Gourmet</p>
+        <h2 class="h2">Home of<br><em>Nazareth Wine Journey</em></h2>
+        <p class="lead">CAVA Gourmet es una casa de experiencias donde convergen vino, hospitalidad y cultura sensorial. Un espacio creado para quienes buscan ir más allá de la copa.</p>
+        <p class="lead">Cada encuentro está diseñado para crear conexión: con el vino, con la mesa, con las personas y con el momento. Nuestra visión une curaduría, educación y disfrute en experiencias memorables.</p>
+        <div class="pillars">
+          <div class="pillar"><small>01</small><span>Vino & Terroir</span><i>→</i></div>
+          <div class="pillar"><small>02</small><span>Mesa Compartida</span><i>→</i></div>
+          <div class="pillar"><small>03</small><span>Hospitalidad Curada</span><i>→</i></div>
+          <div class="pillar"><small>04</small><span>Educación Sensorial</span><i>→</i></div>
+        </div>
+      </div>
+      <div class="quote-card reveal delay-1">
+        <div class="quote-content">
+          <p>“El vino no solo se degusta. También se interpreta, se comparte y se recuerda.”</p>
+          <cite>— Filosofía CAVA Gourmet</cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experiences">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="section-label reveal">Experiencias CAVA</p>
+          <h2 class="h2 reveal delay-1">Momentos diseñados<br><em>para perdurar</em></h2>
+        </div>
+        <p class="reveal delay-2">Cada experiencia nace desde la curaduría, la atmósfera y el deseo de crear encuentros memorables.</p>
+      </div>
+
+      <div class="exp-grid">
+        <article class="exp-card featured reveal">
+          <span class="exp-num">01</span>
+          <h3>After Office<br><em>by CAVA</em></h3>
+          <p>Nuestro encuentro insignia: vino, gastronomía, música y hospitalidad en una experiencia social cuidadosamente curada.</p>
+          <a class="text-link" href="#contact">Solicitar información</a>
+        </article>
+
+        <article class="exp-card reveal delay-1">
+          <span class="exp-num">02</span>
+          <h3>Catas<br><em>Privadas</em></h3>
+          <p>Encuentros íntimos diseñados para descubrir vinos con profundidad, sensibilidad y disfrute.</p>
+          <a class="text-link" href="#contact">Consultar</a>
+        </article>
+
+        <article class="exp-card reveal delay-2">
+          <span class="exp-num">03</span>
+          <h3>Experiencias<br><em>Sensoriales</em></h3>
+          <p>Recorridos donde aromas, texturas, música y percepción transforman la manera de degustar.</p>
+          <a class="text-link" href="#contact">Consultar</a>
+        </article>
+
+        <article class="exp-card reveal delay-1">
+          <span class="exp-num">04</span>
+          <h3>Eventos<br><em>Curados</em></h3>
+          <p>Experiencias diseñadas para grupos privados, marcas, empresas o celebraciones especiales con sello CAVA.</p>
+          <a class="text-link" href="#contact">Consultar</a>
+        </article>
+
+        <article class="exp-card reveal delay-2">
+          <span class="exp-num">05</span>
+          <h3>Selecciones<br><em>Gourmet</em></h3>
+          <p>Vinos, productos y detalles seleccionados con criterio, historia y carácter.</p>
+          <a class="text-link" href="#contact">Consultar</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="nazareth">
+    <div class="container naz-grid">
+      <div class="portrait reveal" aria-label="Espacio reservado para retrato editorial de Nazareth Padilla"></div>
+      <div class="reveal delay-1">
+        <p class="section-label">Nazareth Padilla</p>
+        <h2 class="h2">Comunicadora del vino<br>y creadora de experiencias<br><em>sensoriales</em></h2>
+        <p class="lead">Nazareth Padilla es la mente creativa detrás de CAVA Gourmet y Nazareth Wine Journey. Desde Costa Rica, impulsa una forma distinta de comunicar el vino: cercana, sensorial y profundamente experiencial.</p>
+        <p class="lead">Su enfoque une educación, hospitalidad y narrativa para acercar la cultura del vino a nuevas audiencias. Más que explicar una etiqueta, busca transformar cada cata en una experiencia con significado.</p>
+        <p class="lead">En 2026, Nazareth fue invitada a participar en Vinoinfluencers World Awards en Valladolid, España, una plataforma internacional que reúne a comunicadores y creadores de contenido del mundo del vino.</p>
+        <div class="tags">
+          <span>Comunicadora del vino</span>
+          <span>Educación sensorial</span>
+          <span>Curaduría de experiencias</span>
+          <span>Hospitalidad</span>
+          <span>Nazareth Wine Journey</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="journal">
+    <div class="container journal-grid">
+      <div class="reveal">
+        <p class="section-label">CAVA Journal</p>
+        <h2 class="h2">Historias del<br><em>vino y la mesa</em></h2>
+        <p class="lead">Reflexiones, viajes, vinos, gastronomía y relatos sobre la cultura del vino desde una mirada latinoamericana.</p>
+      </div>
+      <div class="articles reveal delay-1">
+        <article class="article-card"><small>Próximamente</small><div><h3>Camino a Valladolid</h3><p>El recorrido de Nazareth hacia Vinoinfluencers World Awards 2026.</p></div></article>
+        <article class="article-card"><small>Journal</small><div><h3>El ritual del After Office</h3><p>Cómo CAVA convirtió una noche de semana en una experiencia social.</p></div></article>
+        <article class="article-card"><small>Wine</small><div><h3>Vino, memoria y sentidos</h3><p>Una mirada sensorial a la forma en que recordamos lo que bebemos.</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container contact-grid">
+      <div class="reveal">
+        <p class="section-label">Concierge</p>
+        <h2 class="h2">Comenzar una<br><em>experiencia</em></h2>
+        <p class="lead">Para catas privadas, experiencias sensoriales, eventos corporativos, prensa y colaboraciones, CAVA Gourmet está disponible para crear propuestas memorables y cuidadosamente curadas.</p>
+      </div>
+      <div class="contact-list reveal delay-1">
+        <div class="contact-item"><small>Experiencias & Reservas</small><a href="mailto:nazareth@cavagourmet.com">nazareth@cavagourmet.com</a></div>
+        <div class="contact-item"><small>Prensa & Media</small><a href="mailto:media@cavagourmet.com">media@cavagourmet.com</a></div>
+        <div class="contact-item"><small>Información general</small><a href="mailto:hello@cavagourmet.com">hello@cavagourmet.com</a></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">CAVA <span>·</span> Gourmet</div>
+      <div class="footer-links">
+        <a href="#" aria-label="Instagram">Instagram</a>
+        <a href="#" aria-label="LinkedIn">LinkedIn</a>
+        <a href="mailto:media@cavagourmet.com">Email</a>
+      </div>
+      <p class="footer-copy">Home of Nazareth Wine Journey · © 2026 CAVA Gourmet.</p>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('mainNav');
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const cursorDot = document.getElementById('cursorDot');
+    const cursorRing = document.getElementById('cursorRing');
+
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      mobileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    });
+
+    document.querySelectorAll('[data-close-menu]').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+      });
+    });
+
+    const supportsFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+    if (supportsFinePointer) {
+      let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorDot.style.left = `${mouseX}px`;
+        cursorDot.style.top = `${mouseY}px`;
+      }, { passive: true });
+
+      function renderCursor() {
+        ringX += (mouseX - ringX) * 0.14;
+        ringY += (mouseY - ringY) * 0.14;
+        cursorRing.style.left = `${ringX}px`;
+        cursorRing.style.top = `${ringY}px`;
+        requestAnimationFrame(renderCursor);
+      }
+      renderCursor();
+
+      document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => cursorRing.classList.add('is-active'));
+        el.addEventListener('mouseleave', () => cursorRing.classList.remove('is-active'));
+      });
+    }
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
