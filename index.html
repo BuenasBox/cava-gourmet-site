@@ -255,21 +255,24 @@
       display: none;
     }
     .hero-content { position: relative; z-index: 2; max-width: 1200px; }
-    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(2.5rem, 4vw, 5rem); align-items: center; }
-    .hero-copy { max-width: 560px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 560px); gap: clamp(2.5rem, 4vw, 5rem); align-items: center; }
+    .hero-copy { max-width: 560px; position: relative; z-index: 3; }
     .hero-visual {
       min-height: 420px;
+      max-width: 560px;
+      justify-self: end;
       border-radius: 1.5rem;
-      border: 1px solid rgba(246,239,227,.12);
+      border: 1px solid rgba(246,239,227,.08);
       background:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,.05), transparent 22%),
-        linear-gradient(135deg, rgba(255,255,255,.02), rgba(255,255,255,0) 65%),
-        linear-gradient(160deg, #161518, #0a0907);
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.04), transparent 20%),
+        linear-gradient(135deg, rgba(255,255,255,.01), rgba(255,255,255,0) 65%),
+        linear-gradient(160deg, #121318, #0b0c0f);
       display: grid;
       place-items: center;
       padding: clamp(2rem, 4vw, 3rem);
       position: relative;
       overflow: hidden;
+      box-shadow: 0 28px 70px rgba(0,0,0,.18);
     }
     .hero-visual span {
       font-family: var(--serif);
@@ -283,8 +286,8 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 75% 25%, rgba(184,151,90,.14), transparent 26%),
-                  radial-gradient(circle at 15% 80%, rgba(246,239,227,.06), transparent 18%);
+      background: radial-gradient(circle at 75% 25%, rgba(184,151,90,.1), transparent 30%),
+                  radial-gradient(circle at 15% 80%, rgba(246,239,227,.04), transparent 18%);
       pointer-events: none;
     }
     .hero-visual picture,
@@ -302,10 +305,14 @@
     .mesa-pairing picture img,
     .after-visual picture img,
     .divider picture img,
-    .host-photo picture img {
+    .host-photo picture img,
+    .host-photo > img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
+      filter: saturate(0.92) blur(0.02rem);
+      opacity: .98;
       display: block;
     }
     .host-photo:not([data-initials])::after { display: none; }
@@ -494,12 +501,15 @@
       aspect-ratio: 3 / 4;
       width: 100%;
       max-width: 150px;
-      background: radial-gradient(circle at 45% 25%, rgba(184,151,90,.25), transparent 28%), linear-gradient(150deg, #262018, #0d0b08);
-      border: 1px solid rgba(184,151,90,.18);
+      background: transparent;
+      border: none;
+      border-radius: 1.35rem;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,.18);
     }
     .host-photo::after { content: attr(data-initials); position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-style: italic; font-size: 3.2rem; color: rgba(184,151,90,.38); }
+    .host-card { background: #181411; padding: clamp(2rem, 4vw, 3.3rem); display: grid; grid-template-columns: 150px 1fr; gap: 2rem; align-items: center; border: 1px solid rgba(255,255,255,.05); }
     .host-card h3 { font-family: var(--display); font-weight: 300; font-size: clamp(1.9rem, 3vw, 3rem); margin-bottom: .35rem; }
     .host-role { color: var(--gold); font-size: .64rem; letter-spacing: .23em; text-transform: uppercase; margin-bottom: 1.1rem; }
     .host-card p { color: rgba(246,239,227,.58); }
@@ -540,6 +550,10 @@
       .hero-sub { margin-bottom: 2rem; }
       .hero-visual { min-height: 360px; }
       .host-card { padding: clamp(1.8rem, 3vw, 2.5rem); }
+    }
+    @media (min-width: 1200px) {
+      .hero-visual { transform: translateX(2.5rem); }
+      .hero-copy { transform: translateZ(0); }
     }
     @media (max-width: 600px) {
       .hero { padding-top: 6rem; padding-bottom: 4rem; }
@@ -738,19 +752,13 @@
         <div class="host-cards reveal">
           <article class="host-card">
             <div class="host-photo">
-              <picture>
-                <source srcset="assets/images/nazareth-Padilla-wine-sumiller-wset-800.webp 800w, assets/images/nazareth-Padilla-wine-sumiller-wset-1280.webp 1280w, assets/images/nazareth-Padilla-wine-sumiller-wset-1920.webp 1920w" type="image/webp">
-                <img src="assets/images/nazareth-Padilla-wine-sumiller-wset-1920.jpg" alt="Nazareth Padilla, wine communicator at CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
-              </picture>
+              <img src="assets/images/nazareth-padilla-portrait.jpg" alt="Nazareth Padilla, comunicadora del vino en CAVA Vinoteca" width="1920" height="1280" loading="eager" decoding="async">
             </div>
             <div><h3>Nazareth Padilla</h3><p class="host-role">Comunicadora del vino</p><p>Su memoria para recordar lo que cada invitado ha probado vuelve cada encuentro más personal. Su manera de acompañar hace que el vino se sienta cercano.</p></div>
           </article>
           <article class="host-card">
             <div class="host-photo">
-              <picture>
-                <source srcset="assets/images/Nazareth-Erick-Hosters-800.webp 800w, assets/images/Nazareth-Erick-Hosters-1280.webp 1280w, assets/images/Nazareth-Erick-Hosters-1920.webp 1920w" type="image/webp">
-                <img src="assets/images/Nazareth-Erick-Hosters-1920.jpg" alt="Erick Sandi, table host at CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
-              </picture>
+              <img src="assets/images/erick-sandi-portrait.jpg" alt="Erick Sandi, anfitrión de la mesa en CAVA Vinoteca" width="1920" height="1280" loading="eager" decoding="async">
             </div>
             <div><h3>Erick Sandi</h3><p class="host-role">Anfitrión de la mesa</p><p>Elige desde la tipicidad, el estilo y el momento. Su papel es cuidar que cada descorche tenga sentido dentro de la noche.</p></div>
           </article>
