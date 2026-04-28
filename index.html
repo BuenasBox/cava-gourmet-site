@@ -5,33 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="dark" />
 
-  <title>CAVA Gourmet — Del Muro a la Mesa</title>
-  <meta name="description" content="CAVA Gourmet en Pérez Zeledón. Del muro a la mesa, una casa de vino, conversación y hospitalidad compartida." />
+  <title>CAVA Vinoteca — Del muro a la mesa compartida</title>
+  <meta name="description" content="CAVA Vinoteca en Pérez Zeledón. Del muro a la mesa, una vinoteca de vino, conversación y hospitalidad compartida." />
   <meta name="theme-color" content="#091522" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://cavagourmet.com/" />
-  <link rel="icon" href="assets/logo-cava-mark.jpg" type="image/jpeg" />
-  <link rel="preload" as="image" href="assets/logo-cava-wordmark.webp" type="image/webp" />
-  <link rel="preload" as="font" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400;6..96,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" crossorigin />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23b8975a' stroke='%23f6efe3' stroke-width='2'/><text x='50' y='65' font-family='Alfira' font-size='50' font-weight='600' text-anchor='middle' fill='%23091522'>C</text></svg>" type="image/svg+xml" />
+  <link rel="preload" as="font" href="https://fonts.googleapis.com/css2?family=Alfira&family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400;6..96,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" crossorigin />
   <!-- Note: Hero visual and mesa visual images should be preloaded when available -->
 
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="CAVA Gourmet" />
+  <meta property="og:site_name" content="CAVA Vinoteca" />
   <meta property="og:url" content="https://cavagourmet.com/" />
-  <meta property="og:title" content="CAVA Gourmet — Del Muro a la Mesa" />
-  <meta property="og:description" content="CAVA Gourmet en Pérez Zeledón. Del muro a la mesa, una casa de vino, conversación y hospitalidad compartida." />
-  <meta property="og:image" content="https://cavagourmet.com/assets/images/og/og-cava-gourmet.jpg" />
+  <meta property="og:title" content="CAVA Vinoteca — Del muro a la mesa compartida" />
+  <meta property="og:description" content="CAVA Vinoteca en Pérez Zeledón. Del muro a la mesa, una vinoteca de vino, conversación y hospitalidad compartida." />
+  <meta property="og:image" content="https://cavagourmet.com/assets/images/01-cava-vinoteca-wine-wall-hero-1200.jpg" />
   <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image:height" content="800" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://cavagourmet.com/assets/images/og/og-cava-gourmet.jpg" />
-  <meta name="twitter:title" content="CAVA Gourmet — Del Muro a la Mesa" />
-  <meta name="twitter:description" content="CAVA Gourmet en Pérez Zeledón. Del muro a la mesa, una casa de vino, conversación y hospitalidad compartida." />
+  <meta name="twitter:image" content="https://cavagourmet.com/assets/images/01-cava-vinoteca-wine-wall-hero-1200.jpg" />
+  <meta name="twitter:title" content="CAVA Vinoteca — Del muro a la mesa compartida" />
+  <meta name="twitter:description" content="CAVA Vinoteca en Pérez Zeledón. Del muro a la mesa, una vinoteca de vino, conversación y hospitalidad compartida." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400;6..96,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Alfira&family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400;6..96,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <style>
     :root {
@@ -52,6 +51,7 @@
       --display: "Bodoni Moda", Georgia, serif;
       --serif: "Cormorant Garamond", Georgia, serif;
       --sans: "Jost", system-ui, -apple-system, sans-serif;
+      --wordmark: "Alfira", system-ui, -apple-system, sans-serif;
 
       --ease: cubic-bezier(.22,.61,.36,1);
       --max: 1240px;
@@ -168,26 +168,17 @@
       font-style: italic;
       font-size: 1.25rem;
     }
-    .brand-text {
-      font-family: var(--display);
-      font-size: .98rem;
-      letter-spacing: .23em;
-      text-transform: uppercase;
-      color: var(--ivory);
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
+    .cava-monogram {
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
-    .brand-logo {
-      max-height: 44px;
-      width: auto;
-      display: block;
+    .cava-monogram svg {
+      width: 100%;
+      height: 100%;
     }
     .hero-branding {
       display: flex;
@@ -296,6 +287,34 @@
                   radial-gradient(circle at 15% 80%, rgba(246,239,227,.06), transparent 18%);
       pointer-events: none;
     }
+    .hero-visual picture,
+    .mesa-visual picture,
+    .after-visual picture,
+    .divider picture,
+    .host-photo picture {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .hero-visual picture img,
+    .mesa-visual picture img,
+    .after-visual picture img,
+    .divider picture img,
+    .host-photo picture img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .host-photo:not([data-initials])::after { display: none; }
+    .after-visual,
+    .divider {
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid rgba(246,239,227,.12);
+      background: linear-gradient(135deg, #121010, #090807);
+    }
+    .divider { margin: clamp(2rem, 4vw, 3rem) 0; }
     .hero-branding { margin: 2rem 0 0; align-items: flex-start; }
     .hero-copy { display: grid; gap: 1.6rem; }
     .title { font-size: clamp(2.55rem, 5vw, 4.2rem); }
@@ -370,7 +389,7 @@
       pointer-events: none;
     }
     .mesa-visual::after {
-      content: "Del Muro\A a la Mesa";
+      content: "Del muro\A a la mesa compartida";
       white-space: pre-line;
       position: absolute;
       left: 2rem;
@@ -542,16 +561,16 @@
   {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "CAVA Gourmet",
+    "name": "CAVA Vinoteca",
     "url": "https://cavagourmet.com/",
-    "image": "https://cavagourmet.com/assets/images/og/og-cava-gourmet.jpg",
+    "image": "https://cavagourmet.com/assets/images/01-cava-vinoteca-wine-wall-hero-1200.jpg",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Pérez Zeledón",
       "addressLocality": "Pérez Zeledón",
       "addressCountry": "CR"
     },
-    "description": "Del muro a la mesa: una casa de vino, conversación y hospitalidad compartida en Pérez Zeledón, Costa Rica.",
+    "description": "Del muro a la mesa: una vinoteca de vino, conversación y hospitalidad compartida en Pérez Zeledón, Costa Rica.",
     "priceRange": "$$$",
     "telephone": "+50686325260",
     "sameAs": ["https://wa.me/50686325260"]
@@ -561,12 +580,15 @@
 
 <body>
   <header class="nav" id="nav">
-    <a href="#inicio" class="brand" aria-label="CAVA Gourmet">
-      <picture>
-        <source srcset="assets/logo-cava-wordmark.webp" type="image/webp">
-        <img class="brand-logo" src="assets/logo-cava-wordmark.jpg" alt="CAVA Gourmet" loading="eager" decoding="async" />
-      </picture>
-      <span class="brand-text">CAVA Gourmet</span>
+    <a href="#inicio" class="brand" aria-label="CAVA Vinoteca">
+      <div class="cava-monogram">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="45" fill="var(--gold)" stroke="var(--ivory)" stroke-width="2"/>
+          <text x="50" y="65" font-family="var(--wordmark)" font-size="50" font-weight="600" text-anchor="middle" fill="var(--navy-deep)">C</text>
+        </svg>
+      </div>
+      <span class="brand-wordmark">CAVA Vinoteca</span>
+      <span class="brand-text">CAVA Vinoteca</span>
     </a>
 
     <nav class="nav-links" aria-label="Navegación principal">
@@ -593,29 +615,28 @@
       <div class="wrap hero-content">
         <div class="hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow reveal">Del Muro a la Mesa</p>
-            <h1 class="reveal">CAVA <span>Gourmet</span></h1>
-            <p class="hero-sub reveal">En Pérez Zeledón, el muro de botellas se convierte en mesa y cada descorche abre una conversación cercana.</p>
+            <p class="eyebrow reveal">Del muro a la mesa compartida</p>
+            <h1 class="reveal">CAVA <span>Vinoteca</span></h1>
+            <p class="hero-sub reveal">En Pérez Zeledón, cada botella elegida del muro encuentra su lugar en la mesa.</p>
             <div class="hero-actions reveal">
-              <a href="#contacto" class="btn gold">Solicitar un lugar en la mesa</a>
+              <a href="#contacto" class="btn gold">Pedir un lugar en la mesa</a>
               <a href="#after-office" class="btn ghost">Descubrir After Office</a>
             </div>
             <div class="hero-branding reveal">
-              <picture>
-                <source srcset="assets/logo-cava-mark.webp" type="image/webp">
-                <img class="hero-mark-image" src="assets/logo-cava-mark.jpg" alt="Sello de CAVA Gourmet" aria-hidden="true" loading="lazy" decoding="async" />
-              </picture>
+              <div class="cava-monogram">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="50" cy="50" r="45" fill="var(--gold)" stroke="var(--ivory)" stroke-width="2"/>
+                  <text x="50" y="65" font-family="var(--wordmark)" font-size="50" font-weight="600" text-anchor="middle" fill="var(--navy-deep)">C</text>
+                </svg>
+              </div>
               <p class="hero-branding-label">El sello de la casa</p>
             </div>
           </div>
           <div class="hero-visual reveal" aria-hidden="true">
-            <!-- TODO: Reemplazar con foto de ambiente real: 
-                 <picture>
-                   <source srcset="assets/hero-ambiente.webp" type="image/webp">
-                   <img src="assets/hero-ambiente.jpg" alt="Mesa de CAVA Gourmet" loading="lazy" decoding="async" />
-                 </picture>
-            -->
-            <span>Foto de ambiente</span>
+            <picture>
+              <source srcset="assets/images/01-cava-vinoteca-wine-wall-hero-800.webp 800w, assets/images/01-cava-vinoteca-wine-wall-hero-1280.webp 1280w, assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp 1920w" type="image/webp">
+              <img src="assets/images/01-cava-vinoteca-wine-wall-hero-1920.jpg" alt="Wine wall at CAVA Vinoteca in Pérez Zeledón" width="1920" height="1280" loading="eager" decoding="async">
+            </picture>
           </div>
         </div>
       </div>
@@ -625,12 +646,10 @@
     <section class="mesa light" id="mesa">
       <div class="wrap mesa-grid">
         <div class="mesa-visual reveal" aria-label="Representación visual de la mesa compartida">
-          <!-- TODO: Reemplazar con imagen real: 
-               <picture>
-                 <source srcset="assets/mesa-compartida.webp" type="image/webp">
-                 <img src="assets/mesa-compartida.jpg" alt="Mesa compartida en CAVA Gourmet" loading="lazy" decoding="async" />
-               </picture>
-          -->
+          <picture>
+            <source srcset="assets/images/02-cava-vinoteca-private-tasting-table-800.webp 800w, assets/images/02-cava-vinoteca-private-tasting-table-1280.webp 1280w, assets/images/02-cava-vinoteca-private-tasting-table-1920.webp 1920w" type="image/webp">
+            <img src="assets/images/02-cava-vinoteca-private-tasting-table-1920.jpg" alt="Private tasting table at CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+          </picture>
         </div>
 
         <div>
@@ -643,6 +662,13 @@
             <div class="mesa-item"><strong>01</strong><p>El muro cambia cada semana. Nunca hay dos noches iguales.</p></div>
             <div class="mesa-item"><strong>02</strong><p>Algunas botellas regresan porque dejan una marca. Otras viven un solo momento.</p></div>
             <div class="mesa-item"><strong>03</strong><p>El descorche no cierra un círculo. Abre la conversación.</p></div>
+          </div>
+
+          <div class="mesa-pairing reveal">
+            <picture>
+              <source srcset="assets/images/03-cava-vinoteca-charcuterie-experience-800.webp 800w, assets/images/03-cava-vinoteca-charcuterie-experience-1280.webp 1280w, assets/images/03-cava-vinoteca-charcuterie-experience-1920.webp 1920w" type="image/webp">
+              <img src="assets/images/03-cava-vinoteca-charcuterie-experience-1920.jpg" alt="Charcuterie and wine pairing experience at CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+            </picture>
           </div>
         </div>
       </div>
@@ -669,10 +695,10 @@
 
           <div class="ritual-reveal locked" id="ritualReveal">
             <div class="secret-content">
-              <h3>After Office<br><em>Del Muro a la Mesa</em></h3>
+              <h3>After Office<br><em>Del muro a la mesa compartida</em></h3>
               <p>Cada invitado elige una botella del muro para compartirla con la mesa. Nazareth y Erick acompañan el descorche, dosifican el servicio y convierten cada botella en conversación.</p>
               <p>No es cata. Es un ritual compartido que se mide por el momento, no por la botella.</p>
-              <div style="margin-top:2rem;"><a href="#contacto" class="btn gold">Solicitar un lugar en la mesa</a></div>
+              <div style="margin-top:2rem;"><a href="#contacto" class="btn gold">Pedir un lugar en la mesa</a></div>
             </div>
           </div>
         </div>
@@ -682,8 +708,22 @@
           <article class="pillar"><span>02</span><h3>La Mesa</h3><p>Una mesa larga, botellas compartidas y conversaciones que nacen entre descorches.</p></article>
           <article class="pillar"><span>03</span><h3>La Casa</h3><p>Platos al centro, comida hecha en casa y hospitalidad real.</p></article>
         </div>
+
+        <div class="after-visual reveal">
+          <picture>
+            <source srcset="assets/images/04-cava-vinoteca-after-office-lounge-800.webp 800w, assets/images/04-cava-vinoteca-after-office-lounge-1280.webp 1280w, assets/images/04-cava-vinoteca-after-office-lounge-1920.webp 1920w" type="image/webp">
+            <img src="assets/images/04-cava-vinoteca-after-office-lounge-1920.jpg" alt="After Office wine lounge at CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+          </picture>
+        </div>
       </div>
     </section>
+
+    <div class="divider reveal">
+      <picture>
+        <source srcset="assets/images/05-cava-vinoteca-artisan-wine-detail-800.webp 800w, assets/images/05-cava-vinoteca-artisan-wine-detail-1280.webp 1280w, assets/images/05-cava-vinoteca-artisan-wine-detail-1920.webp 1920w" type="image/webp">
+        <img src="assets/images/05-cava-vinoteca-artisan-wine-detail-1920.jpg" alt="Artisan wine and cheese detail at CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+      </picture>
+    </div>
 
     <section class="hosts" id="anfitriones">
       <div class="wrap hosts-grid">
@@ -695,17 +735,55 @@
 
         <div class="host-cards reveal">
           <article class="host-card">
-            <div class="host-photo" data-initials="NP" title="Nazareth Padilla"></div>
+            <div class="host-photo">
+              <picture>
+                <source srcset="assets/images/nazareth-Padilla-wine-sumiller-wset-800.webp 800w, assets/images/nazareth-Padilla-wine-sumiller-wset-1280.webp 1280w, assets/images/nazareth-Padilla-wine-sumiller-wset-1920.webp 1920w" type="image/webp">
+                <img src="assets/images/nazareth-Padilla-wine-sumiller-wset-1920.jpg" alt="Nazareth Padilla, wine communicator at CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+              </picture>
+            </div>
             <div><h3>Nazareth</h3><p class="host-role">Comunicadora del vino</p><p>Su memoria para recordar lo que cada invitado ha probado vuelve cada encuentro más personal. Su manera de acompañar hace que el vino se sienta cercano.</p></div>
           </article>
           <article class="host-card">
-            <div class="host-photo" data-initials="ES" title="Erick Serrano"></div>
+            <div class="host-photo">
+              <picture>
+                <source srcset="assets/images/Nazareth-Erick-Hosters-800.webp 800w, assets/images/Nazareth-Erick-Hosters-1280.webp 1280w, assets/images/Nazareth-Erick-Hosters-1920.webp 1920w" type="image/webp">
+                <img src="assets/images/Nazareth-Erick-Hosters-1920.jpg" alt="Erick Serrano, table host at CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+              </picture>
+            </div>
             <div><h3>Erick</h3><p class="host-role">Anfitrión de la mesa</p><p>Elige desde la tipicidad, el estilo y el momento. Su papel es cuidar que cada descorche tenga sentido dentro de la noche.</p></div>
           </article>
         </div>
       </div>
     </section>
 
+    <section class="hosts" id="nazareth-journey">
+      <div class="wrap">
+        <div>
+          <p class="label reveal">Nazareth Wine Journey</p>
+          <h2 class="title reveal">Una voz latinoamericana <em>para el vino</em></h2>
+          <p class="copy reveal" style="margin-top:1.5rem;">Nazareth Padilla Montero representa la visión educativa y sensorial detrás de CAVA Vinoteca. Su camino une hospitalidad, comunicación del vino y una mirada latinoamericana construida desde Costa Rica.</p>
+          <div class="host-cards reveal" style="margin-top: 2rem;">
+            <article class="host-card">
+              <div class="host-photo">
+                <picture>
+                  <source srcset="assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp 800w, assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1280.webp 1280w, assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp 1920w" type="image/webp">
+                  <img src="assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.jpg" alt="Nazareth hosting wine experiences at CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+                </picture>
+              </div>
+              <div>
+                <h3>Nazareth Padilla Montero</h3>
+                <p class="host-role">Comunicadora del vino</p>
+                <p>WSET Level 3 Wines<br>Becaria Women of the Vine & Spirits Foundation 2025<br>Fundadora de Nazareth Wine Journey</p>
+                <p style="margin-top: 1rem;">
+                  <a href="https://www.wotvsfoundation.org/recipients" target="_blank" rel="noopener">Ver mención oficial en WOTVS Foundation</a><br>
+                  <a href="https://www.womenofthevine.com/articles/women-of-the-vine-spirits-foundation-surpasses-1-million-in-scholarships-awarded-fosters-the-next-generation-of-women-leaders" target="_blank" rel="noopener">Women of the Vine & Spirits Foundation</a>
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section class="contact" id="contacto">
       <div class="wrap">
@@ -727,18 +805,21 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
-        <picture>
-          <source srcset="assets/logo-cava-mark.webp" type="image/webp">
-          <img class="footer-logo" src="assets/logo-cava-mark.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
-        </picture>
-        <span>CAVA Gourmet</span>
+        <div class="cava-monogram">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="var(--gold)" stroke="var(--ivory)" stroke-width="2"/>
+            <text x="50" y="65" font-family="var(--wordmark)" font-size="50" font-weight="600" text-anchor="middle" fill="var(--navy-deep)">C</text>
+          </svg>
+        </div>
+        <span>CAVA Vinoteca</span>
       </div>
       <span>Pérez Zeledón · Costa Rica</span>
       <span>© 2026</span>
+      <span style="font-size: .65rem; opacity: .6;">Operado por CAVA Gourmet SRL · Cédula Jurídica 3-102-874443</span>
     </div>
   </footer>
 
-  <a class="wa" href="https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa" target="_blank" rel="noopener" aria-label="Contactar a CAVA Gourmet por WhatsApp">
+  <a class="wa" href="https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa" target="_blank" rel="noopener" aria-label="Contactar a CAVA Vinoteca por WhatsApp">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20.52 3.48A11.8 11.8 0 0 0 12.1 0C5.54 0 .2 5.34.2 11.9c0 2.1.55 4.14 1.59 5.95L.1 24l6.3-1.65a11.9 11.9 0 0 0 5.7 1.45h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.17-3.49-8.42ZM12.1 21.79h-.01a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.9 6.99c0 5.45-4.44 9.88-9.89 9.88Zm5.42-7.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35Z" fill="currentColor"/></svg>
   </a>
 
