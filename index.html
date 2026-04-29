@@ -1020,22 +1020,14 @@
       }
     }, { threshold: 0.08, rootMargin: '120px 0px 0px 0px' });
 
-const initReveal = () => {
+    const initReveal = () => {
+      if (isMobileFastPath) {
+        revealCandidates.forEach(item => item.classList.add('visible'));
+        return;
+      }
 
-  if (isMobileFastPath) {
-    document.documentElement.classList.add('reveal-no-animation');
-
-    revealCandidates.forEach(item => {
-      item.classList.add('visible');
-    });
-
-    return;
-  }
-
-  revealCandidates.forEach(item => {
-    observer.observe(item);
-  });
-
+      revealCandidates.forEach(item => observer.observe(item));
+    };
 
     if (document.readyState === 'complete') {
       initReveal();
