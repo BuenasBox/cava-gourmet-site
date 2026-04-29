@@ -10,9 +10,7 @@
   <meta name="theme-color" content="#091522" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://www.cavagourmet.com/" />
-  <link rel="preload" as="image" href="Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp?v=1" type="image/webp" media="(min-width: 1024px)">
-  <link rel="preload" as="image" href="Assets/images/01-cava-vinoteca-wine-wall-hero-1280.webp?v=1" type="image/webp" media="(min-width: 768px) and (max-width: 1023px)">
-  <link rel="preload" as="image" href="Assets/images/01-cava-vinoteca-wine-wall-hero-800.webp?v=1" type="image/webp" media="(max-width: 767px)">
+  <link rel="preload" as="image" href="Assets/images/01-cava-vinoteca-wine-wall-hero-1280.webp?v=1" type="image/webp" imagesrcset="Assets/images/01-cava-vinoteca-wine-wall-hero-800.webp?v=1 800w, Assets/images/01-cava-vinoteca-wine-wall-hero-1280.webp?v=1 1280w, Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp?v=1 1920w" imagesizes="(max-width: 960px) 100vw, 560px" fetchpriority="high">
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="CAVA Vinoteca" />
@@ -83,10 +81,8 @@
       inset: 0;
       pointer-events: none;
       z-index: 999;
-      opacity: .23;
-      background-image:
-        radial-gradient(circle at 20% 10%, rgba(255,255,255,.04), transparent 18%),
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+      opacity: .16;
+      background-image: radial-gradient(circle at 20% 10%, rgba(255,255,255,.04), transparent 18%);
     }
 
     .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
@@ -676,9 +672,8 @@
           </div>
           <div class="hero-visual reveal">
             <picture>
-              <source srcset="Assets/images/01-cava-vinoteca-wine-wall-hero-480.avif?v=1 480w, Assets/images/01-cava-vinoteca-wine-wall-hero-640.avif?v=1 640w, Assets/images/01-cava-vinoteca-wine-wall-hero-800.avif?v=1 800w, Assets/images/01-cava-vinoteca-wine-wall-hero-1280.avif?v=1 1280w, Assets/images/01-cava-vinoteca-wine-wall-hero-1920.avif?v=1 1920w" type="image/avif">
-              <source srcset="Assets/images/01-cava-vinoteca-wine-wall-hero-480.webp?v=1 480w, Assets/images/01-cava-vinoteca-wine-wall-hero-640.webp?v=1 640w, Assets/images/01-cava-vinoteca-wine-wall-hero-800.webp?v=1 800w, Assets/images/01-cava-vinoteca-wine-wall-hero-1280.webp?v=1 1280w, Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp?v=1 1920w" type="image/webp">
-             <img src="Assets/images/01-cava-vinoteca-wine-wall-hero-1920.jpg?v=1" alt="Muro de vinos en CAVA Vinoteca en Pérez Zeledón" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="sync" sizes="(max-width: 479px) 480px, (max-width: 639px) 640px, (max-width: 767px) 800px, (max-width: 1023px) 1280px, 1920px">
+              <source srcset="Assets/images/01-cava-vinoteca-wine-wall-hero-800.webp?v=1 800w, Assets/images/01-cava-vinoteca-wine-wall-hero-1280.webp?v=1 1280w, Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp?v=1 1920w" type="image/webp">
+             <img src="Assets/images/01-cava-vinoteca-wine-wall-hero-1920.jpg?v=1" alt="Muro de vinos en CAVA Vinoteca en Pérez Zeledón" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="sync" sizes="(max-width: 960px) 100vw, 560px">
             </picture>
           </div>
         </div>
@@ -755,7 +750,7 @@
         <div class="after-visual reveal">
           <picture>
             <source srcset="Assets/images/04-cava-vinoteca-after-office-lounge-800.webp 800w, Assets/images/04-cava-vinoteca-after-office-lounge-1280.webp 1280w, Assets/images/04-cava-vinoteca-after-office-lounge-1920.webp 1920w" type="image/webp">
-            <img src="Assets/images/04-cava-vinoteca-after-office-lounge-1920.jpg" alt="Sala de descanso postrabajo en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async" sizes="(max-width: 960px) 100vw, 560px" fetchpriority="low">
+            <img src="Assets/images/04-cava-vinoteca-after-office-lounge-1920.jpg" alt="Sala de descanso postrabajo en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async" sizes="(max-width: 960px) 100vw, 1130px" fetchpriority="low">
           </picture>
         </div>
       </div>
@@ -764,7 +759,7 @@
    <div class="divider reveal">
       <picture>
         <source srcset="Assets/images/05-cava-vinoteca-artisan-wine-detail-800.webp 800w, Assets/images/05-cava-vinoteca-artisan-wine-detail-1280.webp 1280w, Assets/images/05-cava-vinoteca-artisan-wine-detail-1920.webp 1920w" type="image/webp">
-        <img src="Assets/images/05-cava-vinoteca-artisan-wine-detail-1920.jpg" alt="Detalle de vino artesanal y quesos en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async" sizes="(max-width: 960px) 100vw, 560px" fetchpriority="low">
+        <img src="Assets/images/05-cava-vinoteca-artisan-wine-detail-1920.jpg" alt="Detalle de vino artesanal y quesos en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async" sizes="(max-width: 960px) 100vw, 1240px" fetchpriority="low">
       </picture>
     </div>
       <div class="wrap hosts-grid">
@@ -799,7 +794,7 @@
               <div class="host-photo">
                 <picture>
                   <source srcset="Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp 800w, Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1280.webp 1280w, Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp 1920w" type="image/webp">
-                  <img src="Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.jpg" alt="Nazareth guiando experiencias de vino en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async" sizes="(max-width: 960px) 100vw, 560px" fetchpriority="low">
+                  <img src="Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.jpg" alt="Nazareth guiando experiencias de vino en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async" sizes="150px" fetchpriority="low">
                 </picture>
               </div>
               <div>
@@ -928,8 +923,7 @@
         const target = document.querySelector(link.getAttribute('href'));
         if (!target) return;
         e.preventDefault();
-        const top = target.getBoundingClientRect().top + window.scrollY - 90;
-        window.scrollTo({ top, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+        target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
         if (mobileMenu.classList.contains('open')) {
           mobileMenu.classList.remove('open');
           mobileMenu.setAttribute('aria-hidden', 'true');
