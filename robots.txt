@@ -1,0 +1,19 @@
+# CAVA Vinoteca robots.txt
+User-agent: *
+Allow: /
+Disallow: /Repaldos Index/
+
+# Crawler delays (ms)
+Crawl-delay: 1
+
+# Specific crawlers
+User-agent: Googlebot
+Crawl-delay: 0
+Allow: /
+
+User-agent: Bingbot
+Crawl-delay: 1
+Allow: /
+
+# Sitemap
+Sitemap: https://cavagourmet.com/sitemap.xml
