@@ -538,8 +538,10 @@
     .wa:hover { transform: translateY(-2px); background: var(--gold-soft); }
     .wa svg { width: 24px; height: 24px; fill: currentColor; }
 
-    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .75s var(--ease), transform .75s var(--ease); }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .75s var(--ease), transform .75s var(--ease); contain: layout style; will-change: opacity, transform; }
     .reveal.visible { opacity: 1; transform: none; }
+    .reveal-no-animation .reveal,
+    .reveal-no-animation .reveal.visible { transition: none !important; }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -958,16 +960,62 @@
       });
     });
 
-    const revealItems = document.querySelectorAll('.reveal');
+    const revealItems = Array.from(document.querySelectorAll('.reveal'));
+    const isMobileFastPath = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobileFastPath) {
+      document.documentElement.classList.add('reveal-no-animation');
+    }
+    const heroRevealItems = revealItems.filter(item => item.closest('#inicio') !== null);
+    heroRevealItems.forEach(item => item.classList.add('visible'));
+
+    const revealCandidates = revealItems.filter(item => !heroRevealItems.includes(item));
+    const revealQueue = [];
+    let rafQueued = false;
+
+    const commitReveal = () => {
+      rafQueued = false;
+      revealQueue.splice(0, revealQueue.length).forEach(item => item.classList.add('visible'));
+    };
+
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+          revealQueue.push(entry.target);
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: .12, rootMargin: '0px 0px -30px 0px' });
-    revealItems.forEach(item => observer.observe(item));
+      if (revealQueue.length && !rafQueued) {
+        rafQueued = true;
+        requestAnimationFrame(commitReveal);
+      }
+    }, { threshold: 0.08, rootMargin: '120px 0px 0px 0px' });
+
+    const nearViewport = item => {
+      const rect = item.getBoundingClientRect();
+      return rect.top <= window.innerHeight + 120 && rect.bottom >= -120;
+    };
+
+    const initReveal = () => {
+      if (isMobileFastPath) {
+        document.documentElement.classList.add('reveal-no-animation');
+        revealCandidates.forEach(item => item.classList.add('visible'));
+        return;
+      }
+
+      revealCandidates.forEach(item => {
+        if (nearViewport(item)) {
+          item.classList.add('visible');
+        } else {
+          observer.observe(item);
+        }
+      });
+    };
+
+    if (document.readyState === 'complete') {
+      initReveal();
+    } else {
+      window.addEventListener('load', initReveal, { once: true });
+    }
   </script>
 </body>
 </html>
