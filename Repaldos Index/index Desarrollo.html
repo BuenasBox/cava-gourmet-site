@@ -596,7 +596,8 @@
       "https://www.facebook.com/cavapz",
       "https://www.instagram.com/cavapz",
       "https://open.spotify.com/show/2nQCir3Xq9srVlnZvX1EGz",
-      "https://www.tripadvisor.es/Attraction_Review-g12886080-d26727331-Reviews-Cava_Gourmet_Market-Daniel_Flores_Daniel_Flores_District_Perez_Zeledon_Provinc.html"
+      "https://www.tripadvisor.es/Attraction_Review-g12886080-d26727331-Reviews-Cava_Gourmet_Market-Daniel_Flores_Daniel_Flores_District_Perez_Zeledon_Provinc.html",
+      "https://wa.me/50686325260"
     ]
   }
   </script>
@@ -670,7 +671,7 @@
           <div class="hero-visual reveal">
             <picture>
               <source srcset="Assets/images/01-cava-vinoteca-wine-wall-hero-800.webp 800w, Assets/images/01-cava-vinoteca-wine-wall-hero-1280.webp 1280w, Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp 1920w" type="image/webp">
-             <img src="Assets/images/01-cava-vinoteca-wine-wall-hero-1920.jpg" alt="Muro de vinos en CAVA Vinoteca en Pérez Zeledón" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="sync" sizes="(max-width: 767px) 800px, (max-width: 1023px) 1280px, 1920px">
+              <img src="Assets/images/01-cava-vinoteca-wine-wall-hero-1920.jpg" alt="Muro de vinos en CAVA Vinoteca en Pérez Zeledón" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="async" sizes="(max-width: 767px) 800px, (max-width: 1023px) 1280px, 1920px">
             </picture>
           </div>
         </div>
@@ -720,10 +721,10 @@
         <div class="ritual-lock reveal" id="ritualLock" role="region" aria-labelledby="ritualQuestion" aria-live="polite">
           <div class="ritual-card">
             <p class="ritual-question" id="ritualQuestion">¿Qué hace memorable una botella?</p>
-         <div class="ritual-options" role="group" aria-label="Opciones de respuesta">
-              <button class="ritual-option" data-correct="false">La añada</button>
-              <button class="ritual-option" data-correct="false">El nombre de la bodega</button>
-              <button class="ritual-option" data-correct="true">La historia que provoca</button>
+            <div class="ritual-options" role="listbox" aria-label="Opciones de respuesta">
+              <button class="ritual-option" data-correct="false" role="option">La añada</button>
+              <button class="ritual-option" data-correct="false" role="option">El nombre de la bodega</button>
+              <button class="ritual-option" data-correct="true" role="option">La historia que provoca</button>
             </div>
             <p class="ritual-msg" id="ritualMsg" aria-live="polite"></p>
           </div>
@@ -753,12 +754,11 @@
       </div>
     </section>
 
-   <div class="divider reveal">
+    <div class="divider reveal">
       <picture>
         <source srcset="Assets/images/05-cava-vinoteca-artisan-wine-detail-800.webp 800w, Assets/images/05-cava-vinoteca-artisan-wine-detail-1280.webp 1280w, Assets/images/05-cava-vinoteca-artisan-wine-detail-1920.webp 1920w" type="image/webp">
         <img src="Assets/images/05-cava-vinoteca-artisan-wine-detail-1920.jpg" alt="Detalle de vino artesanal y quesos en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
-      </picture>
-    </div>
+    <section class="hosts" id="anfitriones">
       <div class="wrap hosts-grid">
         <div class="hosts-intro">
           <p class="label reveal">Los anfitriones</p>
@@ -766,20 +766,23 @@
           <p class="copy reveal" style="margin-top:1.5rem;">Nazareth Padilla recuerda lo que cada persona ha descubierto. Erick Sandi piensa cada descorche según el momento. Entre ambos, CAVA se convierte en una casa donde el vino siempre conduce a algo más.</p>
         </div>
 
-<div class="host-cards reveal">
+        <div class="host-cards reveal">
           <article class="host-card">
             <div class="host-photo">
-              <img src="Assets/images/nazareth-padilla-portrait.jpg" alt="Nazareth Padilla, comunicadora del vino en CAVA Vinoteca" width="150" height="200" loading="lazy" decoding="async">
+              <img src="Assets/images/nazareth-padilla-portrait.jpg" alt="Nazareth Padilla, comunicadora del vino en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
             </div>
             <div><h3>Nazareth Padilla</h3><p class="host-role">Comunicadora del vino</p><p>Su memoria para recordar lo que cada invitado ha probado vuelve cada encuentro más personal. Su manera de acompañar hace que el vino se sienta cercano.</p></div>
           </article>
           <article class="host-card">
             <div class="host-photo">
-              <img src="Assets/images/erick-sandi-portrait.jpg" alt="Erick Sandi, anfitrión de la mesa en CAVA Vinoteca" width="150" height="200" loading="lazy" decoding="async">
+              <img src="Assets/images/erick-sandi-portrait.jpg" alt="Erick Sandi, anfitrión de la mesa en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
             </div>
             <div><h3>Erick Sandi</h3><p class="host-role">Anfitrión de la mesa</p><p>Elige desde la tipicidad, el estilo y el momento. Su papel es cuidar que cada descorche tenga sentido dentro de la noche.</p></div>
           </article>
         </div>
+      </div>
+    </section>
+
     <section class="hosts" id="nazareth-journey">
       <div class="wrap">
         <div>
