@@ -361,7 +361,7 @@
       flex-direction: column;
       align-items: center;
       gap: .7rem;
-      color: rgba(246,239,227,.36);
+      color: rgba(246,239,227,.52);
       font-size: .62rem;
       letter-spacing: .22em;
       text-transform: uppercase;
@@ -373,7 +373,7 @@
       background: linear-gradient(var(--gold), transparent);
       animation: pulseLine 2.2s infinite ease-in-out;
     }
-    @keyframes pulseLine { 50% { opacity: .35; height: 32px; } }
+    @keyframes pulseLine { 50% { opacity: .35; transform: scaleY(0.7); } }
 
     .mesa { background: var(--ivory); color: var(--text); padding: var(--section) 0; }
     .mesa-grid { display: grid; grid-template-columns: .92fr 1.08fr; gap: clamp(3rem, 7vw, 7rem); align-items: center; }
@@ -495,7 +495,7 @@
     .pillar { background: rgba(10,20,31,.72); padding: clamp(1.7rem, 3vw, 3rem); }
     .pillar span { color: var(--gold); font-size: .62rem; letter-spacing: .28em; text-transform: uppercase; display: block; margin-bottom: 1.2rem; }
     .pillar h3 { font-family: var(--display); font-weight: 300; font-size: clamp(1.55rem, 2.6vw, 2.35rem); margin-bottom: .8rem; }
-    .pillar p { color: rgba(246,239,227,.55); font-size: .98rem; }
+    .pillar p { color: rgba(246,239,227,.65); font-size: .98rem; }
 
     .eco-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); margin-top: 3rem; }
     .eco-card { background: rgba(10,20,31,.72); padding: clamp(1.7rem, 3vw, 2.5rem); border: 1px solid rgba(184,151,90,.23); transition: border-color .25s var(--ease), background .25s var(--ease); border-radius: 1rem; }
@@ -624,7 +624,10 @@
   <header class="nav" id="nav">
     <a href="#inicio" class="brand" aria-label="Ir al inicio">
       <div class="cava-monogram">
-        <img src="Assets/logo-cava-mark.webp" alt="Isotipo de CAVA" width="34" height="34">
+        <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="17" cy="17" r="16" fill="var(--gold)" stroke="var(--gold-soft)" stroke-width="1"/>
+          <text x="17" y="23" text-anchor="middle" font-family="var(--display)" font-style="italic" font-size="20" fill="var(--navy-deep)">C</text>
+        </svg>
       </div>
       <span class="brand-wordmark">CAVA Vinoteca</span>
     </a>
@@ -662,7 +665,10 @@
             </div>
             <div class="hero-branding reveal">
               <div class="cava-monogram">
-                <img src="Assets/logo-cava-mark.webp" alt="Isotipo de CAVA" width="34" height="34">
+                <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <circle cx="17" cy="17" r="16" fill="var(--gold)" stroke="var(--gold-soft)" stroke-width="1"/>
+                  <text x="17" y="23" text-anchor="middle" font-family="var(--display)" font-style="italic" font-size="20" fill="var(--navy-deep)">C</text>
+                </svg>
               </div>
               <p class="hero-branding-label">El sello de la casa</p>
             </div>
@@ -683,7 +689,7 @@
         <div class="mesa-visual reveal" aria-label="Representación visual de la mesa compartida">
           <picture>
             <source srcset="Assets/images/02-cava-vinoteca-private-tasting-table-800.webp 800w, Assets/images/02-cava-vinoteca-private-tasting-table-1280.webp 1280w, Assets/images/02-cava-vinoteca-private-tasting-table-1920.webp 1920w" type="image/webp">
-<img src="Assets/images/02-cava-vinoteca-private-tasting-table-1920.jpg" alt="Mesa compartida y cata privada en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+<img src="Assets/images/02-cava-vinoteca-private-tasting-table-1920.jpg" alt="Mesa compartida y cata privada en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async" sizes="(max-width: 960px) 100vw, 560px">
           </picture>
         </div>
 
@@ -702,7 +708,7 @@
           <div class="mesa-pairing reveal">
             <picture>
               <source srcset="Assets/images/03-cava-vinoteca-charcuterie-experience-800.webp 800w, Assets/images/03-cava-vinoteca-charcuterie-experience-1280.webp 1280w, Assets/images/03-cava-vinoteca-charcuterie-experience-1920.webp 1920w" type="image/webp">
-              <img src="Assets/images/03-cava-vinoteca-charcuterie-experience-1920.jpg" alt="Charcutería y maridaje en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+              <img src="Assets/images/03-cava-vinoteca-charcuterie-experience-1920.jpg" alt="Charcutería y maridaje en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async" sizes="(max-width: 960px) 100vw, 560px">
             </picture>
           </div>
         </div>
@@ -747,7 +753,7 @@
         <div class="after-visual reveal">
           <picture>
             <source srcset="Assets/images/04-cava-vinoteca-after-office-lounge-800.webp 800w, Assets/images/04-cava-vinoteca-after-office-lounge-1280.webp 1280w, Assets/images/04-cava-vinoteca-after-office-lounge-1920.webp 1920w" type="image/webp">
-            <img src="Assets/images/04-cava-vinoteca-after-office-lounge-1920.jpg" alt="Sala de descanso postrabajo en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+            <img src="Assets/images/04-cava-vinoteca-after-office-lounge-1920.jpg" alt="Sala de descanso postrabajo en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async" sizes="(max-width: 960px) 100vw, 560px">
           </picture>
         </div>
       </div>
@@ -756,7 +762,7 @@
    <div class="divider reveal">
       <picture>
         <source srcset="Assets/images/05-cava-vinoteca-artisan-wine-detail-800.webp 800w, Assets/images/05-cava-vinoteca-artisan-wine-detail-1280.webp 1280w, Assets/images/05-cava-vinoteca-artisan-wine-detail-1920.webp 1920w" type="image/webp">
-        <img src="Assets/images/05-cava-vinoteca-artisan-wine-detail-1920.jpg" alt="Detalle de vino artesanal y quesos en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+        <img src="Assets/images/05-cava-vinoteca-artisan-wine-detail-1920.jpg" alt="Detalle de vino artesanal y quesos en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async" sizes="(max-width: 960px) 100vw, 560px">
       </picture>
     </div>
       <div class="wrap hosts-grid">
@@ -769,13 +775,13 @@
 <div class="host-cards reveal">
           <article class="host-card">
             <div class="host-photo">
-              <img src="Assets/images/nazareth-padilla-portrait.jpg" alt="Nazareth Padilla, comunicadora del vino en CAVA Vinoteca" width="150" height="200" loading="lazy" decoding="async">
+              <img src="Assets/images/nazareth-padilla-portrait.jpg" alt="Nazareth Padilla, comunicadora del vino en CAVA Vinoteca" width="150" height="200" loading="lazy" decoding="async" sizes="150px">
             </div>
             <div><h3>Nazareth Padilla</h3><p class="host-role">Comunicadora del vino</p><p>Su memoria para recordar lo que cada invitado ha probado vuelve cada encuentro más personal. Su manera de acompañar hace que el vino se sienta cercano.</p></div>
           </article>
           <article class="host-card">
             <div class="host-photo">
-              <img src="Assets/images/erick-sandi-portrait.jpg" alt="Erick Sandi, anfitrión de la mesa en CAVA Vinoteca" width="150" height="200" loading="lazy" decoding="async">
+              <img src="Assets/images/erick-sandi-portrait.jpg" alt="Erick Sandi, anfitrión de la mesa en CAVA Vinoteca" width="150" height="200" loading="lazy" decoding="async" sizes="150px">
             </div>
             <div><h3>Erick Sandi</h3><p class="host-role">Anfitrión de la mesa</p><p>Elige desde la tipicidad, el estilo y el momento. Su papel es cuidar que cada descorche tenga sentido dentro de la noche.</p></div>
           </article>
@@ -791,7 +797,7 @@
               <div class="host-photo">
                 <picture>
                   <source srcset="Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp 800w, Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1280.webp 1280w, Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp 1920w" type="image/webp">
-                  <img src="Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.jpg" alt="Nazareth guiando experiencias de vino en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async">
+                  <img src="Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.jpg" alt="Nazareth guiando experiencias de vino en CAVA Vinoteca" width="1920" height="1280" loading="lazy" decoding="async" sizes="(max-width: 960px) 100vw, 560px">
                 </picture>
               </div>
               <div>
@@ -873,7 +879,10 @@
     <div class="footer-inner">
       <div class="footer-brand">
         <div class="cava-monogram">
-          <img src="Assets/logo-cava-mark.webp" alt="Isotipo de CAVA" width="34" height="34">
+          <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="17" cy="17" r="16" fill="var(--gold)" stroke="var(--gold-soft)" stroke-width="1"/>
+            <text x="17" y="23" text-anchor="middle" font-family="var(--display)" font-style="italic" font-size="20" fill="var(--navy-deep)">C</text>
+          </svg>
         </div>
         <span>CAVA Vinoteca</span>
       </div>
