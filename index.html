@@ -496,6 +496,13 @@
     .pillar h3 { font-family: var(--display); font-weight: 300; font-size: clamp(1.55rem, 2.6vw, 2.35rem); margin-bottom: .8rem; }
     .pillar p { color: rgba(246,239,227,.55); font-size: .98rem; }
 
+    .eco-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); margin-top: 3rem; }
+    .eco-card { background: rgba(10,20,31,.72); padding: clamp(1.7rem, 3vw, 2.5rem); border: 1px solid rgba(184,151,90,.23); transition: border-color .25s var(--ease), background .25s var(--ease); border-radius: 1rem; }
+    .eco-card:hover { border-color: var(--gold); background: rgba(184,151,90,.08); }
+    .eco-card a { text-decoration: none; color: inherit; display: block; }
+    .eco-card h3 { font-family: var(--display); font-weight: 300; font-size: clamp(1.2rem, 2.2vw, 1.8rem); margin-bottom: .5rem; }
+    .eco-card p { color: rgba(246,239,227,.65); font-size: .95rem; line-height: 1.6; }
+
     .hosts { background: var(--charcoal); padding: var(--section) 0; }
     .hosts-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(3rem, 7vw, 7rem); align-items: start; }
     .hosts-intro { position: sticky; top: 7rem; }
@@ -582,11 +589,13 @@
     "description": "Del muro a la mesa: una vinoteca de vino, conversación y hospitalidad compartida en Pérez Zeledón, Costa Rica.",
     "priceRange": "$$$",
     "telephone": "+50686325260",
+    "hasMap": "https://maps.app.goo.gl/Jn628tNv4wjbyxD88",
     "sameAs": [
       "https://maps.app.goo.gl/Jn628tNv4wjbyxD88",
-      "https://www.facebook.com/share/18Vc3YbAWg/",
+      "https://www.facebook.com/cavapz",
       "https://www.instagram.com/cavapz",
       "https://open.spotify.com/show/2nQCir3Xq9srVlnZvX1EGz",
+      "https://www.tripadvisor.es/Attraction_Review-g12886080-d26727331-Reviews-Cava_Gourmet_Market-Daniel_Flores_Daniel_Flores_District_Perez_Zeledon_Provinc.html",
       "https://wa.me/50686325260"
     ]
   }
@@ -799,6 +808,49 @@
               </div>
             </article>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="after" id="ecosistema">
+      <div class="wrap">
+        <div class="after-head">
+          <p class="label reveal">Ecosistema CAVA</p>
+          <h2 class="title reveal">Más allá de <em>la mesa</em></h2>
+          <p class="copy reveal">CAVA Vinoteca se extiende más allá del espacio físico. Un universo de conversaciones, experiencias y conexiones que fortalecen la comunidad del vino en Costa Rica.</p>
+        </div>
+
+        <div class="eco-grid reveal">
+          <article class="eco-card">
+            <a href="https://maps.app.goo.gl/Jn628tNv4wjbyxD88" target="_blank" rel="noopener noreferrer" aria-label="Ubicación física de CAVA Vinoteca en Google Maps">
+              <h3>Ubicación física</h3>
+              <p>Encuéntranos en Pérez Zeledón, Costa Rica</p>
+            </a>
+          </article>
+          <article class="eco-card">
+            <a href="https://www.facebook.com/cavapz" target="_blank" rel="noopener noreferrer" aria-label="Comunidad de CAVA Vinoteca en Facebook">
+              <h3>Comunidad en redes</h3>
+              <p>Conversaciones diarias sobre vino y hospitalidad</p>
+            </a>
+          </article>
+          <article class="eco-card">
+            <a href="https://www.instagram.com/cavapz" target="_blank" rel="noopener noreferrer" aria-label="Momentos capturados de CAVA Vinoteca en Instagram">
+              <h3>Momentos capturados</h3>
+              <p>La esencia visual de nuestras mesas compartidas</p>
+            </a>
+          </article>
+          <article class="eco-card">
+            <a href="https://open.spotify.com/show/2nQCir3Xq9srVlnZvX1EGz" target="_blank" rel="noopener noreferrer" aria-label="Conversaciones sobre vino en el podcast de CAVA Vinoteca">
+              <h3>Conversaciones sobre vino</h3>
+              <p>Podcast que explora historias detrás de cada botella</p>
+            </a>
+          </article>
+          <article class="eco-card">
+            <a href="https://www.tripadvisor.es/Attraction_Review-g12886080-d26727331-Reviews-Cava_Gourmet_Market-Daniel_Flores_Daniel_Flores_District_Perez_Zeledon_Provinc.html" target="_blank" rel="noopener noreferrer" aria-label="Experiencias compartidas de visitantes en TripAdvisor">
+              <h3>Experiencias compartidas</h3>
+              <p>Reseñas de quienes han vivido la mesa con nosotros</p>
+            </a>
+          </article>
         </div>
       </div>
     </section>
