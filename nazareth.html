@@ -998,8 +998,7 @@
       }
     }
 
-@media (max-width: 480px) {
-      .wrap { padding: 0 1.5rem; }
+@media (max-width: 960px) {
       .hero-grid,
       .section-grid,
       .cava-card,
@@ -1026,9 +1025,12 @@
       }
 
       .cava-card-visual { min-height: 220px; }
-
       .links-grid { grid-template-columns: 1fr 1fr; }
     }
+
+    @media (max-width: 480px) {
+      .wrap { padding: 0 1.5rem; }
+    }    
     @media (max-width: 600px) {
       .links-grid {
         grid-template-columns: 1fr;
