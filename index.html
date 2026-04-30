@@ -63,8 +63,8 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { overflow-x: hidden; scroll-behavior: smooth; }
-    body {
+      html, body { overflow-x: hidden; scroll-behavior: smooth; scroll-padding-top: 94px; }    
+      body {
       background: var(--charcoal);
       color: var(--ivory);
       font-family: var(--sans);
@@ -571,6 +571,28 @@
       .hero-visual { min-height: 360px; }
       .footer-inner { flex-wrap: wrap; justify-content: center; text-align: center; }
     }
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: fixed;
+      left: 1rem;
+      top: 1rem;
+      width: auto;
+      height: auto;
+      padding: .75rem 1.25rem;
+      background: var(--gold);
+      color: var(--navy-deep);
+      z-index: 9999;
+      font-size: .85rem;
+      letter-spacing: .1em;
+      border-radius: 4px;
+    }
     @media (max-width: 480px) {
       .hero-content { padding: 0; }
       .hero-grid { grid-template-columns: 1fr; }
@@ -656,6 +678,7 @@
 </head>
 
 <body>
+  <a href="#inicio" class="skip-link">Saltar al contenido principal</a>  
   <header class="nav" id="nav">
     <a href="#inicio" class="brand" aria-label="Ir al inicio">
       <div class="cava-monogram">
