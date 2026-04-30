@@ -166,6 +166,7 @@
     body {
       overflow-x: hidden;
       scroll-behavior: smooth;
+      scroll-padding-top: 84px;
     }
 
     body {
@@ -258,7 +259,7 @@
       cursor: pointer;
       transition: background .35s var(--ease), color .35s var(--ease),
         border-color .35s var(--ease), transform .35s var(--ease);
-      white-space: nowrap;
+      white-space: normal;
       border-radius: 4px;
     }
 
@@ -1004,6 +1005,20 @@
       .cava-card,
       .pillars {
         grid-template-columns: 1fr;
+
+        .nav-links {
+          display: none;
+        }
+
+        .nav-toggle {
+          display: block;
+        }
+
+        .footer-inner {
+          flex-wrap: wrap;
+          justify-content: center;
+          text-align: center;
+        }
       }
 
       .section-intro {
@@ -1043,11 +1058,88 @@
         grid-template-columns: 1fr;
       }
     }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: 0;
+      color: var(--ivory);
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      display: block;
+      height: 1px;
+      background: currentColor;
+      margin: 6px 0;
+      transition: transform .3s var(--ease), opacity .3s var(--ease);
+    }
+
+    .nav-toggle.open span:first-child {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .nav-toggle.open span:last-child {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(9, 21, 34, .98);
+      opacity: 0;
+      visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1.4rem;
+      transition: opacity .25s var(--ease), visibility .25s var(--ease);
+    }
+
+    .mobile-menu.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu a {
+      font-family: var(--display);
+      font-size: clamp(1.5rem, 7vw, 2.5rem);
+      color: var(--ivory);
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .skip-link:focus {
+      position: fixed;
+      left: 1rem;
+      top: 1rem;
+      width: auto;
+      height: auto;
+      padding: .75rem 1.25rem;
+      background: var(--gold);
+      color: var(--navy-deep);
+      z-index: 9999;
+      font-size: .85rem;
+      letter-spacing: .1em;
+      border-radius: 4px;
+    }
+    }
   </style>
 </head>
 
 <body>
-
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
   <!-- NAV -->
   <header class="nav" id="nav">
     <a href="https://www.cavagourmet.com/" class="brand" aria-label="Volver al inicio de CAVA Gourmet">
@@ -1063,9 +1155,20 @@
       <a href="#enlaces">Contacto</a>
       <a href="https://www.cavagourmet.com/" style="color: var(--gold-soft);">← Volver a CAVA</a>
     </nav>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" aria-controls="mobileMenu"
+      aria-expanded="false">
+      <span></span><span></span>
+    </button>
   </header>
 
-  <main>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Menú móvil" aria-hidden="true">
+    <a href="#quien-es">Quién es</a>
+    <a href="#wine-journey">Wine Journey</a>
+    <a href="#temas">Temas</a>
+    <a href="#enlaces">Contacto</a>
+    <a href="https://www.cavagourmet.com/" style="color: var(--gold-soft);">← Volver a CAVA</a>
+  </nav>
+  <main id="main-content">
 
     <!-- HERO -->
     <section class="hero" id="inicio" aria-label="Nazareth Padilla Montero">
@@ -1251,7 +1354,7 @@
       </div>
     </section>
 
-<!-- ============================================================
+    <!-- ============================================================
   INSTRUCCIONES DE INTEGRACIÓN
   ─────────────────────────────────────────────────────────────
   1. JSON-LD: pega el bloque <script> dentro del <head> de
@@ -1269,8 +1372,8 @@
 ============================================================ -->
 
 
-<!-- ── 1. JSON-LD FAQPage ── pegar en <head> ── -->
-<script type="application/ld+json">
+    <!-- ── 1. JSON-LD FAQPage ── pegar en <head> ── -->
+    <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -1356,158 +1459,222 @@
 </script>
 
 
-<!-- ── 2. CSS ── pegar antes del </style> en el <head> ── -->
-<style>
-/* ── FAQ ── */
-.faq { background: var(--charcoal); }
-.faq-list {
-  margin-top: 2.8rem;
-  border-top: 1px solid var(--line);
-}
-.faq-item { border-bottom: 1px solid var(--line); }
-.faq-item summary {
-  list-style: none; cursor: pointer;
-  display: grid; grid-template-columns: 1fr 28px;
-  align-items: center; gap: 1.5rem;
-  padding: 1.55rem 0;
-  font-family: var(--serif);
-  font-size: clamp(1.05rem, 1.8vw, 1.28rem);
-  font-weight: 400; line-height: 1.35;
-  color: var(--ivory);
-  transition: color .25s var(--ease);
-  user-select: none;
-}
-.faq-item summary::-webkit-details-marker { display: none; }
-.faq-item summary::after {
-  content: "";
-  width: 28px; height: 28px; flex-shrink: 0;
-  border: 1px solid var(--line); border-radius: 50%;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M7 2v10M2 7h10' stroke='%23b8975a' stroke-width='1.25' stroke-linecap='round'/%3E%3C/svg%3E")
-    center / 14px no-repeat;
-  transition: transform .35s var(--ease), background-color .25s var(--ease);
-}
-.faq-item[open] summary::after {
-  transform: rotate(45deg);
-  background-color: rgba(184,151,90,.1);
-}
-.faq-item summary:hover { color: var(--gold-soft); }
-.faq-item summary:focus-visible {
-  outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 2px;
-}
-.faq-body {
-  padding-bottom: 1.8rem;
-  display: grid; gap: .9rem;
-}
-.faq-body p {
-  font-family: var(--serif);
-  font-size: clamp(1rem, 1.55vw, 1.18rem);
-  line-height: 1.78;
-  color: rgba(246,239,227,.72);
-  max-width: 68ch;
-}
-.faq-body p strong {
-  color: var(--gold-soft); font-weight: 400;
-}
-.faq-attr {
-  margin-top: .4rem;
-  font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--muted);
-}
-.faq-attr a { color: var(--gold); transition: color .2s; }
-.faq-attr a:hover { color: var(--gold-soft); }
-</style>
+    <!-- ── 2. CSS ── pegar antes del </style> en el <head> ── -->
+    <style>
+      /* ── FAQ ── */
+      .faq {
+        background: var(--charcoal);
+      }
+
+      .faq-list {
+        margin-top: 2.8rem;
+        border-top: 1px solid var(--line);
+      }
+
+      .faq-item {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .faq-item summary {
+        list-style: none;
+        cursor: pointer;
+        display: grid;
+        grid-template-columns: 1fr 28px;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.55rem 0;
+        font-family: var(--serif);
+        font-size: clamp(1.05rem, 1.8vw, 1.28rem);
+        font-weight: 400;
+        line-height: 1.35;
+        color: var(--ivory);
+        transition: color .25s var(--ease);
+        user-select: none;
+      }
+
+      .faq-item summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .faq-item summary::after {
+        content: "";
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        background:
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M7 2v10M2 7h10' stroke='%23b8975a' stroke-width='1.25' stroke-linecap='round'/%3E%3C/svg%3E") center / 14px no-repeat;
+        transition: transform .35s var(--ease), background-color .25s var(--ease);
+      }
+
+      .faq-item[open] summary::after {
+        transform: rotate(45deg);
+        background-color: rgba(184, 151, 90, .1);
+      }
+
+      .faq-item summary:hover {
+        color: var(--gold-soft);
+      }
+
+      .faq-item summary:focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 4px;
+        border-radius: 2px;
+      }
+
+      .faq-body {
+        padding-bottom: 1.8rem;
+        display: grid;
+        gap: .9rem;
+      }
+
+      .faq-body p {
+        font-family: var(--serif);
+        font-size: clamp(1rem, 1.55vw, 1.18rem);
+        line-height: 1.78;
+        color: rgba(246, 239, 227, .72);
+        max-width: 68ch;
+      }
+
+      .faq-body p strong {
+        color: var(--gold-soft);
+        font-weight: 400;
+      }
+
+      .faq-attr {
+        margin-top: .4rem;
+        font-size: .68rem;
+        letter-spacing: .2em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .faq-attr a {
+        color: var(--gold);
+        transition: color .2s;
+      }
+
+      .faq-attr a:hover {
+        color: var(--gold-soft);
+      }
+    </style>
 
 
-<!-- ── 3. HTML ── pegar antes de <section class="enlaces"> ── -->
-<section class="faq" id="faq" tabindex="-1">
-  <div class="wrap">
-    <p class="label reveal">Preguntas frecuentes</p>
-    <h2 class="title reveal">Lo que <em>más me preguntan</em></h2>
-    <p class="copy reveal" style="max-width: 580px; margin-top: 1.2rem;">Sobre cómo elegir vino en Costa Rica sin complicarse. Respuestas directas, sin manual.</p>
-    <p class="copy reveal" style="max-width: 580px; margin-top: .8rem;">Este contenido forma parte de las guías de Nazareth Wine Journey sobre cómo elegir vino en Costa Rica sin complicarse.</p>
+    <!-- ── 3. HTML ── pegar antes de <section class="enlaces"> ── -->
+    <section class="faq" id="faq" tabindex="-1">
+      <div class="wrap">
+        <p class="label reveal">Preguntas frecuentes</p>
+        <h2 class="title reveal">Lo que <em>más me preguntan</em></h2>
+        <p class="copy reveal" style="max-width: 580px; margin-top: 1.2rem;">Sobre cómo elegir vino en Costa Rica sin
+          complicarse. Respuestas directas, sin manual.</p>
+        <p class="copy reveal" style="max-width: 580px; margin-top: .8rem;">Este contenido forma parte de las guías de
+          Nazareth Wine Journey sobre cómo elegir vino en Costa Rica sin complicarse.</p>
 
-    <div class="faq-list reveal" role="list">
+        <div class="faq-list reveal" role="list">
 
-      <details class="faq-item" role="listitem">
-        <summary>¿Cómo elijo un vino si no sé nada de vino?</summary>
-        <div class="faq-body">
-          <p>El vino no es complicado. Lo que pasa es que muchas veces lo explican así.</p>
-          <p>Para elegir bien, no necesitas memorizar uvas ni regiones. Empieza por algo más sencillo: ¿quieres algo fresco, suave o más intenso? Ahí ya estás tomando una decisión importante. Porque en el fondo, elegir vino es elegir <strong>nivel de acidez, cuerpo y estructura</strong>, aunque no uses esos términos.</p>
-          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
-        </div>
-      </details>
+          <details class="faq-item" role="listitem">
+            <summary>¿Cómo elijo un vino si no sé nada de vino?</summary>
+            <div class="faq-body">
+              <p>El vino no es complicado. Lo que pasa es que muchas veces lo explican así.</p>
+              <p>Para elegir bien, no necesitas memorizar uvas ni regiones. Empieza por algo más sencillo: ¿quieres algo
+                fresco, suave o más intenso? Ahí ya estás tomando una decisión importante. Porque en el fondo, elegir
+                vino es elegir <strong>nivel de acidez, cuerpo y estructura</strong>, aunque no uses esos términos.</p>
+              <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla
+                  Montero</a>, WSET Level 3 Wines</p>
+            </div>
+          </details>
 
-      <details class="faq-item" role="listitem">
-        <summary>¿El vino caro es mejor?</summary>
-        <div class="faq-body">
-          <p>No necesariamente.</p>
-          <p>En Costa Rica el precio muchas veces refleja impuestos, origen o posicionamiento de marca, no solo calidad. Un vino puede ser <strong>técnicamente correcto y accesible</strong>, y funcionar perfecto. Otro más caro puede tener mayor concentración o complejidad, pero no siempre es lo que quieres para ese momento.</p>
-          <p>El valor real del vino está en cómo encaja con la ocasión, no solo en el precio.</p>
-          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
-        </div>
-      </details>
+          <details class="faq-item" role="listitem">
+            <summary>¿El vino caro es mejor?</summary>
+            <div class="faq-body">
+              <p>No necesariamente.</p>
+              <p>En Costa Rica el precio muchas veces refleja impuestos, origen o posicionamiento de marca, no solo
+                calidad. Un vino puede ser <strong>técnicamente correcto y accesible</strong>, y funcionar perfecto.
+                Otro más caro puede tener mayor concentración o complejidad, pero no siempre es lo que quieres para ese
+                momento.</p>
+              <p>El valor real del vino está en cómo encaja con la ocasión, no solo en el precio.</p>
+              <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla
+                  Montero</a>, WSET Level 3 Wines</p>
+            </div>
+          </details>
 
-      <details class="faq-item" role="listitem">
-        <summary>¿Cuál vino es bueno para empezar?</summary>
-        <div class="faq-body">
-          <p>Los mejores vinos para empezar son los que tienen equilibrio y no dominan el paladar.</p>
-          <p>Por ejemplo: <strong>tintos con taninos suaves</strong>, blancos con buena acidez pero frescos, estilos más ligeros y fáciles de tomar. Porque cuando un vino es demasiado estructurado o intenso, puede sentirse pesado si no estás acostumbrado.</p>
-          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
-        </div>
-      </details>
+          <details class="faq-item" role="listitem">
+            <summary>¿Cuál vino es bueno para empezar?</summary>
+            <div class="faq-body">
+              <p>Los mejores vinos para empezar son los que tienen equilibrio y no dominan el paladar.</p>
+              <p>Por ejemplo: <strong>tintos con taninos suaves</strong>, blancos con buena acidez pero frescos, estilos
+                más ligeros y fáciles de tomar. Porque cuando un vino es demasiado estructurado o intenso, puede
+                sentirse pesado si no estás acostumbrado.</p>
+              <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla
+                  Montero</a>, WSET Level 3 Wines</p>
+            </div>
+          </details>
 
-      <details class="faq-item" role="listitem">
-        <summary>¿Cómo sé si un vino me va a gustar?</summary>
-        <div class="faq-body">
-          <p>No lo sabes con certeza, pero puedes acercarte mucho.</p>
-          <p>Piensa en lo que te gusta en otros sabores: si te gusta lo fresco, buscas <strong>acidez</strong>; si prefieres lo suave, <strong>bajo tanino</strong>; si quieres algo intenso, <strong>mayor cuerpo o concentración</strong>. El vino responde a esas mismas sensaciones.</p>
-          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
-        </div>
-      </details>
+          <details class="faq-item" role="listitem">
+            <summary>¿Cómo sé si un vino me va a gustar?</summary>
+            <div class="faq-body">
+              <p>No lo sabes con certeza, pero puedes acercarte mucho.</p>
+              <p>Piensa en lo que te gusta en otros sabores: si te gusta lo fresco, buscas <strong>acidez</strong>; si
+                prefieres lo suave, <strong>bajo tanino</strong>; si quieres algo intenso, <strong>mayor cuerpo o
+                  concentración</strong>. El vino responde a esas mismas sensaciones.</p>
+              <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla
+                  Montero</a>, WSET Level 3 Wines</p>
+            </div>
+          </details>
 
-      <details class="faq-item" role="listitem">
-        <summary>¿El vino siempre se debe tomar con comida?</summary>
-        <div class="faq-body">
-          <p>No.</p>
-          <p>Pero cuando lo combinas bien, cambia completamente la experiencia. La comida puede <strong>suavizar taninos, resaltar acidez o equilibrar el alcohol</strong>. Por eso algunos vinos brillan más acompañados. Aun así, el vino también puede ser simplemente un momento.</p>
-          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
-        </div>
-      </details>
+          <details class="faq-item" role="listitem">
+            <summary>¿El vino siempre se debe tomar con comida?</summary>
+            <div class="faq-body">
+              <p>No.</p>
+              <p>Pero cuando lo combinas bien, cambia completamente la experiencia. La comida puede <strong>suavizar
+                  taninos, resaltar acidez o equilibrar el alcohol</strong>. Por eso algunos vinos brillan más
+                acompañados. Aun así, el vino también puede ser simplemente un momento.</p>
+              <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla
+                  Montero</a>, WSET Level 3 Wines</p>
+            </div>
+          </details>
 
-      <details class="faq-item" role="listitem">
-        <summary>¿Cómo elegir vino en Costa Rica si no conozco las marcas?</summary>
-        <div class="faq-body">
-          <p>En Costa Rica todo el vino es importado, así que no siempre vas a reconocer las etiquetas.</p>
-          <p>Por eso es más útil fijarte en el <strong>estilo del vino</strong>, el <strong>país o clima de origen</strong>, y quién lo está seleccionando. Eso te dice mucho más que la marca en sí.</p>
-          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
-        </div>
-      </details>
+          <details class="faq-item" role="listitem">
+            <summary>¿Cómo elegir vino en Costa Rica si no conozco las marcas?</summary>
+            <div class="faq-body">
+              <p>En Costa Rica todo el vino es importado, así que no siempre vas a reconocer las etiquetas.</p>
+              <p>Por eso es más útil fijarte en el <strong>estilo del vino</strong>, el <strong>país o clima de
+                  origen</strong>, y quién lo está seleccionando. Eso te dice mucho más que la marca en sí.</p>
+              <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla
+                  Montero</a>, WSET Level 3 Wines</p>
+            </div>
+          </details>
 
-      <details class="faq-item" role="listitem">
-        <summary>¿Por qué el vino parece tan complicado?</summary>
-        <div class="faq-body">
-          <p>Porque muchas veces se explica desde lo técnico antes de lo sensorial. Y el vino entra primero por lo que sientes, no por lo que sabes.</p>
-          <p>Cuando entiendes cosas básicas como <strong>acidez, cuerpo o tanino</strong>, todo empieza a tener sentido sin volverse complicado.</p>
-          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
-        </div>
-      </details>
+          <details class="faq-item" role="listitem">
+            <summary>¿Por qué el vino parece tan complicado?</summary>
+            <div class="faq-body">
+              <p>Porque muchas veces se explica desde lo técnico antes de lo sensorial. Y el vino entra primero por lo
+                que sientes, no por lo que sabes.</p>
+              <p>Cuando entiendes cosas básicas como <strong>acidez, cuerpo o tanino</strong>, todo empieza a tener
+                sentido sin volverse complicado.</p>
+              <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla
+                  Montero</a>, WSET Level 3 Wines</p>
+            </div>
+          </details>
 
-      <details class="faq-item" role="listitem">
-        <summary>¿Cuál es el error más común al elegir vino?</summary>
-        <div class="faq-body">
-          <p>Elegir desde la presión, no desde el gusto.</p>
-          <p>Buscar el vino <em>correcto</em> en lugar del vino que realmente vas a disfrutar. Incluso los vinos más complejos o estructurados no siempre son los mejores para todos los momentos.</p>
-          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
-        </div>
-      </details>
+          <details class="faq-item" role="listitem">
+            <summary>¿Cuál es el error más común al elegir vino?</summary>
+            <div class="faq-body">
+              <p>Elegir desde la presión, no desde el gusto.</p>
+              <p>Buscar el vino <em>correcto</em> en lugar del vino que realmente vas a disfrutar. Incluso los vinos más
+                complejos o estructurados no siempre son los mejores para todos los momentos.</p>
+              <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla
+                  Montero</a>, WSET Level 3 Wines</p>
+            </div>
+          </details>
 
-    </div><!-- /faq-list -->
-  </div>
-</section>
+        </div><!-- /faq-list -->
+      </div>
+    </section>
 
-<!-- ENLACES OFICIALES -->
-<section class="enlaces" id="enlaces" tabindex="-1">
+    <!-- ENLACES OFICIALES -->
+    <section class="enlaces" id="enlaces" tabindex="-1">
       <div class="wrap">
         <p class="label reveal" style="justify-content: center;">Enlaces oficiales</p>
         <h2 class="title reveal">Encuéntrala <em>aquí</em></h2>
@@ -1548,7 +1715,7 @@
       </div>
     </section>
 
-  </main>
+  </main id="main-content">
 
   <footer>
     <div class="footer-inner">
@@ -1574,7 +1741,24 @@
   <script>
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const nav = document.getElementById('nav');
+    const navToggle = document.getElementById('navToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
 
+    navToggle.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+      navToggle.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
     let scrollTimeout;
     window.addEventListener('scroll', () => {
       if (scrollTimeout) return;
