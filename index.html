@@ -138,7 +138,7 @@
       font-weight: 400;
       cursor: pointer;
       transition: background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease), transform .35s var(--ease);
-      white-space: nowrap;
+      white-space: normal;
       border-radius: 4px;
     }
     .btn:hover { transform: translateY(-1px); }
@@ -552,14 +552,13 @@
         scroll-behavior: auto !important;
       }
     }
-
-    @media (max-width: 960px) {
+@media (max-width: 960px) {
       .nav-links { display: none; }
       .nav-toggle { display: block; }
       .mesa-grid, .ritual-lock, .hosts-grid { grid-template-columns: 1fr; }
       .hosts-intro { position: static; }
       .ritual-pillars { grid-template-columns: 1fr; }
-      .host-card { grid-template-columns: 110px 1fr; gap: 1.35rem; }
+      .host-card { grid-template-columns: 80px 1fr; gap: 1rem; }
       .exp-head { display: block; }
       .exp-head .copy { margin-top: 1rem; }
       .nav { padding-left: clamp(1rem, 5vw, 1.5rem); padding-right: clamp(1rem, 5vw, 1.5rem); }
@@ -570,6 +569,12 @@
       .hero-actions { justify-content: center; }
       .hero-sub { margin-bottom: 2rem; }
       .hero-visual { min-height: 360px; }
+      .footer-inner { flex-wrap: wrap; justify-content: center; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .hero-content { padding: 0; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-visual { min-height: 260px; }
     }
   </style>
 
