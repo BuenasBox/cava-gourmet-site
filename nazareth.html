@@ -998,32 +998,19 @@
       }
     }
 
-    @media (max-width: 960px) {
-
+@media (max-width: 960px) {
       .hero-grid,
       .section-grid,
       .cava-card,
       .pillars {
         grid-template-columns: 1fr;
-
-        .nav-links {
-          display: none;
-        }
-
-        .nav-toggle {
-          display: block;
-        }
-
-        .footer-inner {
-          flex-wrap: wrap;
-          justify-content: center;
-          text-align: center;
-        }
       }
 
-      .section-intro {
-        position: static;
-      }
+      .nav-links { display: none; }
+      .nav-toggle { display: block; }
+      .footer-inner { flex-wrap: wrap; justify-content: center; text-align: center; }
+
+      .section-intro { position: static; }
 
       .hero-visual {
         min-height: 340px;
@@ -1031,24 +1018,17 @@
         justify-self: auto;
       }
 
-      .hero-actions {
-        justify-content: center;
-      }
+      .hero-actions { justify-content: center; }
 
       .hero-copy {
         max-width: 100%;
         text-align: center;
       }
 
-      .cava-card-visual {
-        min-height: 220px;
-      }
+      .cava-card-visual { min-height: 220px; }
 
-      .links-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+      .links-grid { grid-template-columns: 1fr 1fr; }
     }
-
     @media (max-width: 600px) {
       .links-grid {
         grid-template-columns: 1fr;
@@ -1134,7 +1114,7 @@
       letter-spacing: .1em;
       border-radius: 4px;
     }
-    }
+    
   </style>
 </head>
 
