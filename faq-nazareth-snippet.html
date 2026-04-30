@@ -1,0 +1,254 @@
+<!-- ============================================================
+  INSTRUCCIONES DE INTEGRACIÓN
+  ─────────────────────────────────────────────────────────────
+  1. JSON-LD: pega el bloque <script> dentro del <head> de
+     nazareth.html, justo después del JSON-LD @graph existente.
+
+  2. HTML: pega la <section class="faq"> en dos lugares:
+     a) nazareth.html → antes del <section class="enlaces">
+     b) index.html    → donde quieras la sección independiente
+
+  3. CSS: pega el bloque <style> en el <head> de cada archivo,
+     justo antes del </style> que ya existe.
+
+  No requiere JavaScript externo. El acordeón usa <details>/<summary>
+  nativo del navegador: accesible, sin dependencias, sin peso extra.
+============================================================ -->
+
+
+<!-- ── 1. JSON-LD FAQPage ── pegar en <head> ── -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntityOfPage": "https://www.cavagourmet.com/nazareth",
+  "author": {
+    "@id": "https://www.cavagourmet.com/nazareth#person"
+  },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cómo elijo un vino si no sé nada de vino?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El vino no es complicado. Lo que pasa es que muchas veces lo explican así. Para elegir bien, no necesitas memorizar uvas ni regiones. Empieza por algo más sencillo: ¿quieres algo fresco, suave o más intenso? Ahí ya estás tomando una decisión importante sobre acidez, cuerpo y estructura, aunque no uses esos términos.",
+        "author": { "@id": "https://www.cavagourmet.com/nazareth#person" }
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿El vino caro es mejor?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No necesariamente. En Costa Rica el precio muchas veces refleja impuestos, origen o posicionamiento de marca, no solo calidad. Un vino puede ser técnicamente correcto y accesible, y funcionar perfecto. Otro más caro puede tener mayor concentración o complejidad, pero no siempre es lo que quieres para ese momento. El valor real del vino está en cómo encaja con la ocasión.",
+        "author": { "@id": "https://www.cavagourmet.com/nazareth#person" }
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuál vino es bueno para empezar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Los mejores vinos para empezar son los que tienen equilibrio y no dominan el paladar: tintos con taninos suaves, blancos con buena acidez pero frescos, estilos más ligeros y fáciles de tomar. Cuando un vino es demasiado estructurado o intenso, puede sentirse pesado si no estás acostumbrado.",
+        "author": { "@id": "https://www.cavagourmet.com/nazareth#person" }
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo sé si un vino me va a gustar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No lo sabes con certeza, pero puedes acercarte mucho. Piensa en lo que te gusta en otros sabores: si te gusta lo fresco, buscas acidez; si prefieres lo suave, bajo tanino; si quieres algo intenso, mayor cuerpo o concentración. El vino responde a esas mismas sensaciones.",
+        "author": { "@id": "https://www.cavagourmet.com/nazareth#person" }
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿El vino siempre se debe tomar con comida?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Pero cuando lo combinas bien, cambia completamente la experiencia. La comida puede suavizar taninos, resaltar acidez o equilibrar el alcohol. Por eso algunos vinos brillan más acompañados. Aun así, el vino también puede ser simplemente un momento.",
+        "author": { "@id": "https://www.cavagourmet.com/nazareth#person" }
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo elegir vino en Costa Rica si no conozco las marcas?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "En Costa Rica todo el vino es importado, así que no siempre vas a reconocer las etiquetas. Por eso es más útil fijarte en el estilo del vino, el país o clima de origen, y quién lo está seleccionando. Eso te dice mucho más que la marca en sí.",
+        "author": { "@id": "https://www.cavagourmet.com/nazareth#person" }
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué el vino parece tan complicado?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque muchas veces se explica desde lo técnico antes de lo sensorial. Y el vino entra primero por lo que sientes, no por lo que sabes. Cuando entiendes cosas básicas como acidez, cuerpo o tanino, todo empieza a tener sentido sin volverse complicado.",
+        "author": { "@id": "https://www.cavagourmet.com/nazareth#person" }
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuál es el error más común al elegir vino?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Elegir desde la presión, no desde el gusto. Buscar el vino correcto en lugar del vino que realmente vas a disfrutar. Incluso los vinos más complejos o estructurados no siempre son los mejores para todos los momentos.",
+        "author": { "@id": "https://www.cavagourmet.com/nazareth#person" }
+      }
+    }
+  ]
+}
+</script>
+
+
+<!-- ── 2. CSS ── pegar antes del </style> en el <head> ── -->
+<style>
+/* ── FAQ ── */
+.faq { background: var(--charcoal); }
+.faq-list {
+  margin-top: 2.8rem;
+  border-top: 1px solid var(--line);
+}
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-item summary {
+  list-style: none; cursor: pointer;
+  display: grid; grid-template-columns: 1fr 28px;
+  align-items: center; gap: 1.5rem;
+  padding: 1.55rem 0;
+  font-family: var(--serif);
+  font-size: clamp(1.05rem, 1.8vw, 1.28rem);
+  font-weight: 400; line-height: 1.35;
+  color: var(--ivory);
+  transition: color .25s var(--ease);
+  user-select: none;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "";
+  width: 28px; height: 28px; flex-shrink: 0;
+  border: 1px solid var(--line); border-radius: 50%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M7 2v10M2 7h10' stroke='%23b8975a' stroke-width='1.25' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / 14px no-repeat;
+  transition: transform .35s var(--ease), background-color .25s var(--ease);
+}
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+  background-color: rgba(184,151,90,.1);
+}
+.faq-item summary:hover { color: var(--gold-soft); }
+.faq-item summary:focus-visible {
+  outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 2px;
+}
+.faq-body {
+  padding-bottom: 1.8rem;
+  display: grid; gap: .9rem;
+}
+.faq-body p {
+  font-family: var(--serif);
+  font-size: clamp(1rem, 1.55vw, 1.18rem);
+  line-height: 1.78;
+  color: rgba(246,239,227,.72);
+  max-width: 68ch;
+}
+.faq-body p strong {
+  color: var(--gold-soft); font-weight: 400;
+}
+.faq-attr {
+  margin-top: .4rem;
+  font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted);
+}
+.faq-attr a { color: var(--gold); transition: color .2s; }
+.faq-attr a:hover { color: var(--gold-soft); }
+</style>
+
+
+<!-- ── 3. HTML ── pegar antes de <section class="enlaces"> ── -->
+<section class="faq" id="faq" tabindex="-1">
+  <div class="wrap">
+    <p class="label reveal">Preguntas frecuentes</p>
+    <h2 class="title reveal">Lo que <em>más me preguntan</em></h2>
+    <p class="copy reveal" style="max-width: 580px; margin-top: 1.2rem;">Sobre cómo elegir vino en Costa Rica sin complicarse. Respuestas directas, sin manual.</p>
+    <p class="copy reveal" style="max-width: 580px; margin-top: .8rem;">Este contenido forma parte de las guías de Nazareth Wine Journey sobre cómo elegir vino en Costa Rica sin complicarse.</p>
+
+    <div class="faq-list reveal" role="list">
+
+      <details class="faq-item" role="listitem">
+        <summary>¿Cómo elijo un vino si no sé nada de vino?</summary>
+        <div class="faq-body">
+          <p>El vino no es complicado. Lo que pasa es que muchas veces lo explican así.</p>
+          <p>Para elegir bien, no necesitas memorizar uvas ni regiones. Empieza por algo más sencillo: ¿quieres algo fresco, suave o más intenso? Ahí ya estás tomando una decisión importante. Porque en el fondo, elegir vino es elegir <strong>nivel de acidez, cuerpo y estructura</strong>, aunque no uses esos términos.</p>
+          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
+        </div>
+      </details>
+
+      <details class="faq-item" role="listitem">
+        <summary>¿El vino caro es mejor?</summary>
+        <div class="faq-body">
+          <p>No necesariamente.</p>
+          <p>En Costa Rica el precio muchas veces refleja impuestos, origen o posicionamiento de marca, no solo calidad. Un vino puede ser <strong>técnicamente correcto y accesible</strong>, y funcionar perfecto. Otro más caro puede tener mayor concentración o complejidad, pero no siempre es lo que quieres para ese momento.</p>
+          <p>El valor real del vino está en cómo encaja con la ocasión, no solo en el precio.</p>
+          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
+        </div>
+      </details>
+
+      <details class="faq-item" role="listitem">
+        <summary>¿Cuál vino es bueno para empezar?</summary>
+        <div class="faq-body">
+          <p>Los mejores vinos para empezar son los que tienen equilibrio y no dominan el paladar.</p>
+          <p>Por ejemplo: <strong>tintos con taninos suaves</strong>, blancos con buena acidez pero frescos, estilos más ligeros y fáciles de tomar. Porque cuando un vino es demasiado estructurado o intenso, puede sentirse pesado si no estás acostumbrado.</p>
+          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
+        </div>
+      </details>
+
+      <details class="faq-item" role="listitem">
+        <summary>¿Cómo sé si un vino me va a gustar?</summary>
+        <div class="faq-body">
+          <p>No lo sabes con certeza, pero puedes acercarte mucho.</p>
+          <p>Piensa en lo que te gusta en otros sabores: si te gusta lo fresco, buscas <strong>acidez</strong>; si prefieres lo suave, <strong>bajo tanino</strong>; si quieres algo intenso, <strong>mayor cuerpo o concentración</strong>. El vino responde a esas mismas sensaciones.</p>
+          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
+        </div>
+      </details>
+
+      <details class="faq-item" role="listitem">
+        <summary>¿El vino siempre se debe tomar con comida?</summary>
+        <div class="faq-body">
+          <p>No.</p>
+          <p>Pero cuando lo combinas bien, cambia completamente la experiencia. La comida puede <strong>suavizar taninos, resaltar acidez o equilibrar el alcohol</strong>. Por eso algunos vinos brillan más acompañados. Aun así, el vino también puede ser simplemente un momento.</p>
+          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
+        </div>
+      </details>
+
+      <details class="faq-item" role="listitem">
+        <summary>¿Cómo elegir vino en Costa Rica si no conozco las marcas?</summary>
+        <div class="faq-body">
+          <p>En Costa Rica todo el vino es importado, así que no siempre vas a reconocer las etiquetas.</p>
+          <p>Por eso es más útil fijarte en el <strong>estilo del vino</strong>, el <strong>país o clima de origen</strong>, y quién lo está seleccionando. Eso te dice mucho más que la marca en sí.</p>
+          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
+        </div>
+      </details>
+
+      <details class="faq-item" role="listitem">
+        <summary>¿Por qué el vino parece tan complicado?</summary>
+        <div class="faq-body">
+          <p>Porque muchas veces se explica desde lo técnico antes de lo sensorial. Y el vino entra primero por lo que sientes, no por lo que sabes.</p>
+          <p>Cuando entiendes cosas básicas como <strong>acidez, cuerpo o tanino</strong>, todo empieza a tener sentido sin volverse complicado.</p>
+          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
+        </div>
+      </details>
+
+      <details class="faq-item" role="listitem">
+        <summary>¿Cuál es el error más común al elegir vino?</summary>
+        <div class="faq-body">
+          <p>Elegir desde la presión, no desde el gusto.</p>
+          <p>Buscar el vino <em>correcto</em> en lugar del vino que realmente vas a disfrutar. Incluso los vinos más complejos o estructurados no siempre son los mejores para todos los momentos.</p>
+          <p class="faq-attr">— <a href="https://www.cavagourmet.com/nazareth" rel="author">Nazareth Padilla Montero</a>, WSET Level 3 Wines</p>
+        </div>
+      </details>
+
+    </div><!-- /faq-list -->
+  </div>
+</section>
