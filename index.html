@@ -63,7 +63,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html, body { overflow-x: hidden; scroll-behavior: smooth; scroll-padding-top: 94px; }    
+      html, body { overflow-x: hidden; scroll-behavior: smooth; scroll-padding-top: 84px; }    
       body {
       background: var(--charcoal);
       color: var(--ivory);
@@ -173,7 +173,7 @@
       background: rgba(9, 21, 34, .94);
       border-color: rgba(184,151,90,.18);
     }
-    section { scroll-margin-top: 94px; content-visibility: auto; contain-intrinsic-size: 500px; }
+    section { scroll-margin-top: 84px; content-visibility: auto; contain-intrinsic-size: 500px; }
     .brand { display: inline-flex; align-items: center; gap: .85rem; min-width: 170px; }
     .brand-mark {
       width: 34px; height: 34px;
@@ -678,7 +678,7 @@
 </head>
 
 <body>
-  <a href="#inicio" class="skip-link">Saltar al contenido principal</a>  
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>  
   <header class="nav" id="nav">
     <a href="#inicio" class="brand" aria-label="Ir al inicio">
       <div class="cava-monogram">
@@ -709,7 +709,7 @@
     <a href="#contacto">Reservar</a>
   </nav>
 
-  <main>
+  < main id="main-content">
     <section class="hero" id="inicio">
       <div class="wrap hero-content">
         <div class="hero-grid">
