@@ -206,6 +206,12 @@
     .hero-branding-label { font-family: var(--serif); color: rgba(246,239,227,.72); font-size: .88rem; text-transform: uppercase; letter-spacing: .24em; }
     .footer-brand { display: inline-flex; align-items: center; gap: .75rem; }
     .footer-logo { max-height: 24px; width: auto; }
+    .brand img,
+    .footer-brand img,
+    .cava-monogram img {
+      mix-blend-mode: screen;
+    }
+    .nav-links { display: flex; gap: clamp(1rem, 3vw, 2.6rem); align-items: center; }
     .nav-links { display: flex; gap: clamp(1rem, 3vw, 2.6rem); align-items: center; }
     .nav-links a { font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(246,239,227,.78); transition: color .25s var(--ease); }
     .nav-links a:hover { color: var(--gold-soft); }
@@ -683,10 +689,7 @@
   <header class="nav" id="nav">
     <a href="#inicio" class="brand" aria-label="Ir al inicio">
       <div class="cava-monogram">
-        <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <circle cx="17" cy="17" r="16" fill="var(--gold)" stroke="var(--gold-soft)" stroke-width="1"/>
-          <text x="17" y="23" text-anchor="middle" font-family="var(--display)" font-style="italic" font-size="20" fill="var(--navy-deep)">C</text>
-        </svg>
+          <img src="Assets/logo-cava-mark.webp" alt="CAVA Gourmet" width="34" height="34" loading="eager">          
       </div>
       <span class="brand-wordmark">CAVA Vinoteca</span>
     </a>
