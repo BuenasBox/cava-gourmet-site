@@ -22,7 +22,7 @@
   <meta property="og:description"
     content="Comunicadora del vino. Creadora de Nazareth Wine Journey. Pérez Zeledón, Costa Rica." />
   <meta property="og:image"
-    content="https://www.cavagourmet.com/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.jpg" />
+    content="https://www.cavagourmet.com/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp" />
   <meta property="og:image:width" content="1920" />
   <meta property="og:image:height" content="1280" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -30,7 +30,7 @@
   <meta name="twitter:description"
     content="Comunicadora del vino desde CAVA Gourmet Market, Pérez Zeledón, Costa Rica." />
   <meta name="twitter:image"
-    content="https://www.cavagourmet.com/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.jpg" />
+    content="https://www.cavagourmet.com/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp" />
 
   <!-- JSON-LD @graph: Person + Brand + Organization -->
   <script type="application/ld+json">
@@ -168,10 +168,13 @@
     html,
     body {
       overflow-x: hidden;
-      scroll-behavior: smooth;
       scroll-padding-top: 84px;
     }
-
+    @media (prefers-reduced-motion: no-preference) {
+      html {
+        scroll-behavior: smooth;
+      }
+    }
     body {
       background: var(--charcoal);
       color: var(--ivory);
