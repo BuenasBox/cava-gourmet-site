@@ -1155,7 +1155,7 @@
   <!-- NAV -->
   <header class="nav" id="nav">
     <a href="https://www.cavagourmet.com/" class="brand" aria-label="Volver al inicio de CAVA Gourmet">
-      <img src="Assets/logo-cava-mark.webp" alt="CAVA Gourmet" width="34" height="34" loading="eager">
+      <img src="Assets/logo-cava-mark.webp" alt="" aria-hidden="true" width="34" height="34" loading="eager">
       <span
         style="font-family: var(--sans); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(246,239,227,.78);">CAVA
         Gourmet</span>
@@ -1173,7 +1173,7 @@
     </button>
   </header>
 
-  <nav class="mobile-menu" id="mobileMenu" aria-label="Menú móvil" aria-hidden="true">
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Menú móvil" inert>
     <a href="#quien-es">Quién es</a>
     <a href="#wine-journey">Wine Journey</a>
     <a href="#temas">Temas</a>
@@ -1583,9 +1583,9 @@
         <p class="copy reveal" style="max-width: 580px; margin-top: .8rem;">Este contenido forma parte de las guías de
           Nazareth Wine Journey sobre cómo elegir vino en Costa Rica sin complicarse.</p>
 
-        <div class="faq-list reveal" role="list">
+        <div class="faq-list reveal">
 
-          <details class="faq-item" role="listitem">
+          <details class="faq-item">
             <summary>¿Cómo elijo un vino si no sé nada de vino?</summary>
             <div class="faq-body">
               <p>El vino no es complicado. Lo que pasa es que muchas veces lo explican así.</p>
@@ -1597,7 +1597,7 @@
             </div>
           </details>
 
-          <details class="faq-item" role="listitem">
+          <details class="faq-item">
             <summary>¿El vino caro es mejor?</summary>
             <div class="faq-body">
               <p>No necesariamente.</p>
@@ -1611,7 +1611,7 @@
             </div>
           </details>
 
-          <details class="faq-item" role="listitem">
+          <details class="faq-item">
             <summary>¿Cuál vino es bueno para empezar?</summary>
             <div class="faq-body">
               <p>Los mejores vinos para empezar son los que tienen equilibrio y no dominan el paladar.</p>
@@ -1623,7 +1623,7 @@
             </div>
           </details>
 
-          <details class="faq-item" role="listitem">
+          <details class="faq-item">
             <summary>¿Cómo sé si un vino me va a gustar?</summary>
             <div class="faq-body">
               <p>No lo sabes con certeza, pero puedes acercarte mucho.</p>
@@ -1635,7 +1635,7 @@
             </div>
           </details>
 
-          <details class="faq-item" role="listitem">
+          <details class="faq-item">
             <summary>¿El vino siempre se debe tomar con comida?</summary>
             <div class="faq-body">
               <p>No.</p>
@@ -1647,7 +1647,7 @@
             </div>
           </details>
 
-          <details class="faq-item" role="listitem">
+          <details class="faq-item">
             <summary>¿Cómo elegir vino en Costa Rica si no conozco las marcas?</summary>
             <div class="faq-body">
               <p>En Costa Rica todo el vino es importado, así que no siempre vas a reconocer las etiquetas.</p>
@@ -1658,7 +1658,7 @@
             </div>
           </details>
 
-          <details class="faq-item" role="listitem">
+          <details class="faq-item">
             <summary>¿Por qué el vino parece tan complicado?</summary>
             <div class="faq-body">
               <p>Porque muchas veces se explica desde lo técnico antes de lo sensorial. Y el vino entra primero por lo
@@ -1670,7 +1670,7 @@
             </div>
           </details>
 
-          <details class="faq-item" role="listitem">
+          <details class="faq-item">
             <summary>¿Cuál es el error más común al elegir vino?</summary>
             <div class="faq-body">
               <p>Elegir desde la presión, no desde el gusto.</p>
@@ -1727,12 +1727,12 @@
       </div>
     </section>
 
-  </main id="main-content">
+  </main>
 
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
-        <img src="Assets/logo-cava-mark.webp" alt="CAVA Gourmet" width="34" height="34" loading="eager">
+        <img src="Assets/logo-cava-mark.webp" alt="" aria-hidden="true" width="34" height="34" loading="eager">
         <span>CAVA Gourmet</span>
       </div>
       <span>Nazareth Padilla Montero · Nazareth Wine Journey</span>
@@ -1758,7 +1758,11 @@
 
     navToggle.addEventListener('click', () => {
       const isOpen = mobileMenu.classList.toggle('open');
-      mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+      if (isOpen) {
+        mobileMenu.removeAttribute('inert');
+      } else {
+        mobileMenu.setAttribute('inert', '');
+      }
       navToggle.classList.toggle('open', isOpen);
       navToggle.setAttribute('aria-expanded', String(isOpen));
     });
@@ -1766,7 +1770,7 @@
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.remove('open');
-        mobileMenu.setAttribute('aria-hidden', 'true');
+        mobileMenu.setAttribute('inert', '');
         navToggle.classList.remove('open');
         navToggle.setAttribute('aria-expanded', 'false');
       });
