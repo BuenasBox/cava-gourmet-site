@@ -323,7 +323,7 @@
       display: inline-flex;
       align-items: center;
       gap: .85rem;
-
+     }
       .brand img,
       .footer-brand img {
         mix-blend-mode: screen;
@@ -449,8 +449,9 @@
       }
 
       .hero-visual {
-        min-height: 500px;
-        max-width: 520px;
+        aspect-ratio: 2 / 3;
+        width: min(100%, 520px);
+        max-height: min(82vh, 720px);
         justify-self: end;
         border-radius: 1.5rem;
         border: 1px solid rgba(246, 239, 227, .08);
@@ -460,14 +461,16 @@
         box-shadow: 0 28px 70px rgba(0, 0, 0, .25);
       }
 
-      .hero-visual picture,
-      .hero-visual picture img {
+      .hero-visual picture {
         width: 100%;
         height: 100%;
         display: block;
       }
 
       .hero-visual picture img {
+        width: 100%;
+        height: 100%;
+        display: block;
         object-fit: cover;
         object-position: center top;
         filter: saturate(0.92);
@@ -1033,9 +1036,10 @@
         }
 
         .hero-visual {
-          min-height: 340px;
-          max-width: 100%;
-          justify-self: auto;
+          width: min(100%, 420px);
+          max-height: none;
+          justify-self: center;
+          margin-inline: auto;
         }
 
         .hero-actions {
@@ -1132,7 +1136,13 @@
         height: 1px;
         overflow: hidden;
       }
-
+        @media (max-width: 960px) {
+        .nav-toggle {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+      }
       .skip-link:focus {
         position: fixed;
         left: 1rem;
