@@ -236,7 +236,7 @@
       href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap">
   </noscript>
 
-  <style>
+    <style>
     :root {
       --ivory: #f6efe3;
       --ivory-2: #eadcc3;
@@ -251,11 +251,9 @@
       --text: #221e18;
       --muted: #8d8272;
       --line: rgba(184, 151, 90, .23);
-
       --display: "Bodoni Moda", Georgia, serif;
       --serif: "Cormorant Garamond", Georgia, serif;
       --sans: "Jost", system-ui, -apple-system, sans-serif;
-
       --ease: cubic-bezier(.22, .61, .36, 1);
       --max: 1240px;
       --pad: clamp(1.35rem, 4vw, 4.5rem);
@@ -1271,6 +1269,25 @@
         font-size: .85rem;
         letter-spacing: .1em;
         border-radius: 4px;
+
+        /* Final accessibility contrast overrides */
+        .quien .label,
+        .quien .title em,
+        .quien .credential-num {
+          color: #6f4e1f;
+        }
+
+        .quien .copy,
+        .quien .copy.dark,
+        .credential-item p {
+          color: #4b4034;
+          }
+
+        .footer-inner,
+        .footer-inner span,
+        .footer-brand .brand-name {
+          color:rgba(246, 239, 227, 0.82);
+          }
       }
   </style>
 </head>
