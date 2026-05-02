@@ -674,9 +674,11 @@
         color: #665b4c;
       }
 
-      .quien .label {
-        color: var(--gold);
-      }
+      .quien .label,
+      .quien .title em,
+      .credential-num {
+        color: #8a6530;
+        }
 
       .credentials {
         display: grid;
@@ -1043,7 +1045,7 @@
         gap: 1rem;
         align-items: center;
         flex-wrap: wrap;
-        color: rgba(246, 239, 227, .36);
+        color: rgba(246, 239, 227, .68);
         font-size: .72rem;
         letter-spacing: .14em;
         text-transform: uppercase;
@@ -1054,7 +1056,9 @@
         align-items: center;
         gap: .75rem;
       }
-
+      .brand-name {
+  color: rgba(246, 239, 227, 0.78);
+}
       /* ── WA FLOAT ── */
       .wa {
         position: fixed;
@@ -1320,14 +1324,19 @@
             </div>
           </div>
           <div class="hero-visual reveal" aria-label="Foto de Nazareth Padilla Montero">
-            <picture>
-              <source
-                srcset="Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1280.webp 1280w"
-                type="image/webp">
-              <img src="Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp"
-                alt="Nazareth Padilla Montero, comunicadora del vino y creadora de Nazareth Wine Journey en CAVA Gourmet Market"
-                width="1280" height="1920" loading="eager" fetchpriority="high" decoding="sync">
-            </picture>
+<picture>
+  <source
+    srcset="Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp 800w,
+            Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1280.webp 1280w"
+    type="image/webp">
+  <img src="Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1280.webp"
+    alt="Nazareth Padilla Montero, comunicadora del vino y creadora de Nazareth Wine Journey en CAVA Gourmet Market"
+    width="1280" height="1920"
+    loading="eager"
+    fetchpriority="high"
+    decoding="sync"
+    sizes="(max-width: 600px) 220px, (max-width: 960px) 420px, 520px">
+</picture>
             <div class="hero-visual-placeholder"><span>Nazareth Wine Journey</span></div>
           </div>
         </div>
