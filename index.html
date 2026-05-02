@@ -15,6 +15,7 @@
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
     <link rel="preload" as="image" href="Assets/images/01-cava-vinoteca-wine-wall-hero-800.webp?v=1" type="image/webp"
     media="(max-width: 767px)"
     imagesrcset="Assets/images/01-cava-vinoteca-wine-wall-hero-800.webp?v=1 800w, Assets/images/01-cava-vinoteca-wine-wall-hero-1280.webp?v=1 1280w, Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp?v=1 1920w"
@@ -31,15 +32,23 @@
   <meta property="og:url" content="https://www.cavagourmet.com/" />
   <meta property="og:title" content="CAVA Vinoteca — Del muro a la mesa compartida" />
   <meta property="og:description"
-    content="https://www.cavagourmet.com/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp?v=1" />
+    content="CAVA Vinoteca en Pérez Zeledón. Del muro a la mesa, una vinoteca de vino, conversación y hospitalidad compartida." />
+  <meta property="og:image" content="https://www.cavagourmet.com/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp" />
+  <meta property="og:image:alt" content="Muro de vinos en CAVA Vinoteca, Pérez Zeledón" />
   <meta property="og:image:width" content="1920" />
   <meta property="og:image:height" content="1280" />
+  <meta property="og:image:type" content="image/webp" />
+  <meta property="og:locale" content="es_CR" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image"
     content="https://www.cavagourmet.com/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp?v=1" />
   <meta name="twitter:title" content="CAVA Vinoteca — Del muro a la mesa compartida" />
   <meta name="twitter:description"
     content="CAVA Vinoteca en Pérez Zeledón. Del muro a la mesa, una vinoteca de vino, conversación y hospitalidad compartida." />
+  <meta name="geo.region" content="CR-SJ" />
+  <meta name="geo.placename" content="Pérez Zeledón, Costa Rica" />
+  <meta name="geo.position" content="9.3676;-83.6823" />
+  <meta name="ICBM" content="9.3676, -83.6823" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1304,7 +1313,11 @@
         "@id": "https://www.cavagourmet.com/#cava-vinoteca",
         "name": "CAVA Vinoteca",
         "url": "https://www.cavagourmet.com/",
-        "image": "https://www.cavagourmet.com/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.jpg",
+        "image": [
+          "https://www.cavagourmet.com/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp",
+          "https://www.cavagourmet.com/Assets/images/02-cava-vinoteca-private-tasting-table-1920.webp",
+          "https://www.cavagourmet.com/Assets/images/04-cava-vinoteca-after-office-lounge-1920.webp"
+        ],
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Pérez Zeledón",
@@ -1312,10 +1325,34 @@
           "addressRegion": "San José",
           "addressCountry": "CR"
         },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "9.3676",
+          "longitude": "-83.6823"
+        },
         "description": "Del muro a la mesa: una vinoteca de vino, conversación y hospitalidad compartida en Pérez Zeledón, Costa Rica.",
         "priceRange": "$$$",
+        "servesCuisine": "Wine Bar",
+        "currenciesAccepted": "CRC, USD",
         "telephone": "+50686325260",
+        "email": "nazareth@cavagourmet.com",
         "hasMap": "https://maps.app.goo.gl/Jn628tNv4wjbyxD88",
+        "potentialAction": {
+          "@type": "ReserveAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa",
+            "inLanguage": "es",
+            "actionPlatform": [
+              "https://schema.org/DesktopWebPlatform",
+              "https://schema.org/MobileWebPlatform"
+            ]
+          },
+          "result": {
+            "@type": "Reservation",
+            "name": "Mesa en CAVA Vinoteca"
+          }
+        },
         "sameAs": [
           "https://maps.app.goo.gl/Jn628tNv4wjbyxD88",
           "https://www.facebook.com/cavapz",
@@ -1339,7 +1376,7 @@
         "knowsAbout": [
           "vino",
           "hospitalidad",
-          "experiencia enológicos",
+          "experiencia enológica",
           "comunicación de vino"
         ],
         "sameAs": [
@@ -1349,7 +1386,7 @@
           "https://www.linkedin.com/in/nazareth-padilla-montero/",
           "https://www.womenofthevine.com/articles/women-of-the-vine-spirits-foundation-surpasses-1-million-in-scholarships-awarded-fosters-the-next-generation-of-women-leaders"
         ],
-        "image": "https://www.cavagourmet.com/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.jpg"
+        "image": "https://www.cavagourmet.com/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp"
       },
       {
         "@type": "Brand",
@@ -1365,7 +1402,85 @@
         "founder": {
           "@id": "https://www.cavagourmet.com/nazareth#person"
         },
-        "logo": "https://www.cavagourmet.com/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.jpg"
+        "logo": "https://www.cavagourmet.com/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp"
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://www.cavagourmet.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Qué hace memorable una botella de vino?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "En CAVA Vinoteca creemos que lo que hace memorable una botella es la historia que provoca. No la añada ni el nombre de la bodega, sino el momento y la conversación que despierta alrededor de la mesa."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cómo funciona el After Office en CAVA Vinoteca?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cada invitado elige una botella del muro para compartirla con la mesa. Nazareth y Erick acompañan el descorche, dosifican el servicio y convierten cada botella en conversación. No es una cata tradicional: es un ritual compartido que se mide por el momento, no por la botella."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Dónde está ubicada CAVA Vinoteca?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "CAVA Vinoteca está en Pérez Zeledón, San José, Costa Rica. Puedes encontrarnos en Google Maps: https://maps.app.goo.gl/Jn628tNv4wjbyxD88"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cómo puedo reservar en CAVA Vinoteca?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Por WhatsApp al +506 8632 5260 o al correo nazareth@cavagourmet.com. También puedes escribirle a Nazareth al +506 8448 3983. Cuéntanos qué buscas y te ayudamos a encontrar el momento perfecto."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Qué es el Muro de vinos en CAVA Vinoteca?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "El Muro es la selección de vinos en rotación constante de CAVA Vinoteca. Cambia cada semana y nunca hay dos noches iguales. Los invitados eligen una botella del muro para traerla a la mesa compartida."
+            }
+          }
+        ]
+      },
+      {
+        "@type": "Event",
+        "@id": "https://www.cavagourmet.com/#after-office",
+        "name": "After Office — Del muro a la mesa compartida",
+        "description": "Ritual de vino compartido en CAVA Vinoteca. Cada invitado elige una botella del muro, Nazareth y Erick acompañan el descorche y convierten cada botella en conversación.",
+        "url": "https://www.cavagourmet.com/#after-office",
+        "image": "https://www.cavagourmet.com/Assets/images/04-cava-vinoteca-after-office-lounge-1920.webp",
+        "organizer": {
+          "@id": "https://www.cavagourmet.com/#cava-vinoteca"
+        },
+        "location": {
+          "@type": "Place",
+          "name": "CAVA Vinoteca",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Pérez Zeledón",
+            "addressRegion": "San José",
+            "addressCountry": "CR"
+          }
+        },
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "performer": [
+          { "@id": "https://www.cavagourmet.com/nazareth#person" }
+        ],
+        "offers": {
+          "@type": "Offer",
+          "url": "https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa",
+          "availability": "https://schema.org/InStock",
+          "priceCurrency": "CRC"
+        }
       }
     ]
   }
