@@ -1292,8 +1292,12 @@ color: #4b4034;
 color: rgba(246, 239, 227, 0.82);
 }
 </style>
-<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
-<script defer src="/_vercel/insights/script.js"></script>
+
+<!-- Vercel Web Analytics -->
+<script type="module">
+  import { inject } from 'https://cdn.vercel-insights.com/v1/script.js';
+  inject();
+</script>
 </head>
 
 <body>
