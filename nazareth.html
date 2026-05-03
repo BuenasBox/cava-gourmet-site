@@ -1291,6 +1291,7 @@ color: #4b4034;
 .footer-brand .brand-name {
 color: rgba(246, 239, 227, 0.82);
 }
+@media(max-width:768px){.reveal{opacity:1;transform:none;transition:none}}
 </style>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -1870,14 +1871,14 @@ color: rgba(246, 239, 227, 0.82);
     }, { threshold: 0.08, rootMargin: '120px 0px 0px 0px' });
 
     const initReveal = () => {
-      if (isMobileFastPath) { revealItems.forEach(item => item.classList.add('visible')); return; }
+      if (isMobileFastPath) { return; }
       const heroItems = revealItems.filter(item => item.closest('#inicio'));
       heroItems.forEach(item => item.classList.add('visible'));
       revealItems.filter(item => !heroItems.includes(item)).forEach(item => observer.observe(item));
     };
 
     if (document.readyState === 'complete') { requestAnimationFrame(initReveal); }
-    else { window.addEventListener('load', initReveal, { once: true }); }
+    else { window.addEventListener('load', () => requestAnimationFrame(initReveal), { once: true }); }
   </script>
 
 </body>
