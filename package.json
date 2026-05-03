@@ -1,0 +1,15 @@
+{
+  "name": "cava-gourmet-site",
+  "version": "1.0.0",
+  "description": "CAVA Vinoteca website",
+  "private": true,
+  "scripts": {
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/speed-insights": "^1.0.12"
+  }
+}
