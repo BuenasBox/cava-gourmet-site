@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:www.cavagourmet.com)"
+      "WebFetch(domain:www.cavagourmet.com)",
+      "Bash(python -)"
     ]
   }
 }
