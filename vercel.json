@@ -20,7 +20,7 @@
       ]
     },
     {
-      "source": "/(index|nazareth).html",
+      "source": "/(index|nazareth|cata-de-vinos-perez-zeledon).html",
       "headers": [
         {
           "key": "Cache-Control",
@@ -39,6 +39,15 @@
     },
     {
       "source": "/nazareth",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/cata-de-vinos-perez-zeledon",
       "headers": [
         {
           "key": "Cache-Control",
