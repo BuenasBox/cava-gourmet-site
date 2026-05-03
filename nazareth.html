@@ -1356,7 +1356,7 @@ color: rgba(246, 239, 227, 0.82);
     width="1280" height="1920"
     loading="eager"
     fetchpriority="high"
-    decoding="sync"
+    decoding="async"
     sizes="(max-width: 600px) 220px, (max-width: 960px) 420px, 520px">
 </picture>
             <div class="hero-visual-placeholder"><span>Nazareth Wine Journey</span></div>
@@ -1876,7 +1876,7 @@ color: rgba(246, 239, 227, 0.82);
       revealItems.filter(item => !heroItems.includes(item)).forEach(item => observer.observe(item));
     };
 
-    if (document.readyState === 'complete') { initReveal(); }
+    if (document.readyState === 'complete') { requestAnimationFrame(initReveal); }
     else { window.addEventListener('load', initReveal, { once: true }); }
   </script>
 
