@@ -20,7 +20,16 @@
       ]
     },
     {
-      "source": "/(index|nazareth|cata-de-vinos-perez-zeledon).html",
+      "source": "/(index|nazareth|cata-de-vinos-perez-zeledon|blog).html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/blog/:path*.html",
       "headers": [
         {
           "key": "Cache-Control",
@@ -48,6 +57,24 @@
     },
     {
       "source": "/cata-de-vinos-perez-zeledon",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/blog",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/blog/:path*",
       "headers": [
         {
           "key": "Cache-Control",

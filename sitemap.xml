@@ -51,4 +51,64 @@
     </image:image>
   </url>
 
+  <url>
+    <loc>https://www.cavagourmet.com/cata-de-vinos-perez-zeledon</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://www.cavagourmet.com/Assets/images/02-cava-vinoteca-private-tasting-table-1920.webp</image:loc>
+      <image:title>Cata de vinos en CAVA Gourmet Market, Pérez Zeledón</image:title>
+      <image:caption>Mesa de cata de vinos guiada por Nazareth Padilla Montero en CAVA Gourmet Market.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.cavagourmet.com/blog</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.cavagourmet.com/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp</image:loc>
+      <image:title>Blog de CAVA Gourmet Market — Conversaciones sobre vino</image:title>
+      <image:caption>Reflexiones sobre vino, cultura y experiencia desde CAVA Gourmet Market en Costa Rica.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.cavagourmet.com/blog/como-se-construye-cultura-del-vino</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.cavagourmet.com/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp</image:loc>
+      <image:title>Cómo se construye cultura del vino en Costa Rica</image:title>
+      <image:caption>Una reflexión sobre el papel de la experiencia y la conversación en la construcción de cultura del vino.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.cavagourmet.com/blog/vino-menos-elitismo-mas-experiencia</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.cavagourmet.com/Assets/images/05-cava-vinoteca-artisan-wine-detail-1920.webp</image:loc>
+      <image:title>Por qué el vino necesita menos elitismo y más experiencia</image:title>
+      <image:caption>El vino puede ser profundo sin ser intimidante. Nazareth Padilla Montero sobre educación del vino sin elitismo.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.cavagourmet.com/blog/contenido-digital-experiencia-real-vinoteca-costa-rica</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.cavagourmet.com/Assets/images/04-cava-vinoteca-after-office-lounge-1920.webp</image:loc>
+      <image:title>De contenido digital a experiencia real: el caso de una vinoteca en Costa Rica</image:title>
+      <image:caption>Cómo CavaGourmet conecta contenido digital con visita física y experiencia real.</image:caption>
+    </image:image>
+  </url>
+
 </urlset>
