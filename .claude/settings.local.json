@@ -6,7 +6,10 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Bash(identify \"nazareth-padilla-seleccion-vino-bodega-cava.jpg\" \"nazareth-padilla-vino-artesanal-cava-gourmet.jpg\")",
+      "Bash(identify *.jpg)",
+      "Bash(awk '{print $1, $3}')"
     ]
   }
 }
