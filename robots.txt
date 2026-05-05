@@ -2,5 +2,6 @@
 User-agent: *
 Allow: /
 Disallow: /Repaldos%20Index/
+Disallow: /blog/plantilla-articulo.html
 Crawl-delay: 1
 Sitemap: https://www.cavagourmet.com/sitemap.xml
