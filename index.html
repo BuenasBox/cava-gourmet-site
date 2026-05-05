@@ -218,35 +218,23 @@
         ]
       },
       {
-        "@type": "Event",
+        "@type": "Service",
         "@id": "https://www.cavagourmet.com/#after-office",
         "name": "After Office — Del muro a la mesa compartida",
-        "description": "Ritual de vino compartido en CAVA Vinoteca. Cada invitado elige una botella del muro, Nazareth y Erick acompañan el descorche y convierten cada botella en conversación.",
+        "description": "Ritual de vino compartido en CAVA Vinoteca. Cada invitado elige una botella del muro, Nazareth y Erick acompañan el descorche y convierten cada botella en conversación. No es una cata tradicional: es un momento compartido que se mide por la experiencia, no por la botella.",
+        "serviceType": "Experiencia de vino",
+        "provider": { "@id": "https://www.cavagourmet.com/#cava-vinoteca" },
+        "areaServed": {
+          "@type": "Place",
+          "name": "Pérez Zeledón, Costa Rica"
+        },
         "url": "https://www.cavagourmet.com/#after-office",
         "image": "https://www.cavagourmet.com/Assets/images/04-cava-vinoteca-after-office-lounge-1920.webp",
-        "organizer": {
-          "@id": "https://www.cavagourmet.com/#cava-vinoteca"
-        },
-        "location": {
-          "@type": "Place",
-          "name": "CAVA Vinoteca",
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Pérez Zeledón",
-            "addressRegion": "San José",
-            "addressCountry": "CR"
-          }
-        },
-        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-        "eventStatus": "https://schema.org/EventScheduled",
-        "performer": [
-          { "@id": "https://www.cavagourmet.com/nazareth#person" }
-        ],
         "offers": {
           "@type": "Offer",
-          "url": "https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa",
           "availability": "https://schema.org/InStock",
-          "priceCurrency": "CRC"
+          "priceCurrency": "CRC",
+          "url": "https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa"
         }
       }
     ]
