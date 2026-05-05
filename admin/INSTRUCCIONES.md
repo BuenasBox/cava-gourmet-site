@@ -36,7 +36,7 @@ Antes de tocar el código, define estos datos. Los necesitarás para llenar la p
 
 ## Paso 2 — Copia la plantilla
 
-1. Ve a la carpeta `blog/` del sitio.
+1. Ve a la carpeta `admin/` del sitio.
 2. Copia el archivo `plantilla-articulo.html`.
 3. Renombra la copia con el SLUG del artículo: `[SLUG].html`
    - Ejemplo: `como-elegir-un-vino.html`
