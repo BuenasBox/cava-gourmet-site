@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editor de Artículo — CAVA Vinoteca</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ivory:#f6efe3;--ivory-2:#eadcc3;--gold:#b8975a;--gold-soft:#d7b879;
+      --navy:#162b43;--navy-deep:#091522;--charcoal:#12100d;--charcoal-2:#1b1813;
+      --line:rgba(184,151,90,.2);
+      --display:"Bodoni Moda",Georgia,serif;--serif:"Cormorant Garamond",Georgia,serif;
+      --sans:"Jost",system-ui,sans-serif;--ease:cubic-bezier(.22,.61,.36,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--charcoal);color:var(--ivory);font-family:var(--sans);font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+    /* HEADER */
+    .editor-header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(9,21,34,.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+    .editor-brand{display:flex;align-items:center;gap:.75rem;font-family:var(--display);font-size:.9rem;letter-spacing:.14em;font-weight:300;color:var(--gold-soft)}
+    .header-badge{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(246,239,227,.4);border:1px solid var(--line);padding:.25rem .75rem;border-radius:2px}
+    .header-actions{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.25rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;font-weight:400;cursor:pointer;border-radius:3px;border:1px solid transparent;transition:all .25s var(--ease);font-family:var(--sans);white-space:nowrap}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .btn-ghost{background:transparent;color:rgba(246,239,227,.6);border-color:var(--line)}
+    .btn-ghost:hover{color:var(--ivory);border-color:var(--gold)}
+    .btn-gold{background:var(--gold);color:var(--navy-deep);border-color:var(--gold)}
+    .btn-gold:hover:not(:disabled){background:var(--gold-soft);border-color:var(--gold-soft)}
+    .btn-outline{background:transparent;color:var(--gold-soft);border-color:var(--gold)}
+    .btn-outline:hover{background:rgba(184,151,90,.1)}
+    .btn-claude{background:rgba(99,102,241,.12);color:#a5b4fc;border-color:rgba(99,102,241,.35)}
+    .btn-claude:hover{background:rgba(99,102,241,.2);border-color:rgba(99,102,241,.55)}
+    .btn svg{width:14px;height:14px;flex-shrink:0}
+
+    /* LAYOUT */
+    .editor-layout{display:grid;grid-template-columns:360px 1fr;min-height:calc(100vh - 64px)}
+
+    /* SIDEBAR */
+    .sidebar{background:var(--navy-deep);border-right:1px solid var(--line);padding:0;overflow-y:auto;max-height:calc(100vh - 64px);position:sticky;top:64px}
+
+    /* GUIDE */
+    .guide-block{padding:1.5rem;background:rgba(184,151,90,.06);border-bottom:1px solid var(--line)}
+    .guide-title{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+    .guide-title svg{width:13px;height:13px}
+    .guide-steps{display:flex;flex-direction:column;gap:.25rem}
+    .guide-step{display:flex;align-items:flex-start;gap:.75rem;padding:.4rem .5rem;border-radius:3px;transition:background .2s}
+    .guide-step.current{background:rgba(184,151,90,.12)}
+    .guide-step.done .step-num{background:var(--gold-soft);color:var(--navy-deep)}
+    .guide-step.done .step-text{color:rgba(246,239,227,.35);text-decoration:line-through}
+    .step-num{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--line);font-size:.6rem;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(246,239,227,.5);transition:all .2s;margin-top:.1rem}
+    .guide-step.current .step-num{background:var(--gold);color:var(--navy-deep);border-color:var(--gold)}
+    .guide-step.current .step-text{color:var(--ivory)}
+    .step-text{font-size:.72rem;color:rgba(246,239,227,.4);line-height:1.4}
+
+    /* FIELDS */
+    .sidebar-fields{padding:1.5rem}
+    .sidebar-section{margin-bottom:2rem}
+    .sidebar-title{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line)}
+    .field{margin-bottom:1.1rem}
+    .field label{display:block;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(246,239,227,.5);margin-bottom:.4rem}
+    .field input,.field select,.field textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:3px;padding:.65rem .85rem;color:var(--ivory);font-family:var(--sans);font-size:.82rem;font-weight:300;transition:border-color .2s;outline:none}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);background:rgba(184,151,90,.05)}
+    .field input::placeholder,.field textarea::placeholder{color:rgba(246,239,227,.2)}
+    .field select{appearance:none;cursor:pointer}
+    .field select option{background:var(--navy-deep)}
+    .field textarea{resize:vertical;min-height:70px;line-height:1.5}
+    .field-hint{font-size:.62rem;color:rgba(246,239,227,.3);margin-top:.3rem}
+
+    /* CHAR COUNTER */
+    .char-row{display:flex;align-items:center;justify-content:space-between;margin-top:.3rem}
+    .char-feedback{font-size:.62rem;font-style:italic}
+    .char-feedback.ok{color:#7ed4a7}
+    .char-feedback.warn{color:var(--gold-soft)}
+    .char-feedback.over{color:#e07070}
+    .char-count{font-size:.62rem;color:rgba(246,239,227,.3)}
+    .char-count.warn{color:var(--gold-soft)}
+    .char-count.over{color:#e07070}
+
+    /* SLUG INFO */
+    .slug-info{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:3px;padding:.75rem;margin-top:.4rem}
+    .slug-row{display:flex;align-items:baseline;gap:.4rem;margin-bottom:.3rem}
+    .slug-row:last-child{margin-bottom:0;padding-top:.3rem;border-top:1px solid rgba(184,151,90,.1)}
+    .slug-label{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(246,239,227,.3);white-space:nowrap;flex-shrink:0}
+    .slug-val{font-size:.7rem;font-family:monospace;color:var(--gold-soft);word-break:break-all}
+
+    /* IMAGE UPLOAD */
+    .image-upload-area{border:1px dashed var(--line);border-radius:4px;padding:1.25rem 1rem;text-align:center;cursor:pointer;transition:all .25s;position:relative}
+    .image-upload-area:hover{border-color:var(--gold);background:rgba(184,151,90,.04)}
+    .image-upload-area input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .upload-icon{color:var(--gold);margin-bottom:.4rem}
+    .upload-icon svg{width:22px;height:22px}
+    .upload-label{font-size:.7rem;color:rgba(246,239,227,.5)}
+    .upload-label strong{color:var(--gold-soft);display:block;margin-bottom:.15rem}
+    .image-preview-wrap{margin-top:.75rem;display:none}
+    .image-preview{width:100%;height:100px;object-fit:cover;border-radius:3px;display:block}
+    .image-name{font-size:.65rem;color:rgba(246,239,227,.4);margin-top:.35rem;font-family:monospace;word-break:break-all}
+    .no-image-toggle{display:flex;align-items:center;gap:.5rem;margin-top:.75rem;cursor:pointer}
+    .no-image-toggle input{width:auto;cursor:pointer}
+    .no-image-toggle span{font-size:.7rem;color:rgba(246,239,227,.45)}
+
+    /* EXT SELECTOR */
+    .ext-row{display:flex;gap:.5rem;margin-top:.5rem}
+    .ext-btn{flex:1;padding:.4rem;border:1px solid var(--line);border-radius:3px;background:transparent;color:rgba(246,239,227,.4);font-size:.7rem;font-family:var(--sans);cursor:pointer;text-align:center;transition:all .2s}
+    .ext-btn:hover,.ext-btn.active{border-color:var(--gold);color:var(--gold-soft);background:rgba(184,151,90,.08)}
+    .ext-rec{font-size:.62rem;color:#7ed4a7;margin-top:.3rem}
+
+    /* MAIN */
+    .editor-main{padding:2.5rem 3rem;max-width:880px}
+    .editor-main-header{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--line)}
+    .editor-main-title{font-family:var(--display);font-size:1.4rem;font-weight:300;color:var(--ivory-2);letter-spacing:.04em;margin-bottom:.3rem}
+    .editor-subtitle{font-size:.75rem;color:rgba(246,239,227,.4)}
+
+    /* QUOTE FIELD */
+    .quote-field-wrap{background:rgba(184,151,90,.04);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 4px 4px 0;padding:1rem 1.25rem;margin-bottom:1.5rem}
+    .quote-field-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+    .quote-field-input{width:100%;background:transparent;border:none;outline:none;color:var(--ivory-2);font-family:var(--serif);font-size:1rem;font-style:italic;font-weight:300;line-height:1.6;resize:none;min-height:52px}
+    .quote-field-input::placeholder{color:rgba(246,239,227,.2);font-style:italic}
+    .quote-hint{font-size:.62rem;color:rgba(246,239,227,.3);margin-top:.3rem}
+
+    /* TOOLBAR */
+    .toolbar{display:flex;align-items:center;gap:.4rem;padding:.65rem .85rem;background:var(--navy-deep);border:1px solid var(--line);border-bottom:none;border-radius:4px 4px 0 0;flex-wrap:wrap}
+    .toolbar-group{display:flex;gap:.25rem;align-items:center}
+    .toolbar-sep{width:1px;height:18px;background:var(--line);margin:0 .25rem}
+    .tool-btn{width:32px;height:32px;border-radius:3px;border:1px solid transparent;background:transparent;color:rgba(246,239,227,.55);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+    .tool-btn:hover{background:rgba(184,151,90,.12);color:var(--gold-soft);border-color:var(--line)}
+    .tool-btn svg{width:14px;height:14px}
+    .tool-select{background:transparent;border:1px solid var(--line);color:rgba(246,239,227,.55);font-size:.68rem;padding:.25rem .5rem;border-radius:3px;cursor:pointer;font-family:var(--sans);outline:none}
+    .tool-select:focus{border-color:var(--gold)}
+    .tool-select option{background:var(--navy-deep)}
+
+    /* EDITOR BODY */
+    .editor-body{min-height:460px;padding:2rem 2.25rem;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:0 0 4px 4px;outline:none;font-family:var(--serif);font-size:1.05rem;font-weight:300;line-height:1.85;color:var(--ivory)}
+    .editor-body:focus{border-color:rgba(184,151,90,.4)}
+    .editor-body p{margin-bottom:1.25em}
+    .editor-body h2{font-family:var(--display);font-size:1.2rem;font-weight:300;letter-spacing:.04em;color:var(--ivory-2);margin:2em 0 .75em;border-bottom:1px solid var(--line);padding-bottom:.4em}
+    .editor-body h3{font-family:var(--serif);font-size:1rem;font-style:italic;color:var(--gold-soft);margin:1.5em 0 .5em}
+    .editor-body blockquote{border-left:2px solid var(--gold);padding:.75rem 1.25rem;margin:1.5em 0;font-style:italic;color:var(--ivory-2);background:rgba(184,151,90,.04)}
+    .editor-body a{color:var(--gold-soft);text-decoration:underline}
+    .editor-body strong{font-weight:500;color:var(--ivory-2)}
+    .editor-body[data-placeholder]:empty::before{content:attr(data-placeholder);color:rgba(246,239,227,.18);pointer-events:none;font-style:italic}
+    .word-count{font-size:.62rem;color:rgba(246,239,227,.3);text-align:right;margin-top:.5rem}
+
+    /* CTA PREVIEW */
+    .cta-preview{margin-top:1.5rem;background:rgba(184,151,90,.05);border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:0 0 4px 4px;padding:1.25rem 1.5rem}
+    .cta-preview-label{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem}
+    .cta-text{font-family:var(--serif);font-size:1rem;font-style:italic;color:var(--ivory-2);margin-bottom:.75rem;line-height:1.6}
+    .cta-btn-preview{display:inline-block;padding:.6rem 1.25rem;background:var(--gold);color:var(--navy-deep);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;border-radius:3px;font-family:var(--sans)}
+
+    /* SEO CHECKLIST */
+    .seo-checklist{margin-top:1.5rem;background:var(--navy-deep);border:1px solid var(--line);border-radius:4px;padding:1.25rem}
+    .seo-checklist-title{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.85rem}
+    .seo-item{display:flex;align-items:center;gap:.6rem;padding:.35rem 0;border-bottom:1px solid rgba(184,151,90,.08);font-size:.73rem}
+    .seo-item:last-child{border-bottom:none}
+    .seo-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1);flex-shrink:0;transition:background .3s}
+    .seo-dot.ok{background:#7ed4a7}
+    .seo-dot.fail{background:#e07070}
+    .seo-item-text{color:rgba(246,239,227,.45);transition:color .3s}
+    .seo-item-text.ok{color:rgba(246,239,227,.7)}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(9,21,34,.9);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+    .modal-overlay.open{opacity:1;pointer-events:all}
+    .modal{background:var(--charcoal-2, #1b1813);border:1px solid var(--line);border-radius:6px;padding:2rem 2.25rem;max-width:640px;width:92%;max-height:88vh;overflow-y:auto;transform:translateY(16px);transition:transform .25s var(--ease)}
+    .modal-overlay.open .modal{transform:translateY(0)}
+    .modal-title{font-family:var(--display);font-size:1.1rem;font-weight:300;color:var(--ivory-2);margin-bottom:.35rem;letter-spacing:.04em;display:flex;align-items:center;gap:.75rem}
+    .modal-subtitle{font-size:.75rem;color:rgba(246,239,227,.4);margin-bottom:1.25rem;line-height:1.5}
+    .modal-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.5rem;flex-wrap:wrap}
+    .modal-code{background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:3px;padding:1rem;font-family:monospace;font-size:.72rem;color:var(--ivory-2);line-height:1.6;max-height:340px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
+    .copy-confirm{display:none;text-align:center;padding:.65rem;font-size:.72rem;color:#7ed4a7;background:rgba(74,156,111,.08);border:1px solid rgba(74,156,111,.2);border-radius:3px;margin-top:.75rem}
+
+    /* GENERATE CHECKLIST */
+    .inst-block{background:rgba(184,151,90,.05);border:1px solid var(--line);border-radius:4px;padding:1.25rem;margin-top:1.25rem}
+    .inst-title{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.85rem}
+    .inst-step{display:flex;gap:.75rem;align-items:flex-start;padding:.45rem 0;border-bottom:1px solid rgba(184,151,90,.08);font-size:.78rem;color:rgba(246,239,227,.65)}
+    .inst-step:last-child{border-bottom:none}
+    .inst-num{width:20px;height:20px;border-radius:50%;background:var(--gold);color:var(--navy-deep);font-size:.65rem;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.05rem}
+    .inst-code{font-family:monospace;background:rgba(0,0,0,.3);padding:.1rem .4rem;border-radius:2px;font-size:.72rem;color:var(--gold-soft)}
+
+    /* CLAUDE MODAL */
+    .claude-steps{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem}
+    .claude-step{display:flex;align-items:flex-start;gap:.85rem;padding:.75rem;background:rgba(99,102,241,.05);border:1px solid rgba(99,102,241,.12);border-radius:4px}
+    .claude-step-num{width:24px;height:24px;border-radius:50%;background:rgba(99,102,241,.18);border:1px solid rgba(99,102,241,.35);font-size:.65rem;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#a5b4fc;margin-top:.05rem}
+    .claude-step-text{font-size:.77rem;color:rgba(246,239,227,.6);line-height:1.5}
+    .claude-step-text strong{color:var(--ivory);display:block;margin-bottom:.1rem}
+    .prompt-block{background:rgba(0,0,0,.3);border:1px solid rgba(99,102,241,.2);border-radius:4px;padding:1.1rem;margin-bottom:.75rem}
+    .prompt-block-label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:#a5b4fc;margin-bottom:.65rem;display:flex;align-items:center;justify-content:space-between}
+    .copy-small{font-size:.6rem;letter-spacing:.1em;cursor:pointer;color:rgba(165,180,252,.6);background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);padding:.2rem .6rem;border-radius:2px;transition:all .2s;font-family:var(--sans);text-transform:uppercase}
+    .copy-small:hover{color:#a5b4fc;border-color:rgba(99,102,241,.4)}
+    .prompt-text{font-family:monospace;font-size:.69rem;color:rgba(246,239,227,.5);line-height:1.65;white-space:pre-wrap;max-height:160px;overflow-y:auto}
+    .safe-toggle{display:flex;align-items:flex-start;gap:.75rem;padding:.75rem;background:rgba(184,151,90,.05);border:1px solid var(--line);border-radius:4px;cursor:pointer;margin-bottom:1rem}
+    .safe-toggle input{cursor:pointer;margin-top:.15rem;flex-shrink:0}
+    .safe-toggle span{font-size:.75rem;color:rgba(246,239,227,.6);line-height:1.5}
+    .safe-toggle strong{color:var(--gold-soft);display:block;margin-bottom:.1rem}
+
+    /* TOAST */
+    .toast-container{position:fixed;bottom:2rem;right:2rem;display:flex;flex-direction:column;gap:.5rem;z-index:9999;pointer-events:none}
+    .toast{padding:.75rem 1.25rem;border-radius:4px;font-size:.75rem;display:flex;align-items:center;gap:.6rem;transform:translateX(120%);transition:transform .3s var(--ease);pointer-events:auto;max-width:360px}
+    .toast.show{transform:translateX(0)}
+    .toast.success{background:rgba(74,156,111,.15);border:1px solid rgba(74,156,111,.4);color:#7ed4a7}
+    .toast.error{background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.4);color:#e07070}
+    .toast.info{background:rgba(184,151,90,.12);border:1px solid var(--line);color:var(--gold-soft)}
+    .toast svg{width:14px;height:14px;flex-shrink:0}
+
+    .divider{height:1px;background:var(--line);margin:1.25rem 0}
+
+    @media(max-width:960px){
+      .editor-layout{grid-template-columns:1fr}
+      .sidebar{position:static;max-height:none}
+      .editor-main{padding:1.5rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="editor-header">
+  <div class="editor-brand">
+    <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="8" stroke="#b8975a" stroke-width="1.2"/>
+      <circle cx="20" cy="20" r="16" stroke="#b8975a" stroke-width=".6" stroke-dasharray="3 3"/>
+    </svg>
+    CAVA Vinoteca
+  </div>
+  <span class="header-badge">Editor de Artículo — Uso interno</span>
+  <div class="header-actions">
+    <button class="btn btn-ghost" onclick="previewArticle()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Vista previa
+    </button>
+    <button class="btn btn-outline" onclick="verCodigo()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      Ver código generado
+    </button>
+    <button class="btn btn-gold" onclick="generarHTMLFinal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      Generar HTML final
+    </button>
+    <button class="btn btn-claude" onclick="abrirPublicarClaude()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+      Publicar con Claude
+    </button>
+  </div>
+</header>
+
+<div class="editor-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- GUÍA -->
+    <div class="guide-block">
+      <div class="guide-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Pasos para publicar
+      </div>
+      <div class="guide-steps" id="guideSteps">
+        <div class="guide-step current" data-step="1"><div class="step-num">1</div><div class="step-text">Escribe el título del artículo</div></div>
+        <div class="guide-step" data-step="2"><div class="step-num">2</div><div class="step-text">Elige la categoría y fecha</div></div>
+        <div class="guide-step" data-step="3"><div class="step-num">3</div><div class="step-text">Revisa el título SEO y descripción</div></div>
+        <div class="guide-step" data-step="4"><div class="step-num">4</div><div class="step-text">Sube la imagen de portada (opcional)</div></div>
+        <div class="guide-step" data-step="5"><div class="step-num">5</div><div class="step-text">Escribe el artículo en el editor</div></div>
+        <div class="guide-step" data-step="6"><div class="step-num">6</div><div class="step-text">Presiona "Generar HTML final"</div></div>
+        <div class="guide-step" data-step="7"><div class="step-num">7</div><div class="step-text">Copia el código generado</div></div>
+        <div class="guide-step" data-step="8"><div class="step-num">8</div><div class="step-text">Crea el archivo en VS Code dentro de <span style="font-family:monospace;color:var(--gold-soft)">/blog/</span></div></div>
+        <div class="guide-step" data-step="9"><div class="step-num">9</div><div class="step-text">Nómbralo: <span style="font-family:monospace;color:var(--gold-soft)" id="guideFilename">nombre-articulo.html</span></div></div>
+        <div class="guide-step" data-step="10"><div class="step-num">10</div><div class="step-text">Sube la imagen a <span style="font-family:monospace;color:var(--gold-soft)">/Assets/images/Nazareth/</span></div></div>
+      </div>
+    </div>
+
+    <div class="sidebar-fields">
+
+      <!-- BÁSICO -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">Información básica</div>
+        <div class="field">
+          <label>Título del artículo *</label>
+          <input type="text" id="artTitle" placeholder="¿De qué trata este artículo?" oninput="syncTitle(this.value)" />
+        </div>
+        <div class="field">
+          <label>Categoría *</label>
+          <select id="artCategory" onchange="updateAll()">
+            <option value="">— Elige una categoría —</option>
+            <option>Cultura del vino</option>
+            <option>Educación y experiencia</option>
+            <option>Marketing del vino</option>
+            <option>Experiencias en CAVA</option>
+            <option>Maridaje y gastronomía</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Fecha de publicación *</label>
+          <input type="date" id="artDate" oninput="updateAll()" />
+        </div>
+        <div class="field">
+          <label>Slug (URL del artículo)</label>
+          <input type="text" id="artSlug" placeholder="se-genera-del-título" oninput="onSlugEdit()" />
+          <div class="slug-info">
+            <div class="slug-row">
+              <span class="slug-label">URL:</span>
+              <span class="slug-val" id="slugUrl">cavagourmet.com/blog/…</span>
+            </div>
+            <div class="slug-row">
+              <span class="slug-label">📄 Archivo:</span>
+              <span class="slug-val" id="slugFile">nombre-articulo.html</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEO -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">SEO y redes sociales</div>
+        <div class="field">
+          <label>Título SEO *</label>
+          <input type="text" id="artSeoTitle" placeholder="Para Google (máx. 60 caracteres)" oninput="updateCharCount('artSeoTitle','seoCount','seoFeedback',60)" />
+          <div class="char-row">
+            <span class="char-feedback" id="seoFeedback"></span>
+            <span class="char-count" id="seoCount">0 / 60</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Meta descripción *</label>
+          <textarea id="artMetaDesc" rows="3" placeholder="¿Qué encontrará el lector? (máx. 155 caracteres)" oninput="updateCharCount('artMetaDesc','descCount','descFeedback',155)"></textarea>
+          <div class="char-row">
+            <span class="char-feedback" id="descFeedback"></span>
+            <span class="char-count" id="descCount">0 / 155</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Temas principales del artículo</label>
+          <input type="text" id="artKeywords" placeholder="vino, Costa Rica, vinoteca, cata…" oninput="updateAll()" />
+          <div class="field-hint">Para organización interna y Schema. Separa con comas.</div>
+        </div>
+        <div class="field">
+          <label>Extracto para la tarjeta del blog</label>
+          <textarea id="artExcerpt" rows="2" placeholder="Una frase que invite a leer el artículo…"></textarea>
+        </div>
+      </div>
+
+      <!-- IMAGEN -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">Imagen de portada</div>
+        <div class="image-upload-area" id="uploadArea">
+          <input type="file" accept="image/*" id="coverImageInput" onchange="handleImageUpload(event)" />
+          <div class="upload-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="upload-label" id="uploadLabel">
+            <strong>Toca para subir imagen</strong>
+            JPG, WebP o PNG — mínimo 1280px de ancho
+          </div>
+          <div class="image-preview-wrap" id="previewWrap">
+            <img id="imagePreview" class="image-preview" alt="Vista previa" />
+            <div class="image-name" id="imageName"></div>
+          </div>
+        </div>
+        <div class="field" style="margin-top:.75rem">
+          <label>Formato de la imagen</label>
+          <div class="ext-row">
+            <button class="ext-btn active" onclick="setExt('webp',this)">WebP</button>
+            <button class="ext-btn" onclick="setExt('jpg',this)">JPG</button>
+            <button class="ext-btn" onclick="setExt('png',this)">PNG</button>
+          </div>
+          <div class="ext-rec" id="extRec">✓ WebP recomendado — carga más rápido</div>
+        </div>
+        <div class="field">
+          <label>Descripción de la imagen (alt)</label>
+          <input type="text" id="artImgAlt" placeholder="Describe la foto brevemente…" oninput="updateAll()" />
+        </div>
+        <label class="no-image-toggle">
+          <input type="checkbox" id="noImageCheck" onchange="toggleNoImage()" />
+          <span>Publicar sin imagen de portada</span>
+        </label>
+      </div>
+
+      <!-- RELACIONADOS -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">Artículos relacionados</div>
+        <div class="field">
+          <label>Artículo relacionado 1</label>
+          <select id="relArticle1">
+            <option value="">— Elige un artículo —</option>
+            <option value="/blog/como-se-construye-cultura-del-vino">Cómo se construye cultura del vino</option>
+            <option value="/blog/vino-menos-elitismo-mas-experiencia">Menos elitismo, más experiencia</option>
+            <option value="/blog/contenido-digital-experiencia-real-vinoteca-costa-rica">De contenido digital a experiencia real</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Artículo relacionado 2</label>
+          <select id="relArticle2">
+            <option value="">— Elige un artículo —</option>
+            <option value="/blog/como-se-construye-cultura-del-vino">Cómo se construye cultura del vino</option>
+            <option value="/blog/vino-menos-elitismo-mas-experiencia">Menos elitismo, más experiencia</option>
+            <option value="/blog/contenido-digital-experiencia-real-vinoteca-costa-rica">De contenido digital a experiencia real</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="editor-main">
+    <div class="editor-main-header">
+      <h1 class="editor-main-title">Escribe tu artículo</h1>
+      <p class="editor-subtitle">Usa la barra para dar formato. El HTML se genera automáticamente.</p>
+    </div>
+
+    <!-- FRASE DESTACADA -->
+    <div class="quote-field-wrap">
+      <div class="quote-field-label">Frase destacada del artículo (opcional)</div>
+      <textarea class="quote-field-input" id="artQuote" placeholder="Una frase poderosa que resuma la idea central del artículo…" rows="2" oninput="updateAll()"></textarea>
+      <div class="quote-hint">Aparecerá como cita visual dentro del artículo.</div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="toolbar-group">
+        <select class="tool-select" onchange="formatBlock(this.value);this.value=''">
+          <option value="">Formato de texto</option>
+          <option value="p">Párrafo normal</option>
+          <option value="h2">Subtítulo H2</option>
+          <option value="h3">Subtítulo H3</option>
+          <option value="blockquote">Cita destacada</option>
+        </select>
+      </div>
+      <div class="toolbar-sep"></div>
+      <div class="toolbar-group">
+        <button class="tool-btn" onclick="execCmd('bold')" title="Negrita">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z"/><path d="M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z"/></svg>
+        </button>
+        <button class="tool-btn" onclick="execCmd('italic')" title="Cursiva">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg>
+        </button>
+        <button class="tool-btn" onclick="execCmd('underline')" title="Subrayado">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4v6a6 6 0 0012 0V4"/><line x1="4" y1="20" x2="20" y2="20"/></svg>
+        </button>
+      </div>
+      <div class="toolbar-sep"></div>
+      <div class="toolbar-group">
+        <button class="tool-btn" onclick="insertQuote()" title="Cita destacada">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/></svg>
+        </button>
+        <button class="tool-btn" onclick="execCmd('insertUnorderedList')" title="Lista">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+        <button class="tool-btn" onclick="insertLink()" title="Enlace interno">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        </button>
+      </div>
+      <div class="toolbar-sep"></div>
+      <div class="toolbar-group">
+        <button class="tool-btn" onclick="execCmd('undo')" title="Deshacer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/></svg>
+        </button>
+        <button class="tool-btn" onclick="execCmd('redo')" title="Rehacer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 019-9 9 9 0 016 2.3L21 13"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="editor-body" id="editorBody" contenteditable="true"
+      data-placeholder="Empieza a escribir tu artículo aquí. Usa los botones de arriba para subtítulos, citas y formato."
+      oninput="updateWordCount()"></div>
+    <div class="word-count" id="wordCount">0 palabras</div>
+
+    <!-- CTA PREVIEW -->
+    <div class="cta-preview">
+      <div class="cta-preview-label">CTA final — se agrega automáticamente</div>
+      <p class="cta-text">En CAVA Gourmet Market, el vino no se aprende desde la distancia: se conversa, se prueba y se vive.</p>
+      <span class="cta-btn-preview">Conocer experiencias en CAVA →</span>
+    </div>
+
+    <!-- SEO CHECKLIST -->
+    <div class="seo-checklist">
+      <div class="seo-checklist-title">Checklist antes de publicar</div>
+      <div class="seo-item"><div class="seo-dot" id="chk-title"></div><span class="seo-item-text" id="txt-title">El título tiene al menos 5 palabras</span></div>
+      <div class="seo-item"><div class="seo-dot" id="chk-desc"></div><span class="seo-item-text" id="txt-desc">La descripción tiene mínimo 80 caracteres</span></div>
+      <div class="seo-item"><div class="seo-dot" id="chk-img"></div><span class="seo-item-text" id="txt-img">La imagen tiene descripción (alt text)</span></div>
+      <div class="seo-item"><div class="seo-dot" id="chk-h2"></div><span class="seo-item-text" id="txt-h2">El artículo tiene al menos 2 subtítulos</span></div>
+      <div class="seo-item"><div class="seo-dot" id="chk-words"></div><span class="seo-item-text" id="txt-words">Mínimo 300 palabras escritas</span></div>
+      <div class="seo-item"><div class="seo-dot" id="chk-link"></div><span class="seo-item-text" id="txt-link">Incluye al menos 1 enlace interno</span></div>
+      <div class="seo-item"><div class="seo-dot" id="chk-quote"></div><span class="seo-item-text" id="txt-quote">Tiene frase destacada o cita</span></div>
+    </div>
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- MODAL: VER CÓDIGO -->
+<div class="modal-overlay" id="codeModal">
+  <div class="modal">
+    <div class="modal-title">Código HTML generado</div>
+    <div class="modal-subtitle">Copia este código completo y pégalo en VS Code como nuevo archivo dentro de <span style="font-family:monospace;color:var(--gold-soft)">/blog/</span></div>
+    <div class="modal-code" id="exportCode"></div>
+    <div class="copy-confirm" id="copyConfirm">✓ ¡Copiado! Ahora pégalo en VS Code.</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('codeModal')">Cerrar</button>
+      <button class="btn btn-outline" onclick="descargarHTML()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar .html
+      </button>
+      <button class="btn btn-gold" onclick="copyToClipboard()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copiar código completo
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: GENERAR FINAL -->
+<div class="modal-overlay" id="generateModal">
+  <div class="modal">
+    <div class="modal-title">Generar HTML final</div>
+    <div class="modal-subtitle">Revisa el checklist. Los ítems en rojo necesitan atención antes de publicar.</div>
+    <div id="generateChecklist"></div>
+    <div class="inst-block">
+      <div class="inst-title">Qué hacer con el código generado</div>
+      <div class="inst-step"><div class="inst-num">1</div><div>Abre VS Code y ve a la carpeta <span class="inst-code">/blog/</span></div></div>
+      <div class="inst-step"><div class="inst-num">2</div><div>Crea un archivo nuevo: <span class="inst-code" id="modalFilename">nombre-articulo.html</span></div></div>
+      <div class="inst-step"><div class="inst-num">3</div><div>Pega el código y guarda el archivo</div></div>
+      <div class="inst-step"><div class="inst-num">4</div><div>Sube la imagen a <span class="inst-code">/Assets/images/Nazareth/</span> con el nombre <span class="inst-code" id="modalImgName">nombre-articulo.webp</span></div></div>
+      <div class="inst-step"><div class="inst-num">5</div><div>Haz commit y push — el artículo aparecerá en el sitio</div></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('generateModal')">Seguir editando</button>
+      <button class="btn btn-gold" id="confirmGenerateBtn" onclick="confirmarGenerar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Generar y ver HTML
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: PUBLICAR CON CLAUDE -->
+<div class="modal-overlay" id="claudeModal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-title">
+      <span style="width:32px;height:32px;border-radius:50%;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+      </span>
+      Publicar con Claude en VS Code
+    </div>
+    <div class="modal-subtitle">Sigue estos 5 pasos — Claude hace el trabajo técnico por ti</div>
+    <div class="claude-steps">
+      <div class="claude-step"><div class="claude-step-num">1</div><div class="claude-step-text"><strong>Genera el HTML</strong>Usa "Generar HTML final" y copia el código completo</div></div>
+      <div class="claude-step"><div class="claude-step-num">2</div><div class="claude-step-text"><strong>Copia el prompt de abajo</strong>O usa el botón "Copiar prompt + HTML juntos"</div></div>
+      <div class="claude-step"><div class="claude-step-num">3</div><div class="claude-step-text"><strong>Abre Claude en VS Code</strong>Panel lateral izquierdo → ícono de Claude</div></div>
+      <div class="claude-step"><div class="claude-step-num">4</div><div class="claude-step-text"><strong>Pega el prompt + el HTML</strong>Primero el prompt, luego el HTML al final donde dice [PEGAR AQUÍ]</div></div>
+      <div class="claude-step"><div class="claude-step-num">5</div><div class="claude-step-text"><strong>Revisa y aprueba</strong>Claude te dirá qué va a hacer antes de tocar cualquier archivo</div></div>
+    </div>
+    <label class="safe-toggle">
+      <input type="checkbox" id="safeModeCheck" onchange="toggleSafeMode()" />
+      <span><strong>Activar modo seguro</strong>Claude explicará qué va a hacer antes de ejecutar cualquier cambio. Recomendado.</span>
+    </label>
+    <div class="prompt-block">
+      <div class="prompt-block-label">
+        Prompt para Claude en VS Code
+        <button class="copy-small" onclick="copiarPrompt('main')">Copiar prompt</button>
+      </div>
+      <div class="prompt-text" id="mainPromptText"></div>
+    </div>
+    <div class="prompt-block" id="safePromptBlock" style="display:none">
+      <div class="prompt-block-label" style="color:var(--gold-soft)">
+        Prompt adicional — modo seguro
+        <button class="copy-small" style="color:rgba(215,184,121,.6);border-color:rgba(184,151,90,.3)" onclick="copiarPrompt('safe')">Copiar</button>
+      </div>
+      <div class="prompt-text" id="safePromptText"></div>
+    </div>
+    <div class="copy-confirm" id="claudeCopyConfirm">✓ ¡Copiado! Pégalo en Claude dentro de VS Code.</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('claudeModal')">Cerrar</button>
+      <button class="btn btn-gold" onclick="copiarPromptYHTML()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copiar prompt + HTML juntos
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     ÚNICO BLOQUE <script> — todo el JavaScript aquí
+════════════════════════════════════════════════════ -->
+<script>
+  // ── ESTADO GLOBAL ──
+  let slugEdited = false;
+  let imgExt = 'webp';
+  let generatedHTML = '';
+
+  // ── PROMPTS ──
+  const PROMPT_MAIN = `Actúa como asistente técnico experto en HTML, SEO técnico y estructura del sitio cavagourmet.com.
+
+Voy a adjuntarte el HTML generado por el editor de artículos de CAVA.
+
+Tu tarea es publicar este artículo dentro del proyecto en VS Code sin alterar el resto del sitio.
+
+INSTRUCCIONES:
+
+1. Crea un nuevo archivo HTML dentro de la carpeta /blog/.
+2. El nombre del archivo debe coincidir exactamente con el slug del artículo.
+3. No modifiques index.html, main.css, vercel.json ni otros artículos existentes, salvo que yo lo indique expresamente.
+4. Verifica que el archivo conserve:
+   - title
+   - meta description
+   - canonical
+   - Open Graph
+   - Twitter Card
+   - Schema.org BlogPosting
+   - BreadcrumbList
+   - autoría de Nazareth Padilla Montero
+5. Verifica que las rutas de imágenes apunten correctamente a:
+   /Assets/images/Nazareth/
+6. Si falta la imagen, indícame exactamente qué nombre debe tener y en qué carpeta debo colocarla.
+7. Revisa que no existan errores de HTML, etiquetas sin cerrar o estructura duplicada.
+8. No cambies el estilo visual del sitio.
+9. No reescribas el artículo salvo que encuentres errores ortográficos o de estructura.
+10. Al finalizar, dime:
+   - nombre del archivo creado
+   - ruta exacta
+   - imagen requerida (nombre y carpeta)
+   - si el SEO básico quedó correcto
+   - si hay algo pendiente antes de hacer commit y deploy.
+
+Aquí está el HTML del artículo:
+[PEGAR AQUÍ EL HTML GENERADO POR EL EDITOR]`;
+
+  const PROMPT_SAFE = `Antes de hacer cualquier cambio, explícame brevemente qué archivos vas a crear o modificar. No ejecutes cambios fuera de /blog/ sin mi autorización expresa.`;
+
+  // ── INIT ──
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('artDate').value = new Date().toISOString().split('T')[0];
+    updateAll();
+  });
+
+  // ── ESCAPE / SANITIZACIÓN ──
+  function escapeHTML(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+  function escapeJSON(str) {
+    return String(str)
+      .replace(/\\/g, '\\\\')
+      .replace(/"/g, '\\"')
+      .replace(/\n/g, '\\n')
+      .replace(/\r/g, '\\r')
+      .replace(/\t/g, '\\t');
+  }
+
+  // ── SLUG ──
+  function toSlug(str) {
+    return str.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim().replace(/\s+/g, '-').replace(/-+/g, '-');
+  }
+  function syncTitle(val) {
+    if (!slugEdited) {
+      const s = toSlug(val);
+      document.getElementById('artSlug').value = s;
+      updateSlugDisplay(s);
+    }
+    updateAll();
+  }
+  function onSlugEdit() {
+    slugEdited = true;
+    updateSlugDisplay(document.getElementById('artSlug').value);
+    updateAll();
+  }
+  function updateSlugDisplay(s) {
+    const safe = s || '…';
+    document.getElementById('slugUrl').textContent = `cavagourmet.com/blog/${safe}`;
+    document.getElementById('slugFile').textContent = s ? `${s}.html` : 'nombre-articulo.html';
+    document.getElementById('guideFilename').textContent = s ? `${s}.html` : 'nombre-articulo.html';
+    const mf = document.getElementById('modalFilename');
+    const mi = document.getElementById('modalImgName');
+    if (mf) mf.textContent = s ? `${s}.html` : 'nombre-articulo.html';
+    if (mi) mi.textContent = s ? `${s}.${imgExt}` : `nombre-articulo.${imgExt}`;
+  }
+
+  // ── CHAR COUNTER ──
+  function updateCharCount(fieldId, countId, feedbackId, max) {
+    const len = document.getElementById(fieldId).value.length;
+    const c = document.getElementById(countId);
+    const f = document.getElementById(feedbackId);
+    c.textContent = `${len} / ${max}`;
+    if (len === 0) {
+      c.className = 'char-count'; f.textContent = ''; f.className = 'char-feedback';
+    } else if (len <= max * .75) {
+      c.className = 'char-count'; f.textContent = '✓ Perfecto para Google'; f.className = 'char-feedback ok';
+    } else if (len <= max) {
+      c.className = 'char-count warn'; f.textContent = 'Un poco largo — resume si puedes'; f.className = 'char-feedback warn';
+    } else {
+      c.className = 'char-count over'; f.textContent = 'Debe resumirse — Google lo cortará'; f.className = 'char-feedback over';
+    }
+    updateAll();
+  }
+
+  // ── IMAGE EXT ──
+  function setExt(ext, btn) {
+    imgExt = ext;
+    document.querySelectorAll('.ext-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const rec = { webp: '✓ WebP recomendado — carga más rápido', jpg: '📋 JPG compatible con todas las redes', png: '📋 PNG para imágenes con transparencia' };
+    document.getElementById('extRec').textContent = rec[ext];
+    updateSlugDisplay(document.getElementById('artSlug').value);
+  }
+
+  // ── IMAGE UPLOAD ──
+  function handleImageUpload(e) {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('imagePreview').src = ev.target.result;
+      document.getElementById('previewWrap').style.display = 'block';
+      document.getElementById('uploadLabel').style.display = 'none';
+      document.getElementById('imageName').textContent = `📎 ${file.name}`;
+      showToast('Imagen cargada. Recuerda subirla a /Assets/images/Nazareth/', 'info');
+    };
+    reader.readAsDataURL(file);
+    if (!document.getElementById('artImgAlt').value)
+      document.getElementById('artImgAlt').value = file.name.replace(/\.[^.]+$/, '').replace(/-/g, ' ');
+    updateAll();
+  }
+  function toggleNoImage() {
+    const c = document.getElementById('noImageCheck').checked;
+    document.getElementById('uploadArea').style.opacity = c ? '.35' : '1';
+    document.getElementById('uploadArea').style.pointerEvents = c ? 'none' : 'auto';
+    updateAll();
+  }
+
+  // ── TOOLBAR ──
+  function execCmd(cmd) { document.getElementById('editorBody').focus(); document.execCommand(cmd, false, null); }
+  function formatBlock(tag) { if (!tag) return; document.getElementById('editorBody').focus(); document.execCommand('formatBlock', false, tag); }
+  function insertQuote() { document.getElementById('editorBody').focus(); document.execCommand('formatBlock', false, 'blockquote'); }
+  function insertLink() {
+    const url = prompt('URL del enlace (ej: /cata-de-vinos-perez-zeledon):');
+    if (url) { document.getElementById('editorBody').focus(); document.execCommand('createLink', false, url); }
+  }
+
+  // ── WORD COUNT ──
+  function updateWordCount() {
+    const t = document.getElementById('editorBody').innerText || '';
+    const w = t.trim().split(/\s+/).filter(x => x.length > 0).length;
+    document.getElementById('wordCount').textContent = `${w} palabra${w !== 1 ? 's' : ''}`;
+    updateAll();
+  }
+
+  // ── SEO CHECKLIST ──
+  function updateChecklist() {
+    const title = document.getElementById('artTitle').value.trim();
+    const desc = document.getElementById('artMetaDesc').value.trim();
+    const alt = document.getElementById('artImgAlt').value.trim();
+    const noImg = document.getElementById('noImageCheck').checked;
+    const body = document.getElementById('editorBody');
+    const html = body.innerHTML;
+    const words = (body.innerText || '').trim().split(/\s+/).filter(x => x.length > 0).length;
+    const h2count = (html.match(/<h2/gi) || []).length;
+    const linkcount = (html.match(/<a /gi) || []).length;
+    const quote = document.getElementById('artQuote').value.trim();
+    const hasQuoteInBody = html.includes('<blockquote');
+    const set = (id, ok) => {
+      document.getElementById('chk-' + id).className = 'seo-dot ' + (ok ? 'ok' : 'fail');
+      document.getElementById('txt-' + id).className = 'seo-item-text ' + (ok ? 'ok' : '');
+    };
+    set('title', title.split(/\s+/).length >= 5);
+    set('desc', desc.length >= 80);
+    set('img', noImg || alt.length > 0);
+    set('h2', h2count >= 2);
+    set('words', words >= 300);
+    set('link', linkcount >= 1);
+    set('quote', quote.length > 0 || hasQuoteInBody);
+  }
+
+  // ── GUIDE PROGRESS ──
+  function updateGuide() {
+    const title = document.getElementById('artTitle').value.trim();
+    const cat = document.getElementById('artCategory').value;
+    const date = document.getElementById('artDate').value;
+    const seo = document.getElementById('artSeoTitle').value.trim();
+    const desc = document.getElementById('artMetaDesc').value.trim();
+    const words = (document.getElementById('editorBody').innerText || '').trim().split(/\s+/).filter(x => x.length > 0).length;
+    const done = [
+      title.length > 0,
+      !!(cat && date),
+      seo.length > 0 && desc.length > 0,
+      true,
+      words >= 100,
+      false, false, false, false, false
+    ];
+    const steps = document.querySelectorAll('.guide-step');
+    let firstActive = -1;
+    steps.forEach((s, i) => {
+      s.classList.remove('done', 'current');
+      if (done[i]) s.classList.add('done');
+      else if (firstActive === -1) { s.classList.add('current'); firstActive = i; }
+    });
+  }
+
+  function updateAll() { updateChecklist(); updateGuide(); }
+
+  // ── PREVIEW ──
+  function previewArticle() {
+    const html = generateHTML();
+    const w = window.open('', '_blank');
+    w.document.write(html); w.document.close();
+  }
+
+  // ── VER CÓDIGO ──
+  function verCodigo() {
+    generatedHTML = generateHTML();
+    // Mostrar solo los primeros 3000 chars como preview visual — el string completo está en generatedHTML
+    const preview = generatedHTML.length > 3000
+      ? generatedHTML.substring(0, 3000) + '\n\n… (código completo disponible al copiar o descargar)'
+      : generatedHTML;
+    document.getElementById('exportCode').textContent = preview;
+    document.getElementById('copyConfirm').style.display = 'none';
+    openModal('codeModal');
+  }
+
+  // ── GENERAR HTML FINAL ──
+  function generarHTMLFinal() {
+    const slug = document.getElementById('artSlug').value;
+    const mf = document.getElementById('modalFilename');
+    const mi = document.getElementById('modalImgName');
+    if (mf) mf.textContent = slug ? `${slug}.html` : 'nombre-articulo.html';
+    if (mi) mi.textContent = slug ? `${slug}.${imgExt}` : `nombre-articulo.${imgExt}`;
+    const checks = buildPublishChecklist();
+    document.getElementById('generateChecklist').innerHTML = checks.html;
+    // Ajuste: solo habilita si checklist está completo
+    document.getElementById('confirmGenerateBtn').disabled = !checks.ready;
+    openModal('generateModal');
+  }
+
+  function buildPublishChecklist() {
+    const title = document.getElementById('artTitle').value.trim();
+    const cat = document.getElementById('artCategory').value;
+    const date = document.getElementById('artDate').value;
+    const slug = document.getElementById('artSlug').value.trim();
+    const seo = document.getElementById('artSeoTitle').value.trim();
+    const desc = document.getElementById('artMetaDesc').value.trim();
+    const words = (document.getElementById('editorBody').innerText || '').trim().split(/\s+/).filter(x => x.length > 0).length;
+    const items = [
+      { label: 'Título del artículo', ok: title.length > 0 },
+      { label: 'Categoría y fecha', ok: !!(cat && date) },
+      { label: 'Slug (URL del artículo)', ok: slug.length > 0 },
+      { label: 'Título SEO', ok: seo.length > 0 },
+      { label: 'Meta descripción (mín. 80 caracteres)', ok: desc.length >= 80 },
+      { label: `Mínimo 300 palabras (tienes ${words})`, ok: words >= 300 },
+    ];
+    const html = items.map(i => `
+      <div style="display:flex;align-items:center;gap:.75rem;padding:.5rem 0;border-bottom:1px solid rgba(184,151,90,.08);font-size:.78rem">
+        <span style="width:20px;height:20px;border-radius:50%;background:${i.ok ? 'rgba(74,156,111,.2)' : 'rgba(192,57,43,.2)'};border:1px solid ${i.ok ? 'rgba(74,156,111,.5)' : 'rgba(192,57,43,.5)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.7rem;color:${i.ok ? '#7ed4a7' : '#e07070'}">${i.ok ? '✓' : '✗'}</span>
+        <span style="color:${i.ok ? 'rgba(246,239,227,.75)' : 'rgba(246,239,227,.4)'}">${i.label}</span>
+      </div>`).join('');
+    return { html, ready: items.every(i => i.ok) };
+  }
+
+  function confirmarGenerar() {
+    generatedHTML = generateHTML();
+    closeModal('generateModal');
+    const preview = generatedHTML.length > 3000
+      ? generatedHTML.substring(0, 3000) + '\n\n… (código completo disponible al copiar o descargar)'
+      : generatedHTML;
+    document.getElementById('exportCode').textContent = preview;
+    document.getElementById('copyConfirm').style.display = 'none';
+    openModal('codeModal');
+    showToast('¡HTML listo! Descarga o copia el código completo', 'success');
+  }
+
+  function copyToClipboard() {
+    // Siempre usar la variable generatedHTML — nunca el textContent del div que puede estar truncado
+    const source = generatedHTML || generateHTML();
+    navigator.clipboard.writeText(source).then(() => {
+      document.getElementById('copyConfirm').style.display = 'block';
+      showToast('¡Copiado! Pégalo en VS Code como nuevo archivo en /blog/', 'success');
+    }).catch(() => {
+      // Fallback para navegadores sin clipboard API
+      const ta = document.createElement('textarea');
+      ta.value = source;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      document.getElementById('copyConfirm').style.display = 'block';
+      showToast('¡Copiado! Pégalo en VS Code como nuevo archivo en /blog/', 'success');
+    });
+  }
+
+  function descargarHTML() {
+    if (!generatedHTML) generatedHTML = generateHTML();
+    const slug = document.getElementById('artSlug').value || 'nuevo-articulo';
+    const filename = `${slug}.html`;
+    const blob = new Blob([generatedHTML], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast(`Descargado como ${filename} — muévelo a /blog/ en VS Code`, 'success');
+  }
+
+  // ── CLAUDE MODAL ──
+  function abrirPublicarClaude() {
+    document.getElementById('mainPromptText').textContent = PROMPT_MAIN;
+    document.getElementById('safePromptText').textContent = PROMPT_SAFE;
+    document.getElementById('claudeCopyConfirm').style.display = 'none';
+    document.getElementById('safeModeCheck').checked = false;
+    document.getElementById('safePromptBlock').style.display = 'none';
+    openModal('claudeModal');
+  }
+  function toggleSafeMode() {
+    const on = document.getElementById('safeModeCheck').checked;
+    document.getElementById('safePromptBlock').style.display = on ? 'block' : 'none';
+  }
+  function copiarPrompt(type) {
+    const text = type === 'safe' ? PROMPT_SAFE : PROMPT_MAIN;
+    navigator.clipboard.writeText(text).then(() => {
+      document.getElementById('claudeCopyConfirm').style.display = 'block';
+      showToast('Prompt copiado — pégalo en Claude dentro de VS Code', 'success');
+    });
+  }
+  function copiarPromptYHTML() {
+    if (!generatedHTML) generatedHTML = generateHTML();
+    const safeOn = document.getElementById('safeModeCheck').checked;
+    const full = (safeOn ? PROMPT_SAFE + '\n\n---\n\n' : '') +
+      PROMPT_MAIN.replace('[PEGAR AQUÍ EL HTML GENERADO POR EL EDITOR]', generatedHTML);
+    navigator.clipboard.writeText(full).then(() => {
+      document.getElementById('claudeCopyConfirm').style.display = 'block';
+      showToast('¡Prompt + HTML copiados! Pégalo directamente en Claude de VS Code', 'success');
+    });
+  }
+
+  // ── GENERATE HTML ──
+  function generateHTML() {
+    const title     = escapeHTML(document.getElementById('artTitle').value || '[TÍTULO]');
+    const titleJSON = escapeJSON(document.getElementById('artTitle').value || '[TÍTULO]');
+    const slug      = document.getElementById('artSlug').value || 'nuevo-articulo';
+    const cat       = escapeHTML(document.getElementById('artCategory').value || 'Cultura del vino');
+    const date      = document.getElementById('artDate').value || new Date().toISOString().split('T')[0];
+    const seoTitle  = escapeHTML(document.getElementById('artSeoTitle').value || `${document.getElementById('artTitle').value} | CAVA Gourmet Market`);
+    const metaDesc  = escapeHTML(document.getElementById('artMetaDesc').value || '');
+    const metaDescJSON = escapeJSON(document.getElementById('artMetaDesc').value || '');
+    const keywords  = escapeHTML(document.getElementById('artKeywords').value || '');
+    const imgAlt    = escapeHTML(document.getElementById('artImgAlt').value || title);
+    const noImg     = document.getElementById('noImageCheck').checked;
+    const quote     = document.getElementById('artQuote').value.trim();
+    const body      = document.getElementById('editorBody').innerHTML || '';
+    const rel1      = document.getElementById('relArticle1').value;
+    const rel2      = document.getElementById('relArticle2').value;
+
+    // ISO datetime con offset de Costa Rica (UTC-6)
+    const dateISO = date ? `${date}T12:00:00-06:00` : '';
+    const monthYear = new Date(date + 'T12:00:00').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
+
+    const relLabels = {
+      '/blog/como-se-construye-cultura-del-vino': 'Cómo se construye cultura del vino en Costa Rica',
+      '/blog/vino-menos-elitismo-mas-experiencia': 'Por qué el vino necesita menos elitismo y más experiencia',
+      '/blog/contenido-digital-experiencia-real-vinoteca-costa-rica': 'De contenido digital a experiencia real en una vinoteca',
+    };
+
+    const imgPath = `https://www.cavagourmet.com/Assets/images/Nazareth/${slug}.${imgExt}`;
+    const mimeType = imgExt === 'jpg' ? 'image/jpeg' : `image/${imgExt}`;
+
+    const imgBlock = noImg ? '' : `
+    <figure class="art-cover" aria-hidden="true">
+      <img src="/Assets/images/Nazareth/${slug}.${imgExt}" alt="${imgAlt}" width="1280" height="853" loading="eager" decoding="async">
+    </figure>`;
+
+    const quoteBlock = quote ? `\n        <p class="art-quote">"${escapeHTML(quote)}"</p>\n` : '';
+
+    const relBlock = (rel1 || rel2) ? `
+    <nav class="art-footnav" aria-label="Más artículos">
+      <div class="art-footnav-inner">
+        <a href="/blog" class="art-back">Volver al blog</a>
+        <div class="art-more">
+          <span class="art-more-label">Más artículos</span>
+          ${rel1 ? `<a href="${rel1}" class="art-more-link">${escapeHTML(relLabels[rel1] || rel1)}</a>` : ''}
+          ${rel2 ? `<a href="${rel2}" class="art-more-link">${escapeHTML(relLabels[rel2] || rel2)}</a>` : ''}
+        </div>
+      </div>
+    </nav>` : '';
+
+    return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>${seoTitle}</title>
+  <meta name="description" content="${metaDesc}" />
+  ${keywords ? `<meta name="keywords" content="${keywords}" />` : ''}
+  <meta name="theme-color" content="#091522" />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://www.cavagourmet.com/blog/${slug}" />
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="CAVA Gourmet Market" />
+  <meta property="og:url" content="https://www.cavagourmet.com/blog/${slug}" />
+  <meta property="og:title" content="${seoTitle}" />
+  <meta property="og:description" content="${metaDesc}" />
+  ${!noImg ? `<meta property="og:image" content="${imgPath}" />
+  <meta property="og:image:alt" content="${imgAlt}" />
+  <meta property="og:image:type" content="${mimeType}" />` : ''}
+  <meta property="og:locale" content="es_CR" />
+  <meta property="article:author" content="Nazareth Padilla Montero" />
+  <meta property="article:section" content="${cat}" />
+  <meta property="article:published_time" content="${dateISO}" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${seoTitle}" />
+  <meta name="twitter:description" content="${metaDesc}" />
+  ${!noImg ? `<meta name="twitter:image" content="${imgPath}" />` : ''}
+
+  <meta name="geo.region" content="CR-SJ" />
+  <meta name="geo.placename" content="Pérez Zeledón, Costa Rica" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "@id": "https://www.cavagourmet.com/blog/${slug}#article",
+        "headline": "${titleJSON}",
+        "description": "${metaDescJSON}",
+        "url": "https://www.cavagourmet.com/blog/${slug}",
+        "datePublished": "${dateISO}",
+        "dateModified": "${dateISO}",
+        "inLanguage": "es",
+        "author": { "@id": "https://www.cavagourmet.com/nazareth#person" },
+        "publisher": { "@id": "https://www.cavagourmet.com/#organization" },
+        "isPartOf": { "@id": "https://www.cavagourmet.com/blog#blog" }${!noImg ? `,
+        "image": { "@type": "ImageObject", "url": "${imgPath}", "width": 1280, "height": 853 }` : ''},
+        "keywords": "${escapeJSON(document.getElementById('artKeywords').value || '')}",
+        "articleSection": "${escapeJSON(document.getElementById('artCategory').value || 'Cultura del vino')}"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.cavagourmet.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.cavagourmet.com/blog" },
+          { "@type": "ListItem", "position": 3, "name": "${titleJSON}" }
+        ]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://www.cavagourmet.com/nazareth#person",
+        "name": "Nazareth Padilla Montero",
+        "url": "https://www.cavagourmet.com/nazareth"
+      }
+    ]
+  }
+  <\/script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=optional">
+  <link rel="stylesheet" href="/Assets/css/main.css">
+</head>
+<body>
+
+  <nav class="nav" id="nav" role="navigation" aria-label="Navegación principal">
+    <a href="/" class="brand" aria-label="CAVA Vinoteca — Inicio">
+      <span class="cava-monogram"><img src="/Assets/images/logo-cava-mark.webp" alt="" width="34" height="34" loading="eager"></span>
+      <span class="brand-wordmark">CAVA Vinoteca</span>
+    </a>
+    <div class="nav-links" role="list">
+      <a href="/" role="listitem">Inicio</a>
+      <a href="/cata-de-vinos-perez-zeledon" role="listitem">Catas de vino</a>
+      <a href="/nazareth" role="listitem">Nazareth</a>
+      <a href="/blog" aria-current="true" role="listitem">Blog</a>
+      <a href="https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa" class="btn gold" target="_blank" rel="noopener noreferrer" role="listitem">Reservar</a>
+    </div>
+  </nav>
+
+  <main id="main-content">
+
+    <header class="art-header">
+      <div class="art-header-inner">
+        <p class="art-category">${cat}</p>
+        <h1 class="art-title">${title}</h1>
+        <div class="art-meta">
+          <img src="/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp" alt="Nazareth Padilla Montero" width="44" height="44" loading="eager" class="art-meta-img">
+          <div>
+            <span class="art-author-name">Nazareth Padilla Montero</span>
+            <span class="art-meta-date">Comunicadora del vino · ${monthYear}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    ${imgBlock}
+
+    <nav class="art-breadcrumb" aria-label="Breadcrumb">
+      <div class="art-breadcrumb-inner">
+        <a href="/">Inicio</a><span aria-hidden="true">/</span>
+        <a href="/blog">Blog</a><span aria-hidden="true">/</span>
+        <span aria-current="page">${cat}</span>
+      </div>
+    </nav>
+
+    <section class="art-body" aria-label="Contenido del artículo">
+      <article class="art-prose" id="articulo">
+        ${quoteBlock}
+        ${body}
+        <div class="art-cta-block" style="margin-top:3rem;padding:2rem;border-top:1px solid rgba(184,151,90,.2);text-align:center">
+          <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-style:italic;color:#eadcc3;margin-bottom:1.25rem;line-height:1.7">En CAVA Gourmet Market, el vino no se aprende desde la distancia: se conversa, se prueba y se vive.</p>
+          <a href="/cata-de-vinos-perez-zeledon" style="display:inline-flex;align-items:center;gap:.5rem;background:#b8975a;color:#091522;padding:.8rem 1.5rem;border-radius:3px;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;font-family:'Jost',sans-serif;font-weight:400">Conocer experiencias en CAVA →</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="art-author" aria-label="Sobre la autora">
+      <div class="art-author-inner">
+        <div class="art-author-img">
+          <img src="/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp" alt="Nazareth Padilla Montero" width="74" height="74" loading="lazy">
+        </div>
+        <div>
+          <p class="art-author-name">Nazareth Padilla Montero</p>
+          <p class="art-author-cred">Comunicadora del vino · WSET Level 3 · CAVA Vinoteca</p>
+          <p class="art-author-bio">Cofundadora de CAVA Gourmet Market en Pérez Zeledón. Divulga el vino desde la experiencia, la conversación y un espacio físico donde el conocimiento no intimida.</p>
+          <a href="/nazareth" class="art-author-link">Conocer más sobre Nazareth</a>
+        </div>
+      </div>
+    </section>
+
+    ${relBlock}
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span style="font-family:'Bodoni Moda',Georgia,serif;font-size:.9rem;letter-spacing:.1em;font-weight:300">CAVA</span>
+        <span>Gourmet Market · Vinoteca · Pérez Zeledón · Costa Rica</span>
+      </div>
+      <nav class="footer-links" aria-label="Links del footer">
+        <a href="/">Inicio</a>
+        <a href="/nazareth">Nazareth</a>
+        <a href="/cata-de-vinos-perez-zeledon">Catas de vino</a>
+        <a href="/blog">Blog</a>
+        <a href="https://www.instagram.com/cavapz" target="_blank" rel="noopener noreferrer" aria-label="Instagram CAVA Vinoteca">Instagram</a>
+        <span>© 2026</span>
+      </nav>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa" class="wa" target="_blank" rel="noopener noreferrer" aria-label="Contactar CAVA por WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.119.553 4.105 1.52 5.83L.058 23.5l5.83-1.49A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.93 0-3.74-.523-5.29-1.435l-.38-.225-3.94 1.008.999-3.85-.246-.393A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+  </a>
+
+  <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};<\/script>
+  <script defer src="/_vercel/insights/script.js"><\/script>
+  <script defer src="/_vercel/speed-insights/script.js"><\/script>
+</body>
+</html>`;
+  }
+
+  // ── MODALS ──
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+  });
+
+  // ── TOAST ──
+  function showToast(msg, type = 'info') {
+    const c = document.getElementById('toastContainer');
+    const icons = {
+      success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>',
+      error:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>',
+      info:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/></svg>',
+    };
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `${icons[type] || ''}<span>${msg}</span>`;
+    c.appendChild(t);
+    requestAnimationFrame(() => { requestAnimationFrame(() => t.classList.add('show')); });
+    setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 350); }, 4200);
+  }
+</script>
+</body>
+</html>
