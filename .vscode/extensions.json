@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "ms-python.debugpy",
-        "grishonnganga.image-optimizer"
+        "grishonnganga.image-optimizer",
+        "anthropic.claude-code"
     ]
 }
