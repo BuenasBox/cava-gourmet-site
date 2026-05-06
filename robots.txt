@@ -1,7 +1,7 @@
-# CAVA Vinoteca robots.txt
 User-agent: *
 Allow: /
-Disallow: /Repaldos%20Index/
+
 Disallow: /admin/
-Crawl-delay: 1
+Disallow: /Repaldos%20Index/
+
 Sitemap: https://www.cavagourmet.com/sitemap.xml
