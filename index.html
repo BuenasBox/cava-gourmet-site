@@ -72,16 +72,62 @@
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "LocalBusiness",
-        "additionalType": "https://schema.org/WineStore",
+        "@type": "WebSite",
+        "@id": "https://www.cavagourmet.com/#website",
+        "url": "https://www.cavagourmet.com/",
+        "name": "CAVA Vinoteca | Vinoteca en Pérez Zeledón",
+        "publisher": { "@id": "https://www.cavagourmet.com/#organization" }
+      },
+
+      {
+        "@type": "Organization",
+        "@id": "https://www.cavagourmet.com/#organization",
+        "name": "CAVA Gourmet Market Internacional S.R.L.",
+        "legalName": "CAVA Gourmet Market Internacional S.R.L.",
+        "url": "https://www.cavagourmet.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.cavagourmet.com/Assets/logo-cava-mark.jpg",
+          "width": 170,
+          "height": 170
+        },
+        "founder": { "@id": "https://www.cavagourmet.com/nazareth#person" },
+        "sameAs": [
+          "https://www.facebook.com/cavapz",
+          "https://www.instagram.com/cavapz"
+        ]
+      },
+
+      {
+        "@type": ["LocalBusiness", "BarOrPub", "WineStore"],
         "@id": "https://www.cavagourmet.com/#cava-vinoteca",
         "name": "CAVA Vinoteca",
         "alternateName": ["CAVA Gourmet Market", "Cava Gourmet", "cavapz"],
         "url": "https://www.cavagourmet.com/",
+        "description": "Del muro a la mesa: una vinoteca de vino, conversación y hospitalidad compartida en Pérez Zeledón, Costa Rica.",
+        "brand": { "@id": "https://www.cavagourmet.com/#nazareth-wine-journey" },
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.cavagourmet.com/Assets/logo-cava-mark.jpg",
+          "width": 170,
+          "height": 170
+        },
         "image": [
-          "https://www.cavagourmet.com/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp",
-          "https://www.cavagourmet.com/Assets/images/02-cava-vinoteca-private-tasting-table-1920.webp",
-          "https://www.cavagourmet.com/Assets/images/04-cava-vinoteca-after-office-lounge-1920.webp"
+          {
+            "@type": "ImageObject",
+            "url": "https://www.cavagourmet.com/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp",
+            "caption": "Muro de vinos en CAVA Vinoteca - Pérez Zeledón"
+          },
+          {
+            "@type": "ImageObject",
+            "url": "https://www.cavagourmet.com/Assets/images/02-cava-vinoteca-private-tasting-table-1920.webp",
+            "caption": "Mesa de degustación privada en CAVA Vinoteca"
+          },
+          {
+            "@type": "ImageObject",
+            "url": "https://www.cavagourmet.com/Assets/images/04-cava-vinoteca-after-office-lounge-1920.webp",
+            "caption": "Ambiente After Office en CAVA Vinoteca"
+          }
         ],
         "address": {
           "@type": "PostalAddress",
@@ -96,20 +142,18 @@
           "latitude": "9.3676",
           "longitude": "-83.6823"
         },
-        "description": "Del muro a la mesa: una vinoteca de vino, conversación y hospitalidad compartida en Pérez Zeledón, Costa Rica.",
         "priceRange": "$$$",
-        "servesCuisine": "Vinoteca",
-        "currenciesAccepted": "CRC, USD",
         "telephone": "+50686325260",
         "email": "nazareth@cavagourmet.com",
+        "currenciesAccepted": "CRC, USD",
+        "paymentAccepted": ["Cash", "Credit Card", "Debit Card"],
         "hasMap": "https://maps.app.goo.gl/Jn628tNv4wjbyxD88",
-        "logo": "https://www.cavagourmet.com/Assets/logo-cava-mark.jpg",
         "openingHoursSpecification": [
           {
             "@type": "OpeningHoursSpecification",
             "dayOfWeek": [
-              "Monday","Tuesday","Wednesday",
-              "Thursday","Friday","Saturday","Sunday"
+              "Monday", "Tuesday", "Wednesday",
+              "Thursday", "Friday", "Saturday", "Sunday"
             ],
             "opens": "11:00",
             "closes": "20:00"
@@ -145,32 +189,53 @@
           "https://open.spotify.com/show/2nQCir3Xq9srVlnZvX1EGz",
           "https://www.tripadvisor.es/Attraction_Review-g12886080-d26727331-Reviews-Cava_Gourmet_Market-Daniel_Flores_Daniel_Flores_District_Perez_Zeledon_Provinc.html"
         ],
-        "founder": {
-          "@id": "https://www.cavagourmet.com/nazareth#person"
-        }
+        "founder": { "@id": "https://www.cavagourmet.com/nazareth#person" }
       },
+
       {
         "@type": "Person",
         "@id": "https://www.cavagourmet.com/nazareth#person",
         "name": "Nazareth Padilla Montero",
-        "url": "https://www.cavagourmet.com/nazareth"
+        "jobTitle": "Fundadora y Sommelier — Comunicadora del Vino",
+        "url": "https://www.cavagourmet.com/nazareth",
+        "worksFor": { "@id": "https://www.cavagourmet.com/#cava-vinoteca" },
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://www.cavagourmet.com/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp",
+          "caption": "Nazareth Padilla Montero, fundadora de CAVA Vinoteca y Nazareth Wine Journey"
+        },
+        "description": "Fundadora de CAVA Vinoteca y Nazareth Wine Journey. Comunicadora del vino con enfoque en hospitalidad y experiencia sensorial. WSET Level 3 y becaria Women of the Vine & Spirits Foundation 2025.",
+        "knowsAbout": [
+          "Vino", "Enología", "Hospitalidad",
+          "Experiencias sensoriales", "Comunicación del vino",
+          "Cata de vinos", "Maridaje"
+        ],
+        "sameAs": [
+          "https://www.instagram.com/nazarethwinejourney/",
+          "https://www.facebook.com/nazarethwinejourney",
+          "https://www.linkedin.com/in/nazarethpm",
+          "https://open.spotify.com/show/2nQCir3Xq9srVlnZvX1EGz"
+        ]
       },
+
       {
         "@type": "Brand",
         "@id": "https://www.cavagourmet.com/#nazareth-wine-journey",
         "name": "Nazareth Wine Journey",
         "url": "https://www.instagram.com/nazarethwinejourney/",
-        "description": "Nazareth Wine Journey es la voz latinoamericana que acompaña el vino con criterio experto, trayendo una perspectiva de hospitalidad y experiencia sensorial.",
+        "description": "La voz latinoamericana que acompaña el vino con criterio experto, hospitalidad y experiencia sensorial.",
+        "founder": { "@id": "https://www.cavagourmet.com/nazareth#person" },
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.cavagourmet.com/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp"
+        },
         "sameAs": [
           "https://www.instagram.com/nazarethwinejourney/",
           "https://www.facebook.com/nazarethwinejourney",
           "https://www.linkedin.com/in/nazarethpm"
-        ],
-        "founder": {
-          "@id": "https://www.cavagourmet.com/nazareth#person"
-        },
-        "logo": "https://www.cavagourmet.com/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp"
+        ]
       },
+
       {
         "@type": "FAQPage",
         "@id": "https://www.cavagourmet.com/#faq",
@@ -217,19 +282,24 @@
           }
         ]
       },
+
       {
         "@type": "Service",
         "@id": "https://www.cavagourmet.com/#after-office",
         "name": "After Office — Del muro a la mesa compartida",
         "description": "Ritual de vino compartido en CAVA Vinoteca. Cada invitado elige una botella del muro, Nazareth y Erick acompañan el descorche y convierten cada botella en conversación. No es una cata tradicional: es un momento compartido que se mide por la experiencia, no por la botella.",
-        "serviceType": "Experiencia de vino",
+        "serviceType": "Experiencia gastronómica y enológica",
         "provider": { "@id": "https://www.cavagourmet.com/#cava-vinoteca" },
         "areaServed": {
           "@type": "Place",
           "name": "Pérez Zeledón, Costa Rica"
         },
         "url": "https://www.cavagourmet.com/#after-office",
-        "image": "https://www.cavagourmet.com/Assets/images/04-cava-vinoteca-after-office-lounge-1920.webp",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://www.cavagourmet.com/Assets/images/04-cava-vinoteca-after-office-lounge-1920.webp",
+          "caption": "After Office en CAVA Vinoteca — Del muro a la mesa compartida"
+        },
         "offers": {
           "@type": "Offer",
           "availability": "https://schema.org/InStock",

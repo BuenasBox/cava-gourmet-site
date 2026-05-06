@@ -9,7 +9,17 @@
       "Bash(python3 -c ' *)",
       "Bash(identify \"nazareth-padilla-seleccion-vino-bodega-cava.jpg\" \"nazareth-padilla-vino-artesanal-cava-gourmet.jpg\")",
       "Bash(identify *.jpg)",
-      "Bash(awk '{print $1, $3}')"
+      "Bash(awk '{print $1, $3}')",
+      "Bash(git commit *)",
+      "Bash(git mv *)",
+      "Bash(cwebp -version)",
+      "Bash(convert --version)",
+      "Bash(magick --version)",
+      "Bash(ffmpeg -version)",
+      "Bash(node -e \"require\\('sharp'\\); console.log\\('sharp: available'\\)\")",
+      "Bash(magick identify *)",
+      "Bash(scoop search *)",
+      "Bash(scoop info *)"
     ]
   }
 }
