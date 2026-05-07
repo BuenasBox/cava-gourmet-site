@@ -12,6 +12,8 @@
   <meta name="theme-color" content="#091522" />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://www.cavagourmet.com/nazareth" />
+  <link rel="alternate" hreflang="es-CR" href="https://www.cavagourmet.com/nazareth" />
+  <link rel="alternate" hreflang="x-default" href="https://www.cavagourmet.com/" />
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -94,9 +96,7 @@
           "https://substack.com/@nazarethpadillamonter",
           "https://www.tiktok.com/@nazarethwinejourney"
         ],
-        "worksFor": {
-          "@id": "https://www.cavagourmet.com/nazareth#organization"
-        },
+        "worksFor": { "@id": "https://www.cavagourmet.com/#cava-vinoteca" },
         "knowsAbout": [
           "Wine education",
           "Wine tasting",
@@ -111,11 +111,16 @@
         "nationality": {
           "@type": "Country",
           "name": "Costa Rica"
-        }
+        },
+        "brand": { "@id": "https://www.cavagourmet.com/#nazareth-wine-journey" },
+        "founderOf": [
+          { "@id": "https://www.cavagourmet.com/#cava-vinoteca" },
+          { "@id": "https://www.cavagourmet.com/#nazareth-wine-journey" }
+        ]
       },
       {
         "@type": "Organization",
-        "@id": "https://www.cavagourmet.com/nazareth#brand",
+        "@id": "https://www.cavagourmet.com/#nazareth-wine-journey",
         "name": "Nazareth Wine Journey",
         "description": "Nazareth Wine Journey es la marca personal de educación y comunicación del vino creada por Nazareth Padilla Montero desde Costa Rica.",
         "founder": {
@@ -126,26 +131,7 @@
           "https://www.facebook.com/nazarethwinejourney"
         ]
       },
-      {
-        "@type": ["Organization", "LocalBusiness"],
-        "@id": "https://www.cavagourmet.com/nazareth#organization",
-        "name": "CAVA Gourmet Market",
-        "alternateName": ["CAVA Vinoteca", "Cava Gourmet", "cavapz"],
-        "sameAs": [
-          "https://www.instagram.com/cavapz"
-        ],
-        "url": "https://www.cavagourmet.com",
-        "telephone": "+50686325260",
-        "location": {
-          "@type": "Place",
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Pérez Zeledón",
-            "addressRegion": "San José",
-            "addressCountry": "CR"
-          }
-        }
-      }
+      { "@id": "https://www.cavagourmet.com/#cava-vinoteca" }
     ]
   }
   </script>
@@ -1373,6 +1359,14 @@ color: rgba(246, 239, 227, 0.82);
         </div>
       </div>
       <div class="scroll-mark" aria-hidden="true">Explorar</div>
+    </section>
+
+    <section id="nazareth-resumen" aria-labelledby="geo-nazareth-h2" style="background:var(--charcoal);padding:var(--section) 0;">
+      <div class="wrap">
+        <h2 class="title" id="geo-nazareth-h2" style="margin-bottom:2rem;">Nazareth Padilla Montero — Fundadora de CAVA Gourmet Market y comunicadora del vino</h2>
+        <p class="copy">Nazareth Padilla Montero es fundadora de CAVA Gourmet Market y creadora de Nazareth Wine Journey. Desde Pérez Zeledón, Costa Rica, comunica el vino con lenguaje cercano, formación WSET Nivel 2 con Distinction y una visión centrada en experiencia, conversación y criterio experto.</p>
+        <p class="copy" style="margin-top:1.25rem;">Es becaria de la Women of the Vine &amp; Spirits Foundation (WOTVS) Class of 2025 — única representante de Costa Rica en esa generación — y fue invitada a los Vinoinfluencers World Awards 2026 en Valladolid, España, junto a más de 100 creadores de contenido de vino de 30 países.</p>
+      </div>
     </section>
 
     <!-- QUIÉN ES NAZARETH -->
