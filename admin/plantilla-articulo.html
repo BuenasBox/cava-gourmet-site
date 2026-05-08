@@ -19,7 +19,7 @@
   <meta name="keywords" content="[KEYWORDS separados por coma]" />
   <meta name="theme-color" content="#091522" />
   <meta name="robots" content="noindex,nofollow" />
-  <link rel="canonical" href="https://www.cavagourmet.com/blog/[SLUG]" />
+  <link rel="canonical" href="https://www.cavagourmet.com/journal/[SLUG]" />
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -27,7 +27,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="CAVA Gourmet Market" />
-  <meta property="og:url" content="https://www.cavagourmet.com/blog/[SLUG]" />
+  <meta property="og:url" content="https://www.cavagourmet.com/journal/[SLUG]" />
   <meta property="og:title" content="[OG TITLE]" />
   <meta property="og:description" content="[OG DESCRIPTION]" />
   <meta property="og:image" content="https://www.cavagourmet.com/Assets/images/[IMAGEN]-1280.webp" />
@@ -56,17 +56,17 @@
     "@graph": [
       {
         "@type": "BlogPosting",
-        "@id": "https://www.cavagourmet.com/blog/[SLUG]#article",
+        "@id": "https://www.cavagourmet.com/journal/[SLUG]#article",
         "headline": "[TITLE]",
         "name": "[TITLE]",
         "description": "[META DESCRIPTION]",
-        "url": "https://www.cavagourmet.com/blog/[SLUG]",
+        "url": "https://www.cavagourmet.com/journal/[SLUG]",
         "datePublished": "[FECHA YYYY-MM-DD]",
         "dateModified": "[FECHA YYYY-MM-DD]",
         "inLanguage": "es",
         "author": { "@id": "https://www.cavagourmet.com/nazareth#person" },
         "publisher": { "@id": "https://www.cavagourmet.com/#organization" },
-        "isPartOf": { "@id": "https://www.cavagourmet.com/blog#blog" },
+        "isPartOf": { "@id": "https://www.cavagourmet.com/journal#journal" },
         "image": {
           "@type": "ImageObject",
           "url": "https://www.cavagourmet.com/Assets/images/[IMAGEN]-1280.webp",
@@ -80,14 +80,14 @@
         "@type": "BreadcrumbList",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.cavagourmet.com/" },
-          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.cavagourmet.com/blog" },
+          { "@type": "ListItem", "position": 2, "name": "Journal", "item": "https://www.cavagourmet.com/journal" },
           { "@type": "ListItem", "position": 3, "name": "[TITLE]" }
         ]
       },
       {
         "@type": "WebPage",
-        "@id": "https://www.cavagourmet.com/blog/[SLUG]#webpage",
-        "url": "https://www.cavagourmet.com/blog/[SLUG]",
+        "@id": "https://www.cavagourmet.com/journal/[SLUG]#webpage",
+        "url": "https://www.cavagourmet.com/journal/[SLUG]",
         "name": "[SEO TITLE] | CAVA Gourmet Market",
         "description": "[META DESCRIPTION]",
         "inLanguage": "es",
@@ -154,7 +154,7 @@
     .nav-links { display: flex; gap: clamp(1rem, 3vw, 2.6rem); align-items: center; }
     .nav-links a { font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(246, 239, 227, .78); transition: color .25s var(--ease); }
     .nav-links a:hover { color: var(--gold-soft); }
-    .nav-links a[aria-current="true"] { color: var(--gold-soft); }
+    .nav-links a[aria-current="page"] { color: var(--gold-soft); }
     .nav-links a:focus-visible, .nav-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
     .nav-toggle { display: none; background: none; border: 0; color: var(--ivory); width: 36px; height: 36px; cursor: pointer; }
     .nav-toggle span { display: block; height: 1px; background: currentColor; margin: 6px 0; transition: transform .3s var(--ease), opacity .3s var(--ease); }
@@ -237,7 +237,7 @@
       <a href="/">Inicio</a>
       <a href="/cata-de-vinos-perez-zeledon">Catas de vino</a>
       <a href="/nazareth">Nazareth</a>
-      <a href="/blog" aria-current="true">Blog</a>
+      <a href="/journal" aria-current="page">Journal</a>
       <a href="https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa"
         class="btn gold" target="_blank" rel="noopener noreferrer"
         style="padding:.55rem 1.15rem; font-size:.6rem; border-radius:4px;">Reservar</a>
@@ -252,7 +252,7 @@
     <a href="/">Inicio</a>
     <a href="/cata-de-vinos-perez-zeledon">Catas de vino</a>
     <a href="/nazareth">Nazareth</a>
-    <a href="/blog" style="color: var(--gold-soft);">Blog</a>
+    <a href="/journal" style="color: var(--gold-soft);">Journal</a>
     <a href="https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa"
       target="_blank" rel="noopener noreferrer">Reservar</a>
   </nav>
@@ -302,7 +302,7 @@
       <div class="art-breadcrumb-inner">
         <a href="/">Inicio</a>
         <span aria-hidden="true">/</span>
-        <a href="/blog">Blog</a>
+        <a href="/journal">Journal</a>
         <span aria-hidden="true">/</span>
         <span aria-current="page">[CATEGORÍA]</span>
       </div>
@@ -360,13 +360,13 @@
     ============================================================ -->
     <nav class="art-footnav" aria-label="Más artículos">
       <div class="art-footnav-inner">
-        <a href="/blog" class="art-back">Volver al blog</a>
+        <a href="/journal" class="art-back">Volver al journal</a>
         <div class="art-more">
           <span class="art-more-label">Más artículos</span>
-          <a href="/blog/[SLUG-ARTICULO-1]" class="art-more-link">
+          <a href="/journal/[SLUG-ARTICULO-1]" class="art-more-link">
             [Título del artículo relacionado 1]
           </a>
-          <a href="/blog/[SLUG-ARTICULO-2]" class="art-more-link">
+          <a href="/journal/[SLUG-ARTICULO-2]" class="art-more-link">
             [Título del artículo relacionado 2]
           </a>
         </div>
@@ -385,7 +385,7 @@
         <a href="/">Inicio</a>
         <a href="/nazareth">Nazareth</a>
         <a href="/cata-de-vinos-perez-zeledon">Catas de vino</a>
-        <a href="/blog">Blog</a>
+        <a href="/journal">Journal</a>
         <a href="https://www.instagram.com/cavapz" target="_blank" rel="noopener noreferrer"
           aria-label="Instagram CAVA Vinoteca">Instagram</a>
         <span>© 2026</span>

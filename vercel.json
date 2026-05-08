@@ -1,5 +1,17 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/blog",
+      "destination": "/journal",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug",
+      "destination": "/journal/:slug",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/Assets/:path*",
@@ -20,7 +32,7 @@
       ]
     },
     {
-      "source": "/(index|nazareth|cata-de-vinos-perez-zeledon|blog|nuestra-historia).html",
+      "source": "/(index|nazareth|cata-de-vinos-perez-zeledon|blog|journal|nuestra-historia|after-office-vino-perez-zeledon).html",
       "headers": [
         {
           "key": "Cache-Control",
@@ -84,6 +96,33 @@
     },
     {
       "source": "/blog/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/journal",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/journal/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/journal/:path*.html",
       "headers": [
         {
           "key": "Cache-Control",
