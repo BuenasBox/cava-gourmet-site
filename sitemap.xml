@@ -88,20 +88,20 @@
   </url>
 
   <url>
-    <loc>https://www.cavagourmet.com/blog</loc>
-    <lastmod>2026-05-05</lastmod>
+    <loc>https://www.cavagourmet.com/journal</loc>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://www.cavagourmet.com/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp</image:loc>
-      <image:title>Blog de CAVA Gourmet Market — Conversaciones sobre vino</image:title>
+      <image:title>Journal de CAVA Gourmet Market — Conversaciones sobre vino</image:title>
       <image:caption>Reflexiones sobre vino, cultura y experiencia desde CAVA Gourmet Market en Costa Rica.</image:caption>
     </image:image>
   </url>
 
   <url>
-    <loc>https://www.cavagourmet.com/blog/como-se-construye-cultura-del-vino</loc>
-    <lastmod>2026-05-05</lastmod>
+    <loc>https://www.cavagourmet.com/journal/como-se-construye-cultura-del-vino</loc>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image>
@@ -112,8 +112,8 @@
   </url>
 
   <url>
-    <loc>https://www.cavagourmet.com/blog/vino-menos-elitismo-mas-experiencia</loc>
-    <lastmod>2026-05-05</lastmod>
+    <loc>https://www.cavagourmet.com/journal/vino-menos-elitismo-mas-experiencia</loc>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image>
@@ -124,8 +124,8 @@
   </url>
 
   <url>
-    <loc>https://www.cavagourmet.com/blog/contenido-digital-experiencia-real-vinoteca-costa-rica</loc>
-    <lastmod>2026-05-05</lastmod>
+    <loc>https://www.cavagourmet.com/journal/contenido-digital-experiencia-real-vinoteca-costa-rica</loc>
+    <lastmod>2026-05-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image>

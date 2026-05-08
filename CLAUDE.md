@@ -177,6 +177,32 @@ Componente geográfico estratégico.
 Reforzar narrativa de experiencias premium fuera del GAM.
 Usar: Pérez Zeledón, San Isidro de El General, Zona Sur, Costa Rica.
 
+### Sección editorial — Journal
+
+La sección editorial se llama **Journal** (no Blog).
+
+- URL canónica del índice: `/journal`
+- URL de cada artículo: `/journal/[slug]`
+- Schema del índice: `Blog` con `@id: journal#journal`
+- Schema de artículos: `BlogPosting` con `isPartOf: journal#journal`
+- Los archivos en `/blog/` tienen `noindex,follow` y 301 redirect a `/journal/`.
+  No crear ni referenciar URLs `/blog/` en contenido nuevo.
+- Plantilla de nuevos artículos: `admin/plantilla-articulo.html`
+
+---
+
+## Arquitectura de contenido — hub y spokes
+
+El Journal sigue un modelo hub-and-spoke:
+
+- **Hub:** `/journal` — índice editorial, enlaza a todos los artículos
+- **Spokes:** `/journal/[slug]` — cada artículo enlaza al hub y a 2 artículos
+  relacionados (`art-more-link`)
+- **Cross-linking obligatorio:** cada artículo debe incluir al menos 1 enlace
+  interno a otra página del sitio fuera del journal
+  (ej. `/cata-de-vinos-perez-zeledon`, `/nazareth`, `/after-office-vino-perez-zeledon`)
+- **Breadcrumb:** Inicio → Journal → Artículo (refuerza la jerarquía en schema y HTML)
+
 ---
 
 ## Reglas técnicas — producción activa
@@ -227,7 +253,16 @@ Cada página debe responder claramente:
 6. ¿Qué pregunta humana concreta resuelve?
 7. ¿Qué entidad refuerza: CAVA, Nazareth, Pérez Zeledón, cultura del vino CR?
 
----
+------
+
+## Números de contacto oficiales
+
+WhatsApp CAVA (reservas generales): +506 8632 5260
+WhatsApp Nazareth (contacto directo): +506 8448 3983
+
+Usar +506 8632 5260 como CTA principal en todas las páginas de experiencia.
+Usar +506 8448 3983 solo cuando la página apunta específicamente a Nazareth
+como figura pública (colaboraciones, prensa, bodegas).
 
 ## Schema JSON-LD — datos base de CAVA
 
@@ -262,9 +297,14 @@ Usar estos datos consistentemente en todas las páginas:
 }
 ```
 
-Schema aprobados: `LocalBusiness`, `WebPage`, `Article`, `BlogPosting`,
+Schema aprobados: `LocalBusiness`, `WineStore`, `WebPage`, `Article`, `BlogPosting`,
 `FAQPage`, `Person`, `Event`, `Service`, `BreadcrumbList`.
 Schema prohibido: `Winery`.
+
+Nota sobre `WineStore`: subtipo de `LocalBusiness` en schema.org, refleja que
+CAVA vende vino. Usar en páginas donde el contexto de venta es relevante
+(ej. experiencias de cata, muro de vinos). No reemplaza `LocalBusiness` — usar
+en `@graph` junto a él cuando aplique.
 
 ---
 
