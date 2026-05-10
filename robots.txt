@@ -13,7 +13,7 @@
 # ai-input: inputting content into AI models for real-time answers (RAG, grounding).
 # ai-train: training or fine-tuning AI models.
 
-# Regla general: acceso completo, señales explícitas para IA
+# Regla global: todos los crawlers — acceso completo con señales IA explícitas
 User-agent: *
 Content-signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
@@ -22,62 +22,42 @@ Disallow: /Repaldos%20Index/
 
 # Buscadores principales
 User-agent: Googlebot
-Allow: /
-
 User-agent: Bingbot
-Allow: /
-
 User-agent: Applebot
-Allow: /
 
 # OpenAI
 User-agent: GPTBot
-Allow: /
-
 User-agent: OAI-SearchBot
-Allow: /
-
 User-agent: ChatGPT-User
-Allow: /
 
 # Anthropic / Claude
 User-agent: ClaudeBot
-Allow: /
-
 User-agent: Claude-SearchBot
-Allow: /
-
 User-agent: Claude-User
-Allow: /
-
 User-agent: anthropic-ai
-Allow: /
 
 # Perplexity
 User-agent: PerplexityBot
-Allow: /
 
 # Google AI
 User-agent: Google-Extended
-Allow: /
 
 # Apple AI
 User-agent: Applebot-Extended
-Allow: /
 
 # Meta
 User-agent: Meta-ExternalAgent
-Allow: /
-
 User-agent: Meta-ExternalFetcher
-Allow: /
 
 # Amazon
 User-agent: Amazonbot
-Allow: /
 
-# Common Crawl (base de datos que alimenta muchos LLMs)
+# Common Crawl
 User-agent: CCBot
+
+Content-signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
+Disallow: /admin/
+Disallow: /Repaldos%20Index/
 
 Sitemap: https://www.cavagourmet.com/sitemap.xml
