@@ -32,7 +32,11 @@
       "Bash(magick \"Assets/images/erick-sandi-portrait.jpg\" -resize 800x -quality 82 \"Assets/images/erick-sandi-portrait-800.webp\")",
       "Bash(magick \"Assets/images/nazareth-padilla-Perfil1.jpeg\" -resize 800x -quality 82 -define webp:method=6 \"Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp\")",
       "Bash(magick \"Assets/images/nazareth-padilla-Perfil1.jpeg\" -resize 800x -quality 82 -define webp:method=6 \"Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1280.webp\")",
-      "Bash(magick \"Assets/images/nazareth-padilla-Perfil1.jpeg\" -resize 800x -quality 82 -define webp:method=6 \"Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp\")"
+      "Bash(magick \"Assets/images/nazareth-padilla-Perfil1.jpeg\" -resize 800x -quality 82 -define webp:method=6 \"Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp\")",
+      "Bash(Get-Item \"c:\\\\Users\\\\esand\\\\OneDrive\\\\Documents\\\\Mi sitio Web CAVA\\\\Assets\\\\images\\\\01-cava-vinoteca-wine-wall-hero-640.webp\")",
+      "Bash(Select-Object Name, Length)",
+      "Read(//mnt/c/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/**)",
+      "Bash(awk '{print $5, $9}')"
     ]
   }
 }
