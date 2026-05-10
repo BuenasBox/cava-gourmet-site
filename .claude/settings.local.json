@@ -19,7 +19,13 @@
       "Bash(node -e \"require\\('sharp'\\); console.log\\('sharp: available'\\)\")",
       "Bash(magick identify *)",
       "Bash(scoop search *)",
-      "Bash(scoop info *)"
+      "Bash(scoop info *)",
+      "Bash(Test-Path \"c:\\\\Users\\\\esand\\\\OneDrive\\\\Documents\\\\Mi sitio Web CAVA\\\\Assets\\\\images\\\\Vinoteca\\\\Cava-Gourmer-Marker-Interior-de-tienda.jpg\")",
+      "Bash(magick \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/Vinoteca/Cava-Gourmer-Marker-Interior-de-tienda.jpg\" -resize 480x -quality 82 -define webp:method=6 \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/01-cava-vinoteca-wine-wall-hero-480.webp\")",
+      "Bash(magick \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/Vinoteca/Cava-Gourmer-Marker-Interior-de-tienda.jpg\" -resize 640x -quality 82 -define webp:method=6 \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/01-cava-vinoteca-wine-wall-hero-640.webp\")",
+      "Bash(magick \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/Vinoteca/Cava-Gourmer-Marker-Interior-de-tienda.jpg\" -resize 800x -quality 82 -define webp:method=6 \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/01-cava-vinoteca-wine-wall-hero-800.webp\")",
+      "Bash(magick \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/Vinoteca/Cava-Gourmer-Marker-Interior-de-tienda.jpg\" -resize 1280x -quality 82 -define webp:method=6 \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/01-cava-vinoteca-wine-wall-hero-1280.webp\")",
+      "Bash(magick \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/Vinoteca/Cava-Gourmer-Marker-Interior-de-tienda.jpg\" -resize 1920x -quality 82 -define webp:method=6 \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp\")"
     ]
   }
 }
