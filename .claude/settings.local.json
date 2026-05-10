@@ -36,7 +36,8 @@
       "Bash(Get-Item \"c:\\\\Users\\\\esand\\\\OneDrive\\\\Documents\\\\Mi sitio Web CAVA\\\\Assets\\\\images\\\\01-cava-vinoteca-wine-wall-hero-640.webp\")",
       "Bash(Select-Object Name, Length)",
       "Read(//mnt/c/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/**)",
-      "Bash(awk '{print $5, $9}')"
+      "Bash(awk '{print $5, $9}')",
+      "Bash(/c/Users/esand/scoop/apps/imagemagick/current/magick '/c/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/02-cava-vinoteca-private-tasting-table-1920.webp' -crop 1920x1280+0+640 +repage -quality 75 -strip -define webp:method=6 '/c/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/02-preview-crop.webp')"
     ]
   }
 }

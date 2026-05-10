@@ -1,7 +1,83 @@
-User-agent: *
-Allow: /
+# CAVA Vinoteca — robots.txt
+# Política de crawl abierta para buscadores y LLMs.
+# Content Signals: autorización explícita para búsqueda, AI input y AI training.
 
+# As a condition of accessing this website, you agree to abide by the
+# following content signals:
+# (a)  If a content-signal = yes, you may collect content for the
+#      corresponding use.
+# (b)  If a content-signal = no, you may not collect content for the
+#      corresponding use.
+# The content signals and their meanings are:
+# search: building a search index and providing search results.
+# ai-input: inputting content into AI models for real-time answers (RAG, grounding).
+# ai-train: training or fine-tuning AI models.
+
+# Regla general: acceso completo, señales explícitas para IA
+User-agent: *
+Content-signal: search=yes, ai-input=yes, ai-train=yes
+Allow: /
 Disallow: /admin/
 Disallow: /Repaldos%20Index/
+
+# Buscadores principales
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic / Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Google AI
+User-agent: Google-Extended
+Allow: /
+
+# Apple AI
+User-agent: Applebot-Extended
+Allow: /
+
+# Meta
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+# Amazon
+User-agent: Amazonbot
+Allow: /
+
+# Common Crawl (base de datos que alimenta muchos LLMs)
+User-agent: CCBot
+Allow: /
 
 Sitemap: https://www.cavagourmet.com/sitemap.xml
