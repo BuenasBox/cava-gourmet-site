@@ -25,7 +25,14 @@
       "Bash(magick \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/Vinoteca/Cava-Gourmer-Marker-Interior-de-tienda.jpg\" -resize 640x -quality 82 -define webp:method=6 \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/01-cava-vinoteca-wine-wall-hero-640.webp\")",
       "Bash(magick \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/Vinoteca/Cava-Gourmer-Marker-Interior-de-tienda.jpg\" -resize 800x -quality 82 -define webp:method=6 \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/01-cava-vinoteca-wine-wall-hero-800.webp\")",
       "Bash(magick \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/Vinoteca/Cava-Gourmer-Marker-Interior-de-tienda.jpg\" -resize 1280x -quality 82 -define webp:method=6 \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/01-cava-vinoteca-wine-wall-hero-1280.webp\")",
-      "Bash(magick \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/Vinoteca/Cava-Gourmer-Marker-Interior-de-tienda.jpg\" -resize 1920x -quality 82 -define webp:method=6 \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp\")"
+      "Bash(magick \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/Vinoteca/Cava-Gourmer-Marker-Interior-de-tienda.jpg\" -resize 1920x -quality 82 -define webp:method=6 \"c:/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/01-cava-vinoteca-wine-wall-hero-1920.webp\")",
+      "Bash(magick \"Assets/images/nazareth-padilla-portrait.jpg\" -resize 400x -quality 82 \"Assets/images/nazareth-padilla-portrait-400.webp\")",
+      "Bash(magick \"Assets/images/nazareth-padilla-portrait.jpg\" -resize 800x -quality 82 \"Assets/images/nazareth-padilla-portrait-800.webp\")",
+      "Bash(magick \"Assets/images/erick-sandi-portrait.jpg\" -resize 400x -quality 82 \"Assets/images/erick-sandi-portrait-400.webp\")",
+      "Bash(magick \"Assets/images/erick-sandi-portrait.jpg\" -resize 800x -quality 82 \"Assets/images/erick-sandi-portrait-800.webp\")",
+      "Bash(magick \"Assets/images/nazareth-padilla-Perfil1.jpeg\" -resize 800x -quality 82 -define webp:method=6 \"Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp\")",
+      "Bash(magick \"Assets/images/nazareth-padilla-Perfil1.jpeg\" -resize 800x -quality 82 -define webp:method=6 \"Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1280.webp\")",
+      "Bash(magick \"Assets/images/nazareth-padilla-Perfil1.jpeg\" -resize 800x -quality 82 -define webp:method=6 \"Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1920.webp\")"
     ]
   }
 }
