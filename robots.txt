@@ -60,4 +60,5 @@ Allow: /
 Disallow: /admin/
 Disallow: /Repaldos%20Index/
 
+LLMs: https://www.cavagourmet.com/llms.txt
 Sitemap: https://www.cavagourmet.com/sitemap.xml
