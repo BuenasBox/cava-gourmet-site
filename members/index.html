@@ -184,12 +184,18 @@
 </div>
 
 <script>
-  const BENEFICIOS = {
+  const FALLBACK = {
     invitado:   ["Acceso al grupo WhatsApp de CAVA"],
     neofito:    ["Acceso al After Office", "Lugar asegurado en la mesa aunque esté lleno"],
     entusiasta: ["Ingreso al Club Enofilios", "Cajas de vino mensuales — 3 vinos, selección de Nazareth"],
-    enofilo:    [] // se carga desde /api/config
+    enofilo:    []
   };
+
+  function parseBeneficios(config, key, fallback) {
+    const val = (config[key] || "").trim();
+    if (!val) return fallback;
+    return val.split("\n").map(s => s.trim()).filter(s => s.length > 0);
+  }
 
   function nivelKey(nivel) {
     if (nivel.includes("Enófilo"))    return "enofilo";
@@ -198,14 +204,17 @@
     return "invitado";
   }
 
-  function getBeneficiosActivos(nivelK, beneficioEnofilo) {
-    const lista = [...BENEFICIOS.invitado];
-    if (["neofito","entusiasta","enofilo"].includes(nivelK))
-      lista.push(...BENEFICIOS.neofito);
-    if (["entusiasta","enofilo"].includes(nivelK))
-      lista.push(...BENEFICIOS.entusiasta);
-    if (nivelK === "enofilo" && beneficioEnofilo)
-      lista.push(beneficioEnofilo);
+  function getBeneficiosActivos(nivelK, config) {
+    const b = {
+      invitado:   parseBeneficios(config, "beneficio_invitado",   FALLBACK.invitado),
+      neofito:    parseBeneficios(config, "beneficio_neofito",    FALLBACK.neofito),
+      entusiasta: parseBeneficios(config, "beneficio_entusiasta", FALLBACK.entusiasta),
+      enofilo:    parseBeneficios(config, "beneficio_enofilo",    FALLBACK.enofilo)
+    };
+    const lista = [...b.invitado];
+    if (["neofito","entusiasta","enofilo"].includes(nivelK)) lista.push(...b.neofito);
+    if (["entusiasta","enofilo"].includes(nivelK))           lista.push(...b.entusiasta);
+    if (nivelK === "enofilo")                                lista.push(...b.enofilo);
     return lista;
   }
 
@@ -245,8 +254,7 @@
   function render(m, config) {
     const nivelK           = nivelKey(m.nivel);
     const progreso         = calcularProgreso(m.experiencias, m.es_enofilo);
-    const beneficioEnofilo = config.beneficio_enofilo || "";
-    const promoActiva      = config.promocion_activa  || "";
+    const promoActiva = config.promocion_activa || "";
     const isIOS            = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
     document.getElementById("member-name").textContent  = m.nombre;
@@ -266,7 +274,7 @@
       `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrData}&margin=8`;
 
     // Benefits
-    const beneficios = getBeneficiosActivos(nivelK, beneficioEnofilo);
+    const beneficios = getBeneficiosActivos(nivelK, config);
     document.getElementById("benefits-list").innerHTML = beneficios.map(b =>
       `<div class="benefit-item"><div class="benefit-dot"></div><div class="benefit-text">${b}</div></div>`
     ).join("");

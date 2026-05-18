@@ -54,6 +54,9 @@
     input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(184,151,90,.2);border-radius:8px;color:var(--ivory);font-family:var(--sans);font-size:.88rem;font-weight:300;padding:.7rem .9rem;outline:none;transition:border-color .2s var(--ease)}
     input:focus{border-color:var(--gold)}
     input::placeholder{color:rgba(246,239,227,.22)}
+    textarea{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(184,151,90,.2);border-radius:8px;color:var(--ivory);font-family:var(--sans);font-size:.82rem;font-weight:300;padding:.7rem .9rem;outline:none;transition:border-color .2s var(--ease);resize:vertical;min-height:72px;line-height:1.6}
+    textarea:focus{border-color:var(--gold)}
+    textarea::placeholder{color:rgba(246,239,227,.22)}
 
     /* BUTTONS */
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;width:100%;margin-top:1rem;border:1px solid transparent;border-radius:6px;font-family:var(--sans);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;font-weight:400;padding:.85rem 1.25rem;cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease)}
@@ -256,16 +259,36 @@
   </div>
 
   <div class="card">
-    <p class="section-label">Beneficio Enófilo</p>
-    <h2 class="card-title">Nivel <em>🔐 Enófilo</em></h2>
-    <p class="card-desc">Texto del beneficio exclusivo que verán los miembros Enófilo en su tarjeta. Puedes actualizarlo cuando quieras.</p>
-    <div class="field">
-      <label>Descripción del beneficio</label>
-      <input id="cfg_enofilo" type="text" placeholder="Beneficio exclusivo — próximamente">
+    <p class="section-label">Beneficios por nivel</p>
+    <h2 class="card-title">Editar <em>beneficios</em></h2>
+    <p class="card-desc">Una línea por beneficio. Los cambios se reflejan en la tarjeta de cada miembro inmediatamente.</p>
+
+    <div class="field" style="margin-top:1.25rem">
+      <label>🚪 Invitado</label>
+      <textarea id="cfg_invitado" placeholder="Acceso al grupo WhatsApp de CAVA"></textarea>
     </div>
-    <button class="btn btn-gold" onclick="guardarConfig('beneficio_enofilo','cfg_enofilo','cfg_enofilo_alerta')">
-      Guardar beneficio
-    </button>
+    <button class="btn btn-ghost" style="margin-top:.6rem" onclick="guardarConfig('beneficio_invitado','cfg_invitado','cfg_inv_alerta')">Guardar Invitado</button>
+    <div id="cfg_inv_alerta" class="alerta"></div>
+
+    <div class="field" style="margin-top:1.25rem">
+      <label>🌱 Neófito</label>
+      <textarea id="cfg_neofito" placeholder="Acceso al After Office&#10;Lugar asegurado en la mesa"></textarea>
+    </div>
+    <button class="btn btn-ghost" style="margin-top:.6rem" onclick="guardarConfig('beneficio_neofito','cfg_neofito','cfg_neo_alerta')">Guardar Neófito</button>
+    <div id="cfg_neo_alerta" class="alerta"></div>
+
+    <div class="field" style="margin-top:1.25rem">
+      <label>🍷 Entusiasta</label>
+      <textarea id="cfg_entusiasta" placeholder="Ingreso al Club Enofilios&#10;Cajas de vino mensuales"></textarea>
+    </div>
+    <button class="btn btn-ghost" style="margin-top:.6rem" onclick="guardarConfig('beneficio_entusiasta','cfg_entusiasta','cfg_ent_alerta')">Guardar Entusiasta</button>
+    <div id="cfg_ent_alerta" class="alerta"></div>
+
+    <div class="field" style="margin-top:1.25rem">
+      <label>🔐 Enófilo</label>
+      <textarea id="cfg_enofilo" placeholder="Beneficio exclusivo — próximamente"></textarea>
+    </div>
+    <button class="btn btn-gold" style="margin-top:.6rem" onclick="guardarConfig('beneficio_enofilo','cfg_enofilo','cfg_enofilo_alerta')">Guardar Enófilo</button>
     <div id="cfg_enofilo_alerta" class="alerta"></div>
   </div>
 
@@ -567,7 +590,7 @@
 
   async function guardarConfig(clave, inputId, alertId) {
     const key   = getClave();
-    const valor = document.getElementById(inputId).value.trim();
+    const valor = document.getElementById(inputId).value;
     const el    = document.getElementById(alertId);
     if (!key) { el.className='alerta error'; el.innerHTML='Ve al tab Config y guarda tu clave primero.'; el.style.display='block'; return; }
     el.className='alerta ok'; el.innerHTML='Guardando…'; el.style.display='block';
@@ -588,8 +611,13 @@
       const r = await fetch('/api/config');
       const d = await r.json();
       if (d.config) {
-        if (d.config.beneficio_enofilo) document.getElementById('cfg_enofilo').value = d.config.beneficio_enofilo;
-        if (d.config.promocion_activa)  document.getElementById('cfg_promo').value   = d.config.promocion_activa;
+        ['invitado','neofito','entusiasta','enofilo'].forEach(n => {
+          const el = document.getElementById('cfg_' + n);
+          if (el && d.config['beneficio_' + n] !== undefined)
+            el.value = d.config['beneficio_' + n];
+        });
+        if (d.config.promocion_activa !== undefined)
+          document.getElementById('cfg_promo').value = d.config.promocion_activa;
       }
     } catch(e) {}
   }
