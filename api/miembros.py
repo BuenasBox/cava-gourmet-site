@@ -1,10 +1,13 @@
 import json
 import os
-from http.server import BaseHTTPRequestHandler
+import time
 import urllib.request
+import urllib.parse
+from http.server import BaseHTTPRequestHandler
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+ISSUER_ID    = "BCR2DN5TZPM6RPTP"
 
 def supabase_request(method, endpoint, body=None):
     url     = f"{SUPABASE_URL}/rest/v1/{endpoint}"
@@ -28,9 +31,29 @@ def calcular_nivel(exp, es_enofilo=False):
     if exp >= 3:  return "🌱 Neófito"
     return "🚪 Invitado"
 
+def get_google_token():
+    import jwt
+    key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
+    now      = int(time.time())
+    claims   = {
+        "iss":   key_data.get("client_email", ""),
+        "sub":   key_data.get("client_email", ""),
+        "aud":   "https://oauth2.googleapis.com/token",
+        "iat":   now,
+        "exp":   now + 3600,
+        "scope": "https://www.googleapis.com/auth/wallet_object.issuer"
+    }
+    token = jwt.encode(claims, key_data.get("private_key", ""), algorithm="RS256")
+    data  = urllib.parse.urlencode({
+        "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+        "assertion":  token
+    }).encode()
+    req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data)
+    with urllib.request.urlopen(req) as r:
+        return json.loads(r.read())["access_token"]
+
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
-        # Invitar como Enófilo
         length = int(self.headers.get("Content-Length", 0))
         data   = json.loads(self.rfile.read(length))
         email  = data.get("email","").strip().lower()
@@ -47,36 +70,26 @@ class handler(BaseHTTPRequestHandler):
 
         supabase_request("PATCH", f"miembros?email=eq.{email}", {"es_enofilo": True})
 
-        # Actualizar Google Wallet
         try:
-            from google.oauth2 import service_account
-            from googleapiclient.discovery import build
-            import os
-
-            ISSUER_ID    = "BCR2DN5TZPM6RPTP"
-            CLASS_SUFFIX = "AfterOfficeClub"
-            WALLET_SCOPE = ["https://www.googleapis.com/auth/wallet_object.issuer"]
-
-            key_data  = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
-            creds     = service_account.Credentials.from_service_account_info(key_data, scopes=WALLET_SCOPE)
-            service   = build("walletobjects", "v1", credentials=creds)
-            safe_id   = email.replace("@","_at_").replace(".","_")
-            object_id = f"{ISSUER_ID}.{safe_id}"
-
-            service.loyaltyObject().patch(
-                resourceId=object_id,
-                body={
-                    "secondaryLoyaltyPoints": {"label": "Nivel", "balance": {"string": "🔐 Enófilo"}},
-                    "textModulesData": [{"id": "progreso", "header": "Tu progreso", "body": "Bienvenido al círculo interno. 🔐"}]
-                }
-            ).execute()
+            access_token = get_google_token()
+            safe_id      = email.replace("@", "_at_").replace(".", "_")
+            object_id    = f"{ISSUER_ID}.{safe_id}"
+            body = json.dumps({
+                "secondaryLoyaltyPoints": {"label": "Nivel", "balance": {"string": "🔐 Enófilo"}},
+                "textModulesData": [{"id": "progreso", "header": "Tu progreso", "body": "Bienvenido al círculo interno. 🔐"}]
+            }).encode()
+            url = f"https://walletobjects.googleapis.com/walletobjects/v1/loyaltyObject/{urllib.parse.quote(object_id, safe='')}"
+            req = urllib.request.Request(url, data=body, method="PATCH")
+            req.add_header("Authorization", f"Bearer {access_token}")
+            req.add_header("Content-Type", "application/json")
+            with urllib.request.urlopen(req) as r:
+                r.read()
         except Exception:
             pass
 
         self._respond(200, {"ok": True, "mensaje": f"{miembro['nombre']} ahora es Enófilo 🔐"})
 
     def do_GET(self):
-        # Listar todos los miembros
         result = supabase_request("GET", "miembros?select=*&order=experiencias.desc")
         if "error" in result:
             self._respond(500, {"error": str(result)})

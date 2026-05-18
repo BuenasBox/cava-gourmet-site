@@ -1,15 +1,14 @@
 import json
 import os
 import time
-from http.server import BaseHTTPRequestHandler
 import urllib.request
+import urllib.parse
+from http.server import BaseHTTPRequestHandler
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
 ISSUER_ID    = "BCR2DN5TZPM6RPTP"
-CLASS_SUFFIX = "AfterOfficeClub"
 LOGO_URL     = "https://raw.githubusercontent.com/BuenasBox/cava-gourmet-site/refs/heads/master/Assets/Logo-Cava.png"
-WALLET_SCOPE = ["https://www.googleapis.com/auth/wallet_object.issuer"]
 
 def supabase_request(method, endpoint, body=None):
     url     = f"{SUPABASE_URL}/rest/v1/{endpoint}"
@@ -40,32 +39,50 @@ def mensaje_progreso(exp, es_enofilo=False):
     if exp >= 3:     return f"Te faltan {10 - exp} experiencias para Entusiasta."
     return f"Te faltan {3 - exp} experiencias para Neófito."
 
+def get_google_token():
+    import jwt
+    key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
+    now      = int(time.time())
+    claims   = {
+        "iss":   key_data.get("client_email", ""),
+        "sub":   key_data.get("client_email", ""),
+        "aud":   "https://oauth2.googleapis.com/token",
+        "iat":   now,
+        "exp":   now + 3600,
+        "scope": "https://www.googleapis.com/auth/wallet_object.issuer"
+    }
+    token = jwt.encode(claims, key_data.get("private_key", ""), algorithm="RS256")
+    data  = urllib.parse.urlencode({
+        "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+        "assertion":  token
+    }).encode()
+    req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data)
+    with urllib.request.urlopen(req) as r:
+        return json.loads(r.read())["access_token"]
+
 def actualizar_wallet(miembro):
     try:
-        from google.oauth2 import service_account
-        from googleapiclient.discovery import build
+        access_token = get_google_token()
+        email     = miembro["email"]
+        exp       = miembro["experiencias"]
+        enofilo   = miembro.get("es_enofilo", False)
+        nivel     = calcular_nivel(exp, enofilo)
+        progreso  = mensaje_progreso(exp, enofilo)
+        safe_id   = email.replace("@", "_at_").replace(".", "_")
+        object_id = f"{ISSUER_ID}.{safe_id}"
 
-        key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
-        creds    = service_account.Credentials.from_service_account_info(key_data, scopes=WALLET_SCOPE)
-        service  = build("walletobjects", "v1", credentials=creds)
+        body = json.dumps({
+            "loyaltyPoints":          {"label": "Experiencias", "balance": {"int": exp}},
+            "secondaryLoyaltyPoints": {"label": "Nivel",        "balance": {"string": nivel}},
+            "textModulesData": [{"id": "progreso", "header": "Tu progreso", "body": progreso}]
+        }).encode()
 
-        email      = miembro["email"]
-        exp        = miembro["experiencias"]
-        enofilo    = miembro.get("es_enofilo", False)
-        nivel      = calcular_nivel(exp, enofilo)
-        progreso   = mensaje_progreso(exp, enofilo)
-        safe_id    = email.replace("@","_at_").replace(".","_")
-        object_id  = f"{ISSUER_ID}.{safe_id}"
-        class_id   = f"{ISSUER_ID}.{CLASS_SUFFIX}"
-
-        service.loyaltyObject().patch(
-            resourceId=object_id,
-            body={
-                "loyaltyPoints": {"label": "Experiencias", "balance": {"int": exp}},
-                "secondaryLoyaltyPoints": {"label": "Nivel", "balance": {"string": nivel}},
-                "textModulesData": [{"id": "progreso", "header": "Tu progreso", "body": progreso}]
-            }
-        ).execute()
+        url = f"https://walletobjects.googleapis.com/walletobjects/v1/loyaltyObject/{urllib.parse.quote(object_id, safe='')}"
+        req = urllib.request.Request(url, data=body, method="PATCH")
+        req.add_header("Authorization", f"Bearer {access_token}")
+        req.add_header("Content-Type", "application/json")
+        with urllib.request.urlopen(req) as r:
+            r.read()
     except Exception:
         pass  # No interrumpir si falla la actualización de Wallet
 
@@ -81,7 +98,6 @@ class handler(BaseHTTPRequestHandler):
             self._respond(400, {"ok": False, "error": "Email requerido"})
             return
 
-        # Obtener miembro
         result = supabase_request("GET", f"miembros?email=eq.{email}&select=*")
         if not result or len(result) == 0:
             self._respond(404, {"ok": False, "error": "Miembro no encontrado. Regístralo primero."})
@@ -92,7 +108,6 @@ class handler(BaseHTTPRequestHandler):
         historial  = miembro.get("historial") or []
         historial.append({"fecha": time.strftime("%d/%m/%Y"), "nota": nota})
 
-        # Actualizar en Supabase
         supabase_request("PATCH", f"miembros?email=eq.{email}", {
             "experiencias": nuevas_exp,
             "historial":    historial

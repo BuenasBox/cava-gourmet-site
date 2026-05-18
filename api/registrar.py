@@ -26,9 +26,9 @@ def supabase_request(method, endpoint, body=None):
         return {"error": e.read().decode()}
 
 def generar_link_wallet(email):
-    import jwt as pyjwt
-    key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
-    safe_id  = email.replace("@","_at_").replace(".","_")
+    import jwt
+    key_data  = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
+    safe_id   = email.replace("@","_at_").replace(".","_")
     object_id = f"{ISSUER_ID}.{safe_id}"
     claims = {
         "iss":     key_data.get("client_email",""),
@@ -38,7 +38,7 @@ def generar_link_wallet(email):
         "typ":     "savetowallet",
         "payload": {"loyaltyObjects": [{"id": object_id}]}
     }
-    token = pyjwt.encode(claims, key_data.get("private_key",""), algorithm="RS256")
+    token = jwt.encode(claims, key_data.get("private_key",""), algorithm="RS256")
     return f"https://pay.google.com/gp/v/save/{token}"
 
 class handler(BaseHTTPRequestHandler):

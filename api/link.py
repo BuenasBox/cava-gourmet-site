@@ -18,7 +18,7 @@ class handler(BaseHTTPRequestHandler):
             return
 
         try:
-            import jwt as pyjwt
+            import jwt
             key_data  = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
             safe_id   = email.replace("@","_at_").replace(".","_")
             object_id = f"{ISSUER_ID}.{safe_id}"
@@ -31,7 +31,7 @@ class handler(BaseHTTPRequestHandler):
                 "typ":     "savetowallet",
                 "payload": {"loyaltyObjects": [{"id": object_id}]}
             }
-            token = pyjwt.encode(claims, key_data.get("private_key",""), algorithm="RS256")
+            token = jwt.encode(claims, key_data.get("private_key",""), algorithm="RS256")
             link  = f"https://pay.google.com/gp/v/save/{token}"
             self._respond(200, {"link": link})
 

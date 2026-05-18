@@ -1,5 +1,2 @@
-google-auth==2.*
-google-auth-httplib2==0.*
-google-api-python-client==2.*
 PyJWT==2.*
 cryptography==42.*
