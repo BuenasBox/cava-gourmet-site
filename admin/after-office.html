@@ -3,223 +3,399 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CAVA — After Office</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Enofilios Cava — Panel de membresías</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,ital,wght@6..96,0,300;6..96,1,300&family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    :root { --vino:#1C0A00; --vino2:#2E1200; --dorado:#C9A96E; --crema:#F2E8D5; --gris:#9a8a7a; }
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body { background:var(--vino); color:var(--crema); font-family:'Jost',sans-serif; min-height:100vh; }
-    header { background:var(--vino2); border-bottom:1px solid rgba(201,169,110,0.2); padding:20px 20px 16px; text-align:center; }
-    header img { height:36px; margin-bottom:8px; display:block; margin-inline:auto; }
-    header h1 { font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--dorado); }
-    header p  { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gris); margin-top:2px; }
-    nav { display:flex; background:var(--vino2); border-bottom:1px solid rgba(201,169,110,0.15); }
-    nav button { flex:1; background:none; border:none; color:var(--gris); font-family:'Jost',sans-serif; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; padding:12px 4px; cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; }
-    nav button.active { color:var(--dorado); border-bottom-color:var(--dorado); }
-    .tab { display:none; padding:20px 16px 60px; }
-    .tab.active { display:block; }
-    .card { background:rgba(255,255,255,0.04); border:1px solid rgba(201,169,110,0.15); border-radius:12px; padding:20px; margin-bottom:16px; }
-    .card h2 { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--dorado); margin-bottom:14px; }
-    label { display:block; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gris); margin-bottom:5px; margin-top:12px; }
-    label:first-of-type { margin-top:0; }
-    input { width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(201,169,110,0.2); border-radius:8px; color:var(--crema); font-family:'Jost',sans-serif; font-size:0.9rem; padding:10px 12px; outline:none; transition:border-color 0.2s; }
-    input:focus { border-color:var(--dorado); }
-    .btn { width:100%; margin-top:16px; background:var(--dorado); color:var(--vino); border:none; border-radius:8px; font-family:'Jost',sans-serif; font-size:0.82rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; padding:12px; cursor:pointer; transition:opacity 0.2s; }
-    .btn:active { opacity:0.8; }
-    .btn.outline { background:transparent; color:var(--dorado); border:1px solid rgba(201,169,110,0.4); margin-top:8px; }
-    .alerta { margin-top:12px; padding:12px 14px; border-radius:8px; font-size:0.85rem; display:none; line-height:1.6; }
-    .alerta.ok    { background:rgba(90,154,106,0.15); border:1px solid rgba(90,154,106,0.3); color:#90d4a0; }
-    .alerta.error { background:rgba(192,80,80,0.15);  border:1px solid rgba(192,80,80,0.3);  color:#f0a0a0; }
-    .miembro-card { background:rgba(255,255,255,0.04); border:1px solid rgba(201,169,110,0.12); border-radius:10px; padding:14px 16px; margin-bottom:10px; }
-    .miembro-nombre { font-family:'Cormorant Garamond',serif; font-size:1.05rem; }
-    .miembro-nivel  { font-size:0.78rem; color:var(--dorado); margin-top:2px; }
-    .miembro-info   { font-size:0.74rem; color:var(--gris); margin-top:6px; line-height:1.7; }
-    .badge-pendiente { display:inline-block; background:rgba(201,169,110,0.1); border:1px solid rgba(201,169,110,0.3); color:var(--dorado); font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; border-radius:4px; padding:2px 7px; margin-top:6px; }
-    .btn-invitar { width:100%; margin-top:10px; background:rgba(201,169,110,0.08); border:1px solid rgba(201,169,110,0.3); color:var(--dorado); border-radius:6px; font-family:'Jost',sans-serif; font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; padding:9px; cursor:pointer; }
-    .historial-item { font-size:0.76rem; color:var(--gris); padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
-    .historial-item:last-child { border-bottom:none; }
-    details summary { font-size:0.74rem; color:var(--gris); cursor:pointer; margin-top:10px; }
-    .niveles-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    .nivel-tile { background:rgba(201,169,110,0.06); border:1px solid rgba(201,169,110,0.15); border-radius:10px; padding:12px; text-align:center; }
-    .nivel-tile .emoji  { font-size:1.4rem; margin-bottom:4px; }
-    .nivel-tile .nombre { font-family:'Cormorant Garamond',serif; font-size:0.9rem; color:var(--dorado); }
-    .nivel-tile .req    { font-size:0.68rem; color:var(--gris); margin-top:2px; }
-    .link-wallet { display:block; word-break:break-all; color:var(--dorado); font-size:0.74rem; margin-top:8px; }
-    .empty   { text-align:center; color:var(--gris); font-size:0.85rem; padding:32px 0; font-style:italic; }
-    .spinner { text-align:center; color:var(--gris); padding:24px; font-size:0.85rem; }
+    :root {
+      --ivory:#f6efe3;--gold:#b8975a;--gold-soft:#d7b879;
+      --navy-deep:#091522;--charcoal:#12100d;
+      --line:rgba(184,151,90,.23);--muted:rgba(246,239,227,.45);
+      --display:"Bodoni Moda",Georgia,serif;
+      --serif:"Cormorant Garamond",Georgia,serif;
+      --sans:"Jost",system-ui,sans-serif;
+      --ease:cubic-bezier(.22,.61,.36,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--charcoal);color:var(--ivory);font-family:var(--sans);font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+    /* HEADER */
+    .admin-header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(9,21,34,.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+    .header-brand{display:flex;align-items:center;gap:.85rem}
+    .header-logo{height:32px;width:auto;mix-blend-mode:screen}
+    .header-titles{display:flex;flex-direction:column;gap:.1rem}
+    .header-name{font-family:var(--display);font-style:italic;font-weight:300;font-size:1.15rem;color:var(--gold-soft);letter-spacing:.02em;line-height:1}
+    .header-sub{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:400}
+    .header-badge{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:.3rem .8rem;border-radius:2px}
+
+    /* NAV TABS */
+    .admin-nav{display:flex;background:rgba(9,21,34,.85);border-bottom:1px solid var(--line);position:sticky;top:65px;z-index:99}
+    .admin-nav button{flex:1;background:none;border:none;color:var(--muted);font-family:var(--sans);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;padding:14px 4px;cursor:pointer;border-bottom:2px solid transparent;transition:color .25s var(--ease),border-color .25s var(--ease);font-weight:400}
+    .admin-nav button:hover{color:rgba(246,239,227,.75)}
+    .admin-nav button.active{color:var(--gold-soft);border-bottom-color:var(--gold)}
+
+    /* TABS */
+    .tab{display:none;padding:1.5rem 1.25rem 5rem;max-width:680px;margin:0 auto}
+    .tab.active{display:block}
+
+    /* CARDS */
+    .card{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+    .section-label{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem}
+    .section-label::before{content:"";width:20px;height:1px;background:currentColor;opacity:.7}
+    .card-title{font-family:var(--display);font-weight:300;font-size:1.1rem;color:var(--gold-soft);margin-bottom:1.25rem;letter-spacing:-.01em}
+    .card-title em{font-style:normal;color:var(--ivory)}
+    .card-desc{font-size:.78rem;color:var(--muted);margin-bottom:1.25rem;line-height:1.6}
+
+    /* FORM */
+    .field{margin-top:1rem}
+    label{display:block;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;font-weight:400}
+    input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(184,151,90,.2);border-radius:8px;color:var(--ivory);font-family:var(--sans);font-size:.88rem;font-weight:300;padding:.7rem .9rem;outline:none;transition:border-color .2s var(--ease)}
+    input:focus{border-color:var(--gold)}
+    input::placeholder{color:rgba(246,239,227,.22)}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;width:100%;margin-top:1rem;border:1px solid transparent;border-radius:6px;font-family:var(--sans);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;font-weight:400;padding:.85rem 1.25rem;cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease)}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .btn-gold{background:var(--gold);color:var(--navy-deep);border-color:var(--gold)}
+    .btn-gold:hover:not(:disabled){background:var(--gold-soft);border-color:var(--gold-soft)}
+    .btn-ghost{background:transparent;color:var(--gold-soft);border-color:rgba(184,151,90,.4)}
+    .btn-ghost:hover{background:rgba(184,151,90,.08);border-color:var(--gold)}
+    .btn svg{width:14px;height:14px;flex-shrink:0}
+
+    /* ALERTS */
+    .alerta{margin-top:.85rem;padding:.85rem 1rem;border-radius:8px;font-size:.82rem;line-height:1.6;display:none}
+    .alerta a{color:var(--gold-soft);text-decoration:underline;word-break:break-all}
+    .alerta.ok{background:rgba(90,154,106,.1);border:1px solid rgba(90,154,106,.3);color:#90d4a0}
+    .alerta.error{background:rgba(192,80,80,.1);border:1px solid rgba(192,80,80,.3);color:#f0a0a0}
+
+    /* LEVELS */
+    .niveles-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    .nivel-tile{background:rgba(184,151,90,.04);border:1px solid rgba(184,151,90,.15);border-radius:10px;padding:1rem .85rem;text-align:center;transition:border-color .2s var(--ease),background .2s var(--ease)}
+    .nivel-tile:hover{border-color:rgba(184,151,90,.35);background:rgba(184,151,90,.07)}
+    .nivel-tile .emoji{font-size:1.5rem;margin-bottom:.35rem;display:block}
+    .nivel-tile .nombre{font-family:var(--display);font-size:.88rem;font-weight:300;color:var(--gold-soft);display:block;margin-bottom:.2rem}
+    .nivel-tile .req{font-size:.64rem;color:var(--muted);letter-spacing:.06em}
+    .nivel-tile.destacado{border-color:rgba(184,151,90,.35);background:rgba(184,151,90,.07)}
+
+    /* MEMBER CARDS */
+    .miembro-card{background:rgba(255,255,255,.03);border:1px solid rgba(184,151,90,.12);border-radius:10px;padding:1rem 1.1rem;margin-bottom:.75rem;transition:border-color .2s var(--ease)}
+    .miembro-card:hover{border-color:rgba(184,151,90,.28)}
+    .miembro-top{display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem;margin-bottom:.5rem}
+    .miembro-nombre{font-family:var(--display);font-weight:300;font-size:1rem;color:var(--ivory)}
+    .nivel-badge{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;padding:.25rem .65rem;border-radius:3px;background:rgba(184,151,90,.1);border:1px solid rgba(184,151,90,.3);color:var(--gold-soft);flex-shrink:0}
+    .miembro-body{display:flex;justify-content:space-between;align-items:flex-end;gap:.5rem}
+    .miembro-info{font-size:.72rem;color:var(--muted);line-height:1.8}
+    .exp-block{text-align:right;flex-shrink:0}
+    .exp-count{font-family:var(--display);font-size:1.4rem;font-weight:300;color:var(--gold);line-height:1}
+    .exp-label{font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+    .badge-pendiente{display:inline-block;margin-top:.5rem;background:rgba(201,169,110,.07);border:1px solid rgba(201,169,110,.35);color:var(--gold-soft);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;border-radius:3px;padding:.2rem .6rem}
+    details summary{font-size:.65rem;color:var(--muted);cursor:pointer;margin-top:.75rem;letter-spacing:.1em;text-transform:uppercase}
+    details summary:hover{color:var(--ivory)}
+    .historial-item{font-size:.7rem;color:var(--muted);padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.05);line-height:1.5}
+    .historial-item:last-child{border-bottom:none}
+
+    /* INVITE BUTTON */
+    .btn-invitar{width:100%;margin-top:.75rem;background:rgba(184,151,90,.06);border:1px solid rgba(184,151,90,.3);color:var(--gold-soft);border-radius:6px;font-family:var(--sans);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:.75rem;cursor:pointer;font-weight:400;transition:background .2s var(--ease),border-color .2s var(--ease)}
+    .btn-invitar:hover{background:rgba(184,151,90,.12);border-color:var(--gold)}
+
+    /* UTILITY */
+    .empty{text-align:center;color:var(--muted);font-family:var(--serif);font-style:italic;font-size:.95rem;padding:2.5rem 0}
+    .spinner{text-align:center;color:var(--muted);padding:2rem;font-size:.8rem;letter-spacing:.1em}
   </style>
 </head>
 <body>
-<header>
-  <img src="/Assets/Logo-Cava.png" alt="CAVA Vinoteca">
-  <h1>After Office</h1>
-  <p>Del muro a la mesa.</p>
+
+<header class="admin-header">
+  <div class="header-brand">
+    <img src="/Assets/Logo-Cava.png" alt="CAVA Vinoteca" class="header-logo">
+    <div class="header-titles">
+      <span class="header-name">Enofilios Cava</span>
+      <span class="header-sub">Programa de membresías</span>
+    </div>
+  </div>
+  <span class="header-badge">Admin</span>
 </header>
-<nav>
+
+<nav class="admin-nav">
   <button class="active" onclick="tab('registrar',this)">Registrar</button>
-  <button onclick="tab('visita',this)">Visita</button>
+  <button onclick="tab('experiencia',this)">Experiencia</button>
   <button onclick="tab('miembros',this)">Miembros</button>
-  <button onclick="tab('enofilo',this)">Enófilo</button>
+  <button onclick="tab('candidatos',this)">Enófilos</button>
 </nav>
 
+<!-- TAB: REGISTRAR -->
 <div id="tab-registrar" class="tab active">
   <div class="card">
-    <h2>Nuevo miembro</h2>
-    <label>Nombre completo</label><input id="r_nombre" type="text" placeholder="María Mora">
-    <label>Email</label><input id="r_email" type="email" placeholder="maria@gmail.com">
-    <label>Fecha de ingreso</label><input id="r_fecha" type="text" placeholder="17/05/2025">
-    <label>Referido por (email, opcional)</label><input id="r_referido" type="email" placeholder="quien@lo.refirio.com">
-    <button class="btn" onclick="registrar()">Crear tarjeta</button>
+    <p class="section-label">Nuevo miembro</p>
+    <h2 class="card-title">Crear tarjeta <em>Enofilios</em></h2>
+    <div class="field">
+      <label>Nombre completo</label>
+      <input id="r_nombre" type="text" placeholder="María Mora" autocomplete="name">
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input id="r_email" type="email" placeholder="maria@gmail.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Fecha de ingreso</label>
+      <input id="r_fecha" type="text" placeholder="dd/mm/aaaa">
+    </div>
+    <div class="field">
+      <label>Referido por <span style="opacity:.5;font-size:.55rem">(email, opcional)</span></label>
+      <input id="r_referido" type="email" placeholder="quien@lo.refirio.com">
+    </div>
+    <button class="btn btn-gold" onclick="registrar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      Crear tarjeta Wallet
+    </button>
     <div id="r_alerta" class="alerta"></div>
   </div>
+
   <div class="card">
-    <h2>Niveles del programa</h2>
+    <p class="section-label">Estructura del programa</p>
+    <h2 class="card-title">Niveles <em>Enofilios Cava</em></h2>
     <div class="niveles-grid">
-      <div class="nivel-tile"><div class="emoji">🚪</div><div class="nombre">Invitado</div><div class="req">Registro</div></div>
-      <div class="nivel-tile"><div class="emoji">🌱</div><div class="nombre">Neófito</div><div class="req">3 experiencias</div></div>
-      <div class="nivel-tile"><div class="emoji">🍷</div><div class="nombre">Entusiasta</div><div class="req">10 experiencias</div></div>
-      <div class="nivel-tile"><div class="emoji">🔐</div><div class="nombre">Enófilo</div><div class="req">25 exp. + invitación</div></div>
+      <div class="nivel-tile">
+        <span class="emoji">🚪</span>
+        <span class="nombre">Invitado</span>
+        <span class="req">Al registrarse</span>
+      </div>
+      <div class="nivel-tile">
+        <span class="emoji">🌱</span>
+        <span class="nombre">Neófito</span>
+        <span class="req">3 experiencias</span>
+      </div>
+      <div class="nivel-tile">
+        <span class="emoji">🍷</span>
+        <span class="nombre">Entusiasta</span>
+        <span class="req">10 experiencias</span>
+      </div>
+      <div class="nivel-tile destacado">
+        <span class="emoji">🔐</span>
+        <span class="nombre">Enófilo</span>
+        <span class="req">25 exp. + invitación</span>
+      </div>
     </div>
   </div>
 </div>
 
-<div id="tab-visita" class="tab">
+<!-- TAB: EXPERIENCIA -->
+<div id="tab-experiencia" class="tab">
   <div class="card">
-    <h2>Registrar visita al After Office</h2>
-    <label>Email del miembro</label><input id="v_email" type="email" placeholder="maria@gmail.com">
-    <label>Nota de la sesión (opcional)</label><input id="v_nota" type="text" placeholder="After Office Mayo — Vinos de Mendoza">
-    <button class="btn" onclick="registrarVisita()">Registrar visita</button>
+    <p class="section-label">After Office</p>
+    <h2 class="card-title">Registrar experiencia</h2>
+    <p class="card-desc">Suma una experiencia al contador del miembro y actualiza su tarjeta Google Wallet.</p>
+    <div class="field">
+      <label>Email del miembro</label>
+      <input id="v_email" type="email" placeholder="maria@gmail.com">
+    </div>
+    <div class="field">
+      <label>Nota de la sesión <span style="opacity:.5;font-size:.55rem">(opcional)</span></label>
+      <input id="v_nota" type="text" placeholder="After Office Mayo — Vinos de Mendoza">
+    </div>
+    <button class="btn btn-gold" onclick="registrarExperiencia()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+      Registrar experiencia
+    </button>
     <div id="v_alerta" class="alerta"></div>
   </div>
+
   <div class="card">
-    <h2>Generar link de tarjeta</h2>
-    <label>Email del miembro</label><input id="l_email" type="email" placeholder="maria@gmail.com">
-    <button class="btn outline" onclick="generarLink()">Obtener link Google Wallet</button>
+    <p class="section-label">Google Wallet</p>
+    <h2 class="card-title">Link de tarjeta</h2>
+    <p class="card-desc">Genera un enlace para que el miembro agregue su tarjeta Enofilios a Google Wallet.</p>
+    <div class="field">
+      <label>Email del miembro</label>
+      <input id="l_email" type="email" placeholder="maria@gmail.com">
+    </div>
+    <button class="btn btn-ghost" onclick="generarLink()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+      Obtener link Wallet
+    </button>
     <div id="l_alerta" class="alerta"></div>
   </div>
 </div>
 
+<!-- TAB: MIEMBROS -->
 <div id="tab-miembros" class="tab">
-  <div id="lista-miembros"><div class="spinner">Cargando...</div></div>
+  <div id="lista-miembros"><div class="spinner">Cargando miembros…</div></div>
 </div>
 
-<div id="tab-enofilo" class="tab">
-  <div class="card" style="border-color:rgba(201,169,110,0.3)">
-    <h2>🔐 Candidatos a Enófilo</h2>
-    <p style="font-size:0.78rem;color:var(--gris);margin-bottom:14px">Miembros con 25+ experiencias pendientes de invitación CAVA.</p>
-    <div id="lista-candidatos"><div class="spinner">Cargando...</div></div>
+<!-- TAB: CANDIDATOS -->
+<div id="tab-candidatos" class="tab">
+  <div class="card" style="border-color:rgba(184,151,90,.35)">
+    <p class="section-label">Círculo interno</p>
+    <h2 class="card-title">🔐 Candidatos a Enófilo</h2>
+    <p class="card-desc">Miembros con 25 o más experiencias pendientes de invitación formal al círculo interno de CAVA.</p>
+    <div id="lista-candidatos"><div class="spinner">Cargando…</div></div>
   </div>
 </div>
 
 <script>
-  function tab(n,btn){
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-    document.getElementById('tab-'+n).classList.add('active');
+  document.getElementById('r_fecha').value = new Date().toLocaleDateString('es-CR');
+
+  function tab(n, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.admin-nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + n).classList.add('active');
     btn.classList.add('active');
-    if(n==='miembros'||n==='enofilo') cargarMiembros();
+    if (n === 'miembros' || n === 'candidatos') cargarMiembros();
   }
-  function mostrar(id,tipo,html){
-    const el=document.getElementById(id);
-    el.className='alerta '+tipo; el.innerHTML=html; el.style.display='block';
+
+  function mostrar(id, tipo, html) {
+    const el = document.getElementById(id);
+    el.className = 'alerta ' + tipo;
+    el.innerHTML = html;
+    el.style.display = 'block';
   }
-  async function registrar(){
-    const nombre=document.getElementById('r_nombre').value.trim();
-    const email=document.getElementById('r_email').value.trim();
-    const fecha=document.getElementById('r_fecha').value.trim()||new Date().toLocaleDateString('es-CR');
-    const referido=document.getElementById('r_referido').value.trim()||null;
-    if(!nombre||!email){mostrar('r_alerta','error','Nombre y email son obligatorios.');return;}
-    mostrar('r_alerta','ok','Creando tarjeta...');
-    try{
-      const r=await fetch('/api/registrar',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({nombre,email,fecha_ingreso:fecha,referido_por:referido})});
-      const d=await r.json();
-      if(d.ok){
-        mostrar('r_alerta','ok',`✅ Tarjeta creada — <strong>${d.nivel}</strong><br>${d.link?'<a class="link-wallet" href="'+d.link+'" target="_blank">📲 Link Google Wallet</a>':''}`);
-        ['r_nombre','r_email','r_referido'].forEach(id=>document.getElementById(id).value='');
-      } else { mostrar('r_alerta','error','❌ '+(d.error||'Error')); }
-    } catch(e){mostrar('r_alerta','error','❌ Error de conexión');}
+
+  async function registrar() {
+    const nombre   = document.getElementById('r_nombre').value.trim();
+    const email    = document.getElementById('r_email').value.trim();
+    const fecha    = document.getElementById('r_fecha').value.trim() || new Date().toLocaleDateString('es-CR');
+    const referido = document.getElementById('r_referido').value.trim() || null;
+    if (!nombre || !email) { mostrar('r_alerta', 'error', 'Nombre y email son obligatorios.'); return; }
+    mostrar('r_alerta', 'ok', 'Creando tarjeta…');
+    try {
+      const r = await fetch('/api/registrar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, email, fecha_ingreso: fecha, referido_por: referido })
+      });
+      const d = await r.json();
+      if (d.ok) {
+        mostrar('r_alerta', 'ok',
+          `✅ Tarjeta creada — <strong>${d.nivel}</strong>${d.link
+            ? '<br><a href="' + d.link + '" target="_blank" rel="noopener">📲 Abrir en Google Wallet</a>'
+            : ''}`);
+        ['r_nombre', 'r_email', 'r_referido'].forEach(id => document.getElementById(id).value = '');
+      } else {
+        mostrar('r_alerta', 'error', '❌ ' + (d.error || 'Error'));
+      }
+    } catch (e) { mostrar('r_alerta', 'error', '❌ Error de conexión'); }
   }
-  async function registrarVisita(){
-    const email=document.getElementById('v_email').value.trim();
-    const nota=document.getElementById('v_nota').value.trim()||'After Office';
-    if(!email){mostrar('v_alerta','error','Email es obligatorio.');return;}
-    mostrar('v_alerta','ok','Registrando...');
-    try{
-      const r=await fetch('/api/registrar_experiencia',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({email,nota})});
-      const d=await r.json();
-      if(d.ok){
-        mostrar('v_alerta','ok',`✅ Visita registrada<br>Experiencias: <strong>${d.experiencias}</strong> — ${d.nivel}<br><em style="font-size:0.8rem">${d.progreso}</em>`);
-        document.getElementById('v_nota').value='';
-      } else { mostrar('v_alerta','error','❌ '+(d.error||'Error')); }
-    } catch(e){mostrar('v_alerta','error','❌ Error de conexión');}
+
+  async function registrarExperiencia() {
+    const email = document.getElementById('v_email').value.trim();
+    const nota  = document.getElementById('v_nota').value.trim() || 'Enofilios Cava';
+    if (!email) { mostrar('v_alerta', 'error', 'Email es obligatorio.'); return; }
+    mostrar('v_alerta', 'ok', 'Registrando…');
+    try {
+      const r = await fetch('/api/registrar_experiencia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, nota })
+      });
+      const d = await r.json();
+      if (d.ok) {
+        mostrar('v_alerta', 'ok',
+          `✅ Experiencia registrada<br>Total: <strong>${d.experiencias}</strong> — ${d.nivel}<br>
+           <em style="font-size:.78rem;opacity:.8">${d.progreso}</em>`);
+        document.getElementById('v_nota').value = '';
+      } else {
+        mostrar('v_alerta', 'error', '❌ ' + (d.error || 'Error'));
+      }
+    } catch (e) { mostrar('v_alerta', 'error', '❌ Error de conexión'); }
   }
-  async function generarLink(){
-    const email=document.getElementById('l_email').value.trim();
-    if(!email){mostrar('l_alerta','error','Email es obligatorio.');return;}
-    try{
-      const r=await fetch('/api/link?email='+encodeURIComponent(email));
-      const d=await r.json();
-      if(d.link){ mostrar('l_alerta','ok',`📲 <a class="link-wallet" href="${d.link}" target="_blank">Abrir en Google Wallet</a>`); }
-      else { mostrar('l_alerta','error','❌ '+(d.error||'Error')); }
-    } catch(e){mostrar('l_alerta','error','❌ Error de conexión');}
+
+  async function generarLink() {
+    const email = document.getElementById('l_email').value.trim();
+    if (!email) { mostrar('l_alerta', 'error', 'Email es obligatorio.'); return; }
+    try {
+      const r = await fetch('/api/link?email=' + encodeURIComponent(email));
+      const d = await r.json();
+      if (d.link) {
+        mostrar('l_alerta', 'ok',
+          `📲 <a href="${d.link}" target="_blank" rel="noopener">Abrir en Google Wallet</a>`);
+      } else {
+        mostrar('l_alerta', 'error', '❌ ' + (d.error || 'Error'));
+      }
+    } catch (e) { mostrar('l_alerta', 'error', '❌ Error de conexión'); }
   }
-  async function invitarEnofilo(email,nombre){
-    if(!confirm('¿Confirmar invitación de '+nombre+' como Enófilo?')) return;
-    try{
-      const r=await fetch('/api/miembros',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({email})});
-      const d=await r.json();
-      if(d.ok){alert('🔐 '+nombre+' ahora es Enófilo.');cargarMiembros();}
-      else{alert('❌ '+(d.error||'Error'));}
-    } catch(e){alert('❌ Error de conexión');}
+
+  async function invitarEnofilo(email, nombre) {
+    if (!confirm('¿Confirmar la invitación de ' + nombre + ' como Enófilo?')) return;
+    try {
+      const r = await fetch('/api/miembros', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const d = await r.json();
+      if (d.ok) { alert('🔐 ' + nombre + ' ahora es Enófilo.'); cargarMiembros(); }
+      else { alert('❌ ' + (d.error || 'Error')); }
+    } catch (e) { alert('❌ Error de conexión'); }
   }
-  async function cargarMiembros(){
-    document.getElementById('lista-miembros').innerHTML='<div class="spinner">Cargando...</div>';
-    document.getElementById('lista-candidatos').innerHTML='<div class="spinner">Cargando...</div>';
-    try{
-      const r=await fetch('/api/miembros');
-      const d=await r.json();
-      const todos=(d.miembros||[]);
-      const lista=document.getElementById('lista-miembros');
-      lista.innerHTML=todos.length===0?'<div class="empty">Sin miembros registrados aún.</div>':
-        todos.map(m=>`
+
+  async function cargarMiembros() {
+    document.getElementById('lista-miembros').innerHTML = '<div class="spinner">Cargando miembros…</div>';
+    document.getElementById('lista-candidatos').innerHTML = '<div class="spinner">Cargando…</div>';
+    try {
+      const r = await fetch('/api/miembros');
+      const d = await r.json();
+      const todos = d.miembros || [];
+
+      const lista = document.getElementById('lista-miembros');
+      lista.innerHTML = todos.length === 0
+        ? '<div class="empty">Sin miembros registrados aún.</div>'
+        : todos.map(m => `
           <div class="miembro-card">
-            <div class="miembro-nombre">${m.nombre}</div>
-            <div class="miembro-nivel">${m.nivel}</div>
-            <div class="miembro-info">
-              📧 ${m.email}<br>
-              🍷 ${m.experiencias} experiencia${m.experiencias!==1?'s':''}<br>
-              📅 Desde ${m.fecha_ingreso||'—'}
-              ${m.referido_por?'<br>👥 Referido por: '+m.referido_por:''}
-              ${m.referidos&&m.referidos.length?'<br>🔗 Refirió a: '+m.referidos.join(', '):''}
+            <div class="miembro-top">
+              <div class="miembro-nombre">${m.nombre}</div>
+              <div class="nivel-badge">${m.nivel}</div>
             </div>
-            ${m.experiencias>=25&&!m.es_enofilo?'<span class="badge-pendiente">⏳ Pendiente de invitación</span>':''}
-            ${m.historial&&m.historial.length?`
-              <details><summary>Ver historial (${m.historial.length} sesiones)</summary>
-                <div style="margin-top:8px">
-                  ${[...m.historial].reverse().map(h=>`<div class="historial-item">📍 ${h.fecha} — ${h.nota}</div>`).join('')}
+            <div class="miembro-body">
+              <div class="miembro-info">
+                📧 ${m.email}<br>
+                📅 Desde ${m.fecha_ingreso || '—'}
+                ${m.referido_por ? '<br>👥 ' + m.referido_por : ''}
+                ${m.referidos && m.referidos.length ? '<br>🔗 ' + m.referidos.join(', ') : ''}
+              </div>
+              <div class="exp-block">
+                <div class="exp-count">${m.experiencias}</div>
+                <div class="exp-label">exp.</div>
+              </div>
+            </div>
+            ${m.experiencias >= 25 && !m.es_enofilo
+              ? '<div class="badge-pendiente">⏳ Pendiente de invitación</div>' : ''}
+            ${m.historial && m.historial.length ? `
+              <details>
+                <summary>Historial (${m.historial.length} sesiones)</summary>
+                <div style="margin-top:.6rem">
+                  ${[...m.historial].reverse().map(h =>
+                    `<div class="historial-item">📍 ${h.fecha} — ${h.nota}</div>`
+                  ).join('')}
                 </div>
-              </details>`:''}
+              </details>` : ''}
           </div>`).join('');
-      const candidatos=todos.filter(m=>m.experiencias>=25&&!m.es_enofilo);
-      const listaCand=document.getElementById('lista-candidatos');
-      listaCand.innerHTML=candidatos.length===0?'<div class="empty">Sin candidatos por ahora.</div>':
-        candidatos.map(m=>`
+
+      const candidatos = todos.filter(m => m.experiencias >= 25 && !m.es_enofilo);
+      const listaCand = document.getElementById('lista-candidatos');
+      listaCand.innerHTML = candidatos.length === 0
+        ? '<div class="empty">Sin candidatos por ahora.</div>'
+        : candidatos.map(m => `
           <div class="miembro-card">
-            <div class="miembro-nombre">${m.nombre}</div>
+            <div class="miembro-top">
+              <div class="miembro-nombre">${m.nombre}</div>
+              <div class="exp-block" style="text-align:right">
+                <div class="exp-count">${m.experiencias}</div>
+                <div class="exp-label">exp.</div>
+              </div>
+            </div>
             <div class="miembro-info">
               📧 ${m.email}<br>
-              🍷 ${m.experiencias} experiencias<br>
-              ${m.referido_por?'👥 Referido por: '+m.referido_por:'Sin referido registrado'}
+              ${m.referido_por ? '👥 ' + m.referido_por : 'Sin referido registrado'}
             </div>
             <button class="btn-invitar" onclick="invitarEnofilo('${m.email}','${m.nombre}')">
-              🔐 Invitar como Enófilo
+              🔐 Confirmar invitación como Enófilo
             </button>
           </div>`).join('');
-    } catch(e){
-      document.getElementById('lista-miembros').innerHTML='<div class="empty">Error al cargar.</div>';
+    } catch (e) {
+      document.getElementById('lista-miembros').innerHTML = '<div class="empty">Error al cargar miembros.</div>';
+      document.getElementById('lista-candidatos').innerHTML = '<div class="empty">Error al cargar.</div>';
     }
   }
 </script>

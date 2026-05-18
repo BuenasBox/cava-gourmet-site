@@ -75,7 +75,7 @@ class handler(BaseHTTPRequestHandler):
         data   = json.loads(self.rfile.read(length))
 
         email = data.get("email","").strip().lower()
-        nota  = data.get("nota", "After Office")
+        nota  = data.get("nota", "Enofilios Cava")
 
         if not email:
             self._respond(400, {"ok": False, "error": "Email requerido"})
