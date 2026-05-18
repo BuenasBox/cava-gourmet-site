@@ -101,6 +101,16 @@
     .btn-invitar{width:100%;margin-top:.75rem;background:rgba(184,151,90,.06);border:1px solid rgba(184,151,90,.3);color:var(--gold-soft);border-radius:6px;font-family:var(--sans);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:.75rem;cursor:pointer;font-weight:400;transition:background .2s var(--ease),border-color .2s var(--ease)}
     .btn-invitar:hover{background:rgba(184,151,90,.12);border-color:var(--gold)}
 
+    /* CARD ACTIONS */
+    .card-actions{display:flex;gap:.45rem;margin-top:.85rem;flex-wrap:wrap}
+    .btn-action{background:transparent;border:1px solid rgba(184,151,90,.18);color:var(--muted);border-radius:5px;font-family:var(--sans);font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;padding:.4rem .65rem;cursor:pointer;transition:all .2s var(--ease);white-space:nowrap}
+    .btn-action:hover{border-color:var(--gold);color:var(--gold-soft)}
+    .btn-action.danger:hover{border-color:rgba(192,80,80,.5);color:#f0a0a0}
+    .edit-form{border-top:1px solid rgba(184,151,90,.15);margin-top:.85rem;padding-top:.85rem}
+    .edit-row{display:flex;gap:.5rem;margin-top:.65rem}
+    .edit-row .btn{margin-top:0;flex:1}
+    .edit-row .btn.btn-ghost{flex:0 0 auto;padding:.85rem .9rem}
+
     /* UTILITY */
     .empty{text-align:center;color:var(--muted);font-family:var(--serif);font-style:italic;font-size:.95rem;padding:2.5rem 0}
     .spinner{text-align:center;color:var(--muted);padding:2rem;font-size:.8rem;letter-spacing:.1em}
@@ -346,8 +356,17 @@
       const lista = document.getElementById('lista-miembros');
       lista.innerHTML = todos.length === 0
         ? '<div class="empty">Sin miembros registrados aún.</div>'
-        : todos.map(m => `
-          <div class="miembro-card">
+        : todos.map(m => {
+          const sid    = safeId(m.email);
+          const eq     = m.email.replace(/'/g, "\\'");
+          const nq     = m.nombre.replace(/'/g, "\\'");
+          const nomEsc = m.nombre.replace(/"/g, '&quot;');
+          const hist   = m.historial && m.historial.length
+            ? '<details><summary>Historial (' + m.historial.length + ' sesiones)</summary><div style="margin-top:.6rem">'
+              + [...m.historial].reverse().map(h => '<div class="historial-item">📍 ' + h.fecha + ' — ' + h.nota + '</div>').join('')
+              + '</div></details>' : '';
+          return `
+          <div class="miembro-card" id="card-${sid}">
             <div class="miembro-top">
               <div class="miembro-nombre">${m.nombre}</div>
               <div class="nivel-badge">${m.nivel}</div>
@@ -364,18 +383,31 @@
                 <div class="exp-label">exp.</div>
               </div>
             </div>
-            ${m.experiencias >= 25 && !m.es_enofilo
-              ? '<div class="badge-pendiente">⏳ Pendiente de invitación</div>' : ''}
-            ${m.historial && m.historial.length ? `
-              <details>
-                <summary>Historial (${m.historial.length} sesiones)</summary>
-                <div style="margin-top:.6rem">
-                  ${[...m.historial].reverse().map(h =>
-                    `<div class="historial-item">📍 ${h.fecha} — ${h.nota}</div>`
-                  ).join('')}
-                </div>
-              </details>` : ''}
-          </div>`).join('');
+            ${m.experiencias >= 25 && !m.es_enofilo ? '<div class="badge-pendiente">⏳ Pendiente de invitación</div>' : ''}
+            <div class="card-actions">
+              <button class="btn-action" onclick="compartirWallet('${eq}','${nq}')">📲 Wallet</button>
+              <button class="btn-action" onclick="editarMiembro('${sid}')">✏️ Editar</button>
+              <button class="btn-action danger" onclick="eliminarMiembro('${eq}','${nq}')">🗑️ Eliminar</button>
+            </div>
+            <div id="wallet-${sid}" class="alerta" style="display:none"></div>
+            <div id="edit-${sid}" class="edit-form" style="display:none">
+              <div class="field">
+                <label>Nombre</label>
+                <input type="text" id="en-${sid}" value="${nomEsc}">
+              </div>
+              <div class="field">
+                <label>Fecha de ingreso</label>
+                <input type="text" id="ef-${sid}" value="${m.fecha_ingreso || ''}">
+              </div>
+              <div class="edit-row">
+                <button class="btn btn-gold" onclick="guardarEdicion('${eq}','${sid}')">Guardar</button>
+                <button class="btn btn-ghost" onclick="editarMiembro('${sid}')">✕</button>
+              </div>
+              <div id="ea-${sid}" class="alerta" style="display:none"></div>
+            </div>
+            ${hist}
+          </div>`;
+        }).join('');
 
       const candidatos = todos.filter(m => m.experiencias >= 25 && !m.es_enofilo);
       const listaCand = document.getElementById('lista-candidatos');
@@ -402,6 +434,58 @@
       document.getElementById('lista-miembros').innerHTML = '<div class="empty">Error al cargar miembros.</div>';
       document.getElementById('lista-candidatos').innerHTML = '<div class="empty">Error al cargar.</div>';
     }
+  }
+
+  function safeId(email) { return email.replace(/[@.+]/g, '_'); }
+
+  async function compartirWallet(email, nombre) {
+    const sid = safeId(email);
+    const el  = document.getElementById('wallet-' + sid);
+    el.className = 'alerta ok'; el.innerHTML = 'Generando link…'; el.style.display = 'block';
+    try {
+      const r = await fetch('/api/link?email=' + encodeURIComponent(email));
+      const d = await r.json();
+      if (d.link) {
+        const msg = encodeURIComponent('Hola ' + nombre + ', tu tarjeta Enofilios Cava está lista 🍷\nAgrégala a Google Wallet: ' + d.link);
+        el.innerHTML = '📲 <a href="' + d.link + '" target="_blank" rel="noopener">Abrir en Wallet</a>'
+          + ' &nbsp;&nbsp; <a href="https://wa.me/?text=' + msg + '" target="_blank" rel="noopener">📱 Enviar por WhatsApp</a>';
+      } else {
+        el.className = 'alerta error'; el.innerHTML = '❌ ' + (d.error || 'Error');
+      }
+    } catch(e) { el.className = 'alerta error'; el.innerHTML = '❌ Error de conexión'; }
+  }
+
+  function editarMiembro(sid) {
+    const form = document.getElementById('edit-' + sid);
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  }
+
+  async function guardarEdicion(email, sid) {
+    const nombre = document.getElementById('en-' + sid).value.trim();
+    const fecha  = document.getElementById('ef-' + sid).value.trim();
+    const el     = document.getElementById('ea-' + sid);
+    if (!nombre) { el.className='alerta error'; el.innerHTML='Nombre requerido.'; el.style.display='block'; return; }
+    el.className='alerta ok'; el.innerHTML='Guardando…'; el.style.display='block';
+    try {
+      const r = await fetch('/api/miembros', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, nombre, fecha_ingreso: fecha })
+      });
+      const d = await r.json();
+      if (d.ok) { el.innerHTML = '✅ Guardado'; setTimeout(cargarMiembros, 800); }
+      else { el.className='alerta error'; el.innerHTML='❌ ' + (d.error || 'Error'); }
+    } catch(e) { el.className='alerta error'; el.innerHTML='❌ Error de conexión'; }
+  }
+
+  async function eliminarMiembro(email, nombre) {
+    if (!confirm('¿Eliminar a ' + nombre + ' del programa?\nEsta acción no se puede deshacer.')) return;
+    try {
+      const r = await fetch('/api/miembros?email=' + encodeURIComponent(email), { method: 'DELETE' });
+      const d = await r.json();
+      if (d.ok) cargarMiembros();
+      else alert('❌ ' + (d.error || 'Error al eliminar'));
+    } catch(e) { alert('❌ Error de conexión'); }
   }
 </script>
 </body>

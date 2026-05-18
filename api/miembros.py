@@ -21,7 +21,8 @@ def supabase_request(method, endpoint, body=None):
     req  = urllib.request.Request(url, data=data, headers=headers, method=method)
     try:
         with urllib.request.urlopen(req) as r:
-            return json.loads(r.read())
+            raw = r.read()
+            return json.loads(raw) if raw.strip() else {}
     except urllib.error.HTTPError as e:
         return {"error": e.read().decode()}
 
@@ -111,6 +112,34 @@ class handler(BaseHTTPRequestHandler):
 
         self._respond(200, {"miembros": miembros})
 
+    def do_PATCH(self):
+        length = int(self.headers.get("Content-Length", 0))
+        data   = json.loads(self.rfile.read(length))
+        email  = data.get("email", "").strip().lower()
+        campos = {}
+        if data.get("nombre", "").strip():
+            campos["nombre"] = data["nombre"].strip()
+        if "fecha_ingreso" in data:
+            campos["fecha_ingreso"] = data["fecha_ingreso"]
+        if not email or not campos:
+            self._respond(400, {"ok": False, "error": "Email y al menos un campo requeridos"})
+            return
+        supabase_request("PATCH", f"miembros?email=eq.{urllib.parse.quote(email)}", campos)
+        self._respond(200, {"ok": True})
+
+    def do_DELETE(self):
+        parsed = urllib.parse.urlparse(self.path)
+        params = urllib.parse.parse_qs(parsed.query)
+        email  = params.get("email", [""])[0].strip().lower()
+        if not email:
+            self._respond(400, {"ok": False, "error": "Email requerido"})
+            return
+        result = supabase_request("DELETE", f"miembros?email=eq.{urllib.parse.quote(email)}")
+        if isinstance(result, dict) and "error" in result:
+            self._respond(500, {"ok": False, "error": str(result)})
+            return
+        self._respond(200, {"ok": True})
+
     def do_OPTIONS(self):
         self._respond(200, {})
 
@@ -118,7 +147,7 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
         self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
         self.wfile.write(json.dumps(body).encode())
