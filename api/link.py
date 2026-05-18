@@ -3,7 +3,7 @@ import os
 import time
 from http.server import BaseHTTPRequestHandler
 
-ISSUER_ID = "BCR2DN5TZPM6RPTP"
+ISSUER_ID = "3388000000023147327"
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):

@@ -7,7 +7,7 @@ import urllib.parse
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
-ISSUER_ID    = "BCR2DN5TZPM6RPTP"
+ISSUER_ID    = "3388000000023147327"
 CLASS_SUFFIX = "AfterOfficeClub"
 
 def supabase_request(method, endpoint, body=None):

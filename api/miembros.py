@@ -7,7 +7,7 @@ from http.server import BaseHTTPRequestHandler
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
-ISSUER_ID    = "BCR2DN5TZPM6RPTP"
+ISSUER_ID    = "3388000000023147327"
 
 def supabase_request(method, endpoint, body=None):
     url     = f"{SUPABASE_URL}/rest/v1/{endpoint}"

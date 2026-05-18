@@ -6,7 +6,7 @@ import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
 
-ISSUER_ID    = "BCR2DN5TZPM6RPTP"
+ISSUER_ID    = "3388000000023147327"
 CLASS_SUFFIX = "AfterOfficeClub"
 LOGO_URL     = "https://raw.githubusercontent.com/BuenasBox/cava-gourmet-site/refs/heads/master/Assets/Logo-Cava.png"
 
