@@ -3,6 +3,7 @@ import os
 import time
 from http.server import BaseHTTPRequestHandler
 import urllib.request
+import urllib.parse
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
@@ -56,7 +57,7 @@ class handler(BaseHTTPRequestHandler):
             return
 
         # Verificar si ya existe
-        existing = supabase_request("GET", f"miembros?email=eq.{email}&select=id")
+        existing = supabase_request("GET", f"miembros?email=eq.{urllib.parse.quote(email)}&select=id")
         if existing and len(existing) > 0:
             self._respond(409, {"ok": False, "error": "Este email ya está registrado."})
             return
@@ -80,11 +81,11 @@ class handler(BaseHTTPRequestHandler):
 
         # Actualizar referidos del que lo refirió
         if referido_por:
-            ref = supabase_request("GET", f"miembros?email=eq.{referido_por}&select=id,referidos")
+            ref = supabase_request("GET", f"miembros?email=eq.{urllib.parse.quote(referido_por)}&select=id,referidos")
             if ref and len(ref) > 0:
                 ref_doc = ref[0]
                 nuevos  = (ref_doc.get("referidos") or []) + [email]
-                supabase_request("PATCH", f"miembros?email=eq.{referido_por}", {"referidos": nuevos})
+                supabase_request("PATCH", f"miembros?email=eq.{urllib.parse.quote(referido_por)}", {"referidos": nuevos})
 
         try:
             link = generar_link_wallet(email)

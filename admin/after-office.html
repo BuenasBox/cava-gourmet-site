@@ -256,8 +256,13 @@
     const nombre   = document.getElementById('r_nombre').value.trim();
     const email    = document.getElementById('r_email').value.trim();
     const fecha    = document.getElementById('r_fecha').value.trim() || new Date().toLocaleDateString('es-CR');
-    const referido = document.getElementById('r_referido').value.trim() || null;
+    const referidoRaw = document.getElementById('r_referido').value.trim();
+    const referido = referidoRaw || null;
     if (!nombre || !email) { mostrar('r_alerta', 'error', 'Nombre y email son obligatorios.'); return; }
+    if (referido && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(referido)) {
+      mostrar('r_alerta', 'error', 'El campo "Referido por" debe ser un email válido, no un nombre.');
+      return;
+    }
     mostrar('r_alerta', 'ok', 'Creando tarjeta…');
     try {
       const r = await fetch('/api/registrar', {
