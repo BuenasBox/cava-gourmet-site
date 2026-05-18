@@ -446,8 +446,15 @@
       const r = await fetch('/api/link?email=' + encodeURIComponent(email));
       const d = await r.json();
       if (d.link) {
-        const msg = encodeURIComponent('Hola ' + nombre + ', tu tarjeta Enofilios Cava está lista 🍷\nAgrégala a Google Wallet: ' + d.link);
-        el.innerHTML = '📲 <a href="' + d.link + '" target="_blank" rel="noopener">Abrir en Wallet</a>'
+        const shortUrl = 'https://www.cavagourmet.com/api/wallet?email=' + encodeURIComponent(email);
+        const msg = encodeURIComponent(
+          '🍷 *CAVA Vinoteca*\n\n'
+          + 'Hola ' + nombre + ', tu tarjeta de membresía *Enofilios Cava* está lista.\n\n'
+          + 'Agrégala a Google Wallet:\n'
+          + shortUrl + '\n\n'
+          + '_Enofilios Cava · El programa de experiencias de CAVA Vinoteca_'
+        );
+        el.innerHTML = '📲 <a href="' + shortUrl + '" target="_blank" rel="noopener">Abrir en Wallet</a>'
           + ' &nbsp;&nbsp; <a href="https://wa.me/?text=' + msg + '" target="_blank" rel="noopener">📱 Enviar por WhatsApp</a>';
       } else {
         el.className = 'alerta error'; el.innerHTML = '❌ ' + (d.error || 'Error');
