@@ -138,6 +138,7 @@
   <button onclick="tab('experiencia',this)">Experiencia</button>
   <button onclick="tab('miembros',this)">Miembros</button>
   <button onclick="tab('candidatos',this)">Enófilos</button>
+  <button onclick="tab('config',this)">Config</button>
 </nav>
 
 <!-- TAB: REGISTRAR -->
@@ -238,6 +239,51 @@
   <div id="lista-miembros"><div class="spinner">Cargando miembros…</div></div>
 </div>
 
+<!-- TAB: CONFIG -->
+<div id="tab-config" class="tab">
+  <div class="card">
+    <p class="section-label">Acceso admin</p>
+    <h2 class="card-title">Clave de administrador</h2>
+    <p class="card-desc">Necesaria para enviar links de tarjeta y guardar configuración. Se guarda en esta sesión.</p>
+    <div class="field">
+      <label>Clave admin (SCAN_KEY)</label>
+      <input id="cfg_key" type="password" placeholder="••••••••••" autocomplete="off">
+    </div>
+    <button class="btn btn-ghost" onclick="guardarClave()" style="margin-top:.85rem">
+      Guardar clave en sesión
+    </button>
+    <div id="cfg_key_alerta" class="alerta"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Beneficio Enófilo</p>
+    <h2 class="card-title">Nivel <em>🔐 Enófilo</em></h2>
+    <p class="card-desc">Texto del beneficio exclusivo que verán los miembros Enófilo en su tarjeta. Puedes actualizarlo cuando quieras.</p>
+    <div class="field">
+      <label>Descripción del beneficio</label>
+      <input id="cfg_enofilo" type="text" placeholder="Beneficio exclusivo — próximamente">
+    </div>
+    <button class="btn btn-gold" onclick="guardarConfig('beneficio_enofilo','cfg_enofilo','cfg_enofilo_alerta')">
+      Guardar beneficio
+    </button>
+    <div id="cfg_enofilo_alerta" class="alerta"></div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">Promoción activa</p>
+    <h2 class="card-title">Banner en tarjeta</h2>
+    <p class="card-desc">Aparece en la tarjeta de todos los miembros. Déjalo vacío para ocultarlo.</p>
+    <div class="field">
+      <label>Texto de la promoción</label>
+      <input id="cfg_promo" type="text" placeholder="After Office especial este viernes — 2x1 en copas">
+    </div>
+    <button class="btn btn-gold" onclick="guardarConfig('promocion_activa','cfg_promo','cfg_promo_alerta')">
+      Guardar promoción
+    </button>
+    <div id="cfg_promo_alerta" class="alerta"></div>
+  </div>
+</div>
+
 <!-- TAB: CANDIDATOS -->
 <div id="tab-candidatos" class="tab">
   <div class="card" style="border-color:rgba(184,151,90,.35)">
@@ -257,6 +303,7 @@
     document.getElementById('tab-' + n).classList.add('active');
     btn.classList.add('active');
     if (n === 'miembros' || n === 'candidatos') cargarMiembros();
+    if (n === 'config') { cargarConfig(); const k = getClave(); if(k) document.getElementById('cfg_key').value=k; }
   }
 
   function mostrar(id, tipo, html) {
@@ -389,6 +436,7 @@
             </div>
             ${m.experiencias >= 25 && !m.es_enofilo ? '<div class="badge-pendiente">⏳ Pendiente de invitación</div>' : ''}
             <div class="card-actions">
+              <button class="btn-action" onclick="enviarLinkMiembro('${eq}','${nq}')">🔗 Enviar link</button>
               <button class="btn-action" onclick="compartirWallet('${eq}','${nq}')">📲 Wallet</button>
               <button class="btn-action" onclick="editarMiembro('${sid}')">✏️ Editar</button>
               <button class="btn-action danger" onclick="eliminarMiembro('${eq}','${nq}')">🗑️ Eliminar</button>
@@ -505,6 +553,63 @@
       if (d.ok) cargarMiembros();
       else alert('❌ ' + (d.error || 'Error al eliminar'));
     } catch(e) { alert('❌ Error de conexión'); }
+  }
+
+  function getClave() { return sessionStorage.getItem('cava_admin_key') || ''; }
+
+  function guardarClave() {
+    const k  = document.getElementById('cfg_key').value.trim();
+    const el = document.getElementById('cfg_key_alerta');
+    if (!k) { el.className='alerta error'; el.innerHTML='Ingresa la clave.'; el.style.display='block'; return; }
+    sessionStorage.setItem('cava_admin_key', k);
+    el.className='alerta ok'; el.innerHTML='✅ Clave guardada en esta sesión.'; el.style.display='block';
+  }
+
+  async function guardarConfig(clave, inputId, alertId) {
+    const key   = getClave();
+    const valor = document.getElementById(inputId).value.trim();
+    const el    = document.getElementById(alertId);
+    if (!key) { el.className='alerta error'; el.innerHTML='Ve al tab Config y guarda tu clave primero.'; el.style.display='block'; return; }
+    el.className='alerta ok'; el.innerHTML='Guardando…'; el.style.display='block';
+    try {
+      const r = await fetch('/api/config', {
+        method: 'PATCH',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({admin_key: key, clave, valor})
+      });
+      const d = await r.json();
+      if (d.ok) { el.innerHTML='✅ Guardado'; }
+      else { el.className='alerta error'; el.innerHTML='❌ ' + (d.error||'Error'); }
+    } catch(e) { el.className='alerta error'; el.innerHTML='❌ Error de conexión'; }
+  }
+
+  async function cargarConfig() {
+    try {
+      const r = await fetch('/api/config');
+      const d = await r.json();
+      if (d.config) {
+        if (d.config.beneficio_enofilo) document.getElementById('cfg_enofilo').value = d.config.beneficio_enofilo;
+        if (d.config.promocion_activa)  document.getElementById('cfg_promo').value   = d.config.promocion_activa;
+      }
+    } catch(e) {}
+  }
+
+  async function enviarLinkMiembro(email, nombre) {
+    const key = getClave();
+    if (!key) { showToast('Ve al tab Config y guarda tu clave primero.', false); return; }
+    try {
+      const r = await fetch(`/api/member?e=${encodeURIComponent(email)}&admin_key=${encodeURIComponent(key)}`);
+      const d = await r.json();
+      if (!d.ok) { showToast('❌ ' + (d.error||'Error'), false); return; }
+      const msg = encodeURIComponent(
+        '🍷 *CAVA Vinoteca*\n\n'
+        + 'Hola ' + nombre + ', aquí tienes tu tarjeta de membresía *Enofilios Cava*.\n\n'
+        + 'Consulta tu nivel, experiencias y beneficios:\n'
+        + d.link + '\n\n'
+        + '_Enofilios Cava · El programa de experiencias de CAVA Vinoteca_'
+      );
+      window.open('https://wa.me/?text=' + msg, '_blank', 'noopener');
+    } catch(e) { showToast('❌ Error de conexión', false); }
   }
 
   function showToast(msg, ok) {
