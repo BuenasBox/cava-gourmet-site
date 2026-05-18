@@ -9,6 +9,46 @@ SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
 ISSUER_ID    = "3388000000023147327"
 
+def get_google_token():
+    import jwt
+    key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
+    now      = int(time.time())
+    claims   = {
+        "iss":   key_data.get("client_email", ""),
+        "sub":   key_data.get("client_email", ""),
+        "aud":   "https://oauth2.googleapis.com/token",
+        "iat":   now,
+        "exp":   now + 3600,
+        "scope": "https://www.googleapis.com/auth/wallet_object.issuer"
+    }
+    token = jwt.encode(claims, key_data.get("private_key", ""), algorithm="RS256")
+    data  = urllib.parse.urlencode({
+        "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+        "assertion":  token
+    }).encode()
+    req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data)
+    with urllib.request.urlopen(req) as r:
+        return json.loads(r.read())["access_token"]
+
+def actualizar_wallet(email, exp, es_enofilo):
+    try:
+        nivel    = calcular_nivel(exp, es_enofilo)
+        safe_id  = email.replace("@", "_at_").replace(".", "_")
+        object_id = f"{ISSUER_ID}.{safe_id}"
+        body = json.dumps({
+            "loyaltyPoints":          {"label": "Experiencias", "balance": {"int": exp}},
+            "secondaryLoyaltyPoints": {"label": "Nivel",        "balance": {"string": nivel}}
+        }).encode()
+        url = f"https://walletobjects.googleapis.com/walletobjects/v1/loyaltyObject/{urllib.parse.quote(object_id, safe='')}"
+        access_token = get_google_token()
+        req = urllib.request.Request(url, data=body, method="PATCH")
+        req.add_header("Authorization", f"Bearer {access_token}")
+        req.add_header("Content-Type", "application/json")
+        with urllib.request.urlopen(req) as r:
+            r.read()
+    except Exception:
+        pass
+
 def supabase_request(method, endpoint, body=None):
     url     = f"{SUPABASE_URL}/rest/v1/{endpoint}"
     headers = {
@@ -130,6 +170,12 @@ class handler(BaseHTTPRequestHandler):
             self._respond(400, {"ok": False, "error": "Email y al menos un campo requeridos"})
             return
         supabase_request("PATCH", f"miembros?email=eq.{urllib.parse.quote(email)}", campos)
+
+        if "experiencias" in campos:
+            miembro = supabase_request("GET", f"miembros?email=eq.{urllib.parse.quote(email)}&select=es_enofilo")
+            es_enofilo = miembro[0].get("es_enofilo", False) if miembro else False
+            actualizar_wallet(email, campos["experiencias"], es_enofilo)
+
         self._respond(200, {"ok": True})
 
     def do_DELETE(self):
