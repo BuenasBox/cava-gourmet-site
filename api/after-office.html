@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAVA — After Office</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { --vino:#1C0A00; --vino2:#2E1200; --dorado:#C9A96E; --crema:#F2E8D5; --gris:#9a8a7a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--vino); color:var(--crema); font-family:'Jost',sans-serif; min-height:100vh; }
+    header { background:var(--vino2); border-bottom:1px solid rgba(201,169,110,0.2); padding:20px 20px 16px; text-align:center; }
+    header img { height:36px; margin-bottom:8px; display:block; margin-inline:auto; }
+    header h1 { font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--dorado); }
+    header p  { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gris); margin-top:2px; }
+    nav { display:flex; background:var(--vino2); border-bottom:1px solid rgba(201,169,110,0.15); }
+    nav button { flex:1; background:none; border:none; color:var(--gris); font-family:'Jost',sans-serif; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; padding:12px 4px; cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; }
+    nav button.active { color:var(--dorado); border-bottom-color:var(--dorado); }
+    .tab { display:none; padding:20px 16px 60px; }
+    .tab.active { display:block; }
+    .card { background:rgba(255,255,255,0.04); border:1px solid rgba(201,169,110,0.15); border-radius:12px; padding:20px; margin-bottom:16px; }
+    .card h2 { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--dorado); margin-bottom:14px; }
+    label { display:block; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gris); margin-bottom:5px; margin-top:12px; }
+    label:first-of-type { margin-top:0; }
+    input { width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(201,169,110,0.2); border-radius:8px; color:var(--crema); font-family:'Jost',sans-serif; font-size:0.9rem; padding:10px 12px; outline:none; transition:border-color 0.2s; }
+    input:focus { border-color:var(--dorado); }
+    .btn { width:100%; margin-top:16px; background:var(--dorado); color:var(--vino); border:none; border-radius:8px; font-family:'Jost',sans-serif; font-size:0.82rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; padding:12px; cursor:pointer; transition:opacity 0.2s; }
+    .btn:active { opacity:0.8; }
+    .btn.outline { background:transparent; color:var(--dorado); border:1px solid rgba(201,169,110,0.4); margin-top:8px; }
+    .alerta { margin-top:12px; padding:12px 14px; border-radius:8px; font-size:0.85rem; display:none; line-height:1.6; }
+    .alerta.ok    { background:rgba(90,154,106,0.15); border:1px solid rgba(90,154,106,0.3); color:#90d4a0; }
+    .alerta.error { background:rgba(192,80,80,0.15);  border:1px solid rgba(192,80,80,0.3);  color:#f0a0a0; }
+    .miembro-card { background:rgba(255,255,255,0.04); border:1px solid rgba(201,169,110,0.12); border-radius:10px; padding:14px 16px; margin-bottom:10px; }
+    .miembro-nombre { font-family:'Cormorant Garamond',serif; font-size:1.05rem; }
+    .miembro-nivel  { font-size:0.78rem; color:var(--dorado); margin-top:2px; }
+    .miembro-info   { font-size:0.74rem; color:var(--gris); margin-top:6px; line-height:1.7; }
+    .badge-pendiente { display:inline-block; background:rgba(201,169,110,0.1); border:1px solid rgba(201,169,110,0.3); color:var(--dorado); font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; border-radius:4px; padding:2px 7px; margin-top:6px; }
+    .btn-invitar { width:100%; margin-top:10px; background:rgba(201,169,110,0.08); border:1px solid rgba(201,169,110,0.3); color:var(--dorado); border-radius:6px; font-family:'Jost',sans-serif; font-size:0.75rem; letter-spacing:0.08em; text-transform:uppercase; padding:9px; cursor:pointer; }
+    .historial-item { font-size:0.76rem; color:var(--gris); padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+    .historial-item:last-child { border-bottom:none; }
+    details summary { font-size:0.74rem; color:var(--gris); cursor:pointer; margin-top:10px; }
+    .niveles-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .nivel-tile { background:rgba(201,169,110,0.06); border:1px solid rgba(201,169,110,0.15); border-radius:10px; padding:12px; text-align:center; }
+    .nivel-tile .emoji  { font-size:1.4rem; margin-bottom:4px; }
+    .nivel-tile .nombre { font-family:'Cormorant Garamond',serif; font-size:0.9rem; color:var(--dorado); }
+    .nivel-tile .req    { font-size:0.68rem; color:var(--gris); margin-top:2px; }
+    .link-wallet { display:block; word-break:break-all; color:var(--dorado); font-size:0.74rem; margin-top:8px; }
+    .empty   { text-align:center; color:var(--gris); font-size:0.85rem; padding:32px 0; font-style:italic; }
+    .spinner { text-align:center; color:var(--gris); padding:24px; font-size:0.85rem; }
+  </style>
+</head>
+<body>
+<header>
+  <img src="/Assets/Logo-Cava.png" alt="CAVA Vinoteca">
+  <h1>After Office</h1>
+  <p>Del muro a la mesa.</p>
+</header>
+<nav>
+  <button class="active" onclick="tab('registrar',this)">Registrar</button>
+  <button onclick="tab('visita',this)">Visita</button>
+  <button onclick="tab('miembros',this)">Miembros</button>
+  <button onclick="tab('enofilo',this)">Enófilo</button>
+</nav>
+
+<div id="tab-registrar" class="tab active">
+  <div class="card">
+    <h2>Nuevo miembro</h2>
+    <label>Nombre completo</label><input id="r_nombre" type="text" placeholder="María Mora">
+    <label>Email</label><input id="r_email" type="email" placeholder="maria@gmail.com">
+    <label>Fecha de ingreso</label><input id="r_fecha" type="text" placeholder="17/05/2025">
+    <label>Referido por (email, opcional)</label><input id="r_referido" type="email" placeholder="quien@lo.refirio.com">
+    <button class="btn" onclick="registrar()">Crear tarjeta</button>
+    <div id="r_alerta" class="alerta"></div>
+  </div>
+  <div class="card">
+    <h2>Niveles del programa</h2>
+    <div class="niveles-grid">
+      <div class="nivel-tile"><div class="emoji">🚪</div><div class="nombre">Invitado</div><div class="req">Registro</div></div>
+      <div class="nivel-tile"><div class="emoji">🌱</div><div class="nombre">Neófito</div><div class="req">3 experiencias</div></div>
+      <div class="nivel-tile"><div class="emoji">🍷</div><div class="nombre">Entusiasta</div><div class="req">10 experiencias</div></div>
+      <div class="nivel-tile"><div class="emoji">🔐</div><div class="nombre">Enófilo</div><div class="req">25 exp. + invitación</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-visita" class="tab">
+  <div class="card">
+    <h2>Registrar visita al After Office</h2>
+    <label>Email del miembro</label><input id="v_email" type="email" placeholder="maria@gmail.com">
+    <label>Nota de la sesión (opcional)</label><input id="v_nota" type="text" placeholder="After Office Mayo — Vinos de Mendoza">
+    <button class="btn" onclick="registrarVisita()">Registrar visita</button>
+    <div id="v_alerta" class="alerta"></div>
+  </div>
+  <div class="card">
+    <h2>Generar link de tarjeta</h2>
+    <label>Email del miembro</label><input id="l_email" type="email" placeholder="maria@gmail.com">
+    <button class="btn outline" onclick="generarLink()">Obtener link Google Wallet</button>
+    <div id="l_alerta" class="alerta"></div>
+  </div>
+</div>
+
+<div id="tab-miembros" class="tab">
+  <div id="lista-miembros"><div class="spinner">Cargando...</div></div>
+</div>
+
+<div id="tab-enofilo" class="tab">
+  <div class="card" style="border-color:rgba(201,169,110,0.3)">
+    <h2>🔐 Candidatos a Enófilo</h2>
+    <p style="font-size:0.78rem;color:var(--gris);margin-bottom:14px">Miembros con 25+ experiencias pendientes de invitación CAVA.</p>
+    <div id="lista-candidatos"><div class="spinner">Cargando...</div></div>
+  </div>
+</div>
+
+<script>
+  function tab(n,btn){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+    document.getElementById('tab-'+n).classList.add('active');
+    btn.classList.add('active');
+    if(n==='miembros'||n==='enofilo') cargarMiembros();
+  }
+  function mostrar(id,tipo,html){
+    const el=document.getElementById(id);
+    el.className='alerta '+tipo; el.innerHTML=html; el.style.display='block';
+  }
+  async function registrar(){
+    const nombre=document.getElementById('r_nombre').value.trim();
+    const email=document.getElementById('r_email').value.trim();
+    const fecha=document.getElementById('r_fecha').value.trim()||new Date().toLocaleDateString('es-CR');
+    const referido=document.getElementById('r_referido').value.trim()||null;
+    if(!nombre||!email){mostrar('r_alerta','error','Nombre y email son obligatorios.');return;}
+    mostrar('r_alerta','ok','Creando tarjeta...');
+    try{
+      const r=await fetch('/api/registrar',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({nombre,email,fecha_ingreso:fecha,referido_por:referido})});
+      const d=await r.json();
+      if(d.ok){
+        mostrar('r_alerta','ok',`✅ Tarjeta creada — <strong>${d.nivel}</strong><br>${d.link?'<a class="link-wallet" href="'+d.link+'" target="_blank">📲 Link Google Wallet</a>':''}`);
+        ['r_nombre','r_email','r_referido'].forEach(id=>document.getElementById(id).value='');
+      } else { mostrar('r_alerta','error','❌ '+(d.error||'Error')); }
+    } catch(e){mostrar('r_alerta','error','❌ Error de conexión');}
+  }
+  async function registrarVisita(){
+    const email=document.getElementById('v_email').value.trim();
+    const nota=document.getElementById('v_nota').value.trim()||'After Office';
+    if(!email){mostrar('v_alerta','error','Email es obligatorio.');return;}
+    mostrar('v_alerta','ok','Registrando...');
+    try{
+      const r=await fetch('/api/registrar_experiencia',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email,nota})});
+      const d=await r.json();
+      if(d.ok){
+        mostrar('v_alerta','ok',`✅ Visita registrada<br>Experiencias: <strong>${d.experiencias}</strong> — ${d.nivel}<br><em style="font-size:0.8rem">${d.progreso}</em>`);
+        document.getElementById('v_nota').value='';
+      } else { mostrar('v_alerta','error','❌ '+(d.error||'Error')); }
+    } catch(e){mostrar('v_alerta','error','❌ Error de conexión');}
+  }
+  async function generarLink(){
+    const email=document.getElementById('l_email').value.trim();
+    if(!email){mostrar('l_alerta','error','Email es obligatorio.');return;}
+    try{
+      const r=await fetch('/api/link?email='+encodeURIComponent(email));
+      const d=await r.json();
+      if(d.link){ mostrar('l_alerta','ok',`📲 <a class="link-wallet" href="${d.link}" target="_blank">Abrir en Google Wallet</a>`); }
+      else { mostrar('l_alerta','error','❌ '+(d.error||'Error')); }
+    } catch(e){mostrar('l_alerta','error','❌ Error de conexión');}
+  }
+  async function invitarEnofilo(email,nombre){
+    if(!confirm('¿Confirmar invitación de '+nombre+' como Enófilo?')) return;
+    try{
+      const r=await fetch('/api/miembros',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email})});
+      const d=await r.json();
+      if(d.ok){alert('🔐 '+nombre+' ahora es Enófilo.');cargarMiembros();}
+      else{alert('❌ '+(d.error||'Error'));}
+    } catch(e){alert('❌ Error de conexión');}
+  }
+  async function cargarMiembros(){
+    document.getElementById('lista-miembros').innerHTML='<div class="spinner">Cargando...</div>';
+    document.getElementById('lista-candidatos').innerHTML='<div class="spinner">Cargando...</div>';
+    try{
+      const r=await fetch('/api/miembros');
+      const d=await r.json();
+      const todos=(d.miembros||[]);
+      const lista=document.getElementById('lista-miembros');
+      lista.innerHTML=todos.length===0?'<div class="empty">Sin miembros registrados aún.</div>':
+        todos.map(m=>`
+          <div class="miembro-card">
+            <div class="miembro-nombre">${m.nombre}</div>
+            <div class="miembro-nivel">${m.nivel}</div>
+            <div class="miembro-info">
+              📧 ${m.email}<br>
+              🍷 ${m.experiencias} experiencia${m.experiencias!==1?'s':''}<br>
+              📅 Desde ${m.fecha_ingreso||'—'}
+              ${m.referido_por?'<br>👥 Referido por: '+m.referido_por:''}
+              ${m.referidos&&m.referidos.length?'<br>🔗 Refirió a: '+m.referidos.join(', '):''}
+            </div>
+            ${m.experiencias>=25&&!m.es_enofilo?'<span class="badge-pendiente">⏳ Pendiente de invitación</span>':''}
+            ${m.historial&&m.historial.length?`
+              <details><summary>Ver historial (${m.historial.length} sesiones)</summary>
+                <div style="margin-top:8px">
+                  ${[...m.historial].reverse().map(h=>`<div class="historial-item">📍 ${h.fecha} — ${h.nota}</div>`).join('')}
+                </div>
+              </details>`:''}
+          </div>`).join('');
+      const candidatos=todos.filter(m=>m.experiencias>=25&&!m.es_enofilo);
+      const listaCand=document.getElementById('lista-candidatos');
+      listaCand.innerHTML=candidatos.length===0?'<div class="empty">Sin candidatos por ahora.</div>':
+        candidatos.map(m=>`
+          <div class="miembro-card">
+            <div class="miembro-nombre">${m.nombre}</div>
+            <div class="miembro-info">
+              📧 ${m.email}<br>
+              🍷 ${m.experiencias} experiencias<br>
+              ${m.referido_por?'👥 Referido por: '+m.referido_por:'Sin referido registrado'}
+            </div>
+            <button class="btn-invitar" onclick="invitarEnofilo('${m.email}','${m.nombre}')">
+              🔐 Invitar como Enófilo
+            </button>
+          </div>`).join('');
+    } catch(e){
+      document.getElementById('lista-miembros').innerHTML='<div class="empty">Error al cargar.</div>';
+    }
+  }
+</script>
+</body>
+</html>
