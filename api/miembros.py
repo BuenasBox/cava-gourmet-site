@@ -121,6 +121,11 @@ class handler(BaseHTTPRequestHandler):
             campos["nombre"] = data["nombre"].strip()
         if "fecha_ingreso" in data:
             campos["fecha_ingreso"] = data["fecha_ingreso"]
+        if "experiencias" in data:
+            try:
+                campos["experiencias"] = max(0, int(data["experiencias"]))
+            except (ValueError, TypeError):
+                pass
         if not email or not campos:
             self._respond(400, {"ok": False, "error": "Email y al menos un campo requeridos"})
             return

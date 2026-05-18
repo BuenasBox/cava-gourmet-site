@@ -403,6 +403,10 @@
                 <label>Fecha de ingreso</label>
                 <input type="text" id="ef-${sid}" value="${m.fecha_ingreso || ''}">
               </div>
+              <div class="field">
+                <label>Experiencias <span style="opacity:.5;font-size:.55rem">(ajuste manual)</span></label>
+                <input type="number" id="ee-${sid}" value="${m.experiencias}" min="0" style="width:100%">
+              </div>
               <div class="edit-row">
                 <button class="btn btn-gold" onclick="guardarEdicion('${eq}','${sid}')">Guardar</button>
                 <button class="btn btn-ghost" onclick="editarMiembro('${sid}')">✕</button>
@@ -474,14 +478,18 @@
   async function guardarEdicion(email, sid) {
     const nombre = document.getElementById('en-' + sid).value.trim();
     const fecha  = document.getElementById('ef-' + sid).value.trim();
+    const expVal = document.getElementById('ee-' + sid).value;
+    const exp    = expVal !== '' ? parseInt(expVal, 10) : null;
     const el     = document.getElementById('ea-' + sid);
     if (!nombre) { el.className='alerta error'; el.innerHTML='Nombre requerido.'; el.style.display='block'; return; }
     el.className='alerta ok'; el.innerHTML='Guardando…'; el.style.display='block';
+    const payload = { email, nombre, fecha_ingreso: fecha };
+    if (exp !== null && !isNaN(exp)) payload.experiencias = exp;
     try {
       const r = await fetch('/api/miembros', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, nombre, fecha_ingreso: fecha })
+        body: JSON.stringify(payload)
       });
       const d = await r.json();
       if (d.ok) { el.innerHTML = '✅ Guardado'; setTimeout(cargarMiembros, 800); }
