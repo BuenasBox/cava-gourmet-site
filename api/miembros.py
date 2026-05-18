@@ -28,7 +28,7 @@ def calcular_nivel(exp, es_enofilo=False):
     if exp >= 3:  return "🌱 Neófito"
     return "🚪 Invitado"
 
-class handler(BASE := BaseHTTPRequestHandler):
+class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         # Invitar como Enófilo
         length = int(self.headers.get("Content-Length", 0))
