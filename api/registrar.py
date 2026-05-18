@@ -26,6 +26,59 @@ def supabase_request(method, endpoint, body=None):
     except urllib.error.HTTPError as e:
         return {"error": e.read().decode()}
 
+def get_google_token():
+    import jwt
+    key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
+    now      = int(time.time())
+    claims   = {
+        "iss":   key_data.get("client_email", ""),
+        "sub":   key_data.get("client_email", ""),
+        "aud":   "https://oauth2.googleapis.com/token",
+        "iat":   now,
+        "exp":   now + 3600,
+        "scope": "https://www.googleapis.com/auth/wallet_object.issuer"
+    }
+    token = jwt.encode(claims, key_data.get("private_key", ""), algorithm="RS256")
+    data  = urllib.parse.urlencode({
+        "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+        "assertion":  token
+    }).encode()
+    req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data)
+    with urllib.request.urlopen(req) as r:
+        return json.loads(r.read())["access_token"]
+
+def crear_loyalty_object(email, nombre):
+    access_token = get_google_token()
+    safe_id      = email.replace("@", "_at_").replace(".", "_")
+    object_id    = f"{ISSUER_ID}.{safe_id}"
+    class_id     = f"{ISSUER_ID}.{CLASS_SUFFIX}"
+    body = json.dumps({
+        "id":        object_id,
+        "classId":   class_id,
+        "state":     "ACTIVE",
+        "accountName": nombre,
+        "accountId":   email,
+        "loyaltyPoints": {
+            "balance": {"int": 0},
+            "label":   "Experiencias"
+        },
+        "secondaryLoyaltyPoints": {
+            "balance": {"string": "🚪 Invitado"},
+            "label":   "Nivel"
+        }
+    }, ensure_ascii=False).encode()
+    url = "https://walletobjects.googleapis.com/walletobjects/v1/loyaltyObject"
+    req = urllib.request.Request(url, data=body, method="POST")
+    req.add_header("Authorization", f"Bearer {access_token}")
+    req.add_header("Content-Type", "application/json")
+    try:
+        with urllib.request.urlopen(req) as r:
+            r.read()
+    except urllib.error.HTTPError as e:
+        # 409 = object already exists — not an error
+        if e.code != 409:
+            raise
+
 def generar_link_wallet(email):
     import jwt
     key_data  = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
@@ -86,6 +139,12 @@ class handler(BaseHTTPRequestHandler):
                 ref_doc = ref[0]
                 nuevos  = (ref_doc.get("referidos") or []) + [email]
                 supabase_request("PATCH", f"miembros?email=eq.{urllib.parse.quote(referido_por)}", {"referidos": nuevos})
+
+        # Crear Loyalty Object en Google Wallet
+        try:
+            crear_loyalty_object(email, nombre)
+        except Exception:
+            pass
 
         try:
             link = generar_link_wallet(email)

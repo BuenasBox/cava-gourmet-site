@@ -126,8 +126,12 @@
       <span class="header-sub">Programa de membresías</span>
     </div>
   </div>
-  <span class="header-badge">Admin</span>
+  <div style="display:flex;align-items:center;gap:.65rem">
+    <button id="btn-setup" onclick="setupWallet()" style="background:transparent;border:1px solid rgba(184,151,90,.3);color:var(--muted);border-radius:5px;font-family:var(--sans);font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;padding:.4rem .75rem;cursor:pointer;transition:all .2s">⚙ Wallet</button>
+    <span class="header-badge">Admin</span>
+  </div>
 </header>
+<div id="setup-toast" style="display:none;position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:rgba(9,21,34,.97);border:1px solid rgba(184,151,90,.4);color:var(--ivory);font-family:var(--sans);font-size:.75rem;padding:.75rem 1.25rem;border-radius:8px;z-index:200;max-width:90vw;text-align:center"></div>
 
 <nav class="admin-nav">
   <button class="active" onclick="tab('registrar',this)">Registrar</button>
@@ -493,6 +497,32 @@
       if (d.ok) cargarMiembros();
       else alert('❌ ' + (d.error || 'Error al eliminar'));
     } catch(e) { alert('❌ Error de conexión'); }
+  }
+
+  function showToast(msg, ok) {
+    const t = document.getElementById('setup-toast');
+    t.textContent = msg;
+    t.style.borderColor = ok ? 'rgba(90,154,106,.5)' : 'rgba(192,80,80,.4)';
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 4000);
+  }
+
+  async function setupWallet() {
+    const btn = document.getElementById('btn-setup');
+    btn.disabled = true; btn.textContent = '⚙ Creando…';
+    try {
+      const r = await fetch('/api/setup');
+      const d = await r.json();
+      if (d.ok) {
+        showToast('✅ Loyalty Class lista — ' + (d.status === 'exists' ? 'ya existía' : 'creada'), true);
+      } else {
+        showToast('❌ ' + JSON.stringify(d.error || 'Error'), false);
+      }
+    } catch(e) {
+      showToast('❌ Error de conexión con /api/setup', false);
+    } finally {
+      btn.disabled = false; btn.textContent = '⚙ Wallet';
+    }
   }
 </script>
 </body>
