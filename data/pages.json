@@ -117,6 +117,7 @@
 
     { "id": 101, "slug": "/journal/como-se-construye-cultura-del-vino",  "hub": "journal",      "title": "Cómo se Construye Cultura del Vino",                    "status": "publicado" },
     { "id": 102, "slug": "/journal/vino-menos-elitismo-mas-experiencia", "hub": "journal",      "title": "Vino: Menos Elitismo, Más Experiencia",                 "status": "publicado" },
-    { "id": 103, "slug": "/journal/contenido-digital-experiencia-real-vinoteca-costa-rica","hub":"journal","title":"De Contenido Digital a Experiencia Real",      "status": "publicado" }
+    { "id": 103, "slug": "/journal/contenido-digital-experiencia-real-vinoteca-costa-rica","hub":"journal","title":"De Contenido Digital a Experiencia Real",      "status": "publicado" },
+    { "id": 104, "slug": "/journal/el-miedo-silencioso-de-no-saber-de-vino", "hub": "journal",  "title": "El Miedo Silencioso de No Saber de Vino",               "status": "publicado" }
   ]
 }

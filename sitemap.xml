@@ -89,7 +89,7 @@
 
   <url>
     <loc>https://www.cavagourmet.com/journal</loc>
-    <lastmod>2026-05-07</lastmod>
+    <lastmod>2026-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -132,6 +132,18 @@
       <image:loc>https://www.cavagourmet.com/Assets/images/Nazareth/nazareth-padilla-cava-vinoteca-ambiente-lounge.jpg</image:loc>
       <image:title>De contenido digital a experiencia real: el caso de una vinoteca en Costa Rica</image:title>
       <image:caption>Cómo CAVA Vinoteca conecta contenido digital con visita física y experiencia real en Pérez Zeledón.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.cavagourmet.com/journal/el-miedo-silencioso-de-no-saber-de-vino</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.cavagourmet.com/Assets/images/nazareth-padilla-guia-cata-vinos-cava-gourmet-1280.webp</image:loc>
+      <image:title>El miedo silencioso de no saber de vino</image:title>
+      <image:caption>Por qué la barrera más fuerte del vino en mercados emergentes no es el precio, sino la percepción de no saber. Análisis desde CAVA Vinoteca.</image:caption>
     </image:image>
   </url>
 
