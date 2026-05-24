@@ -236,8 +236,10 @@ Every page must link to at least 3 internal destinations.
 | `/` | Always |
 | `/nazareth/` | When expertise or trust signal is relevant |
 | `/cata-de-vinos-perez-zeledon/` | When booking or experience intent exists |
-| `/blog/` | When content is educational or cultural |
+| `/journal/` | When content is educational or cultural — NEVER `/blog/` |
 | Sibling experience pages | When related commercial intent exists |
+
+⛔ `/blog/` is permanently blocked. Every educational or cultural link goes to `/journal/`. See `CLAUDE.md`.
 
 Anchor text: descriptive and keyword-relevant.
 Never: "haz clic aquí", "ver más", "leer aquí".
