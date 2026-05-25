@@ -160,4 +160,16 @@
     </image:image>
   </url>
 
+  <url>
+    <loc>https://www.cavagourmet.com/journal/el-protocolo-del-vino-empieza-con-la-copa</loc>
+    <lastmod>2026-05-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.cavagourmet.com/Assets/images/Nazareth/cava-protocolo-copa-vino-costa-rica-og-1200x630.webp</image:loc>
+      <image:title>La copa de VINO y la cuchara tienen más en común de lo que parece</image:title>
+      <image:caption>Nazareth Padilla Montero sostiene una copa de vino durante una experiencia de hospitalidad y cultura del vino en CAVA Gourmet Market, Pérez Zeledón, Costa Rica.</image:caption>
+    </image:image>
+  </url>
+
 </urlset>

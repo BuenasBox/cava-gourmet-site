@@ -1,7 +1,7 @@
 # JOURNAL REGISTRY — CAVA Gourmet Market / Nazareth Wine Journey
 > Estado editorial vivo del Journal. Actualizar con cada artículo nuevo o editado.
-> Última actualización: 2026-05-24
-> Artículos publicados: 5
+> Última actualización: 2026-05-25
+> Artículos publicados: 5 · En borrador: 1
 
 ---
 
@@ -156,20 +156,48 @@
 
 ---
 
+### ART-006 · El protocolo del vino empieza con la copa
+
+| Campo | Valor |
+|---|---|
+| **Slug** | `/journal/el-protocolo-del-vino-empieza-con-la-copa` |
+| **Título completo** | La copa de VINO y la cuchara tienen más en común de lo que parece |
+| **Fecha publicación** | 2026-05-25 |
+| **Fecha última edición** | 2026-05-25 |
+| **Tipo** | Análisis — adaptación de publicación en Vinetur |
+| **Cluster temático** | Copa de vino / Protocolo / Barreras de entrada |
+| **Intención de búsqueda** | Informacional / TOFU |
+| **Keywords primarias** | copa de vino, protocolo del vino, intimidación vino |
+| **Keywords secundarias** | cómo sostener copa de vino, cultura del vino Costa Rica, cata de vinos Pérez Zeledón |
+| **Territorio semántico** | #1 Vino sin intimidación · #8 Educación accesible sobre vino |
+| **Entidad reforzada** | Nazareth (analista/educadora del protocolo) · CAVA (autoridad temática contextual desde Pérez Zeledón) · Vinetur (amplificación editorial externa) |
+| **Credenciales mencionadas** | WSET L3 · WOTVS 2025 · Vinoinfluencers CR 2026 (las tres, en schema Person) |
+| **CTA en cuerpo** | `/cata-de-vinos-perez-zeledon` — "catas privadas en CAVA" (link inline, 2 menciones) |
+| **Cross-link a hub externo** | Sí — `/cata-de-vinos-perez-zeledon` · `/nazareth` (author link) · `/journal/el-miedo-silencioso-de-no-saber-de-vino` (enlace temático en cuerpo) |
+| **Artículos relacionados (art-more)** | ART-004 (el-miedo) · ART-002 (vino-menos-elitismo) |
+| **Closing type** | FAQ visible + nota editorial de versión ampliada CAVA / Vinetur |
+| **Patrón narrativo** | Tesis editorial Vinetur → contexto local desde la mesa de CAVA en Pérez Zeledón → desmitificación práctica (tallo/forma/propósito) → FAQ útil para búsqueda y LLMs → atribución editorial |
+| **Imagen** | `Assets/images/Nazareth/cava-protocolo-copa-vino-costa-rica-1440.webp` · OG: `cava-protocolo-copa-vino-costa-rica-og-1200x630.webp` |
+| **Vinetur** | Sí — publicado originalmente en Vinetur 2026-05-25; CAVA publica Expanded Editorial Edition con self-canonical, FAQ, schema enriquecido, señales GEO y nota visible con enlace follow a Vinetur |
+| **Riesgo de canibalización** | Alto con ART-004 (ambos trabajan barreras psicológicas); diferenciados: ART-004 = miedo generalizado en mercados emergentes; ART-006 = protocolo visible y el gesto concreto de la copa. Riesgo futuro con `/aprende/copa-de-vino` (pendiente) — cuando se cree, debe distinguirse como guía práctica vs. reflexión editorial. |
+| **Status** | Publicado ✅ (index,follow — Expanded Editorial Edition) |
+
+---
+
 ## Territorio Map — estado actual
 
 Mapa de cobertura de los 9 territorios semánticos prioritarios:
 
 | Territorio | Artículos que lo cubren | Saturación | Próximo artículo posible |
 |---|---|---|---|
-| 1. Vino sin intimidación | ART-002, ART-004 | ⚠️ Media | Solo si hay ángulo nuevo (ej. maridaje informal) |
+| 1. Vino sin intimidación | ART-002, ART-004, ART-006 | 🔴 Alta | Pausa recomendada — próximo artículo requiere ángulo muy diferenciado |
 | 2. Hospitality premium relajado | — | ✅ Libre | After Office como ritual, o muro de vinos |
 | 3. Experiencias humanas / mesa compartida | ART-003 (tangencial) | ✅ Libre | Mesa compartida: qué pasa cuando alguien descorcha en CAVA |
 | 4. After Office como ritual social | — (solo inline en ART-004) | ✅ Libre | Artículo dedicado de alto valor |
 | 5. Cultura del vino en Costa Rica | ART-001, ART-004 | ⚠️ Media | Entrada si es ángulo muy diferenciado (ej. vino + gastronomía local) |
 | 6. Maridaje con comida costarricense | — | ✅ Libre | Oportunidad alta — sin artículo, keywords libres |
 | 7. Experiencias premium fuera del GAM | ART-001 (mencionado), ART-003 | ⚠️ Baja-Media | Artículo específico de Pérez Zeledón / Zona Sur |
-| 8. Educación accesible sobre vino | ART-002, ART-004, ART-005 | ⚠️ Media-Alta | ART-005 cubrió vocabulario básico; nuevo artículo requiere ángulo muy diferenciado |
+| 8. Educación accesible sobre vino | ART-002, ART-004, ART-005, ART-006 | 🔴 Alta | Pausa recomendada — saturado. Próximo artículo debe ir por territorio libre (#4, #6, #7) |
 | 9. Nazareth como voz cultural | ART-003, ART-004 | ✅ Moderado | Vinculado a Vinoinfluencers 2026 cuando sea pertinente |
 
 **Territorios libres con mayor oportunidad:**
@@ -187,7 +215,8 @@ Mapa de cobertura de los 9 territorios semánticos prioritarios:
 | Invitación abierta ("La puerta está abierta") | ART-001 | No repetir literalmente |
 | Declaración de principio/manifiesto | ART-002 | No repetir en próximo artículo |
 | Apertura futura ("El siguiente paso está ahí") | ART-003 | Disponible pero espaciar |
-| Cierre factual/atribución | ART-004 | Solo en artículos Vinetur |
+| Cierre factual/atribución | ART-004, ART-006 | Solo en artículos Vinetur |
+| Declaración de apertura/permiso | ART-006 | No repetir en próximo artículo |
 
 ### Frases estratégicas — frecuencia actual
 | Frase | Artículos donde aparece |
