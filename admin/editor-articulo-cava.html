@@ -268,7 +268,7 @@
         <div class="guide-step" data-step="5"><div class="step-num">5</div><div class="step-text">Escribe el artículo en el editor</div></div>
         <div class="guide-step" data-step="6"><div class="step-num">6</div><div class="step-text">Presiona "Generar HTML final"</div></div>
         <div class="guide-step" data-step="7"><div class="step-num">7</div><div class="step-text">Copia el código generado</div></div>
-        <div class="guide-step" data-step="8"><div class="step-num">8</div><div class="step-text">Crea el archivo en VS Code dentro de <span style="font-family:monospace;color:var(--gold-soft)">/blog/</span></div></div>
+        <div class="guide-step" data-step="8"><div class="step-num">8</div><div class="step-text">Crea el archivo en VS Code dentro de <span style="font-family:monospace;color:var(--gold-soft)">/journal/</span></div></div>
         <div class="guide-step" data-step="9"><div class="step-num">9</div><div class="step-text">Nómbralo: <span style="font-family:monospace;color:var(--gold-soft)" id="guideFilename">nombre-articulo.html</span></div></div>
         <div class="guide-step" data-step="10"><div class="step-num">10</div><div class="step-text">Sube la imagen a <span style="font-family:monospace;color:var(--gold-soft)">/Assets/images/Nazareth/</span></div></div>
       </div>
@@ -292,6 +292,7 @@
             <option>Marketing del vino</option>
             <option>Experiencias en CAVA</option>
             <option>Maridaje y gastronomía</option>
+            <option>Vocabulario del vino</option>
           </select>
         </div>
         <div class="field">
@@ -304,7 +305,7 @@
           <div class="slug-info">
             <div class="slug-row">
               <span class="slug-label">URL:</span>
-              <span class="slug-val" id="slugUrl">cavagourmet.com/blog/…</span>
+              <span class="slug-val" id="slugUrl">cavagourmet.com/journal/…</span>
             </div>
             <div class="slug-row">
               <span class="slug-label">📄 Archivo:</span>
@@ -387,18 +388,22 @@
           <label>Artículo relacionado 1</label>
           <select id="relArticle1">
             <option value="">— Elige un artículo —</option>
-            <option value="/blog/como-se-construye-cultura-del-vino">Cómo se construye cultura del vino</option>
-            <option value="/blog/vino-menos-elitismo-mas-experiencia">Menos elitismo, más experiencia</option>
-            <option value="/blog/contenido-digital-experiencia-real-vinoteca-costa-rica">De contenido digital a experiencia real</option>
+            <option value="/journal/como-se-construye-cultura-del-vino">Cómo se construye cultura del vino</option>
+            <option value="/journal/vino-menos-elitismo-mas-experiencia">Menos elitismo, más experiencia</option>
+            <option value="/journal/contenido-digital-experiencia-real-vinoteca-costa-rica">De contenido digital a experiencia real</option>
+            <option value="/journal/el-miedo-silencioso-de-no-saber-de-vino">El miedo silencioso de no saber de vino</option>
+            <option value="/journal/que-significa-cuerpo-en-el-vino">Qué significa que un vino tenga cuerpo</option>
           </select>
         </div>
         <div class="field">
           <label>Artículo relacionado 2</label>
           <select id="relArticle2">
             <option value="">— Elige un artículo —</option>
-            <option value="/blog/como-se-construye-cultura-del-vino">Cómo se construye cultura del vino</option>
-            <option value="/blog/vino-menos-elitismo-mas-experiencia">Menos elitismo, más experiencia</option>
-            <option value="/blog/contenido-digital-experiencia-real-vinoteca-costa-rica">De contenido digital a experiencia real</option>
+            <option value="/journal/como-se-construye-cultura-del-vino">Cómo se construye cultura del vino</option>
+            <option value="/journal/vino-menos-elitismo-mas-experiencia">Menos elitismo, más experiencia</option>
+            <option value="/journal/contenido-digital-experiencia-real-vinoteca-costa-rica">De contenido digital a experiencia real</option>
+            <option value="/journal/el-miedo-silencioso-de-no-saber-de-vino">El miedo silencioso de no saber de vino</option>
+            <option value="/journal/que-significa-cuerpo-en-el-vino">Qué significa que un vino tenga cuerpo</option>
           </select>
         </div>
       </div>
@@ -499,7 +504,7 @@
 <div class="modal-overlay" id="codeModal">
   <div class="modal">
     <div class="modal-title">Código HTML generado</div>
-    <div class="modal-subtitle">Copia este código completo y pégalo en VS Code como nuevo archivo dentro de <span style="font-family:monospace;color:var(--gold-soft)">/blog/</span></div>
+    <div class="modal-subtitle">Vista previa del draft HTML. Para publicación real usa el botón <strong>Publicar con Claude</strong> que invoca el pipeline completo del Journal.</div>
     <div class="modal-code" id="exportCode"></div>
     <div class="copy-confirm" id="copyConfirm">✓ ¡Copiado! Ahora pégalo en VS Code.</div>
     <div class="modal-actions">
@@ -524,11 +529,11 @@
     <div id="generateChecklist"></div>
     <div class="inst-block">
       <div class="inst-title">Qué hacer con el código generado</div>
-      <div class="inst-step"><div class="inst-num">1</div><div>Abre VS Code y ve a la carpeta <span class="inst-code">/blog/</span></div></div>
-      <div class="inst-step"><div class="inst-num">2</div><div>Crea un archivo nuevo: <span class="inst-code" id="modalFilename">nombre-articulo.html</span></div></div>
-      <div class="inst-step"><div class="inst-num">3</div><div>Pega el código y guarda el archivo</div></div>
-      <div class="inst-step"><div class="inst-num">4</div><div>Sube la imagen a <span class="inst-code">/Assets/images/Nazareth/</span> con el nombre <span class="inst-code" id="modalImgName">nombre-articulo.webp</span></div></div>
-      <div class="inst-step"><div class="inst-num">5</div><div>Haz commit y push — el artículo aparecerá en el sitio</div></div>
+      <div class="inst-step"><div class="inst-num">1</div><div>Usa el botón <span class="inst-code">Publicar con Claude</span> para disparar el pipeline completo del Journal</div></div>
+      <div class="inst-step"><div class="inst-num">2</div><div>Claude ejecuta el skill <span class="inst-code">/journal-article-builder</span> con los datos del formulario</div></div>
+      <div class="inst-step"><div class="inst-num">3</div><div>Verifica el HTML generado y aprueba el Publication Gate</div></div>
+      <div class="inst-step"><div class="inst-num">4</div><div>Confirma la fase de publicación — Claude actualiza <span class="inst-code">journal.html</span>, <span class="inst-code">sitemap.xml</span> y registros</div></div>
+      <div class="inst-step"><div class="inst-num">5</div><div>Commit y push — el artículo aparece en producción</div></div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('generateModal')">Seguir editando</button>
@@ -549,13 +554,13 @@
       </span>
       Publicar con Claude en VS Code
     </div>
-    <div class="modal-subtitle">Sigue estos 5 pasos — Claude hace el trabajo técnico por ti</div>
+    <div class="modal-subtitle">El prompt incluye todos los datos del formulario — Claude ejecuta el pipeline completo del Journal</div>
     <div class="claude-steps">
-      <div class="claude-step"><div class="claude-step-num">1</div><div class="claude-step-text"><strong>Genera el HTML</strong>Usa "Generar HTML final" y copia el código completo</div></div>
-      <div class="claude-step"><div class="claude-step-num">2</div><div class="claude-step-text"><strong>Copia el prompt de abajo</strong>O usa el botón "Copiar prompt + HTML juntos"</div></div>
-      <div class="claude-step"><div class="claude-step-num">3</div><div class="claude-step-text"><strong>Abre Claude en VS Code</strong>Panel lateral izquierdo → ícono de Claude</div></div>
-      <div class="claude-step"><div class="claude-step-num">4</div><div class="claude-step-text"><strong>Pega el prompt + el HTML</strong>Primero el prompt, luego el HTML al final donde dice [PEGAR AQUÍ]</div></div>
-      <div class="claude-step"><div class="claude-step-num">5</div><div class="claude-step-text"><strong>Revisa y aprueba</strong>Claude te dirá qué va a hacer antes de tocar cualquier archivo</div></div>
+      <div class="claude-step"><div class="claude-step-num">1</div><div class="claude-step-text"><strong>Rellena el formulario</strong>Completa todos los campos y escribe el artículo en el editor</div></div>
+      <div class="claude-step"><div class="claude-step-num">2</div><div class="claude-step-text"><strong>Copia el prompt completo</strong>El botón de abajo incluye automáticamente todos los datos y el contenido</div></div>
+      <div class="claude-step"><div class="claude-step-num">3</div><div class="claude-step-text"><strong>Abre Claude Code en VS Code</strong>Panel lateral izquierdo → ícono de Claude</div></div>
+      <div class="claude-step"><div class="claude-step-num">4</div><div class="claude-step-text"><strong>Pega el prompt</strong>Claude ejecuta el pipeline del Journal y crea el artículo con CSS inline</div></div>
+      <div class="claude-step"><div class="claude-step-num">5</div><div class="claude-step-text"><strong>Revisa y aprueba</strong>Claude mostrará qué va a hacer antes de tocar cualquier archivo</div></div>
     </div>
     <label class="safe-toggle">
       <input type="checkbox" id="safeModeCheck" onchange="toggleSafeMode()" />
@@ -580,7 +585,7 @@
       <button class="btn btn-ghost" onclick="closeModal('claudeModal')">Cerrar</button>
       <button class="btn btn-gold" onclick="copiarPromptYHTML()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        Copiar prompt + HTML juntos
+        Copiar prompt completo
       </button>
     </div>
   </div>
@@ -595,44 +600,60 @@
   let imgExt = 'webp';
   let generatedHTML = '';
 
-  // ── PROMPTS ──
-  const PROMPT_MAIN = `Actúa como asistente técnico experto en HTML, SEO técnico y estructura del sitio cavagourmet.com.
+  // ── PROMPT DINÁMICO — lee los datos del formulario en el momento de abrir el modal ──
+  function buildClaudePrompt() {
+    const title    = document.getElementById('artTitle').value.trim() || '[Sin título]';
+    const slug     = document.getElementById('artSlug').value.trim() || 'nuevo-articulo';
+    const cat      = document.getElementById('artCategory').value || '[Sin categoría]';
+    const date     = document.getElementById('artDate').value || new Date().toISOString().split('T')[0];
+    const seoTitle = document.getElementById('artSeoTitle').value.trim() || title;
+    const metaDesc = document.getElementById('artMetaDesc').value.trim();
+    const keywords = document.getElementById('artKeywords').value.trim();
+    const excerpt  = document.getElementById('artExcerpt').value.trim();
+    const imgAlt   = document.getElementById('artImgAlt').value.trim();
+    const quote    = document.getElementById('artQuote').value.trim();
+    const rel1     = document.getElementById('relArticle1').value;
+    const rel2     = document.getElementById('relArticle2').value;
+    const body     = document.getElementById('editorBody').innerText.trim();
+    const relNames = {
+      '/journal/como-se-construye-cultura-del-vino': 'Cómo se construye cultura del vino en Costa Rica',
+      '/journal/vino-menos-elitismo-mas-experiencia': 'Por qué el vino necesita menos elitismo y más experiencia',
+      '/journal/contenido-digital-experiencia-real-vinoteca-costa-rica': 'De contenido digital a experiencia real en una vinoteca',
+      '/journal/el-miedo-silencioso-de-no-saber-de-vino': 'El miedo silencioso de no saber de vino',
+      '/journal/que-significa-cuerpo-en-el-vino': 'Qué significa que un vino tenga cuerpo',
+    };
+    return `Necesito publicar un nuevo artículo en el Journal de CAVA Gourmet.
 
-Voy a adjuntarte el HTML generado por el editor de artículos de CAVA.
+DATOS DEL ARTÍCULO:
+- Título: ${title}
+- Slug / archivo: ${slug} → journal/${slug}.html
+- Categoría: ${cat}
+- Fecha de publicación: ${date}T12:00:00-06:00
+- Título SEO: ${seoTitle}
+- Meta descripción: ${metaDesc || '[completar]'}
+- Keywords: ${keywords || '[completar]'}
+- Extracto para tarjeta: ${excerpt || '[completar]'}
+- Nombre base de imagen: ${slug}
+- Alt de imagen: ${imgAlt || '[completar]'}
+- Frase destacada: ${quote || '(ninguna)'}
+- Artículo relacionado 1: ${rel1 ? (relNames[rel1] || rel1) + ' (' + rel1 + ')' : '(ninguno)'}
+- Artículo relacionado 2: ${rel2 ? (relNames[rel2] || rel2) + ' (' + rel2 + ')' : '(ninguno)'}
 
-Tu tarea es publicar este artículo dentro del proyecto en VS Code sin alterar el resto del sitio.
+CONTENIDO DEL ARTÍCULO:
+---
+${body || '[Sin contenido — escríbelo en el editor antes de publicar]'}
+---
 
-INSTRUCCIONES:
+INSTRUCCIONES PARA CLAUDE CODE:
+1. Ejecuta el skill /journal-article-builder con los datos anteriores.
+2. Sigue el Mandatory Journal Image Selection And Optimization Gate: verifica la imagen en Assets/images/ y sus derivados WebP (480w, 800w, 1280w) y OG JPG (-og-1200x630.jpg).
+3. El HTML debe ser autocontenido (CSS inline), siguiendo el patrón de /journal/que-significa-cuerpo-en-el-vino.html.
+4. robots debe quedar como noindex,nofollow hasta que se apruebe el Publication Gate.
+5. NO actualices journal.html, sitemap.xml, data/pages.json, llms.txt ni JOURNAL-REGISTRY.md hasta instrucción expresa de publicación.
+6. Al terminar, reporta: archivo creado, ruta exacta, imágenes requeridas, checklist SEO básico y pendientes antes de commit.`;
+  }
 
-1. Crea un nuevo archivo HTML dentro de la carpeta /blog/.
-2. El nombre del archivo debe coincidir exactamente con el slug del artículo.
-3. No modifiques index.html, main.css, vercel.json ni otros artículos existentes, salvo que yo lo indique expresamente.
-4. Verifica que el archivo conserve:
-   - title
-   - meta description
-   - canonical
-   - Open Graph
-   - Twitter Card
-   - Schema.org BlogPosting
-   - BreadcrumbList
-   - autoría de Nazareth Padilla Montero
-5. Verifica que las rutas de imágenes apunten correctamente a:
-   /Assets/images/Nazareth/
-6. Si falta la imagen, indícame exactamente qué nombre debe tener y en qué carpeta debo colocarla.
-7. Revisa que no existan errores de HTML, etiquetas sin cerrar o estructura duplicada.
-8. No cambies el estilo visual del sitio.
-9. No reescribas el artículo salvo que encuentres errores ortográficos o de estructura.
-10. Al finalizar, dime:
-   - nombre del archivo creado
-   - ruta exacta
-   - imagen requerida (nombre y carpeta)
-   - si el SEO básico quedó correcto
-   - si hay algo pendiente antes de hacer commit y deploy.
-
-Aquí está el HTML del artículo:
-[PEGAR AQUÍ EL HTML GENERADO POR EL EDITOR]`;
-
-  const PROMPT_SAFE = `Antes de hacer cualquier cambio, explícame brevemente qué archivos vas a crear o modificar. No ejecutes cambios fuera de /blog/ sin mi autorización expresa.`;
+  const PROMPT_SAFE = `Antes de hacer cualquier cambio, explícame brevemente qué archivos vas a crear o modificar. No ejecutes cambios fuera de /journal/ sin mi autorización expresa.`;
 
   // ── INIT ──
   document.addEventListener('DOMContentLoaded', () => {
@@ -680,7 +701,7 @@ Aquí está el HTML del artículo:
   }
   function updateSlugDisplay(s) {
     const safe = s || '…';
-    document.getElementById('slugUrl').textContent = `cavagourmet.com/blog/${safe}`;
+    document.getElementById('slugUrl').textContent = `cavagourmet.com/journal/${safe}`;
     document.getElementById('slugFile').textContent = s ? `${s}.html` : 'nombre-articulo.html';
     document.getElementById('guideFilename').textContent = s ? `${s}.html` : 'nombre-articulo.html';
     const mf = document.getElementById('modalFilename');
@@ -884,7 +905,7 @@ Aquí está el HTML del artículo:
     const source = generatedHTML || generateHTML();
     navigator.clipboard.writeText(source).then(() => {
       document.getElementById('copyConfirm').style.display = 'block';
-      showToast('¡Copiado! Pégalo en VS Code como nuevo archivo en /blog/', 'success');
+      showToast('¡Copiado! Pégalo en VS Code como nuevo archivo en /journal/', 'success');
     }).catch(() => {
       // Fallback para navegadores sin clipboard API
       const ta = document.createElement('textarea');
@@ -896,7 +917,7 @@ Aquí está el HTML del artículo:
       document.execCommand('copy');
       document.body.removeChild(ta);
       document.getElementById('copyConfirm').style.display = 'block';
-      showToast('¡Copiado! Pégalo en VS Code como nuevo archivo en /blog/', 'success');
+      showToast('¡Copiado! Pégalo en VS Code como nuevo archivo en /journal/', 'success');
     });
   }
 
@@ -911,12 +932,12 @@ Aquí está el HTML del artículo:
     document.body.appendChild(a); a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    showToast(`Descargado como ${filename} — muévelo a /blog/ en VS Code`, 'success');
+    showToast(`Descargado como ${filename} — muévelo a /journal/ en VS Code`, 'success');
   }
 
   // ── CLAUDE MODAL ──
   function abrirPublicarClaude() {
-    document.getElementById('mainPromptText').textContent = PROMPT_MAIN;
+    document.getElementById('mainPromptText').textContent = buildClaudePrompt();
     document.getElementById('safePromptText').textContent = PROMPT_SAFE;
     document.getElementById('claudeCopyConfirm').style.display = 'none';
     document.getElementById('safeModeCheck').checked = false;
@@ -928,20 +949,19 @@ Aquí está el HTML del artículo:
     document.getElementById('safePromptBlock').style.display = on ? 'block' : 'none';
   }
   function copiarPrompt(type) {
-    const text = type === 'safe' ? PROMPT_SAFE : PROMPT_MAIN;
+    const text = type === 'safe' ? PROMPT_SAFE : buildClaudePrompt();
     navigator.clipboard.writeText(text).then(() => {
       document.getElementById('claudeCopyConfirm').style.display = 'block';
-      showToast('Prompt copiado — pégalo en Claude dentro de VS Code', 'success');
+      showToast('Prompt copiado — pégalo en Claude Code dentro de VS Code', 'success');
     });
   }
   function copiarPromptYHTML() {
-    if (!generatedHTML) generatedHTML = generateHTML();
+    const prompt = buildClaudePrompt();
     const safeOn = document.getElementById('safeModeCheck').checked;
-    const full = (safeOn ? PROMPT_SAFE + '\n\n---\n\n' : '') +
-      PROMPT_MAIN.replace('[PEGAR AQUÍ EL HTML GENERADO POR EL EDITOR]', generatedHTML);
+    const full = (safeOn ? PROMPT_SAFE + '\n\n---\n\n' : '') + prompt;
     navigator.clipboard.writeText(full).then(() => {
       document.getElementById('claudeCopyConfirm').style.display = 'block';
-      showToast('¡Prompt + HTML copiados! Pégalo directamente en Claude de VS Code', 'success');
+      showToast('¡Prompt copiado! Pégalo directamente en Claude Code (VS Code)', 'success');
     });
   }
 
@@ -968,17 +988,29 @@ Aquí está el HTML del artículo:
     const monthYear = new Date(date + 'T12:00:00').toLocaleDateString('es-CR', { month: 'long', year: 'numeric' });
 
     const relLabels = {
-      '/blog/como-se-construye-cultura-del-vino': 'Cómo se construye cultura del vino en Costa Rica',
-      '/blog/vino-menos-elitismo-mas-experiencia': 'Por qué el vino necesita menos elitismo y más experiencia',
-      '/blog/contenido-digital-experiencia-real-vinoteca-costa-rica': 'De contenido digital a experiencia real en una vinoteca',
+      '/journal/como-se-construye-cultura-del-vino': 'Cómo se construye cultura del vino en Costa Rica',
+      '/journal/vino-menos-elitismo-mas-experiencia': 'Por qué el vino necesita menos elitismo y más experiencia',
+      '/journal/contenido-digital-experiencia-real-vinoteca-costa-rica': 'De contenido digital a experiencia real en una vinoteca',
+      '/journal/el-miedo-silencioso-de-no-saber-de-vino': 'El miedo silencioso de no saber de vino',
+      '/journal/que-significa-cuerpo-en-el-vino': 'Qué significa que un vino tenga cuerpo',
     };
 
     const imgPath = `https://www.cavagourmet.com/Assets/images/Nazareth/${slug}.${imgExt}`;
+    const imgBasePath = `/Assets/images/Nazareth/${slug}`;
+    const imgOgPath = `https://www.cavagourmet.com/Assets/images/Nazareth/${slug}-og-1200x630.jpg`;
     const mimeType = imgExt === 'jpg' ? 'image/jpeg' : `image/${imgExt}`;
 
     const imgBlock = noImg ? '' : `
     <figure class="art-cover" aria-hidden="true">
-      <img src="/Assets/images/Nazareth/${slug}.${imgExt}" alt="${imgAlt}" width="1280" height="853" loading="eager" decoding="async">
+      <img
+        src="${imgBasePath}-1280.webp"
+        srcset="${imgBasePath}-480.webp 480w,
+                ${imgBasePath}-800.webp 800w,
+                ${imgBasePath}-1280.webp 1280w"
+        sizes="100vw"
+        alt="${imgAlt}"
+        width="1280" height="853"
+        loading="eager" decoding="async" fetchpriority="high">
     </figure>`;
 
     const quoteBlock = quote ? `\n        <p class="art-quote">"${escapeHTML(quote)}"</p>\n` : '';
@@ -986,7 +1018,7 @@ Aquí está el HTML del artículo:
     const relBlock = (rel1 || rel2) ? `
     <nav class="art-footnav" aria-label="Más artículos">
       <div class="art-footnav-inner">
-        <a href="/blog" class="art-back">Volver al blog</a>
+        <a href="/journal" class="art-back">Volver al journal</a>
         <div class="art-more">
           <span class="art-more-label">Más artículos</span>
           ${rel1 ? `<a href="${rel1}" class="art-more-link">${escapeHTML(relLabels[rel1] || rel1)}</a>` : ''}
@@ -1005,8 +1037,8 @@ Aquí está el HTML del artículo:
   <meta name="description" content="${metaDesc}" />
   ${keywords ? `<meta name="keywords" content="${keywords}" />` : ''}
   <meta name="theme-color" content="#091522" />
-  <meta name="robots" content="index,follow" />
-  <link rel="canonical" href="https://www.cavagourmet.com/blog/${slug}" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="canonical" href="https://www.cavagourmet.com/journal/${slug}" />
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -1014,16 +1046,19 @@ Aquí está el HTML del artículo:
   <!-- Open Graph -->
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="CAVA Gourmet Market" />
-  <meta property="og:url" content="https://www.cavagourmet.com/blog/${slug}" />
+  <meta property="og:url" content="https://www.cavagourmet.com/journal/${slug}" />
   <meta property="og:title" content="${seoTitle}" />
   <meta property="og:description" content="${metaDesc}" />
-  ${!noImg ? `<meta property="og:image" content="${imgPath}" />
+  ${!noImg ? `<meta property="og:image" content="${imgOgPath}" />
   <meta property="og:image:alt" content="${imgAlt}" />
-  <meta property="og:image:type" content="${mimeType}" />` : ''}
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/jpeg" />` : ''}
   <meta property="og:locale" content="es_CR" />
   <meta property="article:author" content="Nazareth Padilla Montero" />
   <meta property="article:section" content="${cat}" />
   <meta property="article:published_time" content="${dateISO}" />
+  <meta property="article:modified_time" content="${dateISO}" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
@@ -1040,16 +1075,16 @@ Aquí está el HTML del artículo:
     "@graph": [
       {
         "@type": "BlogPosting",
-        "@id": "https://www.cavagourmet.com/blog/${slug}#article",
+        "@id": "https://www.cavagourmet.com/journal/${slug}#article",
         "headline": "${titleJSON}",
         "description": "${metaDescJSON}",
-        "url": "https://www.cavagourmet.com/blog/${slug}",
+        "url": "https://www.cavagourmet.com/journal/${slug}",
         "datePublished": "${dateISO}",
         "dateModified": "${dateISO}",
         "inLanguage": "es",
         "author": { "@id": "https://www.cavagourmet.com/nazareth#person" },
         "publisher": { "@id": "https://www.cavagourmet.com/#organization" },
-        "isPartOf": { "@id": "https://www.cavagourmet.com/blog#blog" }${!noImg ? `,
+        "isPartOf": { "@id": "https://www.cavagourmet.com/journal#journal" }${!noImg ? `,
         "image": { "@type": "ImageObject", "url": "${imgPath}", "width": 1280, "height": 853 }` : ''},
         "keywords": "${escapeJSON(document.getElementById('artKeywords').value || '')}",
         "articleSection": "${escapeJSON(document.getElementById('artCategory').value || 'Cultura del vino')}"
@@ -1058,7 +1093,7 @@ Aquí está el HTML del artículo:
         "@type": "BreadcrumbList",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.cavagourmet.com/" },
-          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.cavagourmet.com/blog" },
+          { "@type": "ListItem", "position": 2, "name": "Journal", "item": "https://www.cavagourmet.com/journal" },
           { "@type": "ListItem", "position": 3, "name": "${titleJSON}" }
         ]
       },
@@ -1088,7 +1123,7 @@ Aquí está el HTML del artículo:
       <a href="/" role="listitem">Inicio</a>
       <a href="/cata-de-vinos-perez-zeledon" role="listitem">Catas de vino</a>
       <a href="/nazareth" role="listitem">Nazareth</a>
-      <a href="/blog" aria-current="true" role="listitem">Blog</a>
+      <a href="/journal" aria-current="true" role="listitem">Journal</a>
       <a href="https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa" class="btn gold" target="_blank" rel="noopener noreferrer" role="listitem">Reservar</a>
     </div>
   </nav>
@@ -1114,7 +1149,7 @@ Aquí está el HTML del artículo:
     <nav class="art-breadcrumb" aria-label="Breadcrumb">
       <div class="art-breadcrumb-inner">
         <a href="/">Inicio</a><span aria-hidden="true">/</span>
-        <a href="/blog">Blog</a><span aria-hidden="true">/</span>
+        <a href="/journal">Journal</a><span aria-hidden="true">/</span>
         <span aria-current="page">${cat}</span>
       </div>
     </nav>
@@ -1158,7 +1193,7 @@ Aquí está el HTML del artículo:
         <a href="/">Inicio</a>
         <a href="/nazareth">Nazareth</a>
         <a href="/cata-de-vinos-perez-zeledon">Catas de vino</a>
-        <a href="/blog">Blog</a>
+        <a href="/journal">Journal</a>
         <a href="https://www.instagram.com/cavapz" target="_blank" rel="noopener noreferrer" aria-label="Instagram CAVA Vinoteca">Instagram</a>
         <span>© 2026</span>
       </nav>
