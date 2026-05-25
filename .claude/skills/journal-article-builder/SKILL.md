@@ -98,24 +98,110 @@ Preserve the established page system:
 
 Do not add new dependencies, new tracking scripts, unnecessary JavaScript, or new design systems.
 
-## Mandatory Image Inventory Gate
+## Mandatory Journal Image Selection And Optimization Gate
 
-Before building final HTML, review:
+This gate is mandatory before building or finalizing any HTML for the Journal. It cannot be skipped, deferred, or assumed complete based on prior conversations.
+
+### Step 1 — Survey available images
+
+Review the following sources in full:
 
 ```text
 admin/journal-image-inventory.md
+Assets/images/
+Assets/images/Nazareth/
+Assets/images/Erick/
 ```
 
-Rules:
+Also review any other relevant subcarpetas within `Assets/images/` that may contain suitable editorial images. Do not invent paths — traverse only paths that exist.
 
-- Do not use image placeholders.
-- Use only real, existing, case-sensitive asset paths.
-- Prefer WebP and responsive variants when available.
-- If the selected image has no WebP/responsive variant, document the performance risk in the build output.
-- The selected image, alt text, OG usage, and responsive status must be documented in `admin/briefs/[slug].md`.
-- If no validated image exists for the article, block publication and keep `noindex,nofollow`.
-- Do not invent image paths from naming patterns.
-- Do not use remote images unless explicitly approved in the brief.
+### Step 2 — Select the best image
+
+Choose the best available image based on these criteria, in order of priority:
+
+- Editorial relationship with the article topic.
+- Not already used as the primary editorial image in another Journal article or site page.
+- Coherence with Nazareth / CAVA / Journal visual identity.
+- Low risk of overuse or visual repetition across the site.
+- Potential for OG crop at 1200×630 without losing the primary subject (face, glass, bottle, element).
+- File weight and orientation appropriate for responsive web use.
+
+Do not use image placeholders. Do not invent image paths from naming patterns. Do not use remote images unless explicitly approved in the brief.
+
+### Step 3 — Verify current usage
+
+Before finalizing selection, search the candidate image path in:
+
+```text
+index.html
+nazareth.html
+journal.html
+journal/*.html
+sitemap.xml
+llms.txt
+```
+
+If the image appears in a high-prominence position (hero, OG, featured card) in more than one existing page, flag it as overused and select an alternative. Report the conflict if no alternative is available.
+
+### Step 4 — Create optimized derivatives if missing
+
+If the selected image does not have all required derivatives, create them before proceeding.
+
+Required derivatives:
+
+| Variant | Format | Dimensions | Target weight |
+|---------|--------|------------|---------------|
+| 480w    | WebP   | 480px wide | < 70 KB       |
+| 800w    | WebP   | 800px wide | < 140 KB      |
+| 1280w   | WebP   | 1280px wide | < 260 KB     |
+| OG      | JPG    | 1200×630   | < 350 KB      |
+
+Recommended encoding parameters:
+
+- WebP quality: 72–78
+- JPG OG quality: 78–82
+- Preserve the primary subject (face, glass, bottle, editorial element) visible and unclipped in all crops and at all widths.
+- File naming must follow exact case-sensitive conventions of the existing `Assets/images/[subfolder]/` directory.
+
+If derivatives cannot be created in the current session, document the gap, report a performance risk, and keep the article at `noindex,nofollow` until resolved.
+
+### Step 5 — Document the image
+
+After selection and optimization, record in both locations before proceeding to HTML:
+
+- `admin/journal-image-inventory.md`: image path, dimensions, all derivative paths, weight per variant, usage status, OG suitability, and assigned article slug.
+- `admin/briefs/[slug].md`: selected image path, alt text, OG image path, all derivative paths, and optimization status.
+
+### Step 6 — Block conditions
+
+Stop and report a blocker if any of these conditions are met:
+
+- The image file does not exist at the exact case-sensitive path.
+- The image path is a placeholder or was invented from a naming pattern.
+- No OG derivative exists and cannot be created in the current session.
+- WebP derivatives are missing and no performance risk note is documented.
+- The image is already used as the primary editorial image in another Journal article or in the `index.html` hero or OG position.
+- The image is not documented in `admin/journal-image-inventory.md`.
+- The image is not documented in `admin/briefs/[slug].md`.
+- Image paths were not verified for GitHub Pages case-sensitivity.
+
+Do not build publishable HTML when any block condition is active. Keep `noindex,nofollow` and list the unresolved blockers in the build output.
+
+### Step 7 — Integrate into draft HTML
+
+The builder may modify the draft HTML to integrate the optimized image:
+
+- Use a `<picture>` element with `srcset` pointing to the WebP derivatives when all variants are available.
+- Use `<img>` with correct `src`, `alt`, `width`, `height`, and `loading="lazy"` (or `eager` for the article hero image).
+- Set `og:image` to the OG derivative path.
+
+The builder must not — as part of this gate or at any other point during the build phase — take any of these publication actions without an explicit user-approved publication phase:
+
+- Change `meta robots` from `noindex` to `index`.
+- Modify `journal.html`.
+- Modify `sitemap.xml`.
+- Modify `data/pages.json`.
+- Modify `llms.txt`.
 
 If the inventory is missing, stale, or does not include a suitable image, stop and report a blocker instead of building publishable HTML.
 
@@ -329,9 +415,17 @@ Stop and report blockers if any of these appear:
 - Missing final article text.
 - Missing approved slug.
 - Missing title tag or meta description.
-- Missing or unverified image asset.
+- Image Selection And Optimization Gate not completed.
+- Missing or unverified image asset (file does not exist at the exact case-sensitive path).
+- Image path is a placeholder or was invented from a naming pattern.
+- `Assets/images/` and relevant subcarpetas were not surveyed.
+- Image usage was not verified in index.html, nazareth.html, journal.html, journal/*.html, sitemap.xml, llms.txt.
+- Image is overused across existing pages.
+- OG image (1200×630 JPG) does not exist and cannot be created.
+- WebP derivatives are missing and performance risk is not documented.
 - Selected image is not documented in `admin/journal-image-inventory.md`.
 - Selected image is not documented in the article brief.
+- Image paths not verified for GitHub Pages case-sensitivity.
 - Missing public Vinetur URL for a Vinetur adaptation.
 - Article is a literal duplicate of Vinetur when adaptation is required.
 - Canonical does not match `/journal/[slug]`.
@@ -356,9 +450,14 @@ Before producing the final HTML draft, verify:
 - Breadcrumbs follow Inicio -> Journal -> Article.
 - Article date and modified date are correct.
 - Author attribution is correct.
-- `admin/journal-image-inventory.md` has been reviewed.
+- Image Selection And Optimization Gate completed (all 7 steps).
+- `Assets/images/` and relevant subcarpetas were surveyed.
+- Image usage was verified in index.html, nazareth.html, journal.html, journal/*.html, sitemap.xml, llms.txt.
+- `admin/journal-image-inventory.md` has been reviewed and updated.
 - Image asset exists, uses exact case-sensitive path, and alt text is useful.
-- Image choice is documented in the persisted brief.
+- All required WebP derivatives exist (480w, 800w, 1280w) or performance risk is documented.
+- OG image (1200×630 JPG) exists and is under 350 KB.
+- Image choice and all derivative paths are documented in `admin/briefs/[slug].md`.
 - JSON-LD is valid JSON.
 - Schema claims are visible on page.
 - No `/blog` references exist.
@@ -383,6 +482,14 @@ File to create:
 Status:
 - Draft for review | Ready for final editorial audit | Blocked
 
+Image gate summary:
+- Image selected: [path]
+- Derivatives: 480w [status] | 800w [status] | 1280w [status] | OG [status]
+- Usage verified in: index.html, nazareth.html, journal.html, journal/*.html, sitemap.xml, llms.txt
+- Inventory updated: admin/journal-image-inventory.md [yes/no/blocker]
+- Brief updated: admin/briefs/[slug].md [yes/no/blocker]
+- Image gate: PASSED | BLOCKED — [reason]
+
 HTML draft:
 ```html
 ...
@@ -392,7 +499,9 @@ Publication checklist:
 - [ ] Confirm robots value before publication
 - [ ] Validate canonical and og:url
 - [ ] Validate schema JSON-LD
-- [ ] Confirm image asset exists in admin/journal-image-inventory.md
+- [ ] Confirm all image derivatives exist at documented paths (case-sensitive)
+- [ ] Confirm OG image exists and is under 350 KB
+- [ ] Confirm selected image is documented in admin/journal-image-inventory.md
 - [ ] Confirm selected image is documented in admin/briefs/[slug].md
 - [ ] Confirm internal links
 - [ ] Run final red-team editorial audit

@@ -159,7 +159,27 @@ Block if:
 - Any new content is planned under `/blog`.
 - CTA turns an editorial article into an ad.
 
-## 6. Pattern Repetition Audit
+## 6. Vinetur Similarity Check Audit
+
+For any article marked as a "Vinetur candidate" or "Vinetur submission", verify that the `journal-seo-geo` skill completed a Vinetur similarity check before the brief was approved.
+
+Check:
+
+- Was a Vinetur similarity check run for this article?
+- Is the result documented in `admin/briefs/[slug].md`?
+- Is the result "Libre" or "Similar pero diferenciable" with a documented differentiation strategy?
+- If the result was "Bloqueado", was the article correctly redirected to an internal Journal angle?
+- If internet was unavailable during the SEO/GEO phase, is the check marked "pendiente de verificación externa" and is the article not yet cleared for Vinetur submission?
+
+Block if:
+
+- The article is intended for Vinetur submission and no similarity check was run.
+- The similarity check returned "Bloqueado" and the article was not redirected to an internal Journal angle.
+- The brief claims "Libre" but the reviewed URLs are not documented in the brief.
+- The similarity check is "pendiente de verificación externa" and the article is advancing to Vinetur submission without resolving it.
+- The differentiation strategy for "Similar pero diferenciable" is vague or not credible enough to justify a new submission.
+
+## 7. Pattern Repetition Audit
 
 Compare against existing Journal style. The article may share the brand voice, but it must not clone the pattern.
 
@@ -174,7 +194,7 @@ Look for:
 
 If repetition is strong, require structural change or reject.
 
-## 7. Blocking Criteria
+## 8. Blocking Criteria
 
 Reject the article if any apply:
 
@@ -188,6 +208,9 @@ Reject the article if any apply:
 - It has high canibalization risk and no differentiation strategy.
 - It relies on `/blog`.
 - It mishandles Vinetur attribution or canonical logic.
+- It is a Vinetur-candidate article and no Vinetur similarity check was completed.
+- The Vinetur similarity check returned "Bloqueado" and the article was not redirected to an internal Journal angle.
+- The Vinetur similarity check is "pendiente de verificación externa" and the article is advancing to Vinetur submission without resolving it.
 
 Approve with changes if the core idea is strong but execution needs revision.
 
@@ -239,6 +262,14 @@ Technical/editorial integrity:
 - Internal links:
 - CTA:
 - Schema visibility:
+- Required changes:
+
+Vinetur similarity check:
+- Applicable: yes / no
+- Check completed: yes / pendiente de verificación externa / not run
+- Result: Libre / Similar pero diferenciable / Bloqueado / Not applicable
+- URLs reviewed: [list or none]
+- Differentiation strategy: [if similar]
 - Required changes:
 
 Decision rationale:

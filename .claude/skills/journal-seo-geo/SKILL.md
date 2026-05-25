@@ -200,6 +200,84 @@ Recommend a CTA only if it fits the article type.
 Primary reservation CTA is WhatsApp CAVA: `+506 8632 5260`.
 Use Nazareth direct contact only for public figure, media, winery/importer, or collaboration context.
 
+## Vinetur Similarity Check Gate
+
+This gate is mandatory for any article marked as a "Vinetur candidate" or "Vinetur submission". Run it before drafting or approving the brief. Do not plan, approve, or persist a Vinetur-destination brief without completing this check.
+
+### When to activate
+
+Activate if any of these apply:
+
+- The article is intended for submission to Vinetur before or alongside the Journal version.
+- The source status is "Vinetur candidate" or "Vinetur submission".
+- The article topic falls in known Vinetur editorial categories: wine culture, wine vocabulary, fear of wine, wine education, Costa Rica wine, pairing, practical storage or serving tips, wine buying, regional wine.
+
+### How to run the check
+
+Search the following in Vinetur using `site:vinetur.com`:
+
+1. The exact working title or the equivalent phrase.
+2. The main synonyms of the topic.
+3. The primary search intent rephrased as a natural question.
+4. Recent articles in the same topic category.
+5. Older archived articles on the same theme.
+6. Articles by external authors covering the same or adjacent topic.
+
+If internet access is not available, mark the check result as "pendiente de verificación externa". Do not advance the brief to Vinetur submission status until the check is completed manually and the result is documented.
+
+### Similarity scale
+
+Classify the result as one of:
+
+- **Libre**: no substantially similar article found. The topic can proceed as a Vinetur candidate.
+- **Similar pero diferenciable**: a similar article exists but a clear angle, format, scope, or geographic difference makes a new submission viable. Document the differentiation strategy explicitly.
+- **Bloqueado**: a substantially similar article exists and no credible differentiation is possible. Do not submit to Vinetur.
+
+### Blocked topic rules
+
+If the result is "Bloqueado":
+
+- Do not submit the article to Vinetur.
+- Recommend converting it into an internal Journal article with a CAVA/Nazareth/Costa Rica angle not covered by the Vinetur article.
+- Or recommend changing the editorial angle radically enough that no substantial overlap exists.
+- Record the blocking reason and the redirect recommendation in `admin/briefs/[slug].md`.
+
+### Example risk case
+
+The topic "cómo guardar una botella de vino ya abierta" must not be submitted to Vinetur. A substantially similar article already exists:
+
+```text
+https://www.vinetur.com/20260513100625/como-conservar-el-vino-abierto-durante-varios-dias.html
+```
+
+Older Vinetur articles also cover the same topic, making the space saturated. This topic should be redirected to the Journal with a CAVA/Nazareth/Costa Rica angle — for example, what Nazareth recommends to customers who buy a bottle and cannot finish it, or the reality of opened bottles in a warm tropical climate like Zona Sur.
+
+### Vinetur similarity check output block
+
+Produce this block as part of the brief whenever the gate is activated:
+
+```text
+VINETUR SIMILARITY CHECK
+
+Topic checked:
+Checked on: [date or "no internet — pendiente de verificación externa"]
+
+URLs found:
+- [URL] — [angle / theme summary]
+
+Similarity result:
+- Libre / Similar pero diferenciable / Bloqueado
+
+Reason:
+- [Why this result was assigned]
+
+Recommendation:
+- Enviar a Vinetur — proceed with Vinetur submission
+- Redirigir al Journal — publish only as an internal CAVA Journal article
+- Reescribir con otro ángulo — submit to Vinetur with a clearly differentiated approach
+- Descartar — topic has no viable angle for either channel
+```
+
 ## Vinetur Adaptation Rules
 
 For articles originally published in Vinetur:
@@ -249,6 +327,8 @@ Reject or flag plans that rely on:
 - `Winery` schema.
 - Programmatic SEO with no unique human angle.
 - Articles that should actually be landing pages, service pages, or merged into existing content.
+- Vinetur-candidate articles where the Vinetur similarity check has not been completed or is "pendiente de verificación externa" and the article is advancing to Vinetur submission without resolving it.
+- Topics where the Vinetur similarity check returned "Bloqueado" and no validated alternative angle is documented in the brief.
 
 ## Output Format
 
@@ -287,6 +367,10 @@ Internal links:
 
 CTA recommendation:
 
+Vinetur similarity check:
+- Not applicable / pendiente de verificación externa / Libre / Similar pero diferenciable [differentiation strategy] / Bloqueado [reason and redirect recommendation]
+- URLs reviewed: [list or none found]
+
 Vinetur status:
 - Not applicable / pending URL / published URL available
 - Required visible note, if applicable
@@ -322,4 +406,6 @@ Before approving the brief, verify:
 - The piece reinforces at least one strategic entity.
 - There is a clear internal linking plan.
 - Any Vinetur source is public before publication.
+- For Vinetur-candidate articles: the Vinetur similarity check is complete with result "Libre" or "Similar pero diferenciable" with a documented differentiation strategy, or is marked "pendiente de verificación externa" and is not advancing to Vinetur submission until resolved.
+- For Vinetur-blocked topics: the redirection to an internal Journal angle is documented in `admin/briefs/[slug].md`.
 - No generic SEO article is being disguised as editorial content.
