@@ -622,7 +622,7 @@
       '/journal/el-miedo-silencioso-de-no-saber-de-vino': 'El miedo silencioso de no saber de vino',
       '/journal/que-significa-cuerpo-en-el-vino': 'Qué significa que un vino tenga cuerpo',
     };
-    return `Necesito publicar un nuevo artículo en el Journal de CAVA Gourmet.
+    return `Necesito crear un nuevo artículo para el Journal de CAVA Gourmet.
 
 DATOS DEL ARTÍCULO:
 - Título: ${title}
@@ -645,12 +645,47 @@ ${body || '[Sin contenido — escríbelo en el editor antes de publicar]'}
 ---
 
 INSTRUCCIONES PARA CLAUDE CODE:
-1. Ejecuta el skill /journal-article-builder con los datos anteriores.
-2. Sigue el Mandatory Journal Image Selection And Optimization Gate: verifica la imagen en Assets/images/ y sus derivados WebP (480w, 800w, 1280w) y OG JPG (-og-1200x630.jpg).
-3. El HTML debe ser autocontenido (CSS inline), siguiendo el patrón de /journal/que-significa-cuerpo-en-el-vino.html.
-4. robots debe quedar como noindex,nofollow hasta que se apruebe el Publication Gate.
-5. NO actualices journal.html, sitemap.xml, data/pages.json, llms.txt ni JOURNAL-REGISTRY.md hasta instrucción expresa de publicación.
-6. Al terminar, reporta: archivo creado, ruta exacta, imágenes requeridas, checklist SEO básico y pendientes antes de commit.`;
+
+PASO 0 — Lee estos archivos antes de empezar:
+- CLAUDE.md
+- AGENTS.md
+- JOURNAL-REGISTRY.md
+- data/pages.json
+
+PASO 1 — Ejecuta el pipeline de skills en este orden exacto:
+
+1. /nazareth-editorial-voice
+   Adapta el tono, voz y ángulo del artículo a la voz editorial de Nazareth.
+   Voz: elegante, cálida, sensorial, educativa sin intimidar, anclada a Pérez Zeledón.
+
+2. /journal-seo-geo
+   Construye el brief SEO/GEO completo.
+   IMPORTANTE — Vinetur Similarity Gate obligatorio:
+   Busca en site:vinetur.com si ya existe contenido similar al tema de este artículo.
+   Este check protege contra duplicar contenido que Nazareth podría publicar allí manualmente.
+   Si el resultado es "Bloqueado", detente y reporta antes de continuar.
+
+3. /journal-red-team-auditor
+   Audita el brief resultante. No construyas el HTML hasta que el auditor apruebe.
+
+4. /journal-article-builder
+   Construye el HTML final: autocontenido con CSS inline, siguiendo el patrón de
+   /journal/que-significa-cuerpo-en-el-vino.html.
+   Sigue el Mandatory Journal Image Selection And Optimization Gate:
+   verifica derivados WebP (480w, 800w, 1280w) y OG JPG (-og-1200x630.jpg).
+
+PASO 2 — Antes de terminar:
+- Persiste el brief en admin/briefs/${slug}.md
+- robots: noindex,nofollow — no cambiar hasta Publication Gate aprobado
+- NO actualices journal.html, sitemap.xml, data/pages.json, llms.txt ni
+  JOURNAL-REGISTRY.md hasta instrucción expresa de publicación
+
+PASO 3 — Al terminar, reporta:
+- Archivo creado y ruta exacta
+- Imágenes requeridas (nombre y carpeta)
+- Resultado del Vinetur Similarity Gate
+- Checklist SEO básico
+- Pendientes antes de hacer commit`;
   }
 
   const PROMPT_SAFE = `Antes de hacer cualquier cambio, explícame brevemente qué archivos vas a crear o modificar. No ejecutes cambios fuera de /journal/ sin mi autorización expresa.`;
