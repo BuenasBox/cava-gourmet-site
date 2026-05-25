@@ -1,7 +1,7 @@
 # JOURNAL REGISTRY — CAVA Gourmet Market / Nazareth Wine Journey
 > Estado editorial vivo del Journal. Actualizar con cada artículo nuevo o editado.
 > Última actualización: 2026-05-24
-> Artículos publicados: 4
+> Artículos publicados: 5
 
 ---
 
@@ -128,6 +128,34 @@
 
 ---
 
+### ART-005 · Qué significa que un vino tenga cuerpo
+
+| Campo | Valor |
+|---|---|
+| **Slug** | `/journal/que-significa-cuerpo-en-el-vino` |
+| **Título completo** | Qué significa que un vino tenga cuerpo |
+| **Fecha publicación** | 2026-05-24 |
+| **Fecha última edición** | 2026-05-24 |
+| **Tipo** | Evergreen SEO · educación accesible / vocabulario del vino |
+| **Cluster temático** | Vocabulario del vino / Educación sin intimidación |
+| **Intención de búsqueda** | Informacional / TOFU — búsqueda directa sobre término de vino |
+| **Keywords primarias** | que significa que un vino tenga cuerpo, cuerpo del vino |
+| **Keywords secundarias** | vino con cuerpo, vino ligero vs con cuerpo, como elegir vino por cuerpo, textura del vino |
+| **Territorio semántico** | #8 Educación accesible sobre vino · #1 Vino sin intimidación (tangencial: desactiva la jerarquía cuerpo=calidad) |
+| **Entidad reforzada** | Nazareth (educadora accesible, traductora del lenguaje del vino) · CAVA Vinoteca (espacio de prueba real) |
+| **Credenciales mencionadas** | WSET L3 · WOTVS 2025 · Vinoinfluencers CR 2026 (las tres, en schema Person) |
+| **CTA en cuerpo** | `/cata-de-vinos-perez-zeledon` — "las catas de CAVA" (link inline, sin bloque de CTA) |
+| **Cross-link a hub externo** | Sí — `/cata-de-vinos-perez-zeledon` · `/nazareth` (author link) |
+| **Artículos relacionados (art-more)** | ART-002 · ART-004 |
+| **Closing type** | Pregunta práctica devuelta al lector — "¿para qué momento? ¿Con qué? La respuesta cambia todo." |
+| **Patrón narrativo** | Escena vinoteca (cliente pide "algo con cuerpo") → definición práctica como textura/peso → desactivar jerarquía falsa (ligero ≠ menor) → utilidad para elegir con comida → CTA suave |
+| **Imagen** | `Assets/images/Nazareth/nazareth-padilla-analisis-copa-vino-blanco-cata-1280.webp` · OG: `-og-1200x630.jpg` |
+| **Vinetur** | No |
+| **Riesgo de canibalización** | Medio-alto con `/aprende/que-es-el-cuerpo-del-vino` (id: 36, status: pendiente). Journal trata el tema desde escena + experiencia de elección; Aprende debe reservarse para guía estructurada con clasificación técnica (ligero/medio/completo, factores, variedades). Monitorear cuando se cree la página de Aprende. |
+| **Status** | Publicado ✅ |
+
+---
+
 ## Territorio Map — estado actual
 
 Mapa de cobertura de los 9 territorios semánticos prioritarios:
@@ -141,7 +169,7 @@ Mapa de cobertura de los 9 territorios semánticos prioritarios:
 | 5. Cultura del vino en Costa Rica | ART-001, ART-004 | ⚠️ Media | Entrada si es ángulo muy diferenciado (ej. vino + gastronomía local) |
 | 6. Maridaje con comida costarricense | — | ✅ Libre | Oportunidad alta — sin artículo, keywords libres |
 | 7. Experiencias premium fuera del GAM | ART-001 (mencionado), ART-003 | ⚠️ Baja-Media | Artículo específico de Pérez Zeledón / Zona Sur |
-| 8. Educación accesible sobre vino | ART-002, ART-004 | ⚠️ Media | Solo si hay ángulo distinto (ej. primer vino, vocabulario básico) |
+| 8. Educación accesible sobre vino | ART-002, ART-004, ART-005 | ⚠️ Media-Alta | ART-005 cubrió vocabulario básico; nuevo artículo requiere ángulo muy diferenciado |
 | 9. Nazareth como voz cultural | ART-003, ART-004 | ✅ Moderado | Vinculado a Vinoinfluencers 2026 cuando sea pertinente |
 
 **Territorios libres con mayor oportunidad:**

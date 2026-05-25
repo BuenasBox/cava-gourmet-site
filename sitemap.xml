@@ -89,7 +89,7 @@
 
   <url>
     <loc>https://www.cavagourmet.com/journal</loc>
-    <lastmod>2026-05-11</lastmod>
+    <lastmod>2026-05-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -144,6 +144,19 @@
       <image:loc>https://www.cavagourmet.com/Assets/images/nazareth-padilla-guia-cata-vinos-cava-gourmet-1280.webp</image:loc>
       <image:title>El miedo silencioso de no saber de vino</image:title>
       <image:caption>Por qué la barrera más fuerte del vino en mercados emergentes no es el precio, sino la percepción de no saber. Análisis desde CAVA Vinoteca.</image:caption>
+    </image:image>
+  </url>
+
+
+  <url>
+    <loc>https://www.cavagourmet.com/journal/que-significa-cuerpo-en-el-vino</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.cavagourmet.com/Assets/images/Nazareth/nazareth-padilla-analisis-copa-vino-blanco-cata-og-1200x630.jpg</image:loc>
+      <image:title>Qué significa que un vino tenga cuerpo</image:title>
+      <image:caption>Nazareth Padilla Montero observando una copa de vino durante una cata en CAVA Vinoteca, Pérez Zeledón.</image:caption>
     </image:image>
   </url>
 

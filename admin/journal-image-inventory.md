@@ -38,7 +38,7 @@ Las carpetas `_Archivo` contienen imagenes potencialmente utiles, pero por peso,
 | Ruta exacta case-sensitive | Orientacion / dimensiones | WebP | Responsive | Uso sugerido | Riesgo de reutilizacion | Notas de performance |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Assets/images/Nazareth/nazareth-padilla-catando-vino-tinto-cava.jpg` | Vertical 738x1108 | No | No | Articulos sobre cata, percepcion, cuerpo, tanino, evaluacion en copa | Medio: muy especifica para cata; puede repetirse en articulos educativos | Peso bajo aprox. 128 KB; buena para inline, debil para OG horizontal |
-| `Assets/images/Nazareth/nazareth-padilla-analisis-copa-vino-blanco-cata.jpg` | Horizontal 4898x3266 | No | No | Articulos de analisis sensorial, educacion, cuerpo, acidez, lenguaje del vino | Medio: fuerte para articulos educativos de Nazareth | JPG pesado aprox. 5.4 MB; requiere conversion WebP/responsive antes de publicar |
+| `Assets/images/Nazareth/nazareth-padilla-analisis-copa-vino-blanco-cata.jpg` | Horizontal 4898x3266 | Sí: 480w (17.9 KB) · 800w (36.3 KB) · 1280w (77.7 KB) · OG 1200x630 (105.3 KB) | Sí | USADA — `/journal/que-significa-cuerpo-en-el-vino` como imagen principal | Alto: ya asignada como imagen primaria del artículo de cuerpo del vino — no reutilizar como imagen principal en otro artículo | Derivados WebP creados y validados. OG dentro de peso óptimo. Excelente candidata para este tema; no disponible para nuevo artículo |
 | `Assets/images/Nazareth/nazareth-padilla-guia-cata-vinos-cava-gourmet.jpg` | Horizontal 6000x4000 | Si, fuera de subcarpeta Nazareth | Si: `Assets/images/nazareth-padilla-guia-cata-vinos-cava-gourmet-480.webp`, `-800.webp`, `-1280.webp`, `-1920.webp` | Catas guiadas, educacion sin intimidacion, articulos evergreen | Alto: ya es imagen transversal de catas y autoridad | Preferir variantes WebP en `Assets/images/` para LCP/OG |
 | `Assets/images/nazareth-padilla-guia-cata-vinos-cava-gourmet-1280.webp` | Horizontal, variante 1280 | Si | Si | Imagen principal optimizada para articulos de cata/educacion | Alto si se usa en demasiados articulos | Buena candidata para Journal si coincide con el tema |
 | `Assets/images/Nazareth/nazareth-padilla-editorial-vino-cava-costa-rica.jpg` | Vertical 1920x3200 | No | No | Articulos editoriales, voz Nazareth, reflexion cultural | Medio-alto: puede volverse imagen comodin de Journal | Peso moderado aprox. 543 KB; falta WebP/responsive |
@@ -77,7 +77,7 @@ Las carpetas `_Archivo` contienen imagenes potencialmente utiles, pero por peso,
 
 - Muchas imagenes JPG utiles para Journal no tienen version WebP ni responsive.
 - Varias imagenes horizontales fuertes pesan entre 2 MB y 10 MB.
-- La imagen usada en el draft local de "Que significa que un vino tenga cuerpo" existe, pero es vertical y sin variantes responsive.
+- La imagen de "Que significa que un vino tenga cuerpo" fue optimizada y publicada con derivados 480/800/1280 WebP y OG 1200x630 JPG. Brecha resuelta — 2026-05-24.
 - Hay activos optimizados WebP suficientes para empezar, pero con riesgo de reutilizacion si se usan en demasiados articulos.
 - Falta convencion formal para derivar imagenes editoriales del Journal con `-480`, `-800`, `-1280`, `-1920`.
 

@@ -1,10 +1,12 @@
 # Brief SEO/GEO - Que significa que un vino tenga cuerpo
 
-Estado: draft / noindex hasta revision final  
-Ruta recomendada: `/journal/que-significa-cuerpo-en-el-vino`  
-Slug recomendado: `que-significa-cuerpo-en-el-vino`  
+Estado: PUBLISHED — 2026-05-24  
+Ruta: `/journal/que-significa-cuerpo-en-el-vino`  
+Slug: `que-significa-cuerpo-en-el-vino`  
 Fecha de brief: 2026-05-24  
-Publicacion: no publicar todavia
+Fecha de publicacion: 2026-05-24  
+Publication Gate: PASS WITH MINOR CHANGES — aprobado 2026-05-24  
+Cambios aplicados al publicar: robots index,follow; dateModified corregido a 2026-05-24; breadcrumb visible corregido al título del artículo
 
 ## Resumen
 
@@ -179,20 +181,36 @@ Evitar CTA comercial agresivo. El articulo debe cerrar con utilidad, no con vent
 
 ## Imagen recomendada
 
-Imagen candidata actual:
+Imagen integrada en draft:
 
-- Ruta: `Assets/images/Nazareth/nazareth-padilla-catando-vino-tinto-cava.jpg`
-- Uso sugerido: imagen principal del articulo si se valida visualmente que representa evaluacion de vino en copa.
-- Riesgo: no existe version WebP ni responsive registrada; archivo pequeno, pero vertical (738x1108), puede no ser ideal para OG horizontal.
-- Estado: validar contra `admin/journal-image-inventory.md` antes de build final.
+- Fuente original: `Assets/images/Nazareth/nazareth-padilla-analisis-copa-vino-blanco-cata.jpg`
+- Uso: imagen principal del articulo.
+- Motivo editorial: muestra observacion de una copa durante una cata en CAVA; comunica textura, prueba y criterio sin sentirse comercial.
+- Riesgo de reutilizacion: bajo en paginas principales y articulos publicados al momento de la auditoria.
+- Estado: integrada en `journal/que-significa-cuerpo-en-el-vino.html`.
 
-Alternativas preferibles si se prioriza OG horizontal:
+Derivados WebP utilizados:
 
-- `Assets/images/Nazareth/nazareth-padilla-analisis-copa-vino-blanco-cata.jpg`
-- `Assets/images/Nazareth/nazareth-padilla-guia-cata-vinos-cava-gourmet.jpg`
-- `Assets/images/nazareth-padilla-guia-cata-vinos-cava-gourmet-1280.webp`
+- `Assets/images/Nazareth/nazareth-padilla-analisis-copa-vino-blanco-cata-480.webp` - 480x320
+- `Assets/images/Nazareth/nazareth-padilla-analisis-copa-vino-blanco-cata-800.webp` - 800x533
+- `Assets/images/Nazareth/nazareth-padilla-analisis-copa-vino-blanco-cata-1280.webp` - 1280x854
 
-La imagen elegida debe quedar documentada aqui antes de pasar a build final.
+OG integrado:
+
+- `Assets/images/Nazareth/nazareth-padilla-analisis-copa-vino-blanco-cata-og-1200x630.jpg` - 1200x630
+
+Alt editorial integrado:
+
+- `Nazareth Padilla Montero observa una copa de vino durante una cata en CAVA Vinoteca`
+
+Rendimiento:
+
+- WebP 480: aprox. 17.9 KB
+- WebP 800: aprox. 36.3 KB
+- WebP 1280: aprox. 77.7 KB
+- OG JPG: aprox. 105.3 KB
+
+La imagen ya no bloquea el paso a auditoria final, pero el articulo debe permanecer `noindex,nofollow` hasta aprobacion de publicacion.
 
 ## Schema plan
 
@@ -239,4 +257,4 @@ No cambiar a `index,follow` hasta que:
 
 ## Recomendacion
 
-Puede avanzar a build HTML solo como draft de revision, manteniendo `noindex,nofollow`, siempre que se documente la imagen final elegida y se confirme que el articulo no sustituye ni duplica la futura pagina de Aprende.
+Puede avanzar a auditoria final previa a publicacion real, manteniendo `noindex,nofollow`. Antes de publicar, confirmar que el articulo no sustituye ni duplica la futura pagina de Aprende y aprobar manualmente las actualizaciones de `journal.html`, `sitemap.xml`, `data/pages.json` y, si aplica, `llms.txt`.
