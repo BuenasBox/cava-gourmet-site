@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex,nofollow">
   <title>Enofilios Cava — Panel de membresías</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,ital,wght@6..96,0,300;6..96,1,300&family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -20,6 +21,12 @@
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--charcoal);color:var(--ivory);font-family:var(--sans);font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh}
+    body.locked .admin-header,body.locked .admin-nav,body.locked .tab{display:none}
+    body:not(.locked) .login-screen{display:none}
+    .login-screen{min-height:100vh;display:grid;place-items:center;padding:1.5rem}
+    .login-card{width:min(100%,380px);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:1.5rem}
+    .login-title{font-family:var(--display);font-weight:300;font-size:1.6rem;color:var(--gold-soft);line-height:1.1;margin-bottom:.6rem}
+    .login-copy{font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:1rem}
 
     /* HEADER */
     .admin-header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:rgba(9,21,34,.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
@@ -119,7 +126,25 @@
     .spinner{text-align:center;color:var(--muted);padding:2rem;font-size:.8rem;letter-spacing:.1em}
   </style>
 </head>
-<body>
+<body class="locked">
+
+<section class="login-screen" id="login-screen" aria-label="Login admin">
+  <div class="login-card">
+    <p class="section-label">Acceso privado</p>
+    <h1 class="login-title">Panel Enofilios Cava</h1>
+    <p class="login-copy">Ingresa con tu usuario autorizado de Supabase para administrar miembros y tarjetas.</p>
+    <div class="field">
+      <label>Email</label>
+      <input id="login_email" type="email" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Contraseña</label>
+      <input id="login_password" type="password" autocomplete="current-password">
+    </div>
+    <button class="btn btn-gold" onclick="loginAdmin()">Entrar</button>
+    <div id="login_alerta" class="alerta"></div>
+  </div>
+</section>
 
 <header class="admin-header">
   <div class="header-brand">
@@ -131,7 +156,7 @@
   </div>
   <div style="display:flex;align-items:center;gap:.65rem">
     <button id="btn-setup" onclick="setupWallet()" style="background:transparent;border:1px solid rgba(184,151,90,.3);color:var(--muted);border-radius:5px;font-family:var(--sans);font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;padding:.4rem .75rem;cursor:pointer;transition:all .2s">⚙ Wallet</button>
-    <span class="header-badge">Admin</span>
+    <button class="header-badge" onclick="logoutAdmin()" style="background:transparent;cursor:pointer">Salir</button>
   </div>
 </header>
 <div id="setup-toast" style="display:none;position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:rgba(9,21,34,.97);border:1px solid rgba(184,151,90,.4);color:var(--ivory);font-family:var(--sans);font-size:.75rem;padding:.75rem 1.25rem;border-radius:8px;z-index:200;max-width:90vw;text-align:center"></div>
@@ -245,20 +270,6 @@
 <!-- TAB: CONFIG -->
 <div id="tab-config" class="tab">
   <div class="card">
-    <p class="section-label">Acceso admin</p>
-    <h2 class="card-title">Clave de administrador</h2>
-    <p class="card-desc">Necesaria para enviar links de tarjeta y guardar configuración. Se guarda en esta sesión.</p>
-    <div class="field">
-      <label>Clave admin (SCAN_KEY)</label>
-      <input id="cfg_key" type="password" placeholder="••••••••••" autocomplete="off">
-    </div>
-    <button class="btn btn-ghost" onclick="guardarClave()" style="margin-top:.85rem">
-      Guardar clave en sesión
-    </button>
-    <div id="cfg_key_alerta" class="alerta"></div>
-  </div>
-
-  <div class="card">
     <p class="section-label">Beneficios por nivel</p>
     <h2 class="card-title">Editar <em>beneficios</em></h2>
     <p class="card-desc">Una línea por beneficio. Los cambios se reflejan en la tarjeta de cada miembro inmediatamente.</p>
@@ -318,7 +329,65 @@
 </div>
 
 <script>
+  let supabaseAdmin = null;
+  let adminSession = null;
+
   document.getElementById('r_fecha').value = new Date().toLocaleDateString('es-CR');
+
+  async function initAuth() {
+    try {
+      const cfgRes = await fetch('/api/auth_config');
+      const cfg = await cfgRes.json();
+      if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) {
+        mostrar('login_alerta', 'error', 'Supabase Auth no está configurado.');
+        return;
+      }
+      supabaseAdmin = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+      const { data } = await supabaseAdmin.auth.getSession();
+      adminSession = data.session;
+      setAuthState(Boolean(adminSession));
+      supabaseAdmin.auth.onAuthStateChange((_event, session) => {
+        adminSession = session;
+        setAuthState(Boolean(session));
+      });
+    } catch (e) {
+      mostrar('login_alerta', 'error', 'No se pudo inicializar el login.');
+    }
+  }
+
+  function setAuthState(isLoggedIn) {
+    document.body.classList.toggle('locked', !isLoggedIn);
+    if (isLoggedIn) cargarConfig();
+  }
+
+  async function loginAdmin() {
+    const email = document.getElementById('login_email').value.trim();
+    const password = document.getElementById('login_password').value;
+    if (!email || !password) { mostrar('login_alerta', 'error', 'Email y contraseña son obligatorios.'); return; }
+    mostrar('login_alerta', 'ok', 'Validando acceso...');
+    const { data, error } = await supabaseAdmin.auth.signInWithPassword({ email, password });
+    if (error) { mostrar('login_alerta', 'error', 'No se pudo iniciar sesión.'); return; }
+    adminSession = data.session;
+    setAuthState(true);
+  }
+
+  async function logoutAdmin() {
+    if (supabaseAdmin) await supabaseAdmin.auth.signOut();
+    adminSession = null;
+    setAuthState(false);
+  }
+
+  async function authFetch(url, options = {}) {
+    if (!adminSession || !adminSession.access_token) throw new Error('Sesión admin requerida');
+    const headers = new Headers(options.headers || {});
+    headers.set('Authorization', 'Bearer ' + adminSession.access_token);
+    if (options.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
+    const response = await fetch(url, { ...options, headers });
+    if (response.status === 401 || response.status === 403) {
+      showToast('Acceso no autorizado. Revisa que tu usuario tenga rol admin.', false);
+    }
+    return response;
+  }
 
   function tab(n, btn) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -326,13 +395,13 @@
     document.getElementById('tab-' + n).classList.add('active');
     btn.classList.add('active');
     if (n === 'miembros' || n === 'candidatos') cargarMiembros();
-    if (n === 'config') { cargarConfig(); const k = getClave(); if(k) document.getElementById('cfg_key').value=k; }
+    if (n === 'config') cargarConfig();
   }
 
   function mostrar(id, tipo, html) {
     const el = document.getElementById(id);
     el.className = 'alerta ' + tipo;
-    el.innerHTML = html;
+    el.textContent = html;
     el.style.display = 'block';
   }
 
@@ -349,17 +418,14 @@
     }
     mostrar('r_alerta', 'ok', 'Creando tarjeta…');
     try {
-      const r = await fetch('/api/registrar', {
+      const r = await authFetch('/api/registrar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre, email, fecha_ingreso: fecha, referido_por: referido })
       });
       const d = await r.json();
       if (d.ok) {
-        mostrar('r_alerta', 'ok',
-          `✅ Tarjeta creada — <strong>${d.nivel}</strong>${d.link
-            ? '<br><a href="' + d.link + '" target="_blank" rel="noopener">📲 Abrir en Google Wallet</a>'
-            : ''}`);
+        mostrar('r_alerta', 'ok', '✅ Tarjeta creada — ' + d.nivel + (d.link ? ' — Link Wallet generado.' : ''));
         ['r_nombre', 'r_email', 'r_referido'].forEach(id => document.getElementById(id).value = '');
       } else {
         mostrar('r_alerta', 'error', '❌ ' + (d.error || 'Error'));
@@ -373,16 +439,14 @@
     if (!email) { mostrar('v_alerta', 'error', 'Email es obligatorio.'); return; }
     mostrar('v_alerta', 'ok', 'Registrando…');
     try {
-      const r = await fetch('/api/registrar_experiencia', {
+      const r = await authFetch('/api/registrar_experiencia', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, nota })
       });
       const d = await r.json();
       if (d.ok) {
-        mostrar('v_alerta', 'ok',
-          `✅ Experiencia registrada<br>Total: <strong>${d.experiencias}</strong> — ${d.nivel}<br>
-           <em style="font-size:.78rem;opacity:.8">${d.progreso}</em>`);
+        mostrar('v_alerta', 'ok', `✅ Experiencia registrada. Total: ${d.experiencias} — ${d.nivel}. ${d.progreso}`);
         document.getElementById('v_nota').value = '';
       } else {
         mostrar('v_alerta', 'error', '❌ ' + (d.error || 'Error'));
@@ -394,11 +458,19 @@
     const email = document.getElementById('l_email').value.trim();
     if (!email) { mostrar('l_alerta', 'error', 'Email es obligatorio.'); return; }
     try {
-      const r = await fetch('/api/link?email=' + encodeURIComponent(email));
+      const r = await authFetch('/api/link?email=' + encodeURIComponent(email));
       const d = await r.json();
       if (d.link) {
-        mostrar('l_alerta', 'ok',
-          `📲 <a href="${d.link}" target="_blank" rel="noopener">Abrir en Google Wallet</a>`);
+        const alert = document.getElementById('l_alerta');
+        alert.className = 'alerta ok';
+        alert.textContent = '';
+        const a = document.createElement('a');
+        a.href = d.link;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = '📲 Abrir en Google Wallet';
+        alert.appendChild(a);
+        alert.style.display = 'block';
       } else {
         mostrar('l_alerta', 'error', '❌ ' + (d.error || 'Error'));
       }
@@ -408,7 +480,7 @@
   async function invitarEnofilo(email, nombre) {
     if (!confirm('¿Confirmar la invitación de ' + nombre + ' como Enófilo?')) return;
     try {
-      const r = await fetch('/api/miembros', {
+      const r = await authFetch('/api/miembros', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -420,99 +492,219 @@
   }
 
   async function cargarMiembros() {
-    document.getElementById('lista-miembros').innerHTML = '<div class="spinner">Cargando miembros…</div>';
-    document.getElementById('lista-candidatos').innerHTML = '<div class="spinner">Cargando…</div>';
+    setSingleNode('lista-miembros', 'spinner', 'Cargando miembros…');
+    setSingleNode('lista-candidatos', 'spinner', 'Cargando…');
     try {
-      const r = await fetch('/api/miembros');
+      const r = await authFetch('/api/miembros');
       const d = await r.json();
       const todos = d.miembros || [];
 
       const lista = document.getElementById('lista-miembros');
-      lista.innerHTML = todos.length === 0
-        ? '<div class="empty">Sin miembros registrados aún.</div>'
-        : todos.map(m => {
-          const sid    = safeId(m.email);
-          const eq     = m.email.replace(/'/g, "\\'");
-          const nq     = m.nombre.replace(/'/g, "\\'");
-          const nomEsc = m.nombre.replace(/"/g, '&quot;');
-          const hist   = m.historial && m.historial.length
-            ? '<details><summary>Historial (' + m.historial.length + ' sesiones)</summary><div style="margin-top:.6rem">'
-              + [...m.historial].reverse().map(h => '<div class="historial-item">📍 ' + h.fecha + ' — ' + h.nota + '</div>').join('')
-              + '</div></details>' : '';
-          return `
-          <div class="miembro-card" id="card-${sid}">
-            <div class="miembro-top">
-              <div class="miembro-nombre">${m.nombre}</div>
-              <div class="nivel-badge">${m.nivel}</div>
-            </div>
-            <div class="miembro-body">
-              <div class="miembro-info">
-                📧 ${m.email}<br>
-                📅 Desde ${m.fecha_ingreso || '—'}
-                ${m.referido_por ? '<br>👥 ' + m.referido_por : ''}
-                ${m.referidos && m.referidos.length ? '<br>🔗 ' + m.referidos.join(', ') : ''}
-              </div>
-              <div class="exp-block">
-                <div class="exp-count">${m.experiencias}</div>
-                <div class="exp-label">exp.</div>
-              </div>
-            </div>
-            ${m.experiencias >= 25 && !m.es_enofilo ? '<div class="badge-pendiente">⏳ Pendiente de invitación</div>' : ''}
-            <div class="card-actions">
-              <button class="btn-action" onclick="enviarLinkMiembro('${eq}','${nq}')">🔗 Enviar link</button>
-              <button class="btn-action" onclick="compartirWallet('${eq}','${nq}')">📲 Wallet</button>
-              <button class="btn-action" onclick="editarMiembro('${sid}')">✏️ Editar</button>
-              <button class="btn-action danger" onclick="eliminarMiembro('${eq}','${nq}')">🗑️ Eliminar</button>
-            </div>
-            <div id="wallet-${sid}" class="alerta" style="display:none"></div>
-            <div id="edit-${sid}" class="edit-form" style="display:none">
-              <div class="field">
-                <label>Nombre</label>
-                <input type="text" id="en-${sid}" value="${nomEsc}">
-              </div>
-              <div class="field">
-                <label>Fecha de ingreso</label>
-                <input type="text" id="ef-${sid}" value="${m.fecha_ingreso || ''}">
-              </div>
-              <div class="field">
-                <label>Experiencias <span style="opacity:.5;font-size:.55rem">(ajuste manual)</span></label>
-                <input type="number" id="ee-${sid}" value="${m.experiencias}" min="0" style="width:100%">
-              </div>
-              <div class="edit-row">
-                <button class="btn btn-gold" onclick="guardarEdicion('${eq}','${sid}')">Guardar</button>
-                <button class="btn btn-ghost" onclick="editarMiembro('${sid}')">✕</button>
-              </div>
-              <div id="ea-${sid}" class="alerta" style="display:none"></div>
-            </div>
-            ${hist}
-          </div>`;
-        }).join('');
+      lista.textContent = '';
+      if (todos.length === 0) {
+        lista.appendChild(emptyNode('Sin miembros registrados aún.'));
+      } else {
+        todos.forEach(m => lista.appendChild(memberCardNode(m)));
+      }
 
       const candidatos = todos.filter(m => m.experiencias >= 25 && !m.es_enofilo);
       const listaCand = document.getElementById('lista-candidatos');
-      listaCand.innerHTML = candidatos.length === 0
-        ? '<div class="empty">Sin candidatos por ahora.</div>'
-        : candidatos.map(m => `
-          <div class="miembro-card">
-            <div class="miembro-top">
-              <div class="miembro-nombre">${m.nombre}</div>
-              <div class="exp-block" style="text-align:right">
-                <div class="exp-count">${m.experiencias}</div>
-                <div class="exp-label">exp.</div>
-              </div>
-            </div>
-            <div class="miembro-info">
-              📧 ${m.email}<br>
-              ${m.referido_por ? '👥 ' + m.referido_por : 'Sin referido registrado'}
-            </div>
-            <button class="btn-invitar" onclick="invitarEnofilo('${m.email}','${m.nombre}')">
-              🔐 Confirmar invitación como Enófilo
-            </button>
-          </div>`).join('');
+      listaCand.textContent = '';
+      if (candidatos.length === 0) {
+        listaCand.appendChild(emptyNode('Sin candidatos por ahora.'));
+      } else {
+        candidatos.forEach(m => listaCand.appendChild(candidateNode(m)));
+      }
     } catch (e) {
-      document.getElementById('lista-miembros').innerHTML = '<div class="empty">Error al cargar miembros.</div>';
-      document.getElementById('lista-candidatos').innerHTML = '<div class="empty">Error al cargar.</div>';
+      setSingleNode('lista-miembros', 'empty', 'Error al cargar miembros.');
+      setSingleNode('lista-candidatos', 'empty', 'Error al cargar.');
     }
+  }
+
+  function setSingleNode(containerId, className, text) {
+    const container = document.getElementById(containerId);
+    container.textContent = '';
+    const node = document.createElement('div');
+    node.className = className;
+    node.textContent = text;
+    container.appendChild(node);
+  }
+
+  function emptyNode(text) {
+    const node = document.createElement('div');
+    node.className = 'empty';
+    node.textContent = text;
+    return node;
+  }
+
+  function labeledLine(parent, text) {
+    const line = document.createElement('div');
+    line.textContent = text;
+    parent.appendChild(line);
+  }
+
+  function memberCardNode(m) {
+    const sid = safeId(m.email);
+    const card = document.createElement('div');
+    card.className = 'miembro-card';
+    card.id = 'card-' + sid;
+
+    const top = document.createElement('div');
+    top.className = 'miembro-top';
+    const name = document.createElement('div');
+    name.className = 'miembro-nombre';
+    name.textContent = m.nombre || '';
+    const badge = document.createElement('div');
+    badge.className = 'nivel-badge';
+    badge.textContent = m.nivel || '';
+    top.append(name, badge);
+
+    const body = document.createElement('div');
+    body.className = 'miembro-body';
+    const info = document.createElement('div');
+    info.className = 'miembro-info';
+    labeledLine(info, '📧 ' + (m.email || ''));
+    labeledLine(info, '📅 Desde ' + (m.fecha_ingreso || '—'));
+    if (m.referido_por) labeledLine(info, '👥 ' + m.referido_por);
+    if (m.referidos && m.referidos.length) labeledLine(info, '🔗 ' + m.referidos.join(', '));
+    const expBlock = document.createElement('div');
+    expBlock.className = 'exp-block';
+    const expCount = document.createElement('div');
+    expCount.className = 'exp-count';
+    expCount.textContent = String(m.experiencias || 0);
+    const expLabel = document.createElement('div');
+    expLabel.className = 'exp-label';
+    expLabel.textContent = 'exp.';
+    expBlock.append(expCount, expLabel);
+    body.append(info, expBlock);
+
+    card.append(top, body);
+    if (m.experiencias >= 25 && !m.es_enofilo) {
+      const pending = document.createElement('div');
+      pending.className = 'badge-pendiente';
+      pending.textContent = '⏳ Pendiente de invitación';
+      card.appendChild(pending);
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'card-actions';
+    actions.append(
+      actionButton('🔗 Enviar link', () => enviarLinkMiembro(m.email, m.nombre)),
+      actionButton('📲 Wallet', () => compartirWallet(m.email, m.nombre)),
+      actionButton('✏️ Editar', () => editarMiembro(sid)),
+      actionButton('🗑️ Eliminar', () => eliminarMiembro(m.email, m.nombre), 'danger')
+    );
+    card.appendChild(actions);
+
+    const wallet = document.createElement('div');
+    wallet.id = 'wallet-' + sid;
+    wallet.className = 'alerta';
+    wallet.style.display = 'none';
+    card.appendChild(wallet);
+    card.appendChild(editFormNode(m, sid));
+    if (m.historial && m.historial.length) card.appendChild(historyNode(m.historial));
+    return card;
+  }
+
+  function candidateNode(m) {
+    const card = document.createElement('div');
+    card.className = 'miembro-card';
+    const top = document.createElement('div');
+    top.className = 'miembro-top';
+    const name = document.createElement('div');
+    name.className = 'miembro-nombre';
+    name.textContent = m.nombre || '';
+    const expBlock = document.createElement('div');
+    expBlock.className = 'exp-block';
+    expBlock.style.textAlign = 'right';
+    const expCount = document.createElement('div');
+    expCount.className = 'exp-count';
+    expCount.textContent = String(m.experiencias || 0);
+    const expLabel = document.createElement('div');
+    expLabel.className = 'exp-label';
+    expLabel.textContent = 'exp.';
+    expBlock.append(expCount, expLabel);
+    top.append(name, expBlock);
+    const info = document.createElement('div');
+    info.className = 'miembro-info';
+    labeledLine(info, '📧 ' + (m.email || ''));
+    labeledLine(info, m.referido_por ? '👥 ' + m.referido_por : 'Sin referido registrado');
+    const btn = document.createElement('button');
+    btn.className = 'btn-invitar';
+    btn.textContent = '🔐 Confirmar invitación como Enófilo';
+    btn.addEventListener('click', () => invitarEnofilo(m.email, m.nombre));
+    card.append(top, info, btn);
+    return card;
+  }
+
+  function actionButton(text, onClick, extraClass = '') {
+    const btn = document.createElement('button');
+    btn.className = 'btn-action' + (extraClass ? ' ' + extraClass : '');
+    btn.textContent = text;
+    btn.addEventListener('click', onClick);
+    return btn;
+  }
+
+  function editFormNode(m, sid) {
+    const form = document.createElement('div');
+    form.id = 'edit-' + sid;
+    form.className = 'edit-form';
+    form.style.display = 'none';
+    form.append(
+      fieldNode('Nombre', 'en-' + sid, 'text', m.nombre || ''),
+      fieldNode('Fecha de ingreso', 'ef-' + sid, 'text', m.fecha_ingreso || ''),
+      fieldNode('Experiencias (ajuste manual)', 'ee-' + sid, 'number', String(m.experiencias || 0))
+    );
+    const row = document.createElement('div');
+    row.className = 'edit-row';
+    const save = document.createElement('button');
+    save.className = 'btn btn-gold';
+    save.textContent = 'Guardar';
+    save.addEventListener('click', () => guardarEdicion(m.email, sid));
+    const cancel = document.createElement('button');
+    cancel.className = 'btn btn-ghost';
+    cancel.textContent = '✕';
+    cancel.addEventListener('click', () => editarMiembro(sid));
+    row.append(save, cancel);
+    const alert = document.createElement('div');
+    alert.id = 'ea-' + sid;
+    alert.className = 'alerta';
+    alert.style.display = 'none';
+    form.append(row, alert);
+    return form;
+  }
+
+  function fieldNode(labelText, inputId, type, value) {
+    const field = document.createElement('div');
+    field.className = 'field';
+    const label = document.createElement('label');
+    label.textContent = labelText;
+    const input = document.createElement('input');
+    input.type = type;
+    input.id = inputId;
+    input.value = value;
+    if (type === 'number') {
+      input.min = '0';
+      input.style.width = '100%';
+    }
+    field.append(label, input);
+    return field;
+  }
+
+  function historyNode(historial) {
+    const details = document.createElement('details');
+    const summary = document.createElement('summary');
+    summary.textContent = 'Historial (' + historial.length + ' sesiones)';
+    const wrap = document.createElement('div');
+    wrap.style.marginTop = '.6rem';
+    [...historial].reverse().forEach(h => {
+      const item = document.createElement('div');
+      item.className = 'historial-item';
+      item.textContent = '📍 ' + (h.fecha || '') + ' — ' + (h.nota || '');
+      wrap.appendChild(item);
+    });
+    details.append(summary, wrap);
+    return details;
   }
 
   function safeId(email) { return email.replace(/[@.+]/g, '_'); }
@@ -520,25 +712,35 @@
   async function compartirWallet(email, nombre) {
     const sid = safeId(email);
     const el  = document.getElementById('wallet-' + sid);
-    el.className = 'alerta ok'; el.innerHTML = 'Generando link…'; el.style.display = 'block';
+    el.className = 'alerta ok'; el.textContent = 'Generando link…'; el.style.display = 'block';
     try {
-      const r = await fetch('/api/link?email=' + encodeURIComponent(email));
+      const r = await authFetch('/api/link?email=' + encodeURIComponent(email));
       const d = await r.json();
       if (d.link) {
-        const shortUrl = 'https://www.cavagourmet.com/api/wallet?email=' + encodeURIComponent(email);
         const msg = encodeURIComponent(
           '🍷 *CAVA Vinoteca*\n\n'
           + 'Hola ' + nombre + ', tu tarjeta de membresía *Enofilios Cava* está lista.\n\n'
           + 'Agrégala a Google Wallet:\n'
-          + shortUrl + '\n\n'
+          + d.link + '\n\n'
           + '_Enofilios Cava · El programa de experiencias de CAVA Vinoteca_'
         );
-        el.innerHTML = '📲 <a href="' + shortUrl + '" target="_blank" rel="noopener">Abrir en Wallet</a>'
-          + ' &nbsp;&nbsp; <a href="https://wa.me/?text=' + msg + '" target="_blank" rel="noopener">📱 Enviar por WhatsApp</a>';
+        el.textContent = '';
+        const walletLink = document.createElement('a');
+        walletLink.href = d.link;
+        walletLink.target = '_blank';
+        walletLink.rel = 'noopener';
+        walletLink.textContent = '📲 Abrir en Wallet';
+        const spacer = document.createTextNode('  ');
+        const waLink = document.createElement('a');
+        waLink.href = 'https://wa.me/?text=' + msg;
+        waLink.target = '_blank';
+        waLink.rel = 'noopener';
+        waLink.textContent = '📱 Enviar por WhatsApp';
+        el.append(walletLink, spacer, waLink);
       } else {
-        el.className = 'alerta error'; el.innerHTML = '❌ ' + (d.error || 'Error');
+        el.className = 'alerta error'; el.textContent = '❌ ' + (d.error || 'Error');
       }
-    } catch(e) { el.className = 'alerta error'; el.innerHTML = '❌ Error de conexión'; }
+    } catch(e) { el.className = 'alerta error'; el.textContent = '❌ Error de conexión'; }
   }
 
   function editarMiembro(sid) {
@@ -552,58 +754,46 @@
     const expVal = document.getElementById('ee-' + sid).value;
     const exp    = expVal !== '' ? parseInt(expVal, 10) : null;
     const el     = document.getElementById('ea-' + sid);
-    if (!nombre) { el.className='alerta error'; el.innerHTML='Nombre requerido.'; el.style.display='block'; return; }
-    el.className='alerta ok'; el.innerHTML='Guardando…'; el.style.display='block';
+    if (!nombre) { el.className='alerta error'; el.textContent='Nombre requerido.'; el.style.display='block'; return; }
+    el.className='alerta ok'; el.textContent='Guardando…'; el.style.display='block';
     const payload = { email, nombre, fecha_ingreso: fecha };
     if (exp !== null && !isNaN(exp)) payload.experiencias = exp;
     try {
-      const r = await fetch('/api/miembros', {
+      const r = await authFetch('/api/miembros', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
       const d = await r.json();
-      if (d.ok) { el.innerHTML = '✅ Guardado'; setTimeout(cargarMiembros, 800); }
-      else { el.className='alerta error'; el.innerHTML='❌ ' + (d.error || 'Error'); }
-    } catch(e) { el.className='alerta error'; el.innerHTML='❌ Error de conexión'; }
+      if (d.ok) { el.textContent = '✅ Guardado'; setTimeout(cargarMiembros, 800); }
+      else { el.className='alerta error'; el.textContent='❌ ' + (d.error || 'Error'); }
+    } catch(e) { el.className='alerta error'; el.textContent='❌ Error de conexión'; }
   }
 
   async function eliminarMiembro(email, nombre) {
     if (!confirm('¿Eliminar a ' + nombre + ' del programa?\nEsta acción no se puede deshacer.')) return;
     try {
-      const r = await fetch('/api/miembros?email=' + encodeURIComponent(email), { method: 'DELETE' });
+      const r = await authFetch('/api/miembros?email=' + encodeURIComponent(email), { method: 'DELETE' });
       const d = await r.json();
       if (d.ok) cargarMiembros();
       else alert('❌ ' + (d.error || 'Error al eliminar'));
     } catch(e) { alert('❌ Error de conexión'); }
   }
 
-  function getClave() { return sessionStorage.getItem('cava_admin_key') || ''; }
-
-  function guardarClave() {
-    const k  = document.getElementById('cfg_key').value.trim();
-    const el = document.getElementById('cfg_key_alerta');
-    if (!k) { el.className='alerta error'; el.innerHTML='Ingresa la clave.'; el.style.display='block'; return; }
-    sessionStorage.setItem('cava_admin_key', k);
-    el.className='alerta ok'; el.innerHTML='✅ Clave guardada en esta sesión.'; el.style.display='block';
-  }
-
   async function guardarConfig(clave, inputId, alertId) {
-    const key   = getClave();
     const valor = document.getElementById(inputId).value;
     const el    = document.getElementById(alertId);
-    if (!key) { el.className='alerta error'; el.innerHTML='Ve al tab Config y guarda tu clave primero.'; el.style.display='block'; return; }
-    el.className='alerta ok'; el.innerHTML='Guardando…'; el.style.display='block';
+    el.className='alerta ok'; el.textContent='Guardando…'; el.style.display='block';
     try {
-      const r = await fetch('/api/config', {
+      const r = await authFetch('/api/config', {
         method: 'PATCH',
         headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({admin_key: key, clave, valor})
+        body: JSON.stringify({clave, valor})
       });
       const d = await r.json();
-      if (d.ok) { el.innerHTML='✅ Guardado'; }
-      else { el.className='alerta error'; el.innerHTML='❌ ' + (d.error||'Error'); }
-    } catch(e) { el.className='alerta error'; el.innerHTML='❌ Error de conexión'; }
+      if (d.ok) { el.textContent='✅ Guardado'; }
+      else { el.className='alerta error'; el.textContent='❌ ' + (d.error||'Error'); }
+    } catch(e) { el.className='alerta error'; el.textContent='❌ Error de conexión'; }
   }
 
   async function cargarConfig() {
@@ -623,10 +813,8 @@
   }
 
   async function enviarLinkMiembro(email, nombre) {
-    const key = getClave();
-    if (!key) { showToast('Ve al tab Config y guarda tu clave primero.', false); return; }
     try {
-      const r = await fetch(`/api/member?e=${encodeURIComponent(email)}&admin_key=${encodeURIComponent(key)}`);
+      const r = await authFetch(`/api/member?e=${encodeURIComponent(email)}`);
       const d = await r.json();
       if (!d.ok) { showToast('❌ ' + (d.error||'Error'), false); return; }
       const msg = encodeURIComponent(
@@ -652,7 +840,7 @@
     const btn = document.getElementById('btn-setup');
     btn.disabled = true; btn.textContent = '⚙ Creando…';
     try {
-      const r = await fetch('/api/setup');
+      const r = await authFetch('/api/setup');
       const d = await r.json();
       if (d.ok) {
         showToast('✅ Loyalty Class lista — ' + (d.status === 'exists' ? 'ya existía' : 'creada'), true);
@@ -665,6 +853,8 @@
       btn.disabled = false; btn.textContent = '⚙ Wallet';
     }
   }
+
+  initAuth();
 </script>
 </body>
 </html>
