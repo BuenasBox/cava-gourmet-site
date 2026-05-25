@@ -10,6 +10,13 @@ except ImportError:
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+PUBLIC_CONFIG_KEYS = {
+    "beneficio_invitado",
+    "beneficio_neofito",
+    "beneficio_entusiasta",
+    "beneficio_enofilo",
+    "promocion_activa",
+}
 
 def supabase_request(method, endpoint, body=None):
     url     = f"{SUPABASE_URL}/rest/v1/{endpoint}"
@@ -34,7 +41,7 @@ class handler(BaseHTTPRequestHandler):
         if isinstance(rows, dict) and "error" in rows:
             self._json(500, {"ok": False, "error": rows["error"]})
             return
-        config = {r["clave"]: r["valor"] for r in rows}
+        config = {r["clave"]: r["valor"] for r in rows if r.get("clave") in PUBLIC_CONFIG_KEYS}
         self._json(200, {"ok": True, "config": config})
 
     def do_PATCH(self):
