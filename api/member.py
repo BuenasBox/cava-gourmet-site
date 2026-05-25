@@ -5,11 +5,14 @@ import hashlib
 import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
+try:
+    from ._auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
+except ImportError:
+    from _auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
 HMAC_SECRET  = os.environ.get("HMAC_SECRET", "")
-SCAN_KEY     = os.environ.get("SCAN_KEY", "")
 BASE_URL     = "https://www.cavagourmet.com"
 
 def generar_token(email):
@@ -41,16 +44,17 @@ class handler(BaseHTTPRequestHandler):
         params    = urllib.parse.parse_qs(parsed.query)
         email     = params.get("e", [""])[0].strip().lower()
         token     = params.get("t", [""])[0]
-        admin_key = params.get("admin_key", [""])[0]
 
         if not email:
             self._json(400, {"ok": False, "error": "Email requerido"})
             return
 
-        # Modo admin: genera el link del miembro
-        if admin_key:
-            if admin_key != SCAN_KEY:
-                self._json(403, {"ok": False, "error": "No autorizado"})
+        # Modo admin: genera el link del miembro con sesión Supabase admin.
+        if not token:
+            try:
+                require_admin(self)
+            except AuthError as exc:
+                respond_auth_error(self, exc, methods="GET, OPTIONS")
                 return
             t    = generar_token(email)
             link = f"{BASE_URL}/members/?t={t}&e={urllib.parse.quote(email)}"
@@ -82,18 +86,16 @@ class handler(BaseHTTPRequestHandler):
             "fecha_ingreso": miembro.get("fecha_ingreso", ""),
             "historial":    miembro.get("historial") or [],
             "scan_url":     scan_url,
-            "wallet_url":   f"{BASE_URL}/api/wallet?email={urllib.parse.quote(email)}"
+            "wallet_url":   f"{BASE_URL}/api/wallet?e={urllib.parse.quote(email)}&t={t}"
         })
 
     def do_OPTIONS(self):
-        self._json(200, {})
+        handle_options(self, methods="GET, OPTIONS")
 
     def _json(self, code, body):
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        add_cors_headers(self, methods="GET, OPTIONS")
         self.end_headers()
         self.wfile.write(json.dumps(body, ensure_ascii=False).encode())
 

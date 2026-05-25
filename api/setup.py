@@ -5,6 +5,10 @@ import jwt
 import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
+try:
+    from ._auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
+except ImportError:
+    from _auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
 
 ISSUER_ID    = "3388000000023147327"
 CLASS_SUFFIX = "AfterOfficeClub"
@@ -46,6 +50,11 @@ def wallet_request(method, path, body=None):
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
+        try:
+            require_admin(self)
+        except AuthError as exc:
+            respond_auth_error(self, exc, methods="GET, OPTIONS")
+            return
         class_id = f"{ISSUER_ID}.{CLASS_SUFFIX}"
 
         # Verificar si ya existe
@@ -86,14 +95,12 @@ class handler(BaseHTTPRequestHandler):
             self._respond(500, {"ok": False, "error": data})
 
     def do_OPTIONS(self):
-        self._respond(200, {})
+        handle_options(self, methods="GET, OPTIONS")
 
     def _respond(self, code, body):
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        add_cors_headers(self, methods="GET, OPTIONS")
         self.end_headers()
         self.wfile.write(json.dumps(body, ensure_ascii=False).encode())
 

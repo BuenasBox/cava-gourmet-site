@@ -4,6 +4,10 @@ import time
 import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
+try:
+    from ._auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
+except ImportError:
+    from _auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
@@ -88,6 +92,11 @@ def actualizar_wallet(miembro):
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
+        try:
+            require_admin(self)
+        except AuthError as exc:
+            respond_auth_error(self, exc, methods="POST, OPTIONS")
+            return
         length = int(self.headers.get("Content-Length", 0))
         data   = json.loads(self.rfile.read(length))
 
@@ -127,14 +136,12 @@ class handler(BaseHTTPRequestHandler):
         })
 
     def do_OPTIONS(self):
-        self._respond(200, {})
+        handle_options(self, methods="POST, OPTIONS")
 
     def _respond(self, code, body):
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        add_cors_headers(self, methods="POST, OPTIONS")
         self.end_headers()
         self.wfile.write(json.dumps(body).encode())
 

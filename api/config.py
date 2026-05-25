@@ -3,10 +3,13 @@ import os
 import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
+try:
+    from ._auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
+except ImportError:
+    from _auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
-SCAN_KEY     = os.environ.get("SCAN_KEY", "")
 
 def supabase_request(method, endpoint, body=None):
     url     = f"{SUPABASE_URL}/rest/v1/{endpoint}"
@@ -35,15 +38,16 @@ class handler(BaseHTTPRequestHandler):
         self._json(200, {"ok": True, "config": config})
 
     def do_PATCH(self):
+        try:
+            require_admin(self)
+        except AuthError as exc:
+            respond_auth_error(self, exc, methods="GET, PATCH, OPTIONS")
+            return
         length    = int(self.headers.get("Content-Length", 0))
         data      = json.loads(self.rfile.read(length))
-        admin_key = data.get("admin_key", "")
         clave     = data.get("clave", "").strip()
         valor     = data.get("valor", "")
 
-        if admin_key != SCAN_KEY:
-            self._json(403, {"ok": False, "error": "No autorizado"})
-            return
         if not clave:
             self._json(400, {"ok": False, "error": "Clave requerida"})
             return
@@ -56,14 +60,12 @@ class handler(BaseHTTPRequestHandler):
         self._json(200, {"ok": True})
 
     def do_OPTIONS(self):
-        self._json(200, {})
+        handle_options(self, methods="GET, PATCH, OPTIONS")
 
     def _json(self, code, body):
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, PATCH, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        add_cors_headers(self, methods="GET, PATCH, OPTIONS")
         self.end_headers()
         self.wfile.write(json.dumps(body, ensure_ascii=False).encode())
 

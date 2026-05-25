@@ -2,14 +2,27 @@ import json
 import os
 import time
 import jwt
+import hmac
+import hashlib
 import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
+try:
+    from ._auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
+except ImportError:
+    from _auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
 
 ISSUER_ID    = "3388000000023147327"
 CLASS_SUFFIX = "AfterOfficeClub"
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+HMAC_SECRET  = os.environ.get("HMAC_SECRET", "")
+
+def validar_token(email, token):
+    if not HMAC_SECRET:
+        return False
+    expected = hmac.new(HMAC_SECRET.encode(), email.encode(), hashlib.sha256).hexdigest()
+    return hmac.compare_digest(expected, token)
 
 def get_google_token():
     key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
@@ -97,7 +110,8 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
         params = urllib.parse.parse_qs(parsed.query)
-        email  = params.get("email", [""])[0].strip().lower()
+        email  = (params.get("email", [""])[0] or params.get("e", [""])[0]).strip().lower()
+        token  = params.get("t", [""])[0]
 
         if not email:
             self.send_response(400)
@@ -105,6 +119,21 @@ class handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b"Email requerido")
             return
+
+        if token:
+            if not validar_token(email, token):
+                self.send_response(403)
+                self.send_header("Content-Type", "text/plain")
+                self.send_header("Cache-Control", "no-store, no-cache")
+                self.end_headers()
+                self.wfile.write(b"Token invalido")
+                return
+        else:
+            try:
+                require_admin(self)
+            except AuthError as exc:
+                respond_auth_error(self, exc, methods="GET, OPTIONS")
+                return
 
         try:
             key_data  = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
@@ -129,7 +158,7 @@ class handler(BaseHTTPRequestHandler):
             self.send_response(302)
             self.send_header("Location", wallet_url)
             self.send_header("Cache-Control", "no-store, no-cache")
-            self.send_header("Access-Control-Allow-Origin", "*")
+            add_cors_headers(self, methods="GET, OPTIONS")
             self.end_headers()
 
         except Exception as e:
@@ -139,9 +168,7 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(str(e).encode())
 
     def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.end_headers()
+        handle_options(self, methods="GET, OPTIONS")
 
     def log_message(self, *args):
         pass

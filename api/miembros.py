@@ -4,6 +4,10 @@ import time
 import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
+try:
+    from ._auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
+except ImportError:
+    from _auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
@@ -95,6 +99,11 @@ def get_google_token():
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
+        try:
+            require_admin(self)
+        except AuthError as exc:
+            respond_auth_error(self, exc)
+            return
         length = int(self.headers.get("Content-Length", 0))
         data   = json.loads(self.rfile.read(length))
         email  = data.get("email","").strip().lower()
@@ -131,6 +140,11 @@ class handler(BaseHTTPRequestHandler):
         self._respond(200, {"ok": True, "mensaje": f"{miembro['nombre']} ahora es Enófilo 🔐"})
 
     def do_GET(self):
+        try:
+            require_admin(self)
+        except AuthError as exc:
+            respond_auth_error(self, exc)
+            return
         result = supabase_request("GET", "miembros?select=*&order=experiencias.desc")
         if "error" in result:
             self._respond(500, {"error": str(result)})
@@ -153,6 +167,11 @@ class handler(BaseHTTPRequestHandler):
         self._respond(200, {"miembros": miembros})
 
     def do_PATCH(self):
+        try:
+            require_admin(self)
+        except AuthError as exc:
+            respond_auth_error(self, exc)
+            return
         length = int(self.headers.get("Content-Length", 0))
         data   = json.loads(self.rfile.read(length))
         email  = data.get("email", "").strip().lower()
@@ -179,6 +198,11 @@ class handler(BaseHTTPRequestHandler):
         self._respond(200, {"ok": True})
 
     def do_DELETE(self):
+        try:
+            require_admin(self)
+        except AuthError as exc:
+            respond_auth_error(self, exc)
+            return
         parsed = urllib.parse.urlparse(self.path)
         params = urllib.parse.parse_qs(parsed.query)
         email  = params.get("email", [""])[0].strip().lower()
@@ -192,14 +216,12 @@ class handler(BaseHTTPRequestHandler):
         self._respond(200, {"ok": True})
 
     def do_OPTIONS(self):
-        self._respond(200, {})
+        handle_options(self)
 
     def _respond(self, code, body):
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        add_cors_headers(self)
         self.end_headers()
         self.wfile.write(json.dumps(body).encode())
 
