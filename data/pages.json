@@ -115,10 +115,10 @@
     { "id": 99,  "slug": "/perez-zeledon/eventos-con-vino-perez-zeledon","hub":"perez-zeledon", "title": "Eventos con Vino en Pérez Zeledón",                     "status": "pendiente" },
     { "id": 100, "slug": "/perez-zeledon/regalos-premium-perez-zeledon", "hub":"perez-zeledon", "title": "Regalos Premium Pérez Zeledón",                         "status": "pendiente" },
 
-    { "id": 101, "slug": "/journal/como-se-construye-cultura-del-vino",  "hub": "journal",      "title": "Cómo se Construye Cultura del Vino",                    "status": "publicado" },
-    { "id": 102, "slug": "/journal/vino-menos-elitismo-mas-experiencia", "hub": "journal",      "title": "Vino: Menos Elitismo, Más Experiencia",                 "status": "publicado" },
-    { "id": 103, "slug": "/journal/contenido-digital-experiencia-real-vinoteca-costa-rica","hub":"journal","title":"De Contenido Digital a Experiencia Real",      "status": "publicado" },
-    { "id": 104, "slug": "/journal/el-miedo-silencioso-de-no-saber-de-vino", "hub": "journal",  "title": "El Miedo Silencioso de No Saber de Vino",               "status": "publicado" },
-    { "id": 105, "slug": "/journal/que-significa-cuerpo-en-el-vino",         "hub": "journal",  "title": "Qué Significa que un Vino Tenga Cuerpo",                 "status": "publicado" }
+    { "id": 101, "slug": "/journal/como-se-construye-cultura-del-vino",  "hub": "journal",      "title": "Cómo se Construye Cultura del Vino",                    "status": "publicado", "canal": ["sitio"] },
+    { "id": 102, "slug": "/journal/vino-menos-elitismo-mas-experiencia", "hub": "journal",      "title": "Vino: Menos Elitismo, Más Experiencia",                 "status": "publicado", "canal": ["sitio"] },
+    { "id": 103, "slug": "/journal/contenido-digital-experiencia-real-vinoteca-costa-rica","hub":"journal","title":"De Contenido Digital a Experiencia Real",      "status": "publicado", "canal": ["sitio"] },
+    { "id": 104, "slug": "/journal/el-miedo-silencioso-de-no-saber-de-vino", "hub": "journal",  "title": "El Miedo Silencioso de No Saber de Vino",               "status": "publicado", "canal": ["sitio", "vinetur"] },
+    { "id": 105, "slug": "/journal/que-significa-cuerpo-en-el-vino",         "hub": "journal",  "title": "Qué Significa que un Vino Tenga Cuerpo",                 "status": "publicado", "canal": ["sitio"] }
   ]
 }
