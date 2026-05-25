@@ -9,6 +9,32 @@ Use this skill before writing, adapting, or approving any article for the CAVA J
 
 The canonical editorial section is `/journal`. Block `/blog` for new work.
 
+## Brief Persistence Requirement
+
+Every approved brief must be persisted before the article moves to drafting or HTML build.
+
+Persist the brief at:
+
+```text
+admin/briefs/[slug].md
+```
+
+Rules:
+
+- Use the final recommended slug without the `/journal/` prefix for the filename.
+- Record status as one of:
+  - `draft`
+  - `listo para build`
+  - `listo para publicacion`
+- Record whether the page should remain `noindex,nofollow`.
+- Record cannibalization review against:
+  - existing Journal articles,
+  - planned or existing Aprende pages,
+  - `data/pages.json`.
+- Record the recommended image only after it has been checked against `admin/journal-image-inventory.md`.
+- Do not let a brief advance to builder if it exists only in chat.
+- Do not modify `journal.html`, `sitemap.xml`, `data/pages.json`, or `llms.txt` from this skill.
+
 ## Core Purpose
 
 Plan Journal articles that strengthen:
@@ -120,6 +146,13 @@ Existing Journal reference points:
 
 Registry risks from `data/pages.json` include beginner education, wine vocabulary, storage, serving, pairing, local Perez Zeledon pages, and experience pages.
 
+Also check Aprende explicitly. If a Journal topic overlaps an Aprende route, define the separation:
+
+- Journal: editorial, experiential, voice-led, human context.
+- Aprende: structured beginner education, glossary, step-by-step guidance, technical basics.
+
+Name the competing or adjacent Aprende slug in the brief.
+
 Classify risk:
 
 - **Low**: unique angle and distinct query.
@@ -224,6 +257,10 @@ Return this brief, not a full article:
 ```text
 JOURNAL SEO/GEO BRIEF
 
+Brief file:
+Status:
+Robots recommendation:
+
 Article type:
 Primary intent:
 Human question answered:
@@ -261,6 +298,9 @@ Schema plan:
 Cannibalization risk:
 - Low / Medium / High
 - Reason:
+- Checked against Journal:
+- Checked against Aprende:
+- Checked against data/pages.json:
 - Differentiation strategy:
 
 Recommendation:
@@ -274,8 +314,11 @@ Assumptions and risks:
 Before approving the brief, verify:
 
 - Route is `/journal/[slug]`, not `/blog`.
+- The approved brief is persisted at `admin/briefs/[slug].md`.
+- Status is recorded as `draft`, `listo para build`, or `listo para publicacion`.
 - Article type matches depth.
 - The angle differs from existing Journal articles.
+- Cannibalization has been checked against Journal, Aprende, and `data/pages.json`.
 - The piece reinforces at least one strategic entity.
 - There is a clear internal linking plan.
 - Any Vinetur source is public before publication.

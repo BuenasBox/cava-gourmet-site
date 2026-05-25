@@ -47,6 +47,7 @@ If required inputs are missing, stop and report the missing items instead of fil
 
 Before building HTML, confirm that these inputs exist:
 
+- Persisted approved brief at `admin/briefs/[slug].md`.
 - Approved final or near-final article text.
 - Approved slug from `journal-seo-geo`.
 - Approved title tag.
@@ -59,7 +60,8 @@ Before building HTML, confirm that these inputs exist:
 - Approved internal links.
 - Approved related articles.
 - Approved schema plan.
-- Image path and alt text, with asset existence verified.
+- Image path and alt text, with asset existence verified against `admin/journal-image-inventory.md`.
+- Image choice documented in the persisted article brief.
 - Initial editorial audit result from `journal-red-team-auditor`.
 
 For Vinetur adaptations, also require:
@@ -95,6 +97,27 @@ Preserve the established page system:
 - Existing script pattern only when it is already part of the article template.
 
 Do not add new dependencies, new tracking scripts, unnecessary JavaScript, or new design systems.
+
+## Mandatory Image Inventory Gate
+
+Before building final HTML, review:
+
+```text
+admin/journal-image-inventory.md
+```
+
+Rules:
+
+- Do not use image placeholders.
+- Use only real, existing, case-sensitive asset paths.
+- Prefer WebP and responsive variants when available.
+- If the selected image has no WebP/responsive variant, document the performance risk in the build output.
+- The selected image, alt text, OG usage, and responsive status must be documented in `admin/briefs/[slug].md`.
+- If no validated image exists for the article, block publication and keep `noindex,nofollow`.
+- Do not invent image paths from naming patterns.
+- Do not use remote images unless explicitly approved in the brief.
+
+If the inventory is missing, stale, or does not include a suitable image, stop and report a blocker instead of building publishable HTML.
 
 ## Article Type Handling
 
@@ -228,7 +251,7 @@ OG tags must match the approved article:
 - `og:title` aligns with title/H1 strategy.
 - `og:description` aligns with meta description.
 - `og:url` matches canonical.
-- `og:image` uses an existing image asset.
+- `og:image` uses an existing image asset validated in `admin/journal-image-inventory.md`.
 - Image path case must be valid for GitHub Pages.
 
 Block or flag if:
@@ -302,10 +325,13 @@ Avoid CTAs that sound generic, urgent, loud, or unrelated to the article.
 Stop and report blockers if any of these appear:
 
 - Missing approved SEO/GEO brief.
+- Missing persisted brief at `admin/briefs/[slug].md`.
 - Missing final article text.
 - Missing approved slug.
 - Missing title tag or meta description.
 - Missing or unverified image asset.
+- Selected image is not documented in `admin/journal-image-inventory.md`.
+- Selected image is not documented in the article brief.
 - Missing public Vinetur URL for a Vinetur adaptation.
 - Article is a literal duplicate of Vinetur when adaptation is required.
 - Canonical does not match `/journal/[slug]`.
@@ -330,7 +356,9 @@ Before producing the final HTML draft, verify:
 - Breadcrumbs follow Inicio -> Journal -> Article.
 - Article date and modified date are correct.
 - Author attribution is correct.
-- Image asset exists and alt text is useful.
+- `admin/journal-image-inventory.md` has been reviewed.
+- Image asset exists, uses exact case-sensitive path, and alt text is useful.
+- Image choice is documented in the persisted brief.
 - JSON-LD is valid JSON.
 - Schema claims are visible on page.
 - No `/blog` references exist.
@@ -364,7 +392,8 @@ Publication checklist:
 - [ ] Confirm robots value before publication
 - [ ] Validate canonical and og:url
 - [ ] Validate schema JSON-LD
-- [ ] Confirm image asset exists
+- [ ] Confirm image asset exists in admin/journal-image-inventory.md
+- [ ] Confirm selected image is documented in admin/briefs/[slug].md
 - [ ] Confirm internal links
 - [ ] Run final red-team editorial audit
 
