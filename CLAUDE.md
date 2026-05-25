@@ -308,6 +308,27 @@ en `@graph` junto a él cuando aplique.
 
 ---
 
+## Fechas ISO 8601 — estándar obligatorio
+
+Costa Rica no observa horario de verano. Su offset es siempre **UTC-6**.
+
+Todas las fechas en artículos del Journal deben usar el formato completo con timezone:
+
+```
+YYYY-MM-DDT12:00:00-06:00
+```
+
+Aplica a:
+- JSON-LD: `datePublished`, `dateModified`
+- Open Graph: `article:published_time`, `article:modified_time`
+
+Ejemplo correcto: `2026-05-24T12:00:00-06:00`
+Ejemplo incorrecto: `2026-05-24` (sin timezone — Google lo marca como warning en Rich Results)
+
+La hora `12:00:00` es convencional (mediodía local) cuando no se conoce la hora exacta.
+
+---
+
 ## Prohibiciones absolutas
 
 - No crear páginas thin content (menos de 400 palabras visibles útiles).
