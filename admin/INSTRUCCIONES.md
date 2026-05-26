@@ -118,11 +118,11 @@ Busca la sección:
 <!-- NAVEGACIÓN ENTRE ARTÍCULOS -->
 ```
 
-Reemplaza los dos artículos relacionados con los más relevantes del blog. Cambia el `href` (la ruta) y el texto visible.
+Reemplaza los dos artículos relacionados con los más relevantes del Journal. Cambia el `href` (la ruta) y el texto visible.
 
 Ejemplo:
 ```html
-<a href="/blog/como-se-construye-cultura-del-vino" class="art-more-link">
+<a href="/journal/como-se-construye-cultura-del-vino" class="art-more-link">
   Cómo se construye cultura del vino en un país sin tradición vitivinícola
 </a>
 ```
@@ -138,9 +138,9 @@ Sube tus tres archivos de imagen a la carpeta `Assets/images/`:
 
 ---
 
-## Paso 8 — Agrega la tarjeta en `blog.html`
+## Paso 8 — Agrega la tarjeta en `journal.html`
 
-Abre el archivo `blog.html` en la raíz del sitio.
+Abre el archivo `journal.html` en la raíz del sitio.
 
 Busca la última tarjeta de artículo (`<!-- Card 3 -->` o similar) y agrega una nueva tarjeta copiando el patrón. Actualiza la imagen, la categoría, el título, el excerpt, la fecha y los enlaces.
 
@@ -152,7 +152,7 @@ Abre `sitemap.xml` y agrega una nueva entrada:
 
 ```xml
 <url>
-  <loc>https://www.cavagourmet.com/blog/[SLUG]</loc>
+  <loc>https://www.cavagourmet.com/journal/[SLUG]</loc>
   <lastmod>[FECHA YYYY-MM-DD]</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.7</priority>

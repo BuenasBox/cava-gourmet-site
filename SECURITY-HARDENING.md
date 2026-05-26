@@ -144,12 +144,8 @@ The following files already contain blocking `<meta http-equiv="Content-Security
 - `after-office-vino-perez-zeledon.html`
 - `cata-de-vinos-perez-zeledon.html`
 - `nuestra-historia.html`
-- `blog.html`
 - `journal.html`
 - `admin/plantilla-articulo.html`
-- `blog/vino-menos-elitismo-mas-experiencia.html`
-- `blog/contenido-digital-experiencia-real-vinoteca-costa-rica.html`
-- `blog/como-se-construye-cultura-del-vino.html`
 - `journal/vino-menos-elitismo-mas-experiencia.html`
 - `journal/que-significa-cuerpo-en-el-vino.html`
 - `journal/como-se-construye-cultura-del-vino.html`
@@ -164,6 +160,8 @@ Most use:
 The home page additionally allows `https://static.cloudflareinsights.com` and `https://cloudflareinsights.com`.
 
 These meta CSP policies are blocking policies and can still affect those pages even while the new header-level CSP is only Report-Only.
+
+Legacy `blog.html` and `blog/*.html` editorial copies were removed after the Journal migration. Legacy `/blog` URLs remain handled by permanent redirects to `/journal`.
 
 ### CSP Report-Only implementation
 

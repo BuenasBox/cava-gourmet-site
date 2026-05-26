@@ -185,8 +185,10 @@ La sección editorial se llama **Journal** (no Blog).
 - URL de cada artículo: `/journal/[slug]`
 - Schema del índice: `Blog` con `@id: journal#journal`
 - Schema de artículos: `BlogPosting` con `isPartOf: journal#journal`
-- Los archivos en `/blog/` tienen `noindex,follow` y 301 redirect a `/journal/`.
-  No crear ni referenciar URLs `/blog/` en contenido nuevo.
+- No existen archivos editoriales vivos en `/blog/`.
+- Las rutas legacy `/blog`, `/blog.html`, `/blog/[slug]` y `/blog/[slug].html`
+  redirigen permanentemente a `/journal`.
+- No crear ni referenciar URLs `/blog/` en contenido nuevo.
 - Plantilla de nuevos artículos: `admin/plantilla-articulo.html`
 
 ---
