@@ -321,3 +321,95 @@ Backend lookup:
 - Do not change public site structure.
 - Do not migrate to SSR or middleware.
 - Do not perform broad refactors.
+
+## Phase 2b — CSP Report-Only collector
+
+Date: 2026-05-26
+
+### Purpose
+
+Added a minimal serverless endpoint at `/api/csp-report` to receive CSP
+violation reports sent by browsers via the `report-uri /api/csp-report`
+directive already present in the `Content-Security-Policy-Report-Only` header
+in `vercel.json`.
+
+This collector is **temporary and observability-only**. It exists solely to
+surface what resources would be blocked if CSP enforcement were activated.
+It does not enforce any policy.
+
+### Privacy and data minimization
+
+The handler (`api/csp-report.py`) enforces the following constraints in code:
+
+- Reads at most **4 KB** of the request body regardless of `Content-Length`.
+- Does **not** log the full payload.
+- Does **not** log IP addresses, cookies, `Authorization` headers, or
+  `User-Agent` strings.
+- Logs only four fields per report:
+  - `ts` — UTC timestamp of receipt (ISO 8601)
+  - `blocked` — `blocked-uri` value (truncated to 200 chars)
+  - `directive` — `violated-directive` value (truncated to 120 chars)
+  - `doc` — `document-uri` value (truncated to 200 chars)
+- Always responds `204 No Content`. Never exposes internal state.
+- Silently discards malformed, empty, or unexpected payloads (no 4xx/5xx).
+- Supports `OPTIONS` with `204` for preflight compatibility.
+
+### Log destination
+
+Logs are written to `stdout` via `print()` and are visible in:
+**Vercel Dashboard → Project → Functions → Logs**
+
+Retention depends on the active Vercel plan. No external log service,
+no database writes, no persistent storage.
+
+### What to expect in logs
+
+Each valid report produces one line:
+
+```
+[CSP] ts=2026-05-26T12:00:00Z blocked='...' directive='...' doc='...'
+```
+
+Common sources of false positives in logs:
+- Browser extensions injecting scripts or styles into pages.
+- Password managers modifying form fields.
+- Antivirus or proxy tools rewriting responses.
+
+These violations come from the user's environment, not the site itself.
+Filter them when analyzing real CSP gaps.
+
+### Limitations
+
+- No aggregation, deduplication, or alerting.
+- No persistence across Vercel function invocations.
+- Logs are ephemeral (rotation per plan).
+- Not suitable as a permanent production collector. Evaluate a dedicated
+  CSP reporting service (e.g. Report URI, Sentry) before enforcement.
+
+### Scope boundaries
+
+This collector does **not**:
+
+- Enforce any CSP policy.
+- Block any resource.
+- Store data in Supabase or any other database.
+- Expose any site state or configuration.
+- Change `unsafe-inline` behavior or any other CSP directive.
+
+### Architectural note — Supabase project mapping
+
+During the Phase 2 audit, SECURITY-HARDENING.md line 137 recorded that
+production `/api/auth_config` was returning `https://qkmgzyxknhhkucndbdsh.supabase.co`.
+This URL does not appear in any source file — it was the value of the
+`SUPABASE_URL` environment variable set in the Vercel dashboard at that time.
+
+The Python fallback in `auth_config.py` and `_auth.py` defaults to
+`https://rbfctmcfweckbpgxlkqf.supabase.co` when `SUPABASE_URL` is not set.
+
+**Action required:** confirm in the Vercel dashboard which value `SUPABASE_URL`
+currently holds. If it still points to `qkmgzyxknhhkucndbdsh`, both projects
+may be active and the `*.supabase.co` wildcard in the new CSP branch is the
+correct approach. If it was consolidated to `rbfctmcfweckbpgxlkqf`, the
+wildcard is still safe and no further action is needed.
+
+Do not remove or narrow the Supabase `connect-src` entry until this is confirmed.

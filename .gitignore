@@ -21,3 +21,5 @@ Thumbs.db
 
 # Security audit output - never commit generated reports, logs, tokens, cookies, or credentials.
 /security-reports/
+.vercel
+.env*
