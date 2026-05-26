@@ -14,6 +14,8 @@ Implemented via `vercel.json`:
 
 No strict CSP was added in this phase.
 
+Production note: the configured HSTS value includes `includeSubDomains`, but the effective public response currently emitted through Cloudflare is `Strict-Transport-Security: max-age=15552000`. SecurityHeaders.com accepts it as present. Enforcing `includeSubDomains` at the edge should be handled later in Cloudflare HSTS settings if required.
+
 ## SecurityHeaders.com
 
 Scan URL: `https://securityheaders.com/?q=https%3A%2F%2Fwww.cavagourmet.com%2F&followRedirects=on&hide=on`
@@ -89,4 +91,3 @@ Analytics:
 - `/members/` returns base headers.
 - `/api/miembros` without auth returns `401`.
 - `/api/wallet?email=test@example.com` without member token/admin auth returns `401`.
-
