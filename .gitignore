@@ -18,3 +18,6 @@ Assets/images/Nazareth y Erick/_Archivo/
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+# Security audit output - never commit generated reports, logs, tokens, cookies, or credentials.
+/security-reports/
