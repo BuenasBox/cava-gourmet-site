@@ -184,3 +184,142 @@ Policy:
 - Admin HTML still includes Supabase Auth client loading from `https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2` and fetches `/api/auth_config`.
 - Members page still references `/api/member`, `/api/config`, and `https://api.qrserver.com` for the public member Wallet/QR flow.
 - External origin `https://evil.example` receives no valid CORS header from sensitive APIs.
+
+## End-of-day security snapshot
+
+Date: 2026-05-25
+
+Status: production stable, hardened, and documented. No CSP enforcement, SEO changes, architecture changes, SSR/middleware migration, or large refactors were applied in this closeout.
+
+### Current production state
+
+- Base security headers are active through `vercel.json`.
+- `Content-Security-Policy-Report-Only` is active globally.
+- No new blocking `Content-Security-Policy` response header is active.
+- Sensitive APIs remain protected by backend admin validation.
+- Admin remains `noindex, nofollow`.
+- Public pages remain indexable where intended.
+
+### Active headers
+
+Expected response headers:
+
+- `Strict-Transport-Security`
+- `X-Content-Type-Options`
+- `X-Frame-Options`
+- `Referrer-Policy`
+- `Permissions-Policy`
+- `Content-Security-Policy-Report-Only`
+
+Admin route:
+
+- `/admin/after-office` also returns `X-Robots-Tag: noindex, nofollow`.
+
+Accepted temporary note:
+
+- HSTS `includeSubDomains` is configured in `vercel.json`, but Cloudflare currently emits `Strict-Transport-Security: max-age=15552000`. Treat Cloudflare HSTS as a future edge configuration item.
+
+### Final production smoke checks
+
+Routes checked:
+
+- `/` returned `200`.
+- `/nazareth` returned `200`.
+- `/journal` returned `200`.
+- `/members/` returned `200`.
+- `/admin/after-office` returned `200` and `X-Robots-Tag: noindex, nofollow`.
+
+Sensitive API checks:
+
+- `/api/miembros` returned `401` without auth.
+- `/api/setup` returned `401` without auth.
+- `/api/link?email=test@example.com` returned `401` without auth.
+- `/api/wallet?email=test@example.com` returned `401` without valid member token or admin auth.
+- `/api/config` returned `200` with public config behavior.
+- `/api/miembros` with `Origin: https://evil.example` returned `403` and no valid CORS header.
+
+Console/loading smoke check:
+
+- Chrome headless smoke checks on `/`, `/nazareth`, `/journal`, `/members/`, and `/admin/after-office` did not report matching breakage patterns for CSP, refused resources, Supabase Auth, fonts, images, analytics, or UI scripts.
+
+### Required environment variables
+
+Required for production:
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `GOOGLE_WALLET_KEY`
+- `HMAC_SECRET`
+- `CAVA_ALLOWED_ORIGINS`
+
+Legacy / compatibility variables still referenced by existing code:
+
+- `SUPABASE_KEY`: fallback for service-role behavior in some API modules. Prefer confirming it is service-role only server-side, or migrating all backend modules to `SUPABASE_SERVICE_ROLE_KEY`.
+- `SCAN_PIN`: referenced by the scan/admin-adjacent flow and should remain server-side only.
+
+Current `CAVA_ALLOWED_ORIGINS` should include production origins and intentional local development origins only, for example:
+
+- `https://www.cavagourmet.com`
+- `https://cavagourmet.com`
+- `http://localhost:3000`
+- `http://localhost:5173`
+- `http://127.0.0.1:5500`
+
+### Admin flow snapshot
+
+1. Admin opens `/admin/after-office`.
+2. Page loads Supabase Auth client from `https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2`.
+3. Page fetches `/api/auth_config`.
+4. `/api/auth_config` exposes only `SUPABASE_URL` and `SUPABASE_ANON_KEY`, which are expected client-side values.
+5. Admin signs in with Supabase Auth.
+6. Admin API calls include `Authorization: Bearer <access_token>`.
+7. Backend validates the access token with Supabase Auth.
+8. Backend checks `admin_profiles` using the service-role key server-side.
+9. Only active users with role `owner` or `admin` can perform protected admin actions.
+
+### `admin_profiles` table snapshot
+
+Expected role table:
+
+- Table: `admin_profiles`
+- Required columns:
+  - `user_id`: Supabase Auth user id.
+  - `email`: admin email for auditability.
+  - `role`: allowed values currently expected by backend are `owner` or `admin`.
+  - `active`: must be `true` for access.
+
+Backend lookup:
+
+- Filters by `user_id`.
+- Requires `active=eq.true`.
+- Accepts only `role in ("owner", "admin")`.
+
+### Secure deploy process
+
+1. Keep changes small and scoped.
+2. Commit and push to `master`.
+3. Wait for Vercel production deployment to reach Ready.
+4. Verify production headers and routes before assuming success.
+5. Re-run sensitive API checks without auth.
+6. Re-run CORS checks with an external origin.
+7. Confirm admin route remains `noindex, nofollow`.
+8. Confirm no new blocking CSP header was introduced unless explicitly intended.
+9. Document results in this file.
+
+### Accepted temporary risks / future work
+
+- Static public routes and assets currently return `Access-Control-Allow-Origin: *` from the platform/CDN layer. Sensitive APIs do not.
+- Several pages still contain legacy blocking meta CSP policies. These must be cleaned and unified so HTTP headers become the single source of truth.
+- CSP is currently Report-Only. Do not move to enforcement until meta CSP inconsistencies are removed and real reports have been observed.
+- No CSP reporting endpoint is active yet. Reports are observable through browser/devtools behavior, but not centrally collected.
+- HSTS edge behavior is controlled by Cloudflare and should be reviewed before enabling stricter subdomain/preload posture.
+- Some backend modules still reference legacy `SUPABASE_KEY`; future cleanup should standardize service-role naming without changing runtime behavior abruptly.
+
+### Do not change next without a separate phase
+
+- Do not enable CSP enforcement.
+- Do not make SEO/indexation changes.
+- Do not change public site structure.
+- Do not migrate to SSR or middleware.
+- Do not perform broad refactors.
