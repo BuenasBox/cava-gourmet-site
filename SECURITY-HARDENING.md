@@ -164,3 +164,23 @@ Most use:
 The home page additionally allows `https://static.cloudflareinsights.com` and `https://cloudflareinsights.com`.
 
 These meta CSP policies are blocking policies and can still affect those pages even while the new header-level CSP is only Report-Only.
+
+### CSP Report-Only implementation
+
+Implemented via `vercel.json` as `Content-Security-Policy-Report-Only` only. No blocking `Content-Security-Policy` response header was added.
+
+Policy:
+
+`default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://va.vercel-scripts.com https://static.cloudflareinsights.com; script-src-elem 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://va.vercel-scripts.com https://static.cloudflareinsights.com; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src-attr 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://vitals.vercel-insights.com https://cloudflareinsights.com https://qkmgzyxknhhkucndbdsh.supabase.co https://rbfctmcfweckbpgxlkqf.supabase.co; frame-src 'self' https://pay.google.com; child-src 'self' https://pay.google.com; worker-src 'self' blob:; manifest-src 'self'; media-src 'self'; upgrade-insecure-requests`
+
+### CSP Report-Only production checks
+
+- `/` returns `Content-Security-Policy-Report-Only` and no blocking CSP response header.
+- `/admin/after-office` returns `Content-Security-Policy-Report-Only`, no blocking CSP response header, and `X-Robots-Tag: noindex, nofollow`.
+- `/members/` returns `Content-Security-Policy-Report-Only` and no blocking CSP response header.
+- `/journal` returns `Content-Security-Policy-Report-Only` and no blocking CSP response header.
+- `/journal/el-protocolo-del-vino-empieza-con-la-copa` returns `Content-Security-Policy-Report-Only` and no blocking CSP response header.
+- `/api/miembros`, `/api/setup`, `/api/link?email=test@example.com`, and `/api/wallet?email=test@example.com` remain `401` without auth.
+- Admin HTML still includes Supabase Auth client loading from `https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2` and fetches `/api/auth_config`.
+- Members page still references `/api/member`, `/api/config`, and `https://api.qrserver.com` for the public member Wallet/QR flow.
+- External origin `https://evil.example` receives no valid CORS header from sensitive APIs.
