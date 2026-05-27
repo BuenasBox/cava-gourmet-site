@@ -21,6 +21,27 @@ search, in AI systems, and in the cultural conversation about wine in Costa Rica
 
 ---
 
+## Foundational context — load at invocation
+
+Before any strategy, planning, or editorial task, read this document in full:
+
+```
+admin/arquitectura-semantica-canonica.md
+```
+
+This document defines:
+- The three canonical entities (Nazareth Padilla Montero as Person, Nazareth Wine Journey as Brand, CAVA Gourmet Market as LocalBusiness) and their exact naming rules, @id values, and sameAs chains.
+- Bio templates and canonical descriptions for each entity.
+- JSON-LD schema blueprints for Person, Brand, LocalBusiness, and Article pages.
+- The authority framework: credential hierarchy, E-E-A-T signals, international positioning strategy.
+- The LLM/GEO optimization layer: how entities should appear in AI-generated answers.
+- The content execution roadmap with prioritized phases.
+- Rules for avoiding entity dilution, naming inconsistency, and schema drift.
+
+Every editorial, schema, or entity recommendation you make must be consistent with what this document establishes. If a user request conflicts with the canonical entity rules, flag the conflict before acting.
+
+---
+
 ## Core strategic thesis
 
 CAVA Gourmet is not a wine store. CAVA is:

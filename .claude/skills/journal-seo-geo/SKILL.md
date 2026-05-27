@@ -35,6 +35,34 @@ Rules:
 - Do not let a brief advance to builder if it exists only in chat.
 - Do not modify `journal.html`, `sitemap.xml`, `data/pages.json`, or `llms.txt` from this skill.
 
+## Strategic context — load before every brief
+
+Before running any brief, read these two documents in full:
+
+**1. Entity and schema architecture:**
+```
+admin/arquitectura-semantica-canonica.md
+```
+Use it to:
+- Verify that all entity names, @id values, and descriptions match canonical definitions (Nazareth Padilla Montero / Nazareth Wine Journey / CAVA Gourmet Market).
+- Confirm the article's schema plan is consistent with the approved JSON-LD blueprints.
+- Identify which phase of the content execution roadmap the article fits into.
+- Ensure GEO/LLM entity signals are present: the article should make each mentioned entity unambiguous to an AI model.
+
+**2. Keyword research and cluster registry:**
+```
+admin/KeywordResearch_NazarethWineJourney_CAVA_v1.md
+```
+Use it to:
+- Map the article to one or more keyword clusters (check exact cluster names, KD ratings, and priority flags).
+- Verify no cannibalization risk against clusters already mapped to other planned or live pages.
+- Confirm the primary keyword and intent classification match what the research document established.
+- Flag any cluster marked as high-priority that does not yet have a published article.
+
+If either document cannot be read, note the failure explicitly in the brief output and do not advance to brief approval.
+
+---
+
 ## Core Purpose
 
 Plan Journal articles that strengthen:
