@@ -52,13 +52,14 @@ User-agent: Meta-ExternalFetcher
 # Amazon
 User-agent: Amazonbot
 
-# Common Crawl
-User-agent: CCBot
-
 Content-signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 Disallow: /admin/
 Disallow: /Repaldos%20Index/
+
+# Common Crawl — acceso completo sin restricciones (corpus LLM)
+User-agent: CCBot
+Disallow:
 
 # llms.txt: https://www.cavagourmet.com/llms.txt
 Sitemap: https://www.cavagourmet.com/sitemap.xml
