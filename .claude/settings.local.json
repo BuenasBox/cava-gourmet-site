@@ -40,7 +40,13 @@
       "Bash(/c/Users/esand/scoop/apps/imagemagick/current/magick '/c/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/02-cava-vinoteca-private-tasting-table-1920.webp' -crop 1920x1280+0+640 +repage -quality 75 -strip -define webp:method=6 '/c/Users/esand/OneDrive/Documents/Mi sitio Web CAVA/Assets/images/02-preview-crop.webp')",
       "WebFetch(domain:substack.com)",
       "Bash(git restore *)",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(git -C \"c:\\\\Users\\\\Box\\\\Documents\\\\Mi Sitio Web CAVA\\\\cava-gourmet-site\" status)",
+      "Bash(git -C \"c:\\\\Users\\\\Box\\\\Documents\\\\Mi Sitio Web CAVA\\\\cava-gourmet-site\" log --oneline -5)",
+      "Bash(git -C \"c:\\\\Users\\\\Box\\\\Documents\\\\Mi Sitio Web CAVA\\\\cava-gourmet-site\" show b496e0b --stat)",
+      "Bash(git -C \"c:\\\\Users\\\\Box\\\\Documents\\\\Mi Sitio Web CAVA\\\\cava-gourmet-site\" add nuestra-historia.html)",
+      "Bash(git -C 'c:\\\\Users\\\\Box\\\\Documents\\\\Mi Sitio Web CAVA\\\\cava-gourmet-site' commit -m ' *)",
+      "Bash(git -C \"c:\\\\Users\\\\Box\\\\Documents\\\\Mi Sitio Web CAVA\\\\cava-gourmet-site\" push origin csp-report-only-preview)"
     ]
   }
 }
