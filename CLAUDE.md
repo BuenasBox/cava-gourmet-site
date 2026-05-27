@@ -2,7 +2,7 @@
 
 Este repositorio pertenece al sitio web de CAVA Gourmet Market / CAVA Vinoteca,
 ubicado en Pérez Zeledón, Zona Sur, Costa Rica.
-Hosted en GitHub Pages · https://www.cavagourmet.com
+Hosted en Vercel + Cloudflare · https://www.cavagourmet.com
 
 ---
 
@@ -12,7 +12,7 @@ Este proyecto tiene múltiples capas de instrucciones para agentes. El orden de
 precedencia es:
 
 1. `AGENTS.md` — instrucciones base: stack, performance, Lighthouse, brand moat,
-   GitHub Pages, Implementation Engineer, Red-Team Auditor.
+   deploy en Vercel, Implementation Engineer, Red-Team Auditor.
 2. `CLAUDE.md` (este archivo) — capa SEO/GEO/AI SEO/entity architecture.
    Complementa `AGENTS.md`, no lo reemplaza.
 3. `.claude/agents/cava-seo-geo-strategist.md` — agente especializado en
@@ -28,8 +28,8 @@ usuario antes de resolver por cuenta propia.**
 ## Stack técnico
 
 - HTML/CSS/JS vanilla — sin frameworks, sin dependencias externas
-- GitHub Pages en `https://www.cavagourmet.com`
-- Assets en `/Assets/` — respetar mayúsculas (GitHub Pages es case-sensitive)
+- Vercel + Cloudflare en `https://www.cavagourmet.com`
+- Assets en `/Assets/` — respetar mayúsculas exactas (Vercel es case-sensitive en rutas)
 - Imágenes en `/Assets/images/`
 - No introducir npm, bundlers ni librerías externas sin autorización expresa
 - No modificar arquitectura de carpetas sin autorización expresa
@@ -171,6 +171,25 @@ No inventar credenciales adicionales. No citar premios no verificados.
 
 Objetivo estratégico adicional (de `AGENTS.md`): posicionar a Nazareth como
 autoridad reconocible por bodegas e importadores internacionales.
+
+### Nazareth Wine Journey
+Identidad editorial y presencia digital pública de Nazareth Padilla Montero.
+No es una marca separada de CAVA — es la voz personal de Nazareth anclada
+editorialmente en el CAVA Journal y digitalmente en cavagourmet.com.
+
+- Handle social canónico: `@nazarethwinejourney` (Instagram, TikTok y otras plataformas)
+- URL canónica de persona: `https://www.cavagourmet.com/nazareth`
+- Relación: Nazareth Padilla Montero es la persona y la entidad formal;
+  Nazareth Wine Journey es su identidad editorial/digital bajo la cual publica
+  contenido, construye audiencia y se posiciona como autoridad del vino.
+- Asociada a: CAVA Gourmet Market, CAVA Vinoteca, CAVA Journal.
+- No crear URL ni schema de entidad separado para Nazareth Wine Journey;
+  la URL canónica de persona es `/nazareth`.
+- En schema JSON-LD y referencias formales: usar "Nazareth Padilla Montero".
+- En menciones de handles sociales y contextos editoriales informales: usar
+  "@nazarethwinejourney".
+- No confundir ni fusionar con CAVA Vinoteca ni con CAVA Journal —
+  son entidades distintas aunque relacionadas.
 
 ### Pérez Zeledón / Zona Sur / Costa Rica
 Componente geográfico estratégico.
