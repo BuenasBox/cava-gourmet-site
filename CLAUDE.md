@@ -287,15 +287,17 @@ como figura pública (colaboraciones, prensa, bodegas).
 
 ## Schema JSON-LD — datos base de CAVA
 
-Usar estos datos consistentemente en todas las páginas:
+El sitio usa un `@graph` con entidades distintas. Al crear páginas nuevas, referenciar
+estos `@id` exactos. **No crear un ID alternativo como `#business` — ese ID no existe
+en el grafo de producción y fragmenta el Knowledge Graph.**
 
+**Entidad operativa — usar en páginas de experiencias, servicios, Journal:**
 ```json
 {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "@id": "https://www.cavagourmet.com/#business",
-  "name": "CAVA Gourmet Market",
-  "alternateName": "CAVA Vinoteca",
+  "@type": ["LocalBusiness", "WineStore"],
+  "@id": "https://www.cavagourmet.com/#cava-vinoteca",
+  "name": "CAVA Vinoteca",
+  "alternateName": ["CAVA Gourmet Market", "Cava Gourmet"],
   "url": "https://www.cavagourmet.com",
   "telephone": "+50686325260",
   "address": {
@@ -311,11 +313,23 @@ Usar estos datos consistentemente en todas las páginas:
   },
   "description": "Vinoteca experiencial en Pérez Zeledón, Costa Rica. Catas privadas, after office, experiencias sensoriales de vino y hospitalidad premium en Zona Sur.",
   "foundingDate": "2023-05-15",
-  "founder": {
-    "@type": "Person",
-    "name": "Nazareth Padilla Montero"
-  }
+  "founder": { "@id": "https://www.cavagourmet.com/nazareth#person" }
 }
+```
+
+**Entidad jurídica — usar como `publisher` u `organization` cuando sea necesario:**
+```json
+{
+  "@type": "Organization",
+  "@id": "https://www.cavagourmet.com/#organization",
+  "name": "CAVA Gourmet Market Internacional S.R.L.",
+  "url": "https://www.cavagourmet.com"
+}
+```
+
+**Entidad persona — referenciar siempre por @id, no inline:**
+```json
+{ "@id": "https://www.cavagourmet.com/nazareth#person" }
 ```
 
 Schema aprobados: `LocalBusiness`, `WineStore`, `WebPage`, `Article`, `BlogPosting`,
