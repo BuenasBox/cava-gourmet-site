@@ -640,7 +640,13 @@ max-height: min(82vh, 720px);
 justify-self: end;
 border-radius: 1.5rem;
 border: 1px solid rgba(246, 239, 227, .08);
-background: linear-gradient(160deg, #121318, #0b0c0f);
+background:
+linear-gradient(rgba(8, 10, 14, .08), rgba(8, 10, 14, .12)),
+url("Assets/images/nazareth-padilla-retrato-estudio-cava-gourmet-1280.webp"),
+linear-gradient(160deg, #121318, #0b0c0f);
+background-position: center top;
+background-size: cover;
+background-repeat: no-repeat;
 overflow: hidden;
 position: relative;
 box-shadow: 0 28px 70px rgba(0, 0, 0, .25);
@@ -650,6 +656,10 @@ box-shadow: 0 28px 70px rgba(0, 0, 0, .25);
 width: 100%;
 height: 100%;
 display: block;
+position: absolute;
+inset: 0;
+opacity: 0;
+pointer-events: none;
 }
 
 .hero-visual picture img {
@@ -660,23 +670,6 @@ object-fit: cover;
 object-position: center top;
 filter: saturate(0.92);
 opacity: .95;
-}
-
-.hero-visual-placeholder {
-position: absolute;
-inset: 0;
-display: grid;
-place-items: center;
-background: radial-gradient(circle at 75% 25%, rgba(184, 151, 90, .12), transparent 30%);
-}
-
-.hero-visual-placeholder span {
-font-family: var(--serif);
-color: rgba(246, 239, 227, .42);
-font-style: italic;
-letter-spacing: .18em;
-text-transform: uppercase;
-font-size: .9rem;
 }
 
 .scroll-mark {
@@ -1222,6 +1215,11 @@ justify-self: center;
 margin-inline: auto;
 }
 
+.hero-visual picture img {
+object-fit: contain;
+object-position: center top;
+}
+
 .hero-actions {
 justify-content: center;
 }
@@ -1451,23 +1449,21 @@ color: rgba(246, 239, 227, 0.82);
               <a href="#enlaces" class="btn ghost">Contactar</a>
             </div>
           </div>
-          <div class="hero-visual reveal" aria-label="Foto de Nazareth Padilla Montero">
+          <div class="hero-visual" aria-label="Foto de Nazareth Padilla Montero">
 <picture>
   <source
-    srcset="Assets/images/nazareth-padilla-montero-comunicadora-vino-cava-costa-rica-480.webp 480w,
-            Assets/images/nazareth-padilla-montero-comunicadora-vino-cava-costa-rica-800.webp 800w,
-            Assets/images/nazareth-padilla-montero-comunicadora-vino-cava-costa-rica-1205.webp 1205w"
+    srcset="Assets/images/nazareth-padilla-retrato-estudio-cava-gourmet-480.webp 480w,
+            Assets/images/nazareth-padilla-retrato-estudio-cava-gourmet-800.webp 800w,
+            Assets/images/nazareth-padilla-retrato-estudio-cava-gourmet-1280.webp 1280w"
     type="image/webp">
-  <img src="Assets/images/nazareth-padilla-montero-comunicadora-vino-cava-costa-rica-800.webp"
+  <img src="Assets/images/nazareth-padilla-retrato-estudio-cava-gourmet-800.webp"
     alt="Nazareth Padilla Montero, fundadora de CAVA Gourmet Market y educadora y comunicadora del vino en Pérez Zeledón, Costa Rica"
-    width="1205" height="2600"
+    width="800" height="800"
     loading="eager"
     fetchpriority="high"
     decoding="async"
-    style="object-fit: contain; object-position: center top;"
     sizes="(max-width: 600px) 220px, (max-width: 960px) 420px, 520px">
 </picture>
-            <div class="hero-visual-placeholder"><span>Nazareth Wine Journey</span></div>
           </div>
         </div>
       </div>
