@@ -1,5 +1,22 @@
 # Security Hardening
 
+> **SNAPSHOT HISTÓRICO** — Este documento registra el estado de seguridad al
+> 2026-05-25. No refleja necesariamente el estado actual de producción.
+> Para verificar el estado real: revisar `vercel.json`, el Vercel Dashboard y
+> correr un escaneo actualizado en SecurityHeaders.com.
+> No modificar configuración de seguridad basándose únicamente en este documento.
+>
+> **Nota Supabase (no eliminar sin verificar):** La CSP en `vercel.json` incluye
+> dos project IDs de Supabase en `connect-src`:
+> - `qkmgzyxknhhkucndbdsh.supabase.co` — proyecto principal (prod)
+> - `rbfctmcfweckbpgxlkqf.supabase.co` — segundo proyecto (confirmar rol en Vercel Dashboard antes de eliminar)
+>
+> No remover ninguno de los dos dominios de la CSP sin confirmar en producción
+> cuál está activo. Ambos pueden ser necesarios durante una migración o
+> para entornos distintos.
+
+---
+
 ## Phase 1 - Base headers
 
 Date: 2026-05-25
