@@ -17,7 +17,13 @@
       "Bash(ffmpeg -version)",
       "Bash(node -e \"require\\('sharp'\\); console.log\\('sharp: available'\\)\")",
       "Bash(scoop search *)",
-      "Bash(scoop info *)"
+      "Bash(scoop info *)",
+      "Bash(claude logout *)",
+      "Bash(ls \"C:\\\\Users\\\\Box\\\\.claude\\\\\" 2>&1)",
+      "Read(//c/Users/Box/**)",
+      "Bash(claude config *)",
+      "Bash(claude auth *)",
+      "Bash(git add *)"
     ]
   }
 }
