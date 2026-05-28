@@ -21,3 +21,11 @@ Thumbs.db
 
 # Security audit output - never commit generated reports, logs, tokens, cookies, or credentials.
 /security-reports/
+
+# Variables de entorno — nunca subir al repo
+.env
+.env.local
+.env.*.local
+
+# Vercel — configuración local generada automáticamente
+.vercel/
