@@ -44,142 +44,149 @@
 
   <!-- JSON-LD @graph: Person + Brand + Organization -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": "https://www.cavagourmet.com/nazareth#webpage",
-          "url": "https://www.cavagourmet.com/nazareth",
-          "name": "Nazareth Padilla Montero — Nazareth Wine Journey",
-          "description": "Nazareth Padilla Montero es comunicadora del vino y creadora de Nazareth Wine Journey desde CAVA Gourmet Market en Pérez Zeledón, Costa Rica.",
-          "isPartOf": {
-          "@id": "https://www.cavagourmet.com/#website"
-        },
-          "mainEntity": {
-           "@id": "https://www.cavagourmet.com/nazareth#person"
-          }
-        },
-      {
-        "@type": "Person",
-        "@id": "https://www.cavagourmet.com/nazareth#person",
-        "name": "Nazareth Padilla Montero",
-        "alternateName": "Nazareth Wine Journey",
-        "jobTitle": "Wine Educator and Communicator",
-        "mainEntityOfPage": {
-          "@id": "https://www.cavagourmet.com/nazareth#webpage"
-        },
-
-        "hasCredential": [
-          {
-            "@type": "EducationalOccupationalCredential",
-            "name": "WSET Level 3 Award in Wines",
-            "credentialCategory": "certificate",
-            "recognizedBy": {
-              "@type": "Organization",
-              "name": "Wine & Spirit Education Trust",
-              "url": "https://www.wsetglobal.com"
-            }
-          },
-          {
-            "@type": "EducationalOccupationalCredential",
-            "name": "Women of the Vine & Spirits Foundation Scholarship",
-            "credentialCategory": "scholarship",
-            "dateReceived": "2025",
-            "recognizedBy": {
-              "@type": "Organization",
-              "name": "Women of the Vine & Spirits Foundation",
-              "url": "https://www.wotvsfoundation.org"
-            }
-          }
-        ],
-
-        "alumniOf": {
-          "@type": "Organization",
-          "name": "Wine & Spirit Education Trust",
-          "url": "https://www.wsetglobal.com"
-        },
-
-        "affiliation": {
-          "@type": "Organization",
-          "name": "Women of the Vine & Spirits Foundation",
-          "url": "https://www.wotvsfoundation.org"
-        },
-
-        "description": "Nazareth Padilla Montero es comunicadora del vino y creadora de Nazareth Wine Journey. Desde CAVA Gourmet Market en Pérez Zeledón, Costa Rica, comparte una forma cercana, práctica y sin intimidación de entender el vino.",
-        "url": "https://www.cavagourmet.com/nazareth",
-        "image": "https://www.cavagourmet.com/Assets/images/nazareth-padilla-montero-comunicadora-vino-cava-costa-rica-1205.webp",
-        "sameAs": [
-          "https://www.instagram.com/nazarethwinejourney",
-          "https://www.facebook.com/nazarethwinejourney",
-          "https://www.linkedin.com/in/nazareth-padilla-montero/",
-          "https://youtube.com/@nazarethwinejourney",
-          "https://substack.com/@nazarethpadillamonter",
-          "https://www.tiktok.com/@nazarethwinejourney",
-          "https://www.vinetur.com/nazarethwinejourney/",
-          "https://www.mastersommeliers.org/sommelier-directory/nazarethpm/"
-        ],
-        "worksFor": { "@id": "https://www.cavagourmet.com/#cava-vinoteca" },
-        "knowsAbout": [
-          "Wine education",
-          "Wine tasting",
-          "Wine selection",
-          "Wine in Costa Rica",
-          "Spanish wine",
-          "Chilean wine",
-          "Argentine wine",
-          "United States wine",
-          "Food and wine pairing"
-        ],
-        "nationality": {
-          "@type": "Country",
-          "name": "Costa Rica"
-        },
-        "brand": { "@id": "https://www.cavagourmet.com/#nazareth-wine-journey" },
-        "founderOf": [
-          { "@id": "https://www.cavagourmet.com/#cava-vinoteca" },
-          { "@id": "https://www.cavagourmet.com/#nazareth-wine-journey" }
-        ],
-        "award": "Women of the Vine & Spirits Foundation Scholarship Recipient 2025 — WSET Level 3 Wines, San José, Costa Rica",
-        "subjectOf": [
-          {
-            "@type": "WebPage",
-            "name": "Women of the Vine & Spirits Foundation — Class of 2025 Recipients",
-            "url": "https://www.wotvsfoundation.org/recipients"
-          },
-          {
-            "@type": "Article",
-            "@id": "https://www.vinetur.com/20260511100467/el-miedo-silencioso-de-no-saber-de-vino.html#article",
-            "headline": "El miedo silencioso de no saber de vino",
-            "name": "El miedo silencioso de no saber de vino",
-            "url": "https://www.vinetur.com/20260511100467/el-miedo-silencioso-de-no-saber-de-vino.html",
-            "datePublished": "2026-05-11",
-            "inLanguage": "es",
-            "author": { "@id": "https://www.cavagourmet.com/nazareth#person" },
-            "publisher": {
-              "@type": "Organization",
-              "name": "Vinetur",
-              "url": "https://www.vinetur.com"
-            }
-          }
-        ]
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.cavagourmet.com/nazareth#webpage",
+      "url": "https://www.cavagourmet.com/nazareth",
+      "name": "Nazareth Padilla Montero — Nazareth Wine Journey",
+      "description": "Nazareth Padilla Montero es comunicadora del vino y creadora de Nazareth Wine Journey desde CAVA Gourmet Market en Pérez Zeledón, Costa Rica.",
+      "inLanguage": "es",
+      "isPartOf": { "@id": "https://www.cavagourmet.com/#website" },
+      "mainEntity": { "@id": "https://www.cavagourmet.com/nazareth#person" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.cavagourmet.com/nazareth#person",
+      "name": "Nazareth Padilla Montero",
+      "alternateName": "Nazareth Wine Journey",
+      "jobTitle": "Comunicadora del vino y fundadora de CAVA Gourmet Market",
+      "description": "Nazareth Padilla Montero es comunicadora del vino, fundadora de CAVA Gourmet Market y creadora de Nazareth Wine Journey. WSET Level 3. Becaria WOTVS 2025. Representante de Costa Rica en Vinoinfluencers World Awards 2026.",
+      "url": "https://www.cavagourmet.com/nazareth",
+      "image": "https://www.cavagourmet.com/Assets/images/nazareth-padilla-montero-comunicadora-vino-cava-costa-rica-1205.webp",
+      "nationality": {
+        "@type": "Country",
+        "name": "Costa Rica"
       },
-      {
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Pérez Zeledón",
+        "addressRegion": "San José",
+        "addressCountry": "CR"
+      },
+      "worksFor": {
+        "@type": "LocalBusiness",
+        "@id": "https://www.cavagourmet.com/#cava-vinoteca",
+        "name": "CAVA Gourmet Market",
+        "url": "https://www.cavagourmet.com"
+      },
+      "hasCredential": [
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "WSET Level 3 Award in Wines",
+          "credentialCategory": "certificate",
+          "recognizedBy": {
+            "@type": "Organization",
+            "name": "Wine & Spirit Education Trust",
+            "url": "https://www.wsetglobal.com"
+          }
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Women of the Vine & Spirits Foundation Scholarship",
+          "credentialCategory": "scholarship",
+          "dateReceived": "2025",
+          "recognizedBy": {
+            "@type": "Organization",
+            "name": "Women of the Vine & Spirits Foundation",
+            "url": "https://www.wotvsfoundation.org"
+          }
+        }
+      ],
+      "alumniOf": {
         "@type": "Organization",
-        "@id": "https://www.cavagourmet.com/#nazareth-wine-journey",
-        "name": "Nazareth Wine Journey",
-        "description": "Nazareth Wine Journey es la marca personal de educación y comunicación del vino creada por Nazareth Padilla Montero desde Costa Rica.",
-        "founder": {
-          "@id": "https://www.cavagourmet.com/nazareth#person"
-        },
-        "sameAs": [
-          "https://www.instagram.com/nazarethwinejourney",
-          "https://www.facebook.com/nazarethwinejourney"
-        ]
+        "name": "Wine & Spirit Education Trust",
+        "url": "https://www.wsetglobal.com"
       },
-      { "@id": "https://www.cavagourmet.com/#cava-vinoteca" }
-    ]
-  }
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Women of the Vine & Spirits Foundation",
+        "url": "https://www.wotvsfoundation.org"
+      },
+      "award": "Women of the Vine & Spirits Foundation Scholarship Recipient 2025 — WSET Level 3 Wines, San José, Costa Rica",
+      "knowsAbout": [
+        "Wine education", "Wine tasting", "Wine selection",
+        "Wine in Costa Rica", "Spanish wine", "Chilean wine",
+        "Argentine wine", "United States wine",
+        "Food and wine pairing", "Wine hospitality", "Wine communication"
+      ],
+      "brand": { "@id": "https://www.cavagourmet.com/#nazareth-wine-journey" },
+      "founderOf": [
+        { "@id": "https://www.cavagourmet.com/#cava-vinoteca" },
+        { "@id": "https://www.cavagourmet.com/#nazareth-wine-journey" }
+      ],
+      "sameAs": [
+        "https://www.instagram.com/nazarethwinejourney",
+        "https://www.facebook.com/nazarethwinejourney",
+        "https://www.linkedin.com/in/nazareth-padilla-montero/",
+        "https://youtube.com/@nazarethwinejourney",
+        "https://substack.com/@nazarethpadillamonter",
+        "https://www.tiktok.com/@nazarethwinejourney",
+        "https://www.vinetur.com/nazarethwinejourney/",
+        "https://www.mastersommeliers.org/sommelier-directory/nazarethpm/"
+      ],
+      "mainEntityOfPage": { "@id": "https://www.cavagourmet.com/nazareth#webpage" },
+      "subjectOf": [
+        {
+          "@type": "WebPage",
+          "name": "Women of the Vine & Spirits Foundation — Class of 2025 Recipients",
+          "url": "https://www.wotvsfoundation.org/recipients"
+        },
+        {
+          "@type": "Article",
+          "@id": "https://www.vinetur.com/20260511100467/el-miedo-silencioso-de-no-saber-de-vino.html#article",
+          "headline": "El miedo silencioso de no saber de vino",
+          "url": "https://www.vinetur.com/20260511100467/el-miedo-silencioso-de-no-saber-de-vino.html",
+          "datePublished": "2026-05-11",
+          "inLanguage": "es",
+          "author": { "@id": "https://www.cavagourmet.com/nazareth#person" },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Vinetur",
+            "url": "https://www.vinetur.com"
+          }
+        },
+        {
+          "@type": "Article",
+          "@id": "https://www.vinetur.com/20260525101263/la-copa-de-vino-tiene-mas-en-comun-de-lo-que-parece.html#article",
+          "headline": "La copa de VINO y la cuchara tienen más en común de lo que parece",
+          "url": "https://www.vinetur.com/20260525101263/la-copa-de-vino-tiene-mas-en-comun-de-lo-que-parece.html",
+          "datePublished": "2026-05-25",
+          "inLanguage": "es",
+          "author": { "@id": "https://www.cavagourmet.com/nazareth#person" },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Vinetur",
+            "url": "https://www.vinetur.com"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.cavagourmet.com/#nazareth-wine-journey",
+      "name": "Nazareth Wine Journey",
+      "description": "Marca personal de educación y comunicación del vino creada por Nazareth Padilla Montero desde Costa Rica.",
+      "founder": { "@id": "https://www.cavagourmet.com/nazareth#person" },
+      "sameAs": [
+        "https://www.instagram.com/nazarethwinejourney",
+        "https://www.facebook.com/nazarethwinejourney"
+      ]
+    }
+  ]
+}
   </script>
       <script type="application/ld+json">
 {
