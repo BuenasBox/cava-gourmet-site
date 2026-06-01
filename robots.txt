@@ -1,3 +1,4 @@
+
 # CAVA Vinoteca — robots.txt
 # Política de crawl abierta para buscadores y LLMs.
 # Content Signals: autorización explícita para búsqueda, AI input y AI training.

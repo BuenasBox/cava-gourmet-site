@@ -1,7 +1,7 @@
 # JOURNAL REGISTRY — CAVA Gourmet Market / Nazareth Wine Journey
 > Estado editorial vivo del Journal. Actualizar con cada artículo nuevo o editado.
-> Última actualización: 2026-05-25
-> Artículos publicados: 5 · En borrador: 1
+> Última actualización: 2026-06-01
+> Artículos publicados: 7 · En borrador: 0
 
 ---
 
@@ -266,13 +266,42 @@ Antes de publicar un artículo de Journal, verificar:
 
 ---
 
+---
+
+### ART-007 · El after office y la botella compartida
+
+| Campo | Valor |
+|---|---|
+| **Slug** | `/journal/el-after-office-y-la-botella-compartida` |
+| **Título completo** | Por qué el after office con vino no es solo una copa |
+| **Fecha publicación** | 2026-06-01 |
+| **Fecha última edición** | 2026-06-01 |
+| **Tipo** | Editorial profundo — primera persona Nazareth |
+| **Cluster temático** | After Office / Hospitalidad y rituales sociales |
+| **Intención de búsqueda** | Cultural + Local / TOFU |
+| **Keywords primarias** | after office con vino, ritual after office |
+| **Keywords secundarias** | after office Pérez Zeledón, vino después del trabajo Costa Rica, plan después del trabajo con vino, vinoteca after office Zona Sur |
+| **Territorio semántico** | #4 After Office como ritual social · #2 Hospitality premium relajado · #7 Experiencias fuera del GAM |
+| **Entidad reforzada** | CAVA Vinoteca (espacio del ritual) · Pérez Zeledón / Zona Sur · Nazareth (voz fundadora) |
+| **Credenciales mencionadas** | WSET L3 · WOTVS 2025 · Vinoinfluencers CR 2026 (en schema Person) |
+| **CTA en cuerpo** | `/after-office-vino-perez-zeledon` — "after office en CAVA" (2 menciones) |
+| **Cross-link a hub externo** | Sí — `/after-office-vino-perez-zeledon` |
+| **Artículos relacionados (art-more)** | ART-003 · ART-001 |
+| **Closing type** | Escena completada + invitación directa — "vengan." |
+| **Patrón narrativo** | Observación sobre réplicas → lo que no se puede copiar → admisión vulnerable ("ni siquiera sé qué estamos vendiendo") → el espacio como casa → Pérez Zeledón / Zona Sur → invitación |
+| **Imagen** | `Assets/images/02-cava-vinoteca-private-tasting-table-1280.webp` · OG: `02-cava-vinoteca-private-tasting-table-og-1200x630.jpg` (197 KB) |
+| **Vinetur** | No |
+| **Riesgo de canibalización** | Medio — complementario con landing `/after-office-vino-perez-zeledon` (diferenciados: landing = servicio, Journal = reflexión cultural). Riesgo futuro con id:20 e id:92 de data/pages.json cuando se construyan. |
+| **Status** | Publicado ✅ |
+
+---
+
 ## Artículos en evaluación / pendientes
 
 *(Actualizar cuando haya propuestas concretas)*
 
 | Título tentativo | Territorio | Prioridad | Observaciones |
 |---|---|---|---|
-| El After Office: por qué compartir una botella cambia la conversación | #4 After Office | Alta | Artículo flagship pendiente — sin cobertura actual |
-| Maridaje sin miedo: vino con gallo pinto, casado y chifrijo | #6 Maridaje local | Alta | Keywords locales sin competencia, ángulo CAVA único |
+| Maridaje sin miedo: vino con gallo pinto, casado y chifrijo | #6 Maridaje local | Alta | Keywords locales sin competencia, ángulo CAVA único — próximo artículo para Vinetur |
 | Por qué Pérez Zeledón tiene la vinoteca que el GAM todavía no tiene | #7 Fuera del GAM | Media | Diferenciador geográfico fuerte |
 | Primer vino: cómo elegir sin perderse | #8 Educación | Media | Verificar si va en Journal (reflexivo) o Aprende (práctico) |

@@ -794,6 +794,16 @@
       "canal": [
         "sitio"
       ]
+    },
+    {
+      "id": 107,
+      "hub": "journal",
+      "slug": "/journal/el-after-office-y-la-botella-compartida",
+      "title": "Por qué el after office con vino no es solo una copa",
+      "status": "publicado",
+      "canal": [
+        "sitio"
+      ]
     }
   ]
 }

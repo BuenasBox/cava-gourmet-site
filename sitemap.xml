@@ -172,4 +172,16 @@
     </image:image>
   </url>
 
+  <url>
+    <loc>https://www.cavagourmet.com/journal/el-after-office-y-la-botella-compartida</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.cavagourmet.com/Assets/images/02-cava-vinoteca-private-tasting-table-og-1200x630.jpg</image:loc>
+      <image:title>Por qué el after office con vino no es solo una copa</image:title>
+      <image:caption>Mesa compartida durante el After Office en CAVA Vinoteca, Pérez Zeledón, Costa Rica.</image:caption>
+    </image:image>
+  </url>
+
 </urlset>
