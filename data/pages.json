@@ -804,6 +804,17 @@
       "canal": [
         "sitio"
       ]
+    },
+    {
+      "id": 108,
+      "hub": "journal",
+      "slug": "/journal/vino-y-gastronomia-costarricense",
+      "title": "Vino y gastronomía costarricense: cuando el contraste es más honesto que las reglas",
+      "status": "publicado",
+      "canal": [
+        "sitio",
+        "vinetur"
+      ]
     }
   ]
 }

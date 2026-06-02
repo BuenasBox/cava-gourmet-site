@@ -89,7 +89,7 @@
 
   <url>
     <loc>https://www.cavagourmet.com/journal</loc>
-    <lastmod>2026-06-01</lastmod>
+    <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -181,6 +181,18 @@
       <image:loc>https://www.cavagourmet.com/Assets/images/02-cava-vinoteca-private-tasting-table-og-1200x630.jpg</image:loc>
       <image:title>Por qué el after office con vino no es solo una copa</image:title>
       <image:caption>Mesa compartida durante el After Office en CAVA Vinoteca, Pérez Zeledón, Costa Rica.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.cavagourmet.com/journal/vino-y-gastronomia-costarricense</loc>
+    <lastmod>2026-06-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://www.cavagourmet.com/Assets/images/03-cava-vinoteca-charcuterie-experience-1280.webp</image:loc>
+      <image:title>Vino y gastronomía costarricense: cuando el contraste es más honesto que las reglas</image:title>
+      <image:caption>Mesa con tabla de acompañamientos y vino en CAVA Vinoteca, Pérez Zeledón, Costa Rica.</image:caption>
     </image:image>
   </url>
 

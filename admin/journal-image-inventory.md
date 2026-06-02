@@ -62,6 +62,7 @@ Las carpetas `_Archivo` contienen imagenes potencialmente utiles, pero por peso,
 | `Assets/images/05-cava-vinoteca-artisan-wine-detail-1280.webp` | Horizontal, variante 1280 | Si | Si: 480/800/1280/1920 | Detalle de vino, articulos evergreen o sensoriales sin retrato | Medio | Buena performance; util para evitar repetir retratos |
 | `Assets/images/01-cava-vinoteca-wine-wall-hero-1280.webp` | Horizontal, variante 1280 | Si | Si: 320/480/640/800/1280/1920 | Articulos sobre eleccion de vino, muro de vinos, vinoteca | Alto: imagen hero del sitio; usar con moderacion | Buena performance, pero alto riesgo de sobreuso |
 | `Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-1280.webp` | Horizontal, variante 1280 | Si | Si: 800/1280/1920 | Articulos de entidad Nazareth, WSET, Nazareth Wine Journey | Medio-alto | Buena performance; usar solo cuando el tema refuerce autoridad |
+| `Assets/images/03-cava-vinoteca-charcuterie-experience-1280.webp` | Horizontal, formato 16:9 aprox. (dimensiones exactas no verificadas) | Si | Si: 480w (21.6 KB) · 800w (42.9 KB) · 1280w (79.5 KB) · 1920w (144 KB) | PRIMERA OPCIÓN — `/journal/vino-y-gastronomia-costarricense`: gastronomía, maridaje, experiencia de mesa con acompañamientos | Bajo-medio: primera asignacion editorial; disponible para este articulo | Validada 2026-06-02. Todos los derivados WebP confirmados. Peso muy bueno para LCP. Falta OG derivado 1200x630 si se requiere; usar -1280 como fallback OG. |
 
 ## Imagenes detectadas pero no recomendadas como primera opcion
 
