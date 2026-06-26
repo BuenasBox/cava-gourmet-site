@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex,nofollow">
+<title>CAVA — Control de Consignación</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --wine:    #5C1A1A; --wine2: #8B2C2C; --wine3: #A83232;
+  --gold:    #C9A84C; --gold-lt: #F5EDD6;
+  --cream:   #FAF6EE; --white: #FFFFFF;
+  --green:   #2E7D32; --green-lt: #E8F5E9; --green2: #1B5E20;
+  --red-lt:  #FFEBEE; --blue: #1565C0; --blue-lt: #E3F2FD;
+  --text:    #2C1810; --muted: #7A6055;
+  --shadow:  0 2px 12px rgba(92,26,26,0.13);
+  --radius:  14px;
+}
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+body { font-family:-apple-system,'Helvetica Neue',Arial,sans-serif; background:var(--cream); color:var(--text); min-height:100vh; }
+
+/* HEADER */
+.header { background:var(--wine); color:var(--white); padding:16px 18px 12px; position:sticky; top:0; z-index:100; box-shadow:0 2px 16px rgba(0,0,0,0.25); }
+.header-top { display:flex; align-items:center; justify-content:space-between; }
+.logo-area  { display:flex; align-items:center; gap:10px; }
+.logo-icon  { font-size:24px; }
+.logo-text  { font-size:19px; font-weight:700; letter-spacing:2px; }
+.logo-sub   { font-size:10px; color:var(--gold); letter-spacing:1px; margin-top:1px; }
+.header-stats { display:flex; gap:10px; margin-top:10px; border-top:1px solid rgba(255,255,255,0.15); padding-top:9px; flex-wrap:wrap; }
+.stat-pill { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:20px; padding:3px 11px; font-size:11px; display:flex; align-items:center; gap:5px; }
+.stat-pill strong { color:var(--gold); font-size:13px; }
+
+/* TABS */
+.tabs { display:flex; background:var(--wine2); padding:0 12px; gap:2px; }
+.tab { flex:1; padding:11px 4px; text-align:center; font-size:11px; font-weight:600; letter-spacing:0.3px; color:rgba(255,255,255,0.55); border-bottom:3px solid transparent; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+.tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+
+/* SEARCH BAR */
+.search-bar { padding:10px 14px; background:var(--white); border-bottom:1px solid #E8DDD0; display:flex; gap:8px; align-items:center; }
+.search-input { flex:1; border:1.5px solid #D5C8B8; border-radius:10px; padding:9px 13px; font-size:15px; background:var(--cream); color:var(--text); outline:none; }
+.search-input:focus { border-color:var(--wine); }
+.filter-btn { background:var(--wine); color:var(--white); border:none; border-radius:10px; padding:9px 13px; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
+.filter-btn.active { background:var(--gold); color:var(--wine); }
+
+/* CONTENT */
+.content { padding:12px 12px 110px; }
+
+/* CATEGORY HEADER */
+.category-header { background:var(--wine2); color:var(--white); padding:7px 13px; border-radius:8px; font-size:10px; font-weight:700; letter-spacing:1.5px; margin:14px 0 7px; display:flex; align-items:center; gap:6px; }
+.category-header:first-child { margin-top:2px; }
+
+/* WINE CARD */
+.wine-card { background:var(--white); border-radius:var(--radius); margin-bottom:9px; box-shadow:var(--shadow); overflow:hidden; border:1.5px solid transparent; transition:border-color 0.2s; }
+.wine-card.all-sold { border-color:#2E7D32; background:var(--green-lt); }
+
+.card-main { padding:12px 13px 9px; display:flex; align-items:flex-start; gap:10px; }
+.card-badge { background:var(--wine); color:var(--white); border-radius:7px; padding:4px 7px; font-size:10px; font-weight:700; min-width:38px; text-align:center; flex-shrink:0; margin-top:2px; }
+.card-info { flex:1; min-width:0; }
+.card-name { font-size:14px; font-weight:700; color:var(--text); line-height:1.3; margin-bottom:2px; }
+.card-meta { font-size:12px; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.card-price { color:var(--gold); font-weight:700; font-size:13px; }
+
+/* SOLD COUNTER */
+.card-controls { display:flex; align-items:center; background:var(--cream); border-radius:10px; border:1.5px solid #D5C8B8; overflow:hidden; flex-shrink:0; }
+.ctrl-btn { width:40px; height:40px; background:none; border:none; font-size:22px; font-weight:300; color:var(--wine); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.15s; -webkit-user-select:none; }
+.ctrl-btn:active { background:rgba(92,26,26,0.12); }
+.ctrl-btn:disabled { color:#CCC; cursor:default; }
+.ctrl-count { min-width:34px; text-align:center; font-size:17px; font-weight:700; color:var(--wine); padding:0 3px; }
+
+/* CARD FOOTER */
+.card-footer { border-top:1px solid #F0E8DC; padding:7px 13px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.stock-info { display:flex; gap:10px; }
+.stock-item { display:flex; flex-direction:column; align-items:center; }
+.stock-label { font-size:9px; color:var(--muted); letter-spacing:0.5px; text-transform:uppercase; }
+.stock-value { font-size:14px; font-weight:700; color:var(--text); }
+.stock-value.available { color:var(--green); }
+.stock-value.sold      { color:var(--wine3); }
+.stock-value.abonar    { color:var(--gold); font-size:12px; }
+
+/* STOCK ADJUST ROW */
+.stock-adjust-row { border-top:1px dashed #E0D4C4; padding:7px 13px; display:flex; align-items:center; gap:8px; background:#FDFAF5; }
+.adj-label { font-size:10px; color:var(--muted); font-weight:600; letter-spacing:0.5px; text-transform:uppercase; flex-shrink:0; }
+.adj-controls { display:flex; align-items:center; background:var(--white); border-radius:9px; border:1.5px solid #C8BEB0; overflow:hidden; }
+.adj-btn { width:36px; height:34px; background:none; border:none; font-size:19px; color:var(--blue); cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:300; -webkit-user-select:none; }
+.adj-btn:active { background:rgba(21,101,192,0.1); }
+.adj-count { min-width:32px; text-align:center; font-size:15px; font-weight:700; color:var(--blue); }
+.adj-hint { font-size:10px; color:var(--muted); flex:1; line-height:1.4; }
+
+.date-info { font-size:10px; color:var(--muted); text-align:right; flex-shrink:0; }
+.date-info span { color:var(--wine2); font-weight:600; display:block; }
+
+/* TOAST */
+.toast { position:fixed; bottom:115px; left:50%; transform:translateX(-50%); background:var(--wine); color:var(--white); padding:11px 20px; border-radius:22px; font-size:13px; font-weight:600; box-shadow:0 4px 20px rgba(0,0,0,0.3); z-index:999; opacity:0; pointer-events:none; transition:opacity 0.3s; white-space:nowrap; }
+.toast.show { opacity:1; }
+
+/* BOTTOM BAR */
+.bottom-bar { position:fixed; bottom:0; left:0; right:0; background:var(--wine); padding:9px 16px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 -3px 16px rgba(0,0,0,0.2); z-index:100; gap:10px; }
+.bottom-summary { color:var(--white); font-size:11px; }
+.bottom-summary strong { color:var(--gold); font-size:15px; display:block; }
+.export-btn { background:var(--gold); color:var(--wine); border:none; border-radius:10px; padding:9px 15px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; }
+
+/* EMPTY */
+.empty { text-align:center; padding:50px 20px; color:var(--muted); }
+.empty-icon { font-size:46px; margin-bottom:12px; }
+
+/* ── RESUMEN ── */
+.resumen-section { margin-bottom:18px; }
+.resumen-title { font-size:12px; font-weight:700; letter-spacing:1px; color:var(--wine); text-transform:uppercase; margin-bottom:9px; padding-bottom:5px; border-bottom:2px solid var(--gold-lt); }
+
+/* Proveedor summary card */
+.prov-card { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:10px; }
+.prov-card-header { background:var(--wine); color:var(--white); padding:11px 15px; }
+.prov-card-title { font-size:14px; font-weight:700; }
+.prov-card-sub   { font-size:10px; opacity:0.7; margin-top:2px; }
+.prov-stats-grid { display:grid; grid-template-columns:1fr 1fr 1fr; border-bottom:1px solid #F0E8DC; }
+.prov-stat { padding:11px 10px; text-align:center; border-right:1px solid #F0E8DC; }
+.prov-stat:last-child { border-right:none; }
+.prov-stat-label { font-size:9px; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); }
+.prov-stat-value { font-size:18px; font-weight:700; margin-top:2px; }
+.pv-consig { color:var(--text); }
+.pv-sold   { color:var(--wine3); }
+.pv-disp   { color:var(--green); }
+
+/* Abono panel */
+.abono-panel { padding:12px 14px; }
+.abono-total-row { display:flex; justify-content:space-between; align-items:center; background:var(--gold-lt); border-radius:9px; padding:9px 12px; margin-bottom:8px; }
+.abono-total-label { font-size:12px; font-weight:700; color:var(--wine); }
+.abono-total-val   { font-size:16px; font-weight:700; color:var(--wine); }
+
+/* 3-col summary grid */
+.abono-summary-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-bottom:12px; }
+.abono-sum-box { border-radius:9px; padding:9px 8px; text-align:center; }
+.abono-sum-box.paid    { background:var(--green-lt); }
+.abono-sum-box.pending { background:var(--red-lt); }
+.abono-sum-box.saldo   { background:var(--blue-lt); }
+.abono-sum-label { font-size:9px; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); }
+.abono-sum-val   { font-size:14px; font-weight:700; margin-top:2px; }
+.abono-sum-val.paid    { color:var(--green2); }
+.abono-sum-val.pending { color:var(--wine3); }
+.abono-sum-val.saldo   { color:var(--blue); }
+
+/* Abono input */
+.abono-input-row { display:flex; gap:8px; align-items:center; margin-bottom:10px; }
+.abono-input { flex:1; border:1.5px solid #D5C8B8; border-radius:9px; padding:9px 12px; font-size:15px; background:var(--cream); color:var(--text); outline:none; }
+.abono-input:focus { border-color:var(--green); }
+.abono-btn { background:var(--green); color:var(--white); border:none; border-radius:9px; padding:9px 15px; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; }
+
+/* Abono history */
+.abono-history-title { font-size:10px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+.abono-history-item {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 10px; border-radius:9px; margin-bottom:5px;
+  border:1.5px solid #E8DDD0; background:var(--white);
+  transition:background 0.2s, border-color 0.2s;
+}
+.abono-history-item.is-paid {
+  background:var(--green-lt); border-color:#A5D6A7;
+}
+.abono-history-item.is-pending {
+  background:var(--red-lt); border-color:#FFCDD2;
+}
+
+/* Big tap-friendly checkbox */
+.abono-check-wrap { flex-shrink:0; }
+.abono-check {
+  width:30px; height:30px; border-radius:8px;
+  border:2px solid #C8BEB0; background:var(--white);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all 0.2s; font-size:17px;
+}
+.abono-check.checked { background:var(--green); border-color:var(--green2); }
+
+.abono-item-info { flex:1; min-width:0; }
+.abono-item-monto { font-size:15px; font-weight:700; }
+.abono-item-monto.paid    { color:var(--green2); }
+.abono-item-monto.pending { color:var(--wine3); }
+.abono-item-meta { font-size:10px; color:var(--muted); margin-top:1px; }
+.abono-item-badge {
+  font-size:10px; font-weight:700; padding:3px 8px; border-radius:10px; flex-shrink:0;
+}
+.abono-item-badge.paid    { background:var(--green-lt); color:var(--green2); }
+.abono-item-badge.pending { background:var(--red-lt);   color:var(--wine3); }
+
+.abono-clear { font-size:11px; color:var(--wine3); cursor:pointer; text-decoration:underline; margin-top:6px; display:inline-block; }
+
+/* Detail rows in resumen */
+.resumen-row { background:var(--white); border-radius:9px; padding:10px 13px; margin-bottom:7px; box-shadow:var(--shadow); display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.resumen-row .rname { font-size:13px; font-weight:600; flex:1; padding-right:8px; line-height:1.3; }
+.chips { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+.chip { padding:3px 8px; border-radius:11px; font-size:11px; font-weight:700; }
+.chip-stock { background:var(--green-lt); color:var(--green2); }
+.chip-sold  { background:var(--red-lt);   color:var(--wine3); }
+.chip-money { background:var(--gold-lt);  color:#7A5800; }
+.chip-date  { background:#F0EAE0; color:var(--muted); }
+
+.grand-total { background:var(--wine); color:var(--white); border-radius:var(--radius); padding:16px; text-align:center; margin-top:8px; }
+.grand-total .gl { font-size:11px; opacity:0.8; letter-spacing:1px; }
+.grand-total .ga { font-size:26px; font-weight:700; color:var(--gold); margin:3px 0; }
+.grand-total .gs { font-size:11px; opacity:0.7; }
+
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:200; display:flex; align-items:flex-end; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s; }
+.modal-overlay.open { opacity:1; pointer-events:auto; }
+.modal { background:var(--white); border-radius:20px 20px 0 0; padding:22px 20px 36px; width:100%; max-width:540px; transform:translateY(100%); transition:transform 0.3s ease; }
+.modal-overlay.open .modal { transform:translateY(0); }
+.modal-title { font-size:16px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.modal-sub   { font-size:12px; color:var(--muted); margin-bottom:18px; }
+.modal-section-label { font-size:11px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:var(--wine2); margin:14px 0 8px; }
+.modal-big-controls { display:flex; align-items:center; justify-content:center; gap:0; background:var(--cream); border-radius:14px; border:2px solid #D5C8B8; overflow:hidden; margin-bottom:6px; }
+.modal-ctrl-btn { width:64px; height:64px; background:none; border:none; font-size:32px; font-weight:300; color:var(--blue); cursor:pointer; display:flex; align-items:center; justify-content:center; -webkit-user-select:none; }
+.modal-ctrl-btn:active { background:rgba(21,101,192,0.1); }
+.modal-ctrl-count { flex:1; text-align:center; font-size:32px; font-weight:700; color:var(--blue); }
+.modal-hint { font-size:11px; color:var(--muted); text-align:center; margin-bottom:4px; }
+.modal-actions { display:flex; gap:10px; margin-top:18px; }
+.modal-cancel { flex:1; background:#F0EAE0; color:var(--muted); border:none; border-radius:11px; padding:14px; font-size:15px; font-weight:600; cursor:pointer; }
+.modal-confirm { flex:2; background:var(--blue); color:var(--white); border:none; border-radius:11px; padding:14px; font-size:15px; font-weight:700; cursor:pointer; }
+.modal-confirm.danger { background:var(--wine3); }
+.modal-confirm.success { background:var(--green); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo-area">
+      <span class="logo-icon">🍷</span>
+      <div><div class="logo-text">CAVA</div><div class="logo-sub">CONTROL DE CONSIGNACIÓN</div></div>
+    </div>
+    <div style="text-align:right;font-size:10px;color:rgba(255,255,255,0.7)" id="current-date"></div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill">📦 <strong id="stat-total">0</strong> consig.</div>
+    <div class="stat-pill">🍷 <strong id="stat-sold">0</strong> vendidas</div>
+    <div class="stat-pill">✅ <strong id="stat-avail">0</strong> disponibles</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('mesa')">Mesa del Vino</div>
+  <div class="tab" onclick="switchTab('cinco')">CINCO / VCINQ</div>
+  <div class="tab" onclick="switchTab('resumen')">Resumen</div>
+</div>
+
+<div class="search-bar" id="search-bar">
+  <input class="search-input" type="search" placeholder="Buscar etiqueta…" id="search-input" oninput="filterCards()">
+  <button class="filter-btn" id="filter-pending" onclick="toggleFilter()">Pendientes</button>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div style="width:min(100%,380px);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:1.5rem;text-align:center">
+    <div style="font-size:24px;margin-bottom:1rem">🍷</div>
+    <h1 style="font-size:1.4rem;margin-bottom:0.5rem;color:#F5EDD6">CAVA Control</h1>
+    <p style="font-size:0.9rem;color:#A0A0A0;margin-bottom:1.5rem">Acceso privado para administración de consignaciones</p>
+    <div style="margin-bottom:1rem">
+      <label style="display:block;font-size:0.8rem;color:#A0A0A0;margin-bottom:0.4rem;text-align:left">Email</label>
+      <input id="login_email" type="email" placeholder="tu@email.com" style="width:100%;padding:10px;border:1px solid rgba(255,255,255,0.2);border-radius:8px;background:rgba(255,255,255,0.05);color:#fff;outline:none;font-size:0.95rem">
+    </div>
+    <div style="margin-bottom:1.5rem">
+      <label style="display:block;font-size:0.8rem;color:#A0A0A0;margin-bottom:0.4rem;text-align:left">Contraseña</label>
+      <input id="login_password" type="password" placeholder="••••••••" style="width:100%;padding:10px;border:1px solid rgba(255,255,255,0.2);border-radius:8px;background:rgba(255,255,255,0.05);color:#fff;outline:none;font-size:0.95rem">
+    </div>
+    <button id="login_btn" class="export-btn" onclick="loginAdmin()" style="width:100%;margin-bottom:1rem">Entrar</button>
+    <div id="login_alerta" style="display:none;padding:10px;border-radius:6px;font-size:0.85rem;margin-top:10px"></div>
+  </div>
+</div>
+
+<div class="content" id="main-content"></div>
+<div class="toast" id="toast"></div>
+
+<div class="bottom-bar">
+  <div class="bottom-summary">
+    <span>Por abonar (tab activo)</span>
+    <strong id="bottom-abonar">₡ 0</strong>
+  </div>
+  <button class="export-btn" onclick="exportCSV()" style="margin-right:10px">⬇ Exportar CSV</button>
+  <button class="export-btn" onclick="logoutAdmin()" style="background:#8B2C2C;padding:9px 12px;font-size:11px">Salir</button>
+</div>
+
+<!-- STOCK ADJUST MODAL -->
+<div class="modal-overlay" id="modal-stock" onclick="closeModal('modal-stock')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-stock-title">Ajustar stock</div>
+    <div class="modal-sub" id="modal-stock-sub"></div>
+    <div class="modal-section-label">Cantidad actual en consignación</div>
+    <div class="modal-big-controls">
+      <button class="modal-ctrl-btn" onclick="modalAdj(-1)">−</button>
+      <span class="modal-ctrl-count" id="modal-adj-count">0</span>
+      <button class="modal-ctrl-btn" onclick="modalAdj(+1)">+</button>
+    </div>
+    <div class="modal-hint" id="modal-adj-hint"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal('modal-stock')">Cancelar</button>
+      <button class="modal-confirm success" onclick="confirmStockAdj()">Confirmar ajuste</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SUPABASE & AUTH ───────────────────────────────────────────────────────
+let supabaseClient = null;
+let adminSession = null;
+let syncEnabled = true;
+
+async function initSupabase() {
+  try {
+    const cfgRes = await fetch('/api/auth_config');
+    const cfg = await cfgRes.json();
+    if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) {
+      showAlert('login_alerta', 'error', 'Supabase no está configurado.');
+      return;
+    }
+    supabaseClient = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+    const { data } = await supabaseClient.auth.getSession();
+    adminSession = data.session;
+    setAuthState(Boolean(adminSession));
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      adminSession = session;
+      setAuthState(Boolean(session));
+    });
+  } catch (e) {
+    showAlert('login_alerta', 'error', 'Error al inicializar Supabase.');
+  }
+}
+
+function setAuthState(isLoggedIn) {
+  document.body.style.overflow = isLoggedIn ? 'auto' : 'hidden';
+  document.getElementById('login-screen').style.display = isLoggedIn ? 'none' : 'grid';
+  if (isLoggedIn) {
+    loadStateFromSupabase();
+    render();
+  }
+}
+
+async function loginAdmin() {
+  const email = document.getElementById('login_email').value.trim();
+  const password = document.getElementById('login_password').value;
+  if (!email || !password) { showAlert('login_alerta', 'error', 'Email y contraseña requeridos.'); return; }
+  document.getElementById('login_btn').disabled = true;
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if (error) { showAlert('login_alerta', 'error', 'Acceso denegado.'); document.getElementById('login_btn').disabled = false; return; }
+  adminSession = data.session;
+  setAuthState(true);
+}
+
+async function logoutAdmin() {
+  if (supabaseClient) await supabaseClient.auth.signOut();
+  adminSession = null;
+  setAuthState(false);
+  document.getElementById('login_email').value = '';
+  document.getElementById('login_password').value = '';
+}
+
+function showAlert(id, tipo, msg) {
+  const el = document.getElementById(id);
+  el.className = tipo === 'error' ? 'alerta error' : 'alerta ok';
+  el.textContent = msg;
+  el.style.display = 'block';
+  if (tipo === 'ok') setTimeout(() => el.style.display = 'none', 2000);
+}
+
+async function authFetch(url, options = {}) {
+  if (!adminSession?.access_token) throw new Error('Sin sesión');
+  const headers = new Headers(options.headers || {});
+  headers.set('Authorization', 'Bearer ' + adminSession.access_token);
+  if (options.body) headers.set('Content-Type', 'application/json');
+  return fetch(url, { ...options, headers });
+}
+
+// ── CONSTANTS ─────────────────────────────────────────────────────────────
+const PROVEEDOR = {
+  mesa:  { name:"Mesa del Vino (Rosier SRL)", consig:"0152", fecha:"15-Jun-2026" },
+  cinco: { name:"CINCO – VCINQ SRL",          consig:"193",  fecha:"15-Jun-2026" }
+};
+
+const RAW = {
+  mesa: [
+    {id:"m01", cod:"001",  marca:"Familia Pacheco",   name:"Familia Pacheco Monastrell Orgánico",        cant:3, precio:6500,   desc:0,  iva:13},
+    {id:"m02", cod:"002",  marca:"Familia Pacheco",   name:"Familia Pacheco Garnacha",                   cant:3, precio:6400,   desc:0,  iva:13},
+    {id:"m03", cod:"003",  marca:"Familia Pacheco",   name:"Familia Pacheco Syrah",                      cant:3, precio:6400,   desc:0,  iva:13},
+    {id:"m04", cod:"004",  marca:"Familia Pacheco",   name:"Familia Pacheco Airén (Blanco)",             cant:3, precio:6100,   desc:0,  iva:13},
+    {id:"m05", cod:"005",  marca:"Juan de Acre",      name:"Juan de Acre Tempranillo",                   cant:6, precio:5100,   desc:0,  iva:13},
+    {id:"m06", cod:"007",  marca:"Estación",          name:"Estación Cabernet Sauvignon",                cant:3, precio:5100,   desc:0,  iva:13},
+    {id:"m07", cod:"015",  marca:"Castillo Viento",   name:"Castillo Viento Crianza Tempranillo",        cant:6, precio:7000,   desc:15, iva:13},
+    {id:"m08", cod:"018",  marca:"Magnolia",          name:"Magnolia Prosecco (Espumoso)",               cant:2, precio:7200,   desc:0,  iva:13},
+    {id:"m09", cod:"019",  marca:"Magnolia",          name:"Magnolia Pecorino (Blanco)",                 cant:2, precio:7200,   desc:0,  iva:13},
+    {id:"m10", cod:"020",  marca:"Magnolia",          name:"Magnolia Pinot Grigio (Blanco)",             cant:2, precio:7200,   desc:0,  iva:13},
+    {id:"m11", cod:"021",  marca:"Magnolia",          name:"Magnolia Sangiovese (Tinto)",                cant:2, precio:7200,   desc:0,  iva:13},
+    {id:"m12", cod:"022",  marca:"Magnolia",          name:"Magnolia Montepulciano (Tinto)",             cant:2, precio:7200,   desc:0,  iva:13},
+    {id:"m13", cod:"1001", marca:"Nicola Festa",      name:"Nicola Festa Chianti DOCG",                  cant:3, precio:5600,   desc:0,  iva:13},
+    {id:"m14", cod:"1002", marca:"Nicola Festa",      name:"Nicola Festa Chianti Riserva DOCG",          cant:3, precio:8000,   desc:0,  iva:13},
+    {id:"m15", cod:"1003", marca:"Badesco",           name:"Badesco Toscano Rosso IGT",                  cant:2, precio:17500,  desc:0,  iva:13},
+    {id:"m16", cod:"1004", marca:"Cantina La Salute", name:"Cantina La Salute Merlot",                   cant:3, precio:7400,   desc:0,  iva:13},
+    {id:"m17", cod:"1005", marca:"Cantina La Salute", name:"Cantina La Salute Sauvignon Blanc",          cant:3, precio:7400,   desc:0,  iva:13},
+    {id:"m18", cod:"1006", marca:"Cantina La Salute", name:"Cantina La Salute Pinot Nero",               cant:3, precio:7400,   desc:0,  iva:13},
+    {id:"m19", cod:"026",  marca:"Estampa",           name:"Estampa Gran Reserva Carmenère",             cant:2, precio:12000,  desc:0,  iva:13},
+    {id:"m20", cod:"008",  marca:"Plan B",            name:"Plan B Chardonnay (Blanco)",                 cant:3, precio:5100,   desc:0,  iva:13},
+    {id:"m21", cod:"009",  marca:"Plan B",            name:"Plan B Malbec (Tinto)",                      cant:3, precio:5100,   desc:0,  iva:13},
+    {id:"m22", cod:"010",  marca:"Tucumen",           name:"Tucumen Malbec",                             cant:3, precio:5600,   desc:0,  iva:13},
+    {id:"m23", cod:"011",  marca:"Tucumen",           name:"Tucumen Reserva Malbec",                     cant:3, precio:10180,  desc:0,  iva:13},
+    {id:"m24", cod:"012",  marca:"4000",              name:"4000 Gran Reserva Malbec",                   cant:2, precio:17500,  desc:0,  iva:13},
+    {id:"m25", cod:"013",  marca:"Tucumen",           name:"Tucumen Reserva Cabernet Franc",             cant:3, precio:10180,  desc:0,  iva:13},
+    {id:"m26", cod:"023",  marca:"4000",              name:"4000 Gran Reserva Black Blend",              cant:2, precio:17500,  desc:0,  iva:13},
+    {id:"m27", cod:"024",  marca:"Budeguer",          name:"Budeguer Partida Limitada Malbec",           cant:1, precio:25000,  desc:0,  iva:13},
+    {id:"m28", cod:"025",  marca:"Budeguer",          name:"Budeguer Partida Limitada Corte de Bodega",  cant:1, precio:25000,  desc:0,  iva:13},
+    {id:"m29", cod:"3001", marca:"Tomarchio",         name:"Tomarchio Aranciata Rossa",                  cant:3, precio:1150,   desc:0,  iva:13},
+    {id:"m30", cod:"3002", marca:"Tomarchio",         name:"Tomarchio Aranciata Rossa Cero Azúcar",     cant:3, precio:1150,   desc:0,  iva:13},
+    {id:"m31", cod:"3003", marca:"Tomarchio",         name:"Tomarchio Limonata",                         cant:3, precio:1150,   desc:0,  iva:13},
+    {id:"m32", cod:"3004", marca:"Tomarchio",         name:"Tomarchio Limonata Cero Azúcar",            cant:3, precio:1150,   desc:0,  iva:13},
+    {id:"m33", cod:"3005", marca:"Tomarchio",         name:"Tomarchio Mandarino Verde",                  cant:3, precio:1150,   desc:0,  iva:13},
+    {id:"m34", cod:"3006", marca:"Tomarchio",         name:"Tomarchio Tónica",                          cant:3, precio:1150,   desc:0,  iva:13},
+    {id:"m35", cod:"3008", marca:"Tomarchio",         name:"Tomarchio Chinotto",                         cant:3, precio:1150,   desc:0,  iva:13},
+    {id:"m36", cod:"3009", marca:"Tomarchio",         name:"Tomarchio Aperitivo Biondo",                 cant:3, precio:1150,   desc:0,  iva:13},
+    {id:"m37", cod:"2001", marca:"Ciemme",            name:"Ciemme Aperitif Horeca",                     cant:1, precio:14850,  desc:0,  iva:13},
+    {id:"m38", cod:"2002", marca:"Ciemme",            name:"Ciemme Liquori Bitter",                      cant:2, precio:15500,  desc:0,  iva:13},
+    {id:"m39", cod:"2003", marca:"Ciemme",            name:"Ciemme Liquori Sambhugo",                    cant:1, precio:14500,  desc:0,  iva:13},
+    {id:"m40", cod:"2004", marca:"Ciemme",            name:"Ciemme Liquori Limoncello",                  cant:2, precio:14500,  desc:0,  iva:13},
+    {id:"m41", cod:"2005", marca:"Ciemme",            name:"Ciemme Liquori Triple Sec",                  cant:1, precio:10500,  desc:0,  iva:13},
+    {id:"m42", cod:"2006", marca:"London",            name:"Life Guard London Dry Gin",                  cant:1, precio:11000,  desc:0,  iva:13},
+    {id:"m43", cod:"2007", marca:"Moscovia",          name:"Vodka Moscovia",                             cant:1, precio:10000,  desc:0,  iva:13},
+  ],
+  cinco: [
+    {id:"c01", cod:"09", marca:"Vinho Verde",    name:"Bico Amarelo",            cant:3, precio:6850,    desc:0, iva:13},
+    {id:"c02", cod:"06", marca:"Vinho Verde",    name:"Ameal Loureiro",          cant:3, precio:9050,    desc:0, iva:13},
+    {id:"c03", cod:"08", marca:"Esporão",        name:"Esporão Colheita Branco", cant:3, precio:8500,    desc:0, iva:13},
+    {id:"c04", cod:"07", marca:"Esporão",        name:"Esporão Colheita Tinto",  cant:3, precio:8500,    desc:0, iva:13},
+    {id:"c05", cod:"12", marca:"Esporão",        name:"Esporao Reserva Blanco",  cant:3, precio:13940,   desc:0, iva:13},
+    {id:"c06", cod:"10", marca:"Esporão",        name:"Esporao Reserva Tinto",   cant:3, precio:13940,   desc:0, iva:13},
+    {id:"c07", cod:"15", marca:"Antonio Madeira",name:"Antonio Madeira Blanco",  cant:3, precio:10110,   desc:0, iva:13},
+    {id:"c08", cod:"16", marca:"Antonio Madeira",name:"Antonio Madeira Tinto",   cant:3, precio:9680,    desc:0, iva:13},
+    {id:"c09", cod:"20", marca:"Madeira",        name:"Madeira Rainwater",       cant:3, precio:8823.01, desc:0, iva:13},
+    {id:"c10", cod:"21", marca:"Madeira",        name:"Madeira Malvasia",        cant:3, precio:8237.21, desc:0, iva:13},
+  ]
+};
+
+const ALL_ITEMS = [...RAW.mesa, ...RAW.cinco];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let state    = {};
+let payments = { mesa:{abonos:[]}, cinco:{abonos:[]} };
+let currentTab    = 'mesa';
+let filterPending = false;
+let modalAdjId    = null;
+let modalAdjVal   = 0;
+
+async function loadStateFromSupabase() {
+  try {
+    syncEnabled = false;
+    const { data: stateData } = await supabaseClient
+      .from('consignacion_state')
+      .select('*')
+      .eq('user_id', adminSession.user.id)
+      .single();
+    if (stateData?.data) state = stateData.data;
+    else state = {};
+
+    const { data: payData } = await supabaseClient
+      .from('consignacion_pagos')
+      .select('*')
+      .eq('user_id', adminSession.user.id);
+    payments = { mesa:{abonos:[]}, cinco:{abonos:[]} };
+    (payData || []).forEach(p => {
+      if (p.proveedor && payments[p.proveedor]) {
+        payments[p.proveedor].abonos.push({ monto: p.monto, fecha: p.fecha, nota: p.nota, paid: p.paid });
+      }
+    });
+    syncEnabled = true;
+  } catch (e) {
+    console.error('Error cargando estado:', e);
+    syncEnabled = true;
+  }
+}
+
+async function saveState() {
+  if (!syncEnabled || !adminSession?.user) return;
+  try {
+    const existing = await supabaseClient
+      .from('consignacion_state')
+      .select('id')
+      .eq('user_id', adminSession.user.id)
+      .single();
+
+    if (existing.data?.id) {
+      await supabaseClient
+        .from('consignacion_state')
+        .update({ data: state, updated_at: new Date() })
+        .eq('id', existing.data.id);
+    } else {
+      await supabaseClient
+        .from('consignacion_state')
+        .insert({ user_id: adminSession.user.id, data: state });
+    }
+  } catch (e) {
+    console.error('Error guardando estado:', e);
+  }
+}
+
+async function savePayments() {
+  if (!syncEnabled || !adminSession?.user) return;
+  try {
+    await supabaseClient
+      .from('consignacion_pagos')
+      .delete()
+      .eq('user_id', adminSession.user.id);
+
+    const pagosToInsert = [];
+    Object.entries(payments).forEach(([prov, payData]) => {
+      (payData.abonos || []).forEach((p, idx) => {
+        pagosToInsert.push({
+          user_id: adminSession.user.id,
+          proveedor: prov,
+          monto: p.monto,
+          fecha: p.fecha,
+          nota: p.nota || null,
+          paid: p.paid || false
+        });
+      });
+    });
+
+    if (pagosToInsert.length > 0) {
+      await supabaseClient.from('consignacion_pagos').insert(pagosToInsert);
+    }
+  } catch (e) {
+    console.error('Error guardando pagos:', e);
+  }
+}
+
+function getItem(id) {
+  if (!state[id]) state[id] = { vendidas:0, fecha:null, stockExtra:0 };
+  if (state[id].stockExtra === undefined) state[id].stockExtra = 0;
+  return state[id];
+}
+
+function stockActual(p) {
+  return p.cant + getItem(p.id).stockExtra;
+}
+
+function precioFinal(p) {
+  return p.precio * (1 - p.desc/100) * (1 + p.iva/100);
+}
+function fmt(n) { return '₡ ' + Math.round(n).toLocaleString('es-CR'); }
+function today() { return new Date().toLocaleDateString('es-CR',{day:'2-digit',month:'2-digit',year:'numeric'}); }
+
+// ── TABS & FILTER ──────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach((t,i)=>{ t.classList.toggle('active',['mesa','cinco','resumen'][i]===tab); });
+  document.getElementById('search-input').value = '';
+  filterPending = false;
+  document.getElementById('filter-pending').classList.remove('active');
+  render();
+}
+function toggleFilter() {
+  filterPending = !filterPending;
+  document.getElementById('filter-pending').classList.toggle('active', filterPending);
+  render();
+}
+function filterCards() { render(); }
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function render() {
+  const content    = document.getElementById('main-content');
+  const searchBar  = document.getElementById('search-bar');
+
+  if (currentTab === 'resumen') {
+    searchBar.style.display = 'none';
+    renderResumen(content);
+    return;
+  }
+  searchBar.style.display = 'flex';
+
+  const q      = document.getElementById('search-input').value.toLowerCase();
+  const items  = RAW[currentTab];
+  const filtered = items.filter(p => {
+    const match = !q || p.name.toLowerCase().includes(q) || p.marca.toLowerCase().includes(q) || p.cod.toLowerCase().includes(q);
+    const s     = getItem(p.id);
+    const sa    = stockActual(p);
+    const pend  = !filterPending || s.vendidas < sa;
+    return match && pend;
+  });
+
+  if (!filtered.length) {
+    content.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><p>Sin resultados</p></div>`;
+    updateStats(); updateBottomBar(); return;
+  }
+
+  const groups = {};
+  filtered.forEach(p => { (groups[p.marca]=groups[p.marca]||[]).push(p); });
+  let html = '';
+  for (const [marca, prods] of Object.entries(groups)) {
+    html += `<div class="category-header">🍾 ${marca}</div>`;
+    prods.forEach(p => { html += cardHTML(p); });
+  }
+  content.innerHTML = html;
+  updateStats(); updateBottomBar();
+}
+
+function cardHTML(p) {
+  const s    = getItem(p.id);
+  const sa   = stockActual(p);
+  const pf   = precioFinal(p);
+  const disp = sa - s.vendidas;
+  const ab   = s.vendidas * pf;
+  const allSold = disp <= 0;
+  const fechaStr = s.fecha ? `<span>${s.fecha}</span>` : '<span style="color:#CCC">—</span>';
+  const stockNote = s.stockExtra !== 0 
+    ? `<span style="color:${s.stockExtra>0?'var(--green)':'var(--wine3)'};font-size:10px;font-weight:600">${s.stockExtra>0?'+ '+s.stockExtra+' reposición':s.stockExtra+' retiradas'}</span>` 
+    : '';
+
+  return `
+  <div class="wine-card${allSold?' all-sold':''}" id="card-${p.id}">
+    <div class="card-main">
+      <div class="card-badge">${p.cod}</div>
+      <div class="card-info">
+        <div class="card-name">${p.name}</div>
+        <div class="card-meta">
+          <span class="card-price">${fmt(pf)}</span>
+          ${p.desc>0?`<span style="color:#A83232;font-size:10px">Desc. ${p.desc}%</span>`:''}
+          ${stockNote}
+        </div>
+      </div>
+      <div class="card-controls">
+        <button class="ctrl-btn" onclick="changeSold('${p.id}',-1)" ${s.vendidas<=0?'disabled':''}>−</button>
+        <span class="ctrl-count">${s.vendidas}</span>
+        <button class="ctrl-btn" onclick="changeSold('${p.id}',1)" ${allSold?'disabled':''}>+</button>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="stock-info">
+        <div class="stock-item"><span class="stock-label">Consig.</span><span class="stock-value">${sa}</span></div>
+        <div class="stock-item"><span class="stock-label">Vendidas</span><span class="stock-value sold">${s.vendidas}</span></div>
+        <div class="stock-item"><span class="stock-label">Disponible</span><span class="stock-value available">${Math.max(0,disp)}</span></div>
+        <div class="stock-item"><span class="stock-label">Abonar</span><span class="stock-value abonar">${fmt(ab)}</span></div>
+      </div>
+      <div class="date-info">Última venta<br>${fechaStr}</div>
+    </div>
+    <div class="stock-adjust-row">
+      <span class="adj-label">📦 Stock</span>
+      <div class="adj-controls">
+        <button class="adj-btn" onclick="openStockModal('${p.id}')">✎ Ajustar</button>
+      </div>
+      <span class="adj-hint">Reposición o retiro de botellas</span>
+    </div>
+  </div>`;
+}
+
+// ── CHANGE SOLD ───────────────────────────────────────────────────────────
+function changeSold(id, delta) {
+  const p  = ALL_ITEMS.find(x=>x.id===id); if(!p) return;
+  const s  = getItem(id);
+  const sa = stockActual(p);
+  const nv = Math.max(0, Math.min(sa, s.vendidas + delta));
+  if (nv === s.vendidas) return;
+  s.vendidas = nv;
+  s.fecha    = nv > 0 ? today() : null;
+  saveState();
+  refreshCard(p);
+  updateStats(); updateBottomBar();
+  if (delta > 0) showToast(`✓ ${p.name.split(' ').slice(0,3).join(' ')} — venta registrada`);
+}
+
+function refreshCard(p) {
+  const card = document.getElementById(`card-${p.id}`);
+  if (!card) return;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = cardHTML(p);
+  card.replaceWith(tmp.firstElementChild);
+}
+
+// ── STOCK MODAL ───────────────────────────────────────────────────────────
+function openStockModal(id) {
+  const p  = ALL_ITEMS.find(x=>x.id===id); if(!p) return;
+  const s  = getItem(id);
+  modalAdjId  = id;
+  modalAdjVal = p.cant + s.stockExtra;   // current total stock
+  document.getElementById('modal-stock-title').textContent = p.name;
+  document.getElementById('modal-stock-sub').textContent   = `Código ${p.cod} · Original: ${p.cant} · Vendidas: ${s.vendidas}`;
+  updateModalAdj();
+  document.getElementById('modal-stock').classList.add('open');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function modalAdj(delta) {
+  const p  = ALL_ITEMS.find(x=>x.id===modalAdjId); if(!p) return;
+  const s  = getItem(modalAdjId);
+  // Can't go below vendidas (can't have negative available)
+  const min = s.vendidas;
+  modalAdjVal = Math.max(min, modalAdjVal + delta);
+  updateModalAdj();
+}
+function updateModalAdj() {
+  const p    = ALL_ITEMS.find(x=>x.id===modalAdjId); if(!p) return;
+  const s    = getItem(modalAdjId);
+  const orig = p.cant;
+  const diff = modalAdjVal - orig;
+  document.getElementById('modal-adj-count').textContent = modalAdjVal;
+  let hint = `Stock original: ${orig}`;
+  if (diff > 0) hint += ` · +${diff} repuestas por proveedor`;
+  else if (diff < 0) hint += ` · ${diff} retiradas por proveedor`;
+  document.getElementById('modal-adj-hint').textContent = hint;
+}
+function confirmStockAdj() {
+  const p = ALL_ITEMS.find(x=>x.id===modalAdjId); if(!p) return;
+  const s = getItem(modalAdjId);
+  s.stockExtra = modalAdjVal - p.cant;
+  saveState();
+  closeModal('modal-stock');
+  refreshCard(p);
+  updateStats(); updateBottomBar();
+  const diff = s.stockExtra;
+  showToast(diff>0 ? `+${diff} repuestas en ${p.name.split(' ').slice(0,2).join(' ')}` : diff<0 ? `${diff} retiradas de ${p.name.split(' ').slice(0,2).join(' ')}` : `Stock restaurado a original`);
+}
+
+// ── STATS & BOTTOM BAR ────────────────────────────────────────────────────
+function updateStats() {
+  const items = currentTab==='resumen' ? ALL_ITEMS : RAW[currentTab];
+  let total=0, sold=0, avail=0;
+  items.forEach(p=>{ 
+    const sa=stockActual(p); const s=getItem(p.id);
+    total+=sa; sold+=s.vendidas; avail+=Math.max(0,sa-s.vendidas);
+  });
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-sold').textContent  = sold;
+  document.getElementById('stat-avail').textContent = avail;
+}
+function updateBottomBar() {
+  const items = currentTab==='resumen' ? ALL_ITEMS : (RAW[currentTab]||[]);
+  let ab=0;
+  items.forEach(p=>{ ab+=getItem(p.id).vendidas*precioFinal(p); });
+  document.getElementById('bottom-abonar').textContent = fmt(ab);
+}
+
+// ── RESUMEN ───────────────────────────────────────────────────────────────
+function renderResumen(content) {
+  updateStats(); updateBottomBar();
+  let html = '<div style="padding-top:4px">';
+  let grandTotal=0, grandPagado=0, grandPendiente=0;
+
+  ['mesa','cinco'].forEach(key=>{
+    const prov  = PROVEEDOR[key];
+    const items = RAW[key];
+    const pay   = payments[key];
+
+    // Stock & sales totals
+    let totalUn=0, soldUn=0, availUn=0, abonarT=0;
+    items.forEach(p=>{
+      const sa=stockActual(p); const s=getItem(p.id);
+      totalUn+=sa; soldUn+=s.vendidas; availUn+=Math.max(0,sa-s.vendidas);
+      abonarT+=s.vendidas*precioFinal(p);
+    });
+
+    // Abono sums split by paid flag
+    const pagado    = pay.abonos.filter(a=>a.paid).reduce((s,a)=>s+a.monto,0);
+    const porPagar  = pay.abonos.filter(a=>!a.paid).reduce((s,a)=>s+a.monto,0);
+    const totalAbon = pagado + porPagar;
+    const saldo     = Math.max(0, abonarT - pagado);  // saldo real = ventas - lo ya pagado
+
+    grandTotal     += abonarT;
+    grandPagado    += pagado;
+    grandPendiente += porPagar;
+
+    // Abono history rows HTML
+    let histHtml = '';
+    if (pay.abonos.length) {
+      histHtml += `<div class="abono-history-title">Historial de abonos</div>`;
+      pay.abonos.slice().reverse().forEach((a, ri)=>{
+        // real index in original array
+        const idx = pay.abonos.length - 1 - ri;
+        const isPaid = !!a.paid;
+        histHtml += `
+        <div class="abono-history-item ${isPaid?'is-paid':'is-pending'}" id="abono-item-${key}-${idx}">
+          <div class="abono-check-wrap" onclick="toggleAbonoPaid('${key}',${idx})">
+            <div class="abono-check ${isPaid?'checked':''}">
+              ${isPaid?'✓':''}
+            </div>
+          </div>
+          <div class="abono-item-info">
+            <div class="abono-item-monto ${isPaid?'paid':'pending'}">${fmt(a.monto)}</div>
+            <div class="abono-item-meta">${a.fecha}${a.nota?` · ${a.nota}`:''}</div>
+          </div>
+          <span class="abono-item-badge ${isPaid?'paid':'pending'}">${isPaid?'Pagado':'Por pagar'}</span>
+        </div>`;
+      });
+      histHtml += `<span class="abono-clear" onclick="clearAbonos('${key}')">Borrar historial</span>`;
+    }
+
+    html += `<div class="resumen-section">
+      <div class="resumen-title">${prov.name}</div>
+      <div class="prov-card">
+        <div class="prov-card-header">
+          <div class="prov-card-title">${prov.name}</div>
+          <div class="prov-card-sub">Consig. #${prov.consig} · ${prov.fecha}</div>
+        </div>
+        <div class="prov-stats-grid">
+          <div class="prov-stat"><div class="prov-stat-label">Consignado</div><div class="prov-stat-value pv-consig">${totalUn}</div></div>
+          <div class="prov-stat"><div class="prov-stat-label">Vendidas</div><div class="prov-stat-value pv-sold">${soldUn}</div></div>
+          <div class="prov-stat"><div class="prov-stat-label">Disponible</div><div class="prov-stat-value pv-disp">${availUn}</div></div>
+        </div>
+        <div class="abono-panel">
+          <div class="abono-total-row">
+            <span class="abono-total-label">Total a abonar</span>
+            <span class="abono-total-val">${fmt(abonarT)}</span>
+          </div>
+          <div class="abono-summary-grid">
+            <div class="abono-sum-box paid">
+              <div class="abono-sum-label">✅ Pagado</div>
+              <div class="abono-sum-val paid">${fmt(pagado)}</div>
+            </div>
+            <div class="abono-sum-box pending">
+              <div class="abono-sum-label">⏳ Por pagar</div>
+              <div class="abono-sum-val pending">${fmt(porPagar)}</div>
+            </div>
+            <div class="abono-sum-box saldo">
+              <div class="abono-sum-label">💰 Saldo</div>
+              <div class="abono-sum-val saldo">${fmt(saldo)}</div>
+            </div>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:var(--wine2);letter-spacing:0.5px;margin-bottom:6px">REGISTRAR ABONO</div>
+          <div class="abono-input-row">
+            <input class="abono-input" type="number" id="abono-input-${key}" placeholder="Monto en CRC" inputmode="numeric">
+            <button class="abono-btn" onclick="registrarAbono('${key}')">+ Agregar</button>
+          </div>
+          ${histHtml}
+        </div>
+      </div>`;
+
+    // Items vendidos detail
+    const vendidos = items.filter(p=>getItem(p.id).vendidas>0);
+    if (vendidos.length) {
+      html += `<div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.5px;margin:10px 0 6px;padding-left:2px">DETALLE VENDIDOS</div>`;
+      vendidos.forEach(p=>{
+        const s=getItem(p.id);
+        html+=`<div class="resumen-row">
+          <div class="rname">${p.name}</div>
+          <div class="chips">
+            <span class="chip chip-sold">${s.vendidas} vend.</span>
+            <span class="chip chip-money">${fmt(s.vendidas*precioFinal(p))}</span>
+            ${s.fecha?`<span class="chip chip-date">${s.fecha}</span>`:''}
+          </div>
+        </div>`;
+      });
+    }
+    html += `</div>`;
+  });
+
+  const grandSaldo = Math.max(0, grandTotal - grandPagado);
+  html += `<div class="grand-total">
+    <div class="gl">RESUMEN GENERAL — AMBOS PROVEEDORES</div>
+    <div class="ga">${fmt(grandTotal)}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px">
+      <div style="background:rgba(255,255,255,0.12);border-radius:9px;padding:8px;text-align:center">
+        <div style="font-size:9px;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px">✅ Pagado</div>
+        <div style="font-size:14px;font-weight:700;color:#A5D6A7;margin-top:2px">${fmt(grandPagado)}</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.12);border-radius:9px;padding:8px;text-align:center">
+        <div style="font-size:9px;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px">⏳ Por pagar</div>
+        <div style="font-size:14px;font-weight:700;color:#EF9A9A;margin-top:2px">${fmt(grandPendiente)}</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.12);border-radius:9px;padding:8px;text-align:center">
+        <div style="font-size:9px;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px">💰 Saldo</div>
+        <div style="font-size:14px;font-weight:700;color:var(--gold);margin-top:2px">${fmt(grandSaldo)}</div>
+      </div>
+    </div>
+  </div></div>`;
+
+  content.innerHTML = html;
+}
+
+function registrarAbono(key) {
+  const input = document.getElementById(`abono-input-${key}`);
+  const monto = parseFloat(input.value);
+  if (!monto || monto <= 0) { showToast('⚠ Ingresá un monto válido'); return; }
+  // New abonos start as "por pagar" (paid: false)
+  payments[key].abonos.push({ monto, fecha: today(), paid: false });
+  savePayments();
+  input.value = '';
+  renderResumen(document.getElementById('main-content'));
+  showToast(`✓ Abono de ${fmt(monto)} agregado como pendiente`);
+}
+
+function toggleAbonoPaid(key, idx) {
+  const a = payments[key].abonos[idx];
+  if (!a) return;
+  a.paid = !a.paid;
+  savePayments();
+  renderResumen(document.getElementById('main-content'));
+  showToast(a.paid ? '✅ Marcado como pagado' : '↩ Marcado como pendiente');
+}
+
+function clearAbonos(key) {
+  if (!confirm('¿Borrar todo el historial de abonos para este proveedor?')) return;
+  payments[key].abonos = [];
+  savePayments();
+  renderResumen(document.getElementById('main-content'));
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+function exportCSV() {
+  let rows=[['Proveedor','Código','Marca','Producto','Stock Original','Ajuste','Stock Actual','Precio Unit.','Precio Final','Vendidas','Disponible','Abonar','Fecha Venta']];
+  ALL_ITEMS.forEach(p=>{
+    const s=getItem(p.id); const sa=stockActual(p); const pf=precioFinal(p);
+    const prov=RAW.mesa.includes(p)?PROVEEDOR.mesa.name:PROVEEDOR.cinco.name;
+    rows.push([prov,p.cod,p.marca,p.name,p.cant,s.stockExtra,sa,p.precio.toFixed(2),pf.toFixed(2),s.vendidas,Math.max(0,sa-s.vendidas),(s.vendidas*pf).toFixed(2),s.fecha||'']);
+  });
+  const csv=rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download=`CAVA_Consignacion_${today().replace(/\//g,'-')}.csv`;
+  a.click(); showToast('✓ CSV exportado');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+document.getElementById('current-date').textContent =
+  new Date().toLocaleDateString('es-CR',{weekday:'short',day:'numeric',month:'long'});
+document.getElementById('login-screen').style.display = 'grid';
+initSupabase();
+document.getElementById('login_password').addEventListener('keypress', e => {
+  if (e.key === 'Enter') loginAdmin();
+});
+</script>
+</body>
+</html>
