@@ -254,7 +254,7 @@ class handler(BaseHTTPRequestHandler):
     def _html(self, code, html):
         self.send_response(code)
         self.send_header("Content-Type", "text/html; charset=utf-8")
-        self.send_header("Cache-Control", "no-store")
+        self.send_header("Cache-Control", "private, no-store")
         self.end_headers()
         self.wfile.write(html.encode())
 

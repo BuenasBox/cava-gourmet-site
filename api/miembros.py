@@ -221,6 +221,7 @@ class handler(BaseHTTPRequestHandler):
     def _respond(self, code, body):
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
+        self.send_header("Cache-Control", "private, no-store")
         add_cors_headers(self)
         self.end_headers()
         self.wfile.write(json.dumps(body).encode())

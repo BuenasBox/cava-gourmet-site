@@ -95,6 +95,7 @@ class handler(BaseHTTPRequestHandler):
     def _json(self, code, body):
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
+        self.send_header("Cache-Control", "private, no-store")
         add_cors_headers(self, methods="GET, OPTIONS")
         self.end_headers()
         self.wfile.write(json.dumps(body, ensure_ascii=False).encode())

@@ -116,6 +116,7 @@ class handler(BaseHTTPRequestHandler):
         if not email:
             self.send_response(400)
             self.send_header("Content-Type", "text/plain")
+            self.send_header("Cache-Control", "private, no-store")
             self.end_headers()
             self.wfile.write(b"Email requerido")
             return
@@ -124,7 +125,7 @@ class handler(BaseHTTPRequestHandler):
             if not validar_token(email, token):
                 self.send_response(403)
                 self.send_header("Content-Type", "text/plain")
-                self.send_header("Cache-Control", "no-store, no-cache")
+                self.send_header("Cache-Control", "private, no-store")
                 self.end_headers()
                 self.wfile.write(b"Token invalido")
                 return
@@ -157,13 +158,14 @@ class handler(BaseHTTPRequestHandler):
 
             self.send_response(302)
             self.send_header("Location", wallet_url)
-            self.send_header("Cache-Control", "no-store, no-cache")
+            self.send_header("Cache-Control", "private, no-store")
             add_cors_headers(self, methods="GET, OPTIONS")
             self.end_headers()
 
         except Exception as e:
             self.send_response(500)
             self.send_header("Content-Type", "text/plain")
+            self.send_header("Cache-Control", "private, no-store")
             self.end_headers()
             self.wfile.write(str(e).encode())
 
