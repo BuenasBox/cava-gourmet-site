@@ -112,6 +112,9 @@ def _styles():
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
+        if not SUPABASE_URL or not SUPABASE_KEY or not HMAC_SECRET or not SCAN_PIN:
+            self._html(503, self._page_error("Servicio temporalmente no disponible"))
+            return
         parsed = urllib.parse.urlparse(self.path)
         params = urllib.parse.parse_qs(parsed.query)
         email  = params.get("email", [""])[0].strip().lower()
@@ -137,6 +140,9 @@ class handler(BaseHTTPRequestHandler):
         self._html(200, self._page_pin(nombre, nivel, exp, email, token))
 
     def do_POST(self):
+        if not SUPABASE_URL or not SUPABASE_KEY or not HMAC_SECRET or not SCAN_PIN:
+            self._html(503, self._page_error("Servicio temporalmente no disponible"))
+            return
         parsed  = urllib.parse.urlparse(self.path)
         params  = urllib.parse.parse_qs(parsed.query)
         email   = params.get("email", [""])[0].strip().lower()

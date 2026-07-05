@@ -49,6 +49,11 @@ def read_json_body(handler, max_bytes=MAX_JSON_BODY_BYTES):
     return data
 
 
+def require_server_config(**values):
+    if any(not value for value in values.values()):
+        raise AuthError(503, "Configuración del servidor incompleta")
+
+
 def _json_response(handler, status, body, methods="GET, POST, PATCH, DELETE, OPTIONS"):
     handler.send_response(status)
     handler.send_header("Content-Type", "application/json")

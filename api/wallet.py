@@ -8,9 +8,9 @@ import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
 try:
-    from ._auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
+    from ._auth import AuthError, add_cors_headers, handle_options, require_admin, require_server_config, respond_auth_error
 except ImportError:
-    from _auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
+    from _auth import AuthError, add_cors_headers, handle_options, require_admin, require_server_config, respond_auth_error
 
 ISSUER_ID    = "3388000000023147327"
 CLASS_SUFFIX = "AfterOfficeClub"
@@ -108,6 +108,15 @@ def ensure_loyalty_object(email, nombre):
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
+        try:
+            require_server_config(
+                SUPABASE_URL=SUPABASE_URL,
+                SUPABASE_KEY=SUPABASE_KEY,
+                HMAC_SECRET=HMAC_SECRET,
+            )
+        except AuthError as exc:
+            respond_auth_error(self, exc, methods="GET, OPTIONS")
+            return
         parsed = urllib.parse.urlparse(self.path)
         params = urllib.parse.parse_qs(parsed.query)
         email  = (params.get("email", [""])[0] or params.get("e", [""])[0]).strip().lower()

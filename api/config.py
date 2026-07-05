@@ -4,9 +4,9 @@ import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
 try:
-    from ._auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, respond_auth_error
+    from ._auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
 except ImportError:
-    from _auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, respond_auth_error
+    from _auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
@@ -37,6 +37,11 @@ def supabase_request(method, endpoint, body=None):
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
+        try:
+            require_server_config(SUPABASE_URL=SUPABASE_URL, SUPABASE_KEY=SUPABASE_KEY)
+        except AuthError as exc:
+            respond_auth_error(self, exc, methods="GET, PATCH, OPTIONS")
+            return
         rows = supabase_request("GET", "configuracion?select=*")
         if isinstance(rows, dict) and "error" in rows:
             self._json(500, {"ok": False, "error": "No se pudo cargar la configuración"})
@@ -46,6 +51,7 @@ class handler(BaseHTTPRequestHandler):
 
     def do_PATCH(self):
         try:
+            require_server_config(SUPABASE_URL=SUPABASE_URL, SUPABASE_KEY=SUPABASE_KEY)
             require_admin(self)
             data = read_json_body(self)
         except AuthError as exc:
