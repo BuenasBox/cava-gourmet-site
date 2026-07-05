@@ -57,11 +57,15 @@ class handler(BaseHTTPRequestHandler):
         except AuthError as exc:
             respond_auth_error(self, exc, methods="GET, PATCH, OPTIONS")
             return
-        clave     = data.get("clave", "").strip()
+        clave_raw = data.get("clave", "")
+        clave     = clave_raw.strip() if isinstance(clave_raw, str) else ""
         valor     = data.get("valor", "")
 
         if not clave:
             self._json(400, {"ok": False, "error": "Clave requerida"})
+            return
+        if clave not in PUBLIC_CONFIG_KEYS:
+            self._json(400, {"ok": False, "error": "Clave de configuración no permitida"})
             return
 
         supabase_request(
