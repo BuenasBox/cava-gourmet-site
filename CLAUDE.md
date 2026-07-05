@@ -294,7 +294,7 @@ en el grafo de producción y fragmenta el Knowledge Graph.**
 **Entidad operativa — usar en páginas de experiencias, servicios, Journal:**
 ```json
 {
-  "@type": ["LocalBusiness", "WineStore"],
+  "@type": ["WineStore", "FoodEstablishment", "TouristAttraction"],
   "@id": "https://www.cavagourmet.com/#cava-vinoteca",
   "name": "CAVA Vinoteca",
   "alternateName": ["CAVA Gourmet Market", "Cava Gourmet"],
@@ -332,14 +332,38 @@ en el grafo de producción y fragmenta el Knowledge Graph.**
 { "@id": "https://www.cavagourmet.com/nazareth#person" }
 ```
 
-Schema aprobados: `LocalBusiness`, `WineStore`, `WebPage`, `Article`, `BlogPosting`,
-`FAQPage`, `Person`, `Event`, `Service`, `BreadcrumbList`.
-Schema prohibido: `Winery`.
+Schema aprobados: `LocalBusiness`, `WineStore`, `FoodEstablishment`, `TouristAttraction`,
+`WebPage`, `Article`, `BlogPosting`, `FAQPage`, `Person`, `Brand`, `Event`, `Service`,
+`BreadcrumbList`.
+Schema prohibido: `Winery`, `BarOrPub` (categoriza a CAVA como bar/pub, contradice el
+posicionamiento de marca — ver sección "Posicionamiento").
 
 Nota sobre `WineStore`: subtipo de `LocalBusiness` en schema.org, refleja que
 CAVA vende vino. Usar en páginas donde el contexto de venta es relevante
 (ej. experiencias de cata, muro de vinos). No reemplaza `LocalBusiness` — usar
 en `@graph` junto a él cuando aplique.
+
+### Arquitectura Person → Brand → LocalBusiness (actualizado 2026-07-05)
+
+- **Nazareth Wine Journey es un nodo `Brand`, no `Organization`.** Su `@id` es
+  `https://www.cavagourmet.com/#nazareth-wine-journey`. No tiene `founder` propio
+  (las entidades `Brand` no lo llevan) — la relación se expresa desde `nazareth#person`
+  mediante la propiedad `"brand": { "@id": "https://www.cavagourmet.com/#nazareth-wine-journey" }`.
+  Su `url` debe ser siempre `https://www.cavagourmet.com/nazareth` (la URL canónica de
+  persona), nunca un perfil social — Instagram y Facebook van en `sameAs`.
+- **Cadena de relación:** `nazareth#person` → (`worksFor`) → `#cava-vinoteca`;
+  `nazareth#person` → (`brand`) → `#nazareth-wine-journey`; `#cava-vinoteca` y
+  `#organization` → (`founder`) → `nazareth#person`. Todas las referencias cruzadas
+  se hacen por `@id`, nunca redeclarando el nodo completo inline.
+- **`aggregateRating` de `#cava-vinoteca` proviene de Google Reviews y debe
+  sincronizarse periódicamente.** `ratingValue`, `reviewCount`, `bestRating` y
+  `worstRating` son tipos `Number`/`Integer` (no strings). No modificar estos valores
+  sin verificar la cifra real vigente en Google Business Profile — deben reflejar
+  contenido real, nunca una estimación.
+- **`https://www.wikidata.org/wiki/Q139959656` es el ancla de desambiguación de
+  Nazareth Padilla Montero.** Nunca eliminar este `sameAs` de `nazareth#person`: es
+  la señal más fuerte para que Google y los LLMs la distingan de otras personas con
+  nombre similar y consoliden su entidad en el Knowledge Graph.
 
 ---
 
