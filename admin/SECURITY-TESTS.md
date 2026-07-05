@@ -76,7 +76,7 @@ Expected:
 
 ## Admin Panel
 
-1. Open `/admin/after-office`.
+1. Open `/admin/enofilios-panel`.
 2. Confirm the login screen appears before any member data.
 3. Log in with a non-admin Supabase user.
 4. Confirm API calls fail with `403`.
