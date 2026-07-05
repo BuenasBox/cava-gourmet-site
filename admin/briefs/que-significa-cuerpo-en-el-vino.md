@@ -85,7 +85,7 @@ Fuente detectada:
 Tambien hay menciones parciales en:
 
 - `nazareth.html`: FAQ sobre acidez, cuerpo y estructura.
-- `faq-nazareth-snippet.html`: FAQ reutilizable sobre cuerpo, acidez y tanino.
+- `admin/faq-nazareth-snippet.html`: FAQ reutilizable sobre cuerpo, acidez y tanino.
 - `journal/que-significa-cuerpo-en-el-vino.html`: existe como draft/artifact local; no usar esto como senal de publicacion.
 
 ## Diferenciacion Journal vs Aprende
