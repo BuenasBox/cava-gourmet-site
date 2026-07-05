@@ -32,7 +32,7 @@ def get_miembro(email):
     headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
     req = urllib.request.Request(url, headers=headers)
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=12) as r:
             rows = json.loads(r.read())
             return rows[0] if rows else None
     except Exception:

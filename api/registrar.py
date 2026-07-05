@@ -25,7 +25,7 @@ def supabase_request(method, endpoint, body=None):
     data = json.dumps(body).encode() if body else None
     req  = urllib.request.Request(url, data=data, headers=headers, method=method)
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=12) as r:
             return json.loads(r.read())
     except urllib.error.HTTPError as e:
         return {"error": e.read().decode()}
@@ -48,7 +48,7 @@ def get_google_token():
         "assertion":  token
     }).encode()
     req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data)
-    with urllib.request.urlopen(req) as r:
+    with urllib.request.urlopen(req, timeout=12) as r:
         return json.loads(r.read())["access_token"]
 
 def crear_loyalty_object(email, nombre):
@@ -76,7 +76,7 @@ def crear_loyalty_object(email, nombre):
     req.add_header("Authorization", f"Bearer {access_token}")
     req.add_header("Content-Type", "application/json")
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=12) as r:
             r.read()
     except urllib.error.HTTPError as e:
         # 409 = object already exists — not an error

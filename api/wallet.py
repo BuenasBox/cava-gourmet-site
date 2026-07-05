@@ -41,7 +41,7 @@ def get_google_token():
         "assertion":  token
     }).encode()
     req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data)
-    with urllib.request.urlopen(req) as r:
+    with urllib.request.urlopen(req, timeout=12) as r:
         return json.loads(r.read())["access_token"]
 
 def get_nombre_from_supabase(email):
@@ -52,7 +52,7 @@ def get_nombre_from_supabase(email):
     }
     req = urllib.request.Request(url, headers=headers)
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=12) as r:
             rows = json.loads(r.read())
             if rows:
                 return rows[0].get("nombre", email)
@@ -71,7 +71,7 @@ def ensure_loyalty_object(email, nombre):
     req = urllib.request.Request(url)
     req.add_header("Authorization", f"Bearer {access_token}")
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=12) as r:
             r.read()
             return  # already exists
     except urllib.error.HTTPError as e:
@@ -101,7 +101,7 @@ def ensure_loyalty_object(email, nombre):
     req.add_header("Authorization", f"Bearer {access_token}")
     req.add_header("Content-Type", "application/json")
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=12) as r:
             r.read()
     except urllib.error.HTTPError:
         pass  # 409 = already exists is fine; other errors don't block redirect

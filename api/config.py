@@ -29,7 +29,7 @@ def supabase_request(method, endpoint, body=None):
     data = json.dumps(body).encode() if body else None
     req  = urllib.request.Request(url, data=data, headers=headers, method=method)
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=12) as r:
             raw = r.read()
             return json.loads(raw) if raw.strip() else []
     except urllib.error.HTTPError as e:

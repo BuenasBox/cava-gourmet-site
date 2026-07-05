@@ -31,7 +31,7 @@ def get_google_token():
         "assertion":  token
     }).encode()
     req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data)
-    with urllib.request.urlopen(req) as r:
+    with urllib.request.urlopen(req, timeout=12) as r:
         return json.loads(r.read())["access_token"]
 
 def wallet_request(method, path, body=None):
@@ -42,7 +42,7 @@ def wallet_request(method, path, body=None):
     req.add_header("Authorization", f"Bearer {access_token}")
     req.add_header("Content-Type", "application/json")
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=12) as r:
             raw = r.read()
             return r.status, json.loads(raw) if raw.strip() else {}
     except urllib.error.HTTPError as e:
