@@ -140,6 +140,15 @@
       ]
     },
     {
+      "source": "/after-office-vino-perez-zeledon",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/journal",
       "headers": [
         {
