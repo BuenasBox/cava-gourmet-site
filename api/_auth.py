@@ -14,6 +14,7 @@ ALLOWED_ORIGINS = {
     ).split(",")
     if origin.strip()
 }
+MAX_JSON_BODY_BYTES = 64 * 1024
 
 
 class AuthError(Exception):
@@ -21,6 +22,31 @@ class AuthError(Exception):
         super().__init__(message)
         self.status = status
         self.message = message
+
+
+def read_json_body(handler, max_bytes=MAX_JSON_BODY_BYTES):
+    content_type = (handler.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
+    if content_type != "application/json":
+        raise AuthError(415, "Content-Type application/json requerido")
+
+    try:
+        length = int(handler.headers.get("Content-Length", "0"))
+    except (TypeError, ValueError):
+        raise AuthError(400, "Content-Length inválido")
+
+    if length <= 0:
+        raise AuthError(400, "Cuerpo JSON requerido")
+    if length > max_bytes:
+        raise AuthError(413, "Cuerpo de solicitud demasiado grande")
+
+    try:
+        data = json.loads(handler.rfile.read(length))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        raise AuthError(400, "JSON inválido")
+
+    if not isinstance(data, dict):
+        raise AuthError(400, "El cuerpo JSON debe ser un objeto")
+    return data
 
 
 def _json_response(handler, status, body, methods="GET, POST, PATCH, DELETE, OPTIONS"):

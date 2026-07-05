@@ -4,9 +4,9 @@ import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
 try:
-    from ._auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
+    from ._auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, respond_auth_error
 except ImportError:
-    from _auth import AuthError, add_cors_headers, handle_options, require_admin, respond_auth_error
+    from _auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, respond_auth_error
 
 SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
@@ -47,11 +47,10 @@ class handler(BaseHTTPRequestHandler):
     def do_PATCH(self):
         try:
             require_admin(self)
+            data = read_json_body(self)
         except AuthError as exc:
             respond_auth_error(self, exc, methods="GET, PATCH, OPTIONS")
             return
-        length    = int(self.headers.get("Content-Length", 0))
-        data      = json.loads(self.rfile.read(length))
         clave     = data.get("clave", "").strip()
         valor     = data.get("valor", "")
 
