@@ -1,5 +1,12 @@
 # Security Hardening
 
+> **Nota de mantenimiento (2026-07-05):** El archivo `admin/after-office.html`
+> fue renombrado a `admin/enofilios-panel.html` en el commit `bffb87e` [F1-04].
+> Las referencias a "after-office" que aparecen más abajo en este documento
+> reflejan el nombre original vigente al momento de cada prueba y se
+> conservan intactas a propósito, como registro histórico de auditoría.
+> No las reescribas.
+
 > **SNAPSHOT HISTÓRICO** — Este documento registra el estado de seguridad al
 > 2026-05-25. No refleja necesariamente el estado actual de producción.
 > Para verificar el estado real: revisar `vercel.json`, el Vercel Dashboard y
