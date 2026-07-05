@@ -44,8 +44,8 @@ class handler(BaseHTTPRequestHandler):
             link  = f"https://pay.google.com/gp/v/save/{token}"
             self._respond(200, {"link": link})
 
-        except Exception as e:
-            self._respond(500, {"error": str(e)})
+        except Exception:
+            self._respond(500, {"error": "No se pudo generar el enlace"})
 
     def do_OPTIONS(self):
         handle_options(self, methods="GET, OPTIONS")

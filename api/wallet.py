@@ -162,12 +162,12 @@ class handler(BaseHTTPRequestHandler):
             add_cors_headers(self, methods="GET, OPTIONS")
             self.end_headers()
 
-        except Exception as e:
+        except Exception:
             self.send_response(500)
             self.send_header("Content-Type", "text/plain")
             self.send_header("Cache-Control", "private, no-store")
             self.end_headers()
-            self.wfile.write(str(e).encode())
+            self.wfile.write(b"No se pudo generar el enlace de Wallet")
 
     def do_OPTIONS(self):
         handle_options(self, methods="GET, OPTIONS")

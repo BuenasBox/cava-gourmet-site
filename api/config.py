@@ -39,7 +39,7 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         rows = supabase_request("GET", "configuracion?select=*")
         if isinstance(rows, dict) and "error" in rows:
-            self._json(500, {"ok": False, "error": rows["error"]})
+            self._json(500, {"ok": False, "error": "No se pudo cargar la configuración"})
             return
         config = {r["clave"]: r["valor"] for r in rows if r.get("clave") in PUBLIC_CONFIG_KEYS}
         self._json(200, {"ok": True, "config": config})

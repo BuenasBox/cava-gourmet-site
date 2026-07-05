@@ -138,7 +138,7 @@ class handler(BaseHTTPRequestHandler):
         result = supabase_request("POST", "miembros", miembro)
 
         if "error" in result:
-            self._respond(500, {"ok": False, "error": str(result)})
+            self._respond(500, {"ok": False, "error": "No se pudo registrar el miembro"})
             return
 
         # Actualizar referidos del que lo refirió

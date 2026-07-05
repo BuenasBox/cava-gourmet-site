@@ -147,7 +147,7 @@ class handler(BaseHTTPRequestHandler):
             return
         result = supabase_request("GET", "miembros?select=*&order=experiencias.desc")
         if "error" in result:
-            self._respond(500, {"error": str(result)})
+            self._respond(500, {"error": "No se pudo consultar la lista de miembros"})
             return
 
         miembros = []
@@ -211,7 +211,7 @@ class handler(BaseHTTPRequestHandler):
             return
         result = supabase_request("DELETE", f"miembros?email=eq.{urllib.parse.quote(email)}")
         if isinstance(result, dict) and "error" in result:
-            self._respond(500, {"ok": False, "error": str(result)})
+            self._respond(500, {"ok": False, "error": "No se pudo eliminar el miembro"})
             return
         self._respond(200, {"ok": True})
 
