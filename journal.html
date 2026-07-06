@@ -261,22 +261,30 @@
       background:
         radial-gradient(circle at 72% 18%, rgba(184,151,90,.13), transparent 30%),
         radial-gradient(circle at 12% 82%, rgba(74,23,32,.45), transparent 36%),
+        radial-gradient(ellipse at 50% 110%, rgba(140,96,54,.14), transparent 45%),
         linear-gradient(155deg, #0a1624 0%, #11100e 60%, #090807 100%);
       position: relative; overflow: hidden;
     }
     .blog-hero::before {
-      content: ""; position: absolute; inset: 0; opacity: .35;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(255,255,255,.02) 1px, transparent 1px);
-      background-size: 72px 72px;
-      mask-image: radial-gradient(circle at 40% 50%, black, transparent 72%);
+      content: ""; position: absolute; inset: 0; opacity: .5;
+      background: repeating-linear-gradient(180deg, transparent 0 35px, rgba(246,239,227,.035) 35px 36px);
+      mask-image: radial-gradient(ellipse at 32% 45%, black, transparent 72%);
+      pointer-events: none;
+    }
+    .blog-hero::after {
+      content: ""; position: absolute; top: 0; bottom: 0;
+      left: calc(max(var(--pad), (100% - var(--max)) / 2 + var(--pad)) - 1.6rem);
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(184,151,90,.4) 32%, rgba(184,151,90,.16));
+      pointer-events: none;
     }
     .blog-hero .wrap { position: relative; z-index: 2; max-width: 860px; }
     .blog-hero .title { font-size: clamp(3.2rem, 9vw, 7.5rem); }
-    .blog-hero .copy { max-width: 540px; margin-top: 1.5rem; }
+    .blog-hero .title em { font-style: italic; }
+    .blog-hero .copy { max-width: 46ch; margin-top: 1.5rem; text-wrap: pretty; }
     .blog-hero-author {
       display: flex; align-items: center; gap: 1.2rem; margin-top: 2.8rem;
+      padding-top: 1.6rem; border-top: 1px solid var(--line); max-width: 380px;
     }
     .blog-hero-author .naz-thumb {
       width: 46px; height: 46px; border-radius: 50%; overflow: hidden;
@@ -288,7 +296,9 @@
       color: rgba(246,239,227,.5);
     }
     .blog-hero-author .naz-info strong {
-      color: var(--gold); font-weight: 400; display: block; margin-bottom: .2rem;
+      font-family: var(--serif); font-style: italic; font-weight: 400;
+      font-size: 1.08rem; letter-spacing: .02em; text-transform: none;
+      color: var(--gold-soft); display: block; margin-bottom: .3rem;
     }
 
     /* ==========================================
