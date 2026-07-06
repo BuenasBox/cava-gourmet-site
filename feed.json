@@ -1,0 +1,109 @@
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": "CAVA Gourmet Market Journal",
+  "home_page_url": "https://www.cavagourmet.com",
+  "feed_url": "https://www.cavagourmet.com/feed.json",
+  "description": "Artículos educativos sobre vino, cultura y experiencias de CAVA Gourmet Market",
+  "author": {
+    "name": "Nazareth Padilla Montero",
+    "url": "https://www.cavagourmet.com/nazareth"
+  },
+  "items": [
+    {
+      "id": "https://www.cavagourmet.com/journal/vino-y-gastronomia-costarricense",
+      "url": "https://www.cavagourmet.com/journal/vino-y-gastronomia-costarricense",
+      "title": "Vino y gastronomía costarricense: cuando el contraste es más honesto que las reglas",
+      "summary": "Por Nazareth Padilla Montero. El arroz con pollo y el casado maridan con vino mejor de lo que el protocolo del maridaje sugiere. CAVA Gourmet Market Journal.",
+      "date_published": "2026-06-02T12:00:00-06:00",
+      "author": {
+        "name": "Nazareth Padilla Montero",
+        "url": "https://www.cavagourmet.com/nazareth"
+      },
+      "tags": ["vino", "gastronomía costarricense", "maridaje", "Costa Rica"]
+    },
+    {
+      "id": "https://www.cavagourmet.com/journal/el-after-office-y-la-botella-compartida",
+      "url": "https://www.cavagourmet.com/journal/el-after-office-y-la-botella-compartida",
+      "title": "Por qué el after office con vino no es solo una copa",
+      "summary": "Por Nazareth Padilla Montero. El after office con vino no se copia con decoración: se copia la conexión que se siente en la mesa. CAVA Gourmet Market Journal.",
+      "date_published": "2026-06-01T12:00:00-06:00",
+      "author": {
+        "name": "Nazareth Padilla Montero",
+        "url": "https://www.cavagourmet.com/nazareth"
+      },
+      "tags": ["after office", "ritual social", "vino", "Pérez Zeledón"]
+    },
+    {
+      "id": "https://www.cavagourmet.com/journal/el-protocolo-del-vino-empieza-con-la-copa",
+      "url": "https://www.cavagourmet.com/journal/el-protocolo-del-vino-empieza-con-la-copa",
+      "title": "La copa de VINO y la cuchara tienen más en común de lo que parece",
+      "summary": "Por Nazareth Padilla Montero. Sostener una copa de vino es tan sencillo como sostener una cuchara: el protocolo sin rigidez. CAVA Gourmet Market Journal.",
+      "date_published": "2026-05-25T12:00:00-06:00",
+      "author": {
+        "name": "Nazareth Padilla Montero",
+        "url": "https://www.cavagourmet.com/nazareth"
+      },
+      "tags": ["copa de vino", "protocolo del vino", "cultura del vino", "Pérez Zeledón"]
+    },
+    {
+      "id": "https://www.cavagourmet.com/journal/que-significa-cuerpo-en-el-vino",
+      "url": "https://www.cavagourmet.com/journal/que-significa-cuerpo-en-el-vino",
+      "title": "Qué significa que un vino tenga cuerpo",
+      "summary": "Por Nazareth Padilla Montero. Qué significa que un vino tenga cuerpo, y por qué no es lo mismo que calidad. CAVA Gourmet Market Journal.",
+      "date_published": "2026-05-24T12:00:00-06:00",
+      "author": {
+        "name": "Nazareth Padilla Montero",
+        "url": "https://www.cavagourmet.com/nazareth"
+      },
+      "tags": ["cuerpo del vino", "vocabulario del vino", "cata de vinos", "Costa Rica"]
+    },
+    {
+      "id": "https://www.cavagourmet.com/journal/el-miedo-silencioso-de-no-saber-de-vino",
+      "url": "https://www.cavagourmet.com/journal/el-miedo-silencioso-de-no-saber-de-vino",
+      "title": "El miedo silencioso de no saber de vino",
+      "summary": "Por Nazareth Padilla Montero. La barrera real hacia el vino no es el precio: es el miedo silencioso a no saber lo suficiente. CAVA Gourmet Market Journal.",
+      "date_published": "2026-05-11T12:00:00-06:00",
+      "author": {
+        "name": "Nazareth Padilla Montero",
+        "url": "https://www.cavagourmet.com/nazareth"
+      },
+      "tags": ["miedo al vino", "educación del vino", "mercados emergentes", "cultura del vino"]
+    },
+    {
+      "id": "https://www.cavagourmet.com/journal/como-se-construye-cultura-del-vino",
+      "url": "https://www.cavagourmet.com/journal/como-se-construye-cultura-del-vino",
+      "title": "Cómo se construye cultura del vino en un país sin tradición vitivinícola",
+      "summary": "Por Nazareth Padilla Montero. Sin tradición vitivinícola, Costa Rica construye su cultura del vino desde la conversación diaria. CAVA Gourmet Market Journal.",
+      "date_published": "2026-05-01T12:00:00-06:00",
+      "author": {
+        "name": "Nazareth Padilla Montero",
+        "url": "https://www.cavagourmet.com/nazareth"
+      },
+      "tags": ["cultura del vino", "Costa Rica", "educación del vino"]
+    },
+    {
+      "id": "https://www.cavagourmet.com/journal/contenido-digital-experiencia-real-vinoteca-costa-rica",
+      "url": "https://www.cavagourmet.com/journal/contenido-digital-experiencia-real-vinoteca-costa-rica",
+      "title": "De contenido digital a experiencia real: el caso de una vinoteca en Costa Rica",
+      "summary": "Por Nazareth Padilla Montero. Del contenido digital a la experiencia real: qué pasa cuando alguien cruza la puerta de la vinoteca. CAVA Gourmet Market Journal.",
+      "date_published": "2026-05-01T12:00:00-06:00",
+      "author": {
+        "name": "Nazareth Padilla Montero",
+        "url": "https://www.cavagourmet.com/nazareth"
+      },
+      "tags": ["marketing del vino", "contenido digital", "vinoteca", "Costa Rica"]
+    },
+    {
+      "id": "https://www.cavagourmet.com/journal/vino-menos-elitismo-mas-experiencia",
+      "url": "https://www.cavagourmet.com/journal/vino-menos-elitismo-mas-experiencia",
+      "title": "Por qué el vino necesita menos elitismo y más experiencia",
+      "summary": "Por Nazareth Padilla Montero. Quien comunica el vino decide si invita o excluye: por qué la experiencia debe ganarle al examen. CAVA Gourmet Market Journal.",
+      "date_published": "2026-05-01T12:00:00-06:00",
+      "author": {
+        "name": "Nazareth Padilla Montero",
+        "url": "https://www.cavagourmet.com/nazareth"
+      },
+      "tags": ["vino sin elitismo", "educación del vino", "experiencia del vino", "cultura del vino"]
+    }
+  ]
+}
