@@ -307,50 +307,73 @@
     .blog-posts {
       padding: clamp(4rem, 7vw, 6rem) 0 clamp(5rem, 9vw, 8rem);
       background: var(--charcoal-2);
+      position: relative;
     }
+    .blog-posts::before {
+      content: ""; position: absolute; top: 0; bottom: 0;
+      left: calc(max(var(--pad), (100% - var(--max)) / 2 + var(--pad)) - 1.6rem);
+      width: 1px;
+      background: linear-gradient(180deg, rgba(184,151,90,.16), rgba(184,151,90,.26) 40%, transparent);
+      pointer-events: none;
+    }
+    .blog-posts .wrap { position: relative; z-index: 1; }
     .blog-posts-header { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
-    .blog-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: clamp(1.5rem, 2.5vw, 2.25rem);
-    }
+    .blog-grid { display: block; max-width: 980px; counter-reset: entry; }
     .blog-card {
-      background: rgba(246, 239, 227, .03);
-      border: 1px solid var(--line);
-      border-radius: .875rem; overflow: hidden;
-      display: flex; flex-direction: column;
-      transition: transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+      counter-increment: entry;
+      display: grid; grid-template-columns: minmax(0, 1fr) 300px;
+      gap: clamp(1.5rem, 3.5vw, 3rem);
+      padding: clamp(2.25rem, 4vw, 3.25rem) 0;
+      border-top: 1px solid var(--line);
+      transition: background var(--m-surface) var(--ease);
     }
-    .blog-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(184, 151, 90, .38);
-      box-shadow: 0 24px 52px rgba(0,0,0,.3);
+    .blog-card:first-child {
+      border-top: 0; padding-top: .5rem;
+      grid-template-columns: minmax(0, 1fr) 380px;
     }
-    .blog-card-img { aspect-ratio: 3/2; overflow: hidden; }
+    .blog-card:last-child { border-bottom: 1px solid var(--line); }
+    .blog-card-img {
+      aspect-ratio: 3/2; overflow: hidden; order: 2; align-self: center;
+      border-radius: 2px; box-shadow: 0 16px 38px rgba(0,0,0,.24);
+    }
     .blog-card-img img {
       width: 100%; height: 100%; object-fit: cover; display: block;
-      transition: transform .55s var(--ease);
+      opacity: .92; filter: saturate(.94);
+      transition: opacity var(--m-surface) var(--ease), filter var(--m-surface) var(--ease);
     }
-    .blog-card:hover .blog-card-img img { transform: scale(1.05); }
-    .blog-card-body { padding: 1.65rem 1.75rem 1.85rem; display: flex; flex-direction: column; flex: 1; }
+    .blog-card:hover .blog-card-img img { opacity: 1; filter: saturate(1); }
+    .blog-card-img:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .blog-card-body { display: flex; flex-direction: column; min-width: 0; }
     .blog-card-cat {
-      font-size: .55rem; letter-spacing: .3em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: .9rem; font-weight: 400;
+      font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem; font-weight: 400;
+      display: flex; align-items: center; gap: .7rem;
     }
+    .blog-card-cat::before {
+      content: counter(entry, decimal-leading-zero);
+      font-family: var(--display); font-style: italic; font-weight: 400;
+      font-size: .95rem; letter-spacing: .04em; color: var(--gold-soft);
+    }
+    .blog-card-cat::after { content: ""; width: 22px; height: 1px; background: currentColor; opacity: .5; }
     .blog-card-title {
       font-family: var(--display); font-weight: 300;
-      font-size: clamp(1.2rem, 1.8vw, 1.55rem);
-      line-height: 1.12; letter-spacing: -.02em;
+      font-size: clamp(1.45rem, 2.4vw, 2.1rem);
+      line-height: 1.1; letter-spacing: -.02em;
       color: var(--ivory); margin-bottom: 1rem;
+      text-wrap: pretty;
     }
+    .blog-card:first-child .blog-card-title { font-size: clamp(1.9rem, 3.2vw, 2.9rem); }
+    .blog-card-title a { transition: color var(--m-surface) var(--ease); }
+    .blog-card-title a:hover { color: var(--gold-soft); }
+    .blog-card-title a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     .blog-card-excerpt {
-      font-family: var(--serif); font-size: clamp(.95rem, 1.3vw, 1.08rem);
-      line-height: 1.72; color: rgba(246,239,227,.58);
-      flex: 1; margin-bottom: 1.5rem;
+      font-family: var(--serif); font-size: clamp(1rem, 1.35vw, 1.14rem);
+      line-height: 1.78; color: rgba(246,239,227,.6);
+      max-width: 58ch; text-wrap: pretty;
+      flex: 1; margin-bottom: 1.4rem;
     }
     .blog-card-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      border-top: 1px solid var(--line); padding-top: 1.2rem; margin-top: auto;
+      display: flex; align-items: center; gap: 1.4rem; margin-top: auto;
     }
     .blog-card-date {
       font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
@@ -359,10 +382,11 @@
     .blog-card-link {
       font-size: .6rem; letter-spacing: .22em; text-transform: uppercase;
       color: var(--gold-soft); display: inline-flex; align-items: center; gap: .35rem;
-      transition: gap .25s var(--ease), color .25s var(--ease);
+      transition: gap var(--m-surface) var(--ease), color var(--m-surface) var(--ease);
     }
     .blog-card-link::after { content: "→"; }
     .blog-card-link:hover { gap: .65rem; color: var(--gold); }
+    .blog-card-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
     /* ==========================================
        FOOTER
@@ -427,10 +451,13 @@
       .nav-toggle { display: block; }
       .nav { padding-left: clamp(1rem, 5vw, 1.5rem); padding-right: clamp(1rem, 5vw, 1.5rem); }
       .footer-inner { flex-wrap: wrap; justify-content: center; text-align: center; }
-      .blog-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 880px) {
+      .blog-card, .blog-card:first-child { grid-template-columns: 1fr; gap: 1.4rem; }
+      .blog-card-body { order: 1; }
+      .blog-card-img { order: 2; max-width: 480px; align-self: start; }
     }
     @media (max-width: 600px) {
-      .blog-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
       .wrap { padding: 0 1.5rem; }
     }
     @media (max-width: 768px) { .reveal { opacity: 1; transform: none; transition: none; } }
