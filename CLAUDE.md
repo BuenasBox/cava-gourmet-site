@@ -463,3 +463,50 @@ La hora `12:00:00` es convencional (mediodía local) cuando no se conoce la hora
 - No modificar `meta robots` a noindex sin autorización.
 - No eliminar canonical existentes sin reemplazarlos.
 - No hacer commit ni push sin instrucción expresa.
+
+---
+
+## ARQUITECTURA TÉCNICA — Estado Final (Julio 2026)
+
+Resultado de la auditoría técnica completa ejecutada en sesión (Fases 1-4 +
+deudas técnicas). Ver historial de git para el detalle de cada commit.
+
+**Fase 1 (Estructura y configuración):** ✅ Completada
+- `vercel.json`: cache rule agregada para `/after-office-vino-perez-zeledon`,
+  headers de seguridad deduplicados, `cleanUrls` y redirects `/blog/*` → `/journal/*` verificados
+- Archivos huérfanos (`faq-nazareth-snippet.html`, `NuestraHistoria_FINAL-2.txt`)
+  movidos a `/admin/`; `admin/after-office.html` renombrado a `admin/enofilios-panel.html`
+- `CNAME` (artefacto de GitHub Pages) eliminado, confirmado DNS 100% en Vercel
+- DNS/Cloudflare (DMARC/SPF/DKIM): **fuera de alcance de esta auditoría, no verificado ni modificado**
+
+**Fase 2 (Knowledge Graph):** ✅ Completada
+- `nazareth#person` → `founderOf`/`worksFor` → `#cava-vinoteca`; `brand` → `#nazareth-wine-journey`
+- `#cava-vinoteca` retipado a `WineStore + FoodEstablishment + TouristAttraction` (se retira `BarOrPub`)
+- `#nazareth-wine-journey` retipado de `Organization` a `Brand` (sin `founder`, con `creator` → Person)
+- Ciclo de autoridad explícito: Person ⇄ CAVA ⇄ Brand, sin relación de propiedad empresarial
+- Todas las referencias cruzadas por `@id` absoluto, sincronizadas entre `index.html` y `nazareth.html`
+
+**Fase 3 (SEO técnico):** ✅ Completada
+- Meta descriptions únicas por página, patrón Entity SEO aprobado
+- Canonicals verificados en todas las páginas HTML (incluida `/members/`, que no lo tenía)
+- Open Graph + Twitter Card completos y consistentes entre sí
+- `sitemap.xml`: 12 de 14 `lastmod` resincronizados con la fecha real de edición
+- Headers de seguridad verificados presentes; CSP se mantiene en Report-Only (no se endureció)
+
+**Fase 4 (Editorial + Journal):** ✅ Completada
+- 8 artículos con `articleBody` (extracto real de 514-693 caracteres, no el cuerpo completo,
+  para no impactar Lighthouse) y `about` (array de conceptos reales por artículo)
+- `BreadcrumbList` con `@id` propio (`.../journal/[slug]#breadcrumb`) en los 8
+- `author`/`publisher`/`isPartOf` verificados byte-idénticos en los 8 artículos
+- **Pendiente, no corregido:** los nodos `Person`/`Organization` redeclarados inline en cada
+  artículo tienen `jobTitle`, `hasCredential` y `sameAs` inconsistentes entre sí y respecto a
+  `index.html`/`nazareth.html` (falta Wikidata Q139959656 en los 8). Requiere una fase dedicada.
+
+**Deudas técnicas:** ✅ Cero pendientes de lo auditado
+- `/feed.json`: JSON Feed 1.1 creado, 8 artículos en orden cronológico real descendente
+- `/llms.txt`: ya existía (más completo que un template genérico); se agregó el artículo
+  más reciente faltante, el ancla Wikidata Q139959656 y el link a `/feed.json`
+- `/robots.txt`: ya tenía Content-signals (`search`, `ai-input`, `ai-train`) y `Sitemap:` — verificado, no requirió cambios
+- Multiidioma: no aplica (sitio 100% español, `es-CR`)
+
+**Próxima fase:** UX/UI visual (en conversación separada) — no se tocó en esta auditoría por instrucción explícita.
