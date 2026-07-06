@@ -3,6 +3,10 @@ Assets/images/Nazareth/_Archivo/
 Assets/images/Erick/_Archivo/
 Assets/images/Nazareth y Erick/_Archivo/
 
+# Staging local de logos optimizados (entrega de trabajo/reserva) —
+# los archivos finales se copian a sus rutas reales en L-01/L-02/L-03
+Assets/logo-optimizado/
+
 # Formatos de cámara
 *.ARW
 *.arw
