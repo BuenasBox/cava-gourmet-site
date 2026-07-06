@@ -260,6 +260,52 @@ Cada página importante debe incluir:
 - Copy conversacional útil para LLMs
 - CTA vinculado a WhatsApp (+506 8632 5260) o reservación
 
+### Meta tags y Entity SEO para LLMs (actualizado 2026-07-05)
+
+No optimizar solo para Google Search. Cada decisión de título, descripción,
+canonical y Open Graph debe reforzar simultáneamente: Google Search + Google AI
+Overviews, ChatGPT, Claude, Gemini y Perplexity, y las entidades del Knowledge
+Graph (Nazareth, CAVA, Wine Journey). Esto es Entity SEO + GEO — no reemplaza
+el SEO técnico ni la accesibilidad, los complementa.
+
+1. **URL canónica oficial del sitio:** `https://www.cavagourmet.com` — con
+   `www` y HTTPS obligatorio. El apex sin `www` y `http://` deben redirigir con
+   301 a esta forma (esto se configura en Vercel Dashboard → Domains, no en
+   `vercel.json` — es un redirect cross-domain).
+2. **Meta description — patrón editorial:** `[Qué es] [Ubicación] [Ofertas]
+   [Diferenciador]`. Cada página tiene una descripción única pero con
+   identidad de marca común.
+3. **Open Graph + Twitter Card obligatorios en TODAS las páginas indexables**
+   (`og:type`, `og:title`, `og:description`, `og:image` con `width`/`height`/
+   `alt`/`type`, `og:url`, `og:locale`; `twitter:card`, `twitter:title`,
+   `twitter:description`, `twitter:image`). Twitter debe ser consistente con
+   Open Graph, no declarar un mensaje distinto.
+4. **`<link rel="canonical">` en TODAS las páginas HTML**, incluidas las que
+   llevan `noindex,nofollow` (ej. `/members/`) — el canonical no sustituye al
+   robots meta, son señales independientes.
+5. **`article:author` en artículos del Journal debe ser la URL de la
+   entidad** (`https://www.cavagourmet.com/nazareth#person`), nunca el nombre
+   en texto plano — es el patrón que espera Open Graph/Facebook para vincular
+   autoría a una entidad verificable.
+6. **`sitemap.xml` debe actualizarse cada vez que se edite una página** — el
+   `<lastmod>` debe reflejar la fecha real de la última edición de contenido,
+   no quedar congelado desde la publicación original.
+7. **Breadcrumbs (`BreadcrumbList`) en páginas de navegación profunda**
+   (Journal, experiencias): patrón Inicio → sección → página actual, con
+   `position` e `item` (URL) en todos los niveles excepto el actual.
+8. **CSP en Report-Only es intencional — no endurecer a modo enforce sin un
+   sprint de seguridad dedicado y separado.** Cualquier cambio a la política
+   de Content-Security-Policy requiere su propia revisión, no debe mezclarse
+   con trabajo de SEO o contenido.
+
+**Nota de longitud (2026-07-05):** las reglas de arriba (title 50–60,
+description 140–160 caracteres) son la guía por defecto. En esta sesión se
+aprobaron textos específicos para home y `/nazareth` que exceden esos rangos
+(title ~60–67, description ~209–220 caracteres) priorizando densidad de
+Entity SEO sobre el límite de caracteres. Si esto se repite como patrón,
+actualizar el rango aquí; si fue una excepción puntual, mantener la regla
+50–60 / 140–160 como estándar para páginas nuevas.
+
 ---
 
 ## Reglas GEO / AI SEO
