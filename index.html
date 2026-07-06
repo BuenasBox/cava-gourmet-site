@@ -389,13 +389,17 @@
               <a href="#after-office" class="btn ghost">Descubrir After Office</a>
             </div>
             <div class="hero-branding reveal">
-              <div class="cava-monogram">
-                <svg width="34" height="34" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <circle cx="17" cy="17" r="16" fill="var(--gold)" stroke="var(--gold-soft)" stroke-width="1" />
-                  <text x="17" y="23" text-anchor="middle" font-family="var(--display)" font-style="italic"
-                    font-size="20" fill="var(--navy-deep)">C</text>
-                </svg>
-              </div>
+              <picture>
+                <source
+                  srcset="Assets/images/sello-cava-bronce-320.webp 320w, Assets/images/sello-cava-bronce-640.webp 640w, Assets/images/sello-cava-bronce-960.webp 960w, Assets/images/sello-cava-bronce-1280.webp 1280w"
+                  type="image/webp"
+                  sizes="clamp(120px, 20vw, 180px)">
+                <img src="Assets/images/sello-cava-bronce-640.png"
+                  alt="Isotipo y wordmark de CAVA Vinoteca"
+                  class="hero-mark-image"
+                  width="640" height="173"
+                  loading="eager" decoding="async">
+              </picture>
               <p class="hero-branding-label">El sello de la casa</p>
             </div>
           </div>
