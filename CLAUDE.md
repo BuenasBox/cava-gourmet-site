@@ -345,16 +345,33 @@ en `@graph` junto a él cuando aplique.
 
 ### Arquitectura Person → Brand → LocalBusiness (actualizado 2026-07-05)
 
+Filosofía: CAVA no es una tienda de vinos. Es una vinoteca boutique experiencial
+donde el vino es el medio para crear educación, hospitalidad, comunidad y cultura.
+Nazareth Padilla Montero es la autoridad/fundadora. Nazareth Wine Journey es su
+marca editorial personal — no una empresa, no una propietaria. El schema nunca debe
+sugerir propiedad, operación o dependencia empresarial entre estas entidades.
+
 - **Nazareth Wine Journey es un nodo `Brand`, no `Organization`.** Su `@id` es
-  `https://www.cavagourmet.com/#nazareth-wine-journey`. No tiene `founder` propio
-  (las entidades `Brand` no lo llevan) — la relación se expresa desde `nazareth#person`
-  mediante la propiedad `"brand": { "@id": "https://www.cavagourmet.com/#nazareth-wine-journey" }`.
-  Su `url` debe ser siempre `https://www.cavagourmet.com/nazareth` (la URL canónica de
-  persona), nunca un perfil social — Instagram y Facebook van en `sameAs`.
-- **Cadena de relación:** `nazareth#person` → (`worksFor`) → `#cava-vinoteca`;
-  `nazareth#person` → (`brand`) → `#nazareth-wine-journey`; `#cava-vinoteca` y
-  `#organization` → (`founder`) → `nazareth#person`. Todas las referencias cruzadas
-  se hacen por `@id`, nunca redeclarando el nodo completo inline.
+  `https://www.cavagourmet.com/#nazareth-wine-journey`. No tiene `founder`
+  (las entidades `Brand` no lo llevan). Su `url` debe ser siempre
+  `https://www.cavagourmet.com/nazareth` (la URL canónica de persona), nunca un
+  perfil social — Instagram, Facebook, YouTube, SubStack, TikTok y el podcast de
+  Spotify van en `sameAs`.
+- **Ciclo de autoridad — todas las referencias cruzadas por `@id`, nunca inline:**
+  - `nazareth#person` → (`worksFor`) → `#cava-vinoteca`
+  - `nazareth#person` → (`brand`) → `#nazareth-wine-journey`
+  - `nazareth#person` → (`founderOf`) → `[#cava-vinoteca, #nazareth-wine-journey]`
+  - `#cava-vinoteca` y `#organization` → (`founder`) → `nazareth#person`
+  - `#nazareth-wine-journey` (Brand) → (`creator`) → `nazareth#person`
+  - `#nazareth-wine-journey` (Brand) → (`mentions`) → `#cava-vinoteca` (relación
+    editorial, no de propiedad — nunca usar `owns`, `subsidiary` ni `parentOrganization`
+    entre Brand y `#cava-vinoteca`)
+- **Articles/BlogPosting usan `publisher` → `{"@id": "https://www.cavagourmet.com/#organization"}`.**
+  Nunca declarar un `publisher` inline ni apuntar al `Person` o al `Brand`.
+- **`hasOfferCatalog` (cuando aplique, ej. páginas de experiencias) usa la
+  estructura `OfferCatalog.itemListElement[].Offer.itemOffered.Service`** — no
+  usar `Event` para experiencias recurrentes sin fecha fija (After Office, catas
+  guiadas, maridajes).
 - **`aggregateRating` de `#cava-vinoteca` proviene de Google Reviews y debe
   sincronizarse periódicamente.** `ratingValue`, `reviewCount`, `bestRating` y
   `worstRating` son tipos `Number`/`Integer` (no strings). No modificar estos valores
