@@ -681,6 +681,18 @@ text-transform: uppercase;
 font-size: .9rem;
 }
 
+/* ==========================================
+   VIEW TRANSITIONS (Sprint 11/12) — sello compartido + retrato con nombre propio.
+   El nombre de .cava-seal debe coincidir exactamente con el de index.html.
+========================================== */
+@media (prefers-reduced-motion: no-preference) {
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation-duration: var(--m-veil); animation-timing-function: var(--ease); }
+::view-transition-new(root) { animation-duration: var(--m-veil); animation-timing-function: var(--ease); }
+.nav .brand img { view-transition-name: cava-seal; }
+.hero-visual { view-transition-name: nazareth-portrait; }
+}
+
 .scroll-mark {
 position: absolute;
 right: var(--pad);
@@ -1471,12 +1483,12 @@ color: rgba(246, 239, 227, 0.82);
             <p class="copy dark reveal" style="margin-top: 1.2rem;">Su premisa es simple: el vino no debería intimidar a
               nadie. Cada botella tiene una historia y ella se encarga de contarla de una manera que resuene con las
               personas, no que las aleje.</p>
-            <div class="credentials reveal">
-              <div class="credential-item">
+            <div class="credentials">
+              <div class="credential-item reveal">
                 <span class="credential-num">01</span>
                 <p><strong>WSET Level 3 Wines</strong> — Certificación internacional de educación en vino.</p>
               </div>
-              <div class="credential-item">
+              <div class="credential-item reveal">
                 <span class="credential-num">02</span>
                 <p><strong>Becaria Women of the Vine &amp; Spirits Foundation 2025</strong> — Reconocimiento a liderazgo
                   femenino en la industria del vino.
@@ -1490,7 +1502,7 @@ color: rgba(246, 239, 227, 0.82);
                   Ver mención oficial en WOTVS Foundation →
                 </a>
               </div>
-              <div class="credential-item">
+              <div class="credential-item reveal">
                 <span class="credential-num">→</span>
                 <p><strong>Publicado en Vinetur</strong> — Nazareth Padilla Montero publicó en Vinetur — la revista
                   digital líder del vino en español — el artículo
@@ -1505,12 +1517,12 @@ color: rgba(246, 239, 227, 0.82);
                   Leer artículo en Vinetur →
                 </a>
               </div>
-              <div class="credential-item">
+              <div class="credential-item reveal">
                 <span class="credential-num">03</span>
                 <p><strong>Fundadora de Nazareth Wine Journey</strong> — Marca de educación y comunicación del vino
                   desde Costa Rica.</p>
               </div>
-              <div class="credential-item">
+              <div class="credential-item reveal">
                 <span class="credential-num">04</span>
                 <p><strong>Anfitriona en CAVA Gourmet Market</strong> — Pérez Zeledón, Costa Rica.</p>
               </div>
