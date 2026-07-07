@@ -276,7 +276,10 @@
     .wa svg { width: 24px; height: 24px; fill: currentColor; }
     .skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
     .skip-link:focus { position: fixed; left: 1rem; top: 1rem; width: auto; height: auto; padding: .75rem 1.25rem; background: var(--gold); color: var(--navy-deep); z-index: 9999; font-size: .85rem; letter-spacing: .1em; border-radius: 4px; }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; } }
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity var(--m-reveal) var(--ease), transform var(--m-reveal) var(--ease); transition-delay: calc(var(--stg, 0) * 70ms); }
+    .reveal.visible { opacity: 1; transform: none; }
+    @media (max-width: 768px) { .reveal { opacity: 1; transform: none; transition: none; } }
     @media (max-width: 960px) { .nav-links { display: none; } .nav-toggle { display: block; } .nav { padding-left: clamp(1rem, 5vw, 1.5rem); padding-right: clamp(1rem, 5vw, 1.5rem); } .footer-inner { flex-wrap: wrap; justify-content: center; text-align: center; } }
     @media (max-width: 640px) { .art-author-inner { flex-direction: column; } .art-more { text-align: left; } .art-footnav-inner { flex-direction: column; gap: 2rem; } }
     @media (max-width: 480px) { .art-prose p.art-quote { padding-left: 1rem; } }
@@ -379,7 +382,7 @@
 
         <p>Y eso nos ha puesto a pensar muchas veces.</p>
 
-        <h2>Lo que no se puede copiar del ritual</h2>
+        <h2 class="reveal">Lo que no se puede copiar del ritual</h2>
 
         <p>El after office con vino, como ritual social, tiene una fórmula aparentemente simple: terminar la semana, reunirse, elegir algo, sentarse. Pero entre tener esa estructura y lograr que la noche cambie de temperatura hay una distancia que no siempre se cruza.</p>
 
@@ -387,11 +390,11 @@
 
         <p>La <a href="/journal/como-se-construye-cultura-del-vino">construcción de cultura del vino en Costa Rica</a> pasa, en parte, por aprender a distinguir esa diferencia. Por entender que el vino puede ser el pretexto, pero lo que sostiene la noche es otra cosa.</p>
 
-        <h2>Ni siquiera sé exactamente qué estamos vendiendo</h2>
+        <h2 class="reveal">Ni siquiera sé exactamente qué estamos vendiendo</h2>
 
         <p>Sinceramente, al final nosotros no sentimos que estemos "vendiendo vino".</p>
 
-        <p class="art-quote">Es más… a veces ni siquiera sé exactamente qué es lo que estamos vendiendo.</p>
+        <p class="art-quote reveal">Es más… a veces ni siquiera sé exactamente qué es lo que estamos vendiendo.</p>
 
         <p>Porque estoy segura de que si en esa mesa hubiera otra cosa distinta, muchas de las personas igual vendrían.</p>
 
@@ -405,7 +408,7 @@
 
         <p>Eso es lo que, con el tiempo, ha terminado siendo el <a href="/after-office-vino-perez-zeledon">after office en CAVA</a>. No un evento con nombre elegante. Un lugar al que la gente vuelve.</p>
 
-        <h2>El plan después del trabajo que no necesita justificarse</h2>
+        <h2 class="reveal">El plan después del trabajo que no necesita justificarse</h2>
 
         <p>Pérez Zeledón tiene sus propias dinámicas. La vida aquí no es la misma que en San José, y el vino después del trabajo tampoco ocurre de la misma forma.</p>
 
@@ -527,6 +530,24 @@
         navToggle.setAttribute('aria-expanded', 'false');
       }
     });
+
+    const isMobileFastPath = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobileFastPath) {
+      const revealQueue = [];
+      let rafQueued = false;
+      const commitReveal = () => {
+        rafQueued = false;
+        revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
+          item.style.setProperty('--stg', Math.min(i, 5));
+          item.classList.add('visible');
+        });
+      };
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { revealQueue.push(e.target); observer.unobserve(e.target); } });
+        if (revealQueue.length && !rafQueued) { rafQueued = true; requestAnimationFrame(commitReveal); }
+      }, { threshold: 0.08, rootMargin: '120px 0px 0px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
   </script>
 </body>
 

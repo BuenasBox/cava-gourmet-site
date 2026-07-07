@@ -282,7 +282,10 @@
     .wa svg { width: 24px; height: 24px; fill: currentColor; }
     .skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
     .skip-link:focus { position: fixed; left: 1rem; top: 1rem; width: auto; height: auto; padding: .75rem 1.25rem; background: var(--gold); color: var(--navy-deep); z-index: 9999; font-size: .85rem; letter-spacing: .1em; border-radius: 4px; }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; } }
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity var(--m-reveal) var(--ease), transform var(--m-reveal) var(--ease); transition-delay: calc(var(--stg, 0) * 70ms); }
+    .reveal.visible { opacity: 1; transform: none; }
+    @media (max-width: 768px) { .reveal { opacity: 1; transform: none; transition: none; } }
     @media (max-width: 960px) { .nav-links { display: none; } .nav-toggle { display: block; } .nav { padding-left: clamp(1rem, 5vw, 1.5rem); padding-right: clamp(1rem, 5vw, 1.5rem); } .footer-inner { flex-wrap: wrap; justify-content: center; text-align: center; } }
     @media (max-width: 640px) { .art-author-inner { flex-direction: column; } .art-more { text-align: left; } .art-footnav-inner { flex-direction: column; gap: 2rem; } }
     @media (max-width: 480px) { .art-prose p.art-quote { padding-left: 1rem; } }
@@ -380,7 +383,7 @@
 
         <p>Prefiero hablar de contraste. No como sinónimo técnico, sino como una forma más honesta de describir lo que realmente ocurre cuando el vino y la comida se encuentran en la misma mesa. <a href="/journal/el-miedo-silencioso-de-no-saber-de-vino">Ese miedo silencioso de no saber qué combinar</a> es real, y tiene nombre. Pero también tiene salida.</p>
 
-        <h2>Lo que piden cuando el vino da hambre</h2>
+        <h2 class="reveal">Lo que piden cuando el vino da hambre</h2>
 
         <p>Hay algo que me ha pasado muchas veces en la vinoteca y que me parece revelador.</p>
 
@@ -394,7 +397,7 @@
 
         <p>Lo que he visto en esos momentos es que la gente disfruta más cuando deja de preguntarse si lo está haciendo bien.</p>
 
-        <h2>Un principio que sí vale la pena conocer</h2>
+        <h2 class="reveal">Un principio que sí vale la pena conocer</h2>
 
         <p>Dicho esto, hay una idea que me parece útil compartir. No como regla, sino como herramienta.</p>
 
@@ -406,7 +409,7 @@
 
         <p>Esto no es para memorizarlo. Es para entender que tiene sentido probar. Que dos blancos pueden dar experiencias completamente distintas con el mismo plato.</p>
 
-        <h2>La gastronomía costarricense y el vino que ya le queda</h2>
+        <h2 class="reveal">La gastronomía costarricense y el vino que ya le queda</h2>
 
         <p>En Pérez Zeledón, y en Zona Sur en general, la comida del día a día tiene mucho de contundente, de sabor directo, de proteína y almidón en el mismo plato. El gallo pinto. El casado al mediodía. Un arroz con pollo por la tarde. Carne asada un viernes.</p>
 
@@ -420,11 +423,11 @@
 
         <p>Lo que sí puedo decir es que la gastronomía costarricense no está peleada con el vino. Nunca lo estuvo. Solo nunca tuvo a alguien que dijera: pruébelo así.</p>
 
-        <h2>Experimentar sin miedo a equivocarse</h2>
+        <h2 class="reveal">Experimentar sin miedo a equivocarse</h2>
 
         <p>La forma más directa que encontré para decirle esto a alguien que empieza es simple:</p>
 
-        <p class="art-quote">Acompañe la copa con lo que tenga en la mano izquierda.</p>
+        <p class="art-quote reveal">Acompañe la copa con lo que tenga en la mano izquierda.</p>
 
         <p>No es una broma. Es en serio.</p>
 
@@ -434,7 +437,7 @@
 
         <p>El error más común no es combinar mal. Es no probar por miedo a combinar mal.</p>
 
-        <h2>En CAVA lo descubrimos juntos</h2>
+        <h2 class="reveal">En CAVA lo descubrimos juntos</h2>
 
         <p>En la vinoteca en Pérez Zeledón, hemos tenido muchas de esas conversaciones. Alguien prueba algo con lo que no esperaba que funcionara, y se sorprende. Alguien llega con la idea de que el vino es para comida "elegante" y termina descubriendo que un buen tinto va perfecto con lo que cocinó esa noche.</p>
 
@@ -545,6 +548,24 @@
         navToggle.setAttribute('aria-expanded', 'false');
       }
     });
+
+    const isMobileFastPath = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobileFastPath) {
+      const revealQueue = [];
+      let rafQueued = false;
+      const commitReveal = () => {
+        rafQueued = false;
+        revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
+          item.style.setProperty('--stg', Math.min(i, 5));
+          item.classList.add('visible');
+        });
+      };
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { revealQueue.push(e.target); observer.unobserve(e.target); } });
+        if (revealQueue.length && !rafQueued) { rafQueued = true; requestAnimationFrame(commitReveal); }
+      }, { threshold: 0.08, rootMargin: '120px 0px 0px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
   </script>
 </body>
 

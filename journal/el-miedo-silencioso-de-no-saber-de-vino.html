@@ -263,7 +263,10 @@
     .wa svg { width: 24px; height: 24px; fill: currentColor; }
     .skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
     .skip-link:focus { position: fixed; left: 1rem; top: 1rem; width: auto; height: auto; padding: .75rem 1.25rem; background: var(--gold); color: var(--navy-deep); z-index: 9999; font-size: .85rem; letter-spacing: .1em; border-radius: 4px; }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; } }
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity var(--m-reveal) var(--ease), transform var(--m-reveal) var(--ease); transition-delay: calc(var(--stg, 0) * 70ms); }
+    .reveal.visible { opacity: 1; transform: none; }
+    @media (max-width: 768px) { .reveal { opacity: 1; transform: none; transition: none; } }
     @media (max-width: 960px) { .nav-links { display: none; } .nav-toggle { display: block; } .nav { padding-left: clamp(1rem, 5vw, 1.5rem); padding-right: clamp(1rem, 5vw, 1.5rem); } .footer-inner { flex-wrap: wrap; justify-content: center; text-align: center; } }
     @media (max-width: 640px) { .art-author-inner { flex-direction: column; } .art-more { text-align: left; } .art-footnav-inner { flex-direction: column; gap: 2rem; } }
     @media (max-width: 480px) { .art-prose p.art-quote { padding-left: 1rem; } }
@@ -355,7 +358,7 @@
 
         <p>Y quizá ahí comienza uno de los mayores desafíos culturales del vino contemporáneo.</p>
 
-        <h2>El miedo que nadie menciona</h2>
+        <h2 class="reveal">El miedo que nadie menciona</h2>
 
         <p>Hay personas capaces de entrar con total seguridad a una tienda de tecnología y hablar durante horas sobre cámaras, computadoras o celulares. Pero frente a una carta de vinos, algo cambia.</p>
 
@@ -363,11 +366,11 @@
 
         <p>No porque el vino sea realmente complicado, sino porque durante años se construyó alrededor de él una idea de sofisticación profundamente asociada al conocimiento técnico, al protocolo y a ciertos códigos sociales que muchos consumidores sienten ajenos.</p>
 
-        <p class="art-quote">"Me da miedo escoger mal."</p>
+        <p class="art-quote reveal">"Me da miedo escoger mal."</p>
 
         <p>En Costa Rica es común escuchar frases como: <em>"Yo no sé nada de vino."</em> <em>"Ojalá alguien me recomiende algo."</em> Y aunque pocas personas admiten sentirse intimidadas, la inseguridad aparece constantemente en el comportamiento del consumidor — en la indecisión frente a la carta, en la delegación inmediata de la elección, en la dependencia de la primera recomendación que aparezca.</p>
 
-        <h2>Lo que dice la evidencia</h2>
+        <h2 class="reveal">Lo que dice la evidencia</h2>
 
         <p>Diversos estudios sobre mercados emergentes del vino respaldan esta percepción. Investigaciones citadas por la Organización Internacional de la Viña y el Vino (OIV) señalan que una de las principales barreras de entrada no es necesariamente el precio absoluto, sino la sensación de falta de conocimiento.</p>
 
@@ -375,13 +378,13 @@
 
         <p>Y eso tiene implicaciones importantes para la industria. Porque mientras el vino continúe percibiéndose como un espacio donde hay que "hacerlo bien", muchos nuevos consumidores seguirán sintiéndose observados antes que bienvenidos.</p>
 
-        <h2>El desafío adicional de América Latina</h2>
+        <h2 class="reveal">El desafío adicional de América Latina</h2>
 
         <p>En América Latina existe una capa adicional de complejidad: el vino todavía opera dentro de ecosistemas complejos de distribución, impuestos altos, rotación lenta y acceso limitado a educación especializada. Esto genera cartas repetitivas, poca diversidad disponible y, muchas veces, experiencias de servicio inseguras tanto para consumidores locales como para visitantes extranjeros.</p>
 
         <p>El resultado es un círculo que se alimenta a sí mismo: menos acceso a educación genera más inseguridad, y más inseguridad genera menos consumo y menos demanda de diversidad.</p>
 
-        <h2>La oportunidad es humana</h2>
+        <h2 class="reveal">La oportunidad es humana</h2>
 
         <p>Sin embargo, también existe una enorme oportunidad. Probablemente el crecimiento futuro del vino en mercados emergentes no dependa únicamente de importar más etiquetas o sofisticar más el lenguaje, sino de lograr exactamente lo contrario: hacer que el vino vuelva a sentirse humano.</p>
 
@@ -389,7 +392,7 @@
 
         <p>En CAVA Vinoteca lo vemos cada semana en el <a href="/after-office-vino-perez-zeledon" style="color: var(--gold); text-decoration: underline; text-underline-offset: 3px;">After Office</a>: personas que llegan sin vocabulario técnico y se van con una botella descorchada, una conversación real y la sensación de que el vino también les pertenece a ellas.</p>
 
-        <p class="art-quote">"Antes de convertirse en símbolo de sofisticación, el vino fue mesa compartida, pausa y conexión."</p>
+        <p class="art-quote reveal">"Antes de convertirse en símbolo de sofisticación, el vino fue mesa compartida, pausa y conexión."</p>
 
         <p>Y quizá el verdadero desafío para la industria no sea enseñar a las personas a hablar de vino. Quizá sea lograr que más personas sientan que también pertenecen a esa conversación.</p>
 
@@ -490,6 +493,24 @@
         navToggle.setAttribute('aria-expanded', 'false');
       }
     });
+
+    const isMobileFastPath = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobileFastPath) {
+      const revealQueue = [];
+      let rafQueued = false;
+      const commitReveal = () => {
+        rafQueued = false;
+        revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
+          item.style.setProperty('--stg', Math.min(i, 5));
+          item.classList.add('visible');
+        });
+      };
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { revealQueue.push(e.target); observer.unobserve(e.target); } });
+        if (revealQueue.length && !rafQueued) { rafQueued = true; requestAnimationFrame(commitReveal); }
+      }, { threshold: 0.08, rootMargin: '120px 0px 0px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
   </script>
 </body>
 

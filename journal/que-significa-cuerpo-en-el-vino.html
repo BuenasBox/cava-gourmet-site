@@ -265,7 +265,10 @@
     .wa svg { width: 24px; height: 24px; fill: currentColor; }
     .skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
     .skip-link:focus { position: fixed; left: 1rem; top: 1rem; width: auto; height: auto; padding: .75rem 1.25rem; background: var(--gold); color: var(--navy-deep); z-index: 9999; font-size: .85rem; letter-spacing: .1em; border-radius: 4px; }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; } }
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity var(--m-reveal) var(--ease), transform var(--m-reveal) var(--ease); transition-delay: calc(var(--stg, 0) * 70ms); }
+    .reveal.visible { opacity: 1; transform: none; }
+    @media (max-width: 768px) { .reveal { opacity: 1; transform: none; transition: none; } }
     @media (max-width: 960px) { .nav-links { display: none; } .nav-toggle { display: block; } .nav { padding-left: clamp(1rem, 5vw, 1.5rem); padding-right: clamp(1rem, 5vw, 1.5rem); } .footer-inner { flex-wrap: wrap; justify-content: center; text-align: center; } }
     @media (max-width: 640px) { .art-author-inner { flex-direction: column; } .art-more { text-align: left; } .art-footnav-inner { flex-direction: column; gap: 2rem; } }
     @media (max-width: 480px) { .art-prose p.art-quote { padding-left: 1rem; } }
@@ -358,7 +361,7 @@
 
         <p>"Cuerpo" es una de esas palabras del vino que la gente aprende rápido y entiende a medias. No está mal — el vocabulario suele llegar antes que la experiencia. Pero la palabra y la idea que carga no siempre van al mismo lugar, y esa diferencia tiene consecuencias al elegir.</p>
 
-        <h2>Qué es el cuerpo de un vino</h2>
+        <h2 class="reveal">Qué es el cuerpo de un vino</h2>
 
         <p>El cuerpo es la sensación de peso y textura del vino en la boca. No es el sabor. No es la intensidad del aroma. No es si el vino es bueno o no. Es simplemente cómo se siente el líquido cuando pasa: si es ligero como el agua, o más denso, o algo en el medio.</p>
 
@@ -366,9 +369,9 @@
 
         <p>El cuerpo viene principalmente del alcohol: a más grados, más peso en boca. También influye la variedad de uva — el Pinot Noir es naturalmente ligero; el Malbec, el Syrah y el Cabernet Sauvignon tienden hacia más estructura — y el azúcar residual agrega volumen aunque no siempre se perciba como dulzor. Las regiones cálidas, donde las uvas maduran más, producen vinos con más cuerpo que regiones frescas con las mismas variedades.</p>
 
-        <h2>El error más común: confundir cuerpo con calidad</h2>
+        <h2 class="reveal">El error más común: confundir cuerpo con calidad</h2>
 
-        <p class="art-quote">El cuerpo de un vino no dice si vale la pena abrirlo. Dice cómo se va a sentir en boca.</p>
+        <p class="art-quote reveal">El cuerpo de un vino no dice si vale la pena abrirlo. Dice cómo se va a sentir en boca.</p>
 
         <p>Mucha gente aprendió que un vino "con cuerpo" es un vino serio, y que uno ligero es menor. Eso no es cierto, pero es comprensible: si alguien probó un tinto muy ligero que le pareció aguado, es natural concluir que más cuerpo equivale a mejor vino.</p>
 
@@ -376,7 +379,7 @@
 
         <p>Es uno de esos filtros innecesarios que la cultura del vino arrastra, y que vale la pena soltar.</p>
 
-        <h2>Para qué sirve saber el cuerpo de un vino</h2>
+        <h2 class="reveal">Para qué sirve saber el cuerpo de un vino</h2>
 
         <p>El cuerpo es una herramienta de coincidencia, no de jerarquía.</p>
 
@@ -485,6 +488,24 @@
         navToggle.setAttribute('aria-expanded', 'false');
       }
     });
+
+    const isMobileFastPath = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobileFastPath) {
+      const revealQueue = [];
+      let rafQueued = false;
+      const commitReveal = () => {
+        rafQueued = false;
+        revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
+          item.style.setProperty('--stg', Math.min(i, 5));
+          item.classList.add('visible');
+        });
+      };
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { revealQueue.push(e.target); observer.unobserve(e.target); } });
+        if (revealQueue.length && !rafQueued) { rafQueued = true; requestAnimationFrame(commitReveal); }
+      }, { threshold: 0.08, rootMargin: '120px 0px 0px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
   </script>
 </body>
 

@@ -494,8 +494,16 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
     }
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity var(--m-reveal) var(--ease), transform var(--m-reveal) var(--ease);
+      transition-delay: calc(var(--stg, 0) * 70ms);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    @media (max-width: 768px) { .reveal { opacity: 1; transform: none; transition: none; } }
     @media (max-width: 960px) {
       .nav-links { display: none; }
       .nav-toggle { display: block; }
@@ -603,7 +611,7 @@
 
         <p>La primera pregunta suele ser mucho más sencilla:</p>
 
-        <p class="art-quote">"¿Por dónde empiezo?"</p>
+        <p class="art-quote reveal">"¿Por dónde empiezo?"</p>
 
         <p>Y la verdad es que esa pregunta lo resume todo.</p>
 
@@ -624,13 +632,13 @@
 
         <p>Y entonces aparece una frase que escucho mucho:</p>
 
-        <p class="art-quote">"No me gusta el vino".</p>
+        <p class="art-quote reveal">"No me gusta el vino".</p>
 
         <p>Pero con el tiempo he aprendido que, muchas veces, el problema no fue el vino.</p>
 
         <p>Fue la experiencia.</p>
 
-        <h2>El vino también necesita una primera oportunidad</h2>
+        <h2 class="reveal">El vino también necesita una primera oportunidad</h2>
 
         <p>Cuando comenzamos con CAVA Vinoteca, yo tampoco venía de una historia perfecta con el vino.</p>
 
@@ -658,13 +666,13 @@
 
         <p>Pero no debería ser así.</p>
 
-        <h2>Una vinoteca como espacio de confianza</h2>
+        <h2 class="reveal">Una vinoteca como espacio de confianza</h2>
 
         <p>Para mí, una vinoteca no debería ser un lugar intimidante.</p>
 
         <p>Debería ser un espacio donde una persona pueda decir:</p>
 
-        <p class="art-quote">"No sé nada de vino, pero quiero aprender".</p>
+        <p class="art-quote reveal">"No sé nada de vino, pero quiero aprender".</p>
 
         <p>Y que esa frase no suene como una debilidad, sino como el mejor punto de partida.</p>
 
@@ -694,7 +702,7 @@
 
         <p>Desde la conversación.</p>
 
-        <h2>Construir cultura no es complicar el vino</h2>
+        <h2 class="reveal">Construir cultura no es complicar el vino</h2>
 
         <p>A veces creemos que construir cultura del vino significa hablar más difícil.</p>
 
@@ -724,17 +732,17 @@
 
         <p>A veces basta con decir:</p>
 
-        <p class="art-quote">"Este vino puede funcionar muy bien con lo que usted quiere preparar".</p>
+        <p class="art-quote reveal">"Este vino puede funcionar muy bien con lo que usted quiere preparar".</p>
 
         <p>O:</p>
 
-        <p class="art-quote">"Este estilo es más amable para empezar".</p>
+        <p class="art-quote reveal">"Este estilo es más amable para empezar".</p>
 
         <p>O simplemente:</p>
 
-        <p class="art-quote">"Probemos algo distinto, pero sin complicarnos".</p>
+        <p class="art-quote reveal">"Probemos algo distinto, pero sin complicarnos".</p>
 
-        <h2>Costa Rica también puede vivir el vino a su manera</h2>
+        <h2 class="reveal">Costa Rica también puede vivir el vino a su manera</h2>
 
         <p>Construir cultura del vino en Costa Rica también significa entender nuestra realidad.</p>
 
@@ -762,7 +770,7 @@
 
         <p>A veces el vino se vuelve más cercano cuando deja de sentirse lejano.</p>
 
-        <h2>CAVA Vinoteca como punto de encuentro</h2>
+        <h2 class="reveal">CAVA Vinoteca como punto de encuentro</h2>
 
         <p>Por eso CAVA Vinoteca no nació solo como un punto de venta.</p>
 
@@ -794,7 +802,7 @@
 
         <p>Sino para conectar.</p>
 
-        <h2>La cultura empieza cuando alguien se siente parte</h2>
+        <h2 class="reveal">La cultura empieza cuando alguien se siente parte</h2>
 
         <p>Para mí, construir cultura del vino no significa que todos tengan que saber mucho.</p>
 
@@ -802,7 +810,7 @@
 
         <p>Que alguien que antes decía "yo no sé de vino" pueda decir después:</p>
 
-        <p class="art-quote">"quiero probar algo nuevo".</p>
+        <p class="art-quote reveal">"quiero probar algo nuevo".</p>
 
         <p>Que alguien que solo compraba para regalar empiece a comprar para compartir.</p>
 
@@ -826,7 +834,7 @@
 
         <p>Necesita estar cerca de las personas.</p>
 
-        <h2>La puerta siempre está abierta</h2>
+        <h2 class="reveal">La puerta siempre está abierta</h2>
 
         <p>Construir cultura del vino en Costa Rica es un proceso lento.</p>
 
@@ -940,6 +948,24 @@
         navToggle.setAttribute('aria-expanded', 'false');
       }
     });
+
+    const isMobileFastPath = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobileFastPath) {
+      const revealQueue = [];
+      let rafQueued = false;
+      const commitReveal = () => {
+        rafQueued = false;
+        revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
+          item.style.setProperty('--stg', Math.min(i, 5));
+          item.classList.add('visible');
+        });
+      };
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { revealQueue.push(e.target); observer.unobserve(e.target); } });
+        if (revealQueue.length && !rafQueued) { rafQueued = true; requestAnimationFrame(commitReveal); }
+      }, { threshold: 0.08, rootMargin: '120px 0px 0px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
   </script>
 </body>
 

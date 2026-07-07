@@ -485,8 +485,16 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
     }
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity var(--m-reveal) var(--ease), transform var(--m-reveal) var(--ease);
+      transition-delay: calc(var(--stg, 0) * 70ms);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    @media (max-width: 768px) { .reveal { opacity: 1; transform: none; transition: none; } }
     @media (max-width: 960px) {
       .nav-links { display: none; }
       .nav-toggle { display: block; }
@@ -608,7 +616,7 @@
 
         <p>Debería invitarte.</p>
 
-        <h2>Cuando el lenguaje se vuelve una barrera</h2>
+        <h2 class="reveal">Cuando el lenguaje se vuelve una barrera</h2>
 
         <p>Aprender de vino puede sentirse como aprender otro idioma.</p>
 
@@ -634,19 +642,19 @@
 
         <p>Cuando se olvida que, antes de aprender, una persona necesita sentirse cómoda.</p>
 
-        <h2>La primera pregunta no suele ser técnica</h2>
+        <h2 class="reveal">La primera pregunta no suele ser técnica</h2>
 
         <p>En la vinoteca, el cliente casi nunca llega preguntando por taninos, acidez, crianza o denominaciones.</p>
 
         <p>Llega con preguntas mucho más humanas.</p>
 
-        <p class="art-quote">"¿Cuál me recomienda?"</p>
-        <p class="art-quote">"¿Este vino será rico?"</p>
-        <p class="art-quote">"¿Qué puedo llevar para una cena?"</p>
-        <p class="art-quote">"¿Cuál le puede gustar a mi mamá?"</p>
-        <p class="art-quote">"Quiero algo suave."</p>
-        <p class="art-quote">"Quiero algo que no sea tan seco."</p>
-        <p class="art-quote">"Quiero quedar bien, pero no sé por dónde empezar."</p>
+        <p class="art-quote reveal">"¿Cuál me recomienda?"</p>
+        <p class="art-quote reveal">"¿Este vino será rico?"</p>
+        <p class="art-quote reveal">"¿Qué puedo llevar para una cena?"</p>
+        <p class="art-quote reveal">"¿Cuál le puede gustar a mi mamá?"</p>
+        <p class="art-quote reveal">"Quiero algo suave."</p>
+        <p class="art-quote reveal">"Quiero algo que no sea tan seco."</p>
+        <p class="art-quote reveal">"Quiero quedar bien, pero no sé por dónde empezar."</p>
 
         <p>Y esas preguntas son válidas.</p>
 
@@ -658,7 +666,7 @@
 
         <p>Y ahí es donde empieza el acompañamiento.</p>
 
-        <h2>Primero la experiencia, después la técnica</h2>
+        <h2 class="reveal">Primero la experiencia, después la técnica</h2>
 
         <p>Yo creo que el vino se entiende mejor cuando primero se vive.</p>
 
@@ -690,7 +698,7 @@
 
         <p>Sino porque acercarse al vino debería serlo.</p>
 
-        <h2>Menos solemnidad, más conversación</h2>
+        <h2 class="reveal">Menos solemnidad, más conversación</h2>
 
         <p>Hay una idea muy instalada de que el vino necesita solemnidad.</p>
 
@@ -714,23 +722,23 @@
 
         <p>No deberían hacer que alguien piense:</p>
 
-        <p class="art-quote">"Esto no es para mí".</p>
+        <p class="art-quote reveal">"Esto no es para mí".</p>
 
         <p>Porque el vino sí puede ser para esa persona.</p>
 
         <p>Solo necesita encontrar su forma de acercarse.</p>
 
-        <h2>Educar no es corregir todo el tiempo</h2>
+        <h2 class="reveal">Educar no es corregir todo el tiempo</h2>
 
         <p>A veces, en el mundo del vino, se corrige demasiado.</p>
 
-        <p class="art-quote">"No se dice así."</p>
+        <p class="art-quote reveal">"No se dice así."</p>
 
-        <p class="art-quote">"No se sirve así."</p>
+        <p class="art-quote reveal">"No se sirve así."</p>
 
-        <p class="art-quote">"No se acompaña con eso."</p>
+        <p class="art-quote reveal">"No se acompaña con eso."</p>
 
-        <p class="art-quote">"No deberías tomarlo de esa manera."</p>
+        <p class="art-quote reveal">"No deberías tomarlo de esa manera."</p>
 
         <p>Y sí, hay recomendaciones.</p>
 
@@ -750,21 +758,21 @@
 
         <p>Es decir:</p>
 
-        <p class="art-quote">"Mirá, si lo servís un poquito más fresco, puede gustarte más."</p>
+        <p class="art-quote reveal">"Mirá, si lo servís un poquito más fresco, puede gustarte más."</p>
 
         <p>O:</p>
 
-        <p class="art-quote">"Tal vez ese vino no era para ese momento, probemos otro estilo."</p>
+        <p class="art-quote reveal">"Tal vez ese vino no era para ese momento, probemos otro estilo."</p>
 
         <p>O:</p>
 
-        <p class="art-quote">"Si no te gustó este tinto, no significa que no te guste el vino."</p>
+        <p class="art-quote reveal">"Si no te gustó este tinto, no significa que no te guste el vino."</p>
 
         <p>Ese tipo de guía abre puertas.</p>
 
         <p>No las cierra.</p>
 
-        <h2>El vino también se adapta a nuestra vida</h2>
+        <h2 class="reveal">El vino también se adapta a nuestra vida</h2>
 
         <p>En Costa Rica, muchas personas no crecieron viendo vino en la mesa todos los días.</p>
 
@@ -792,7 +800,7 @@
 
         <p>Es el que funciona para ese momento y para esas personas.</p>
 
-        <h2>El vino es para quien quiera acercarse</h2>
+        <h2 class="reveal">El vino es para quien quiera acercarse</h2>
 
         <p>Para mí, el vino necesita menos elitismo y más experiencia porque la experiencia es lo que conecta.</p>
 
@@ -820,7 +828,7 @@
 
         <p>Y una invitación, para que funcione, tiene que hacerte sentir bienvenido.</p>
 
-        <h2>Cada copa es una puerta, no un examen</h2>
+        <h2 class="reveal">Cada copa es una puerta, no un examen</h2>
 
         <p>El vino que más te va a gustar no es el más caro, ni el más difícil de pronunciar.</p>
 
@@ -932,7 +940,26 @@
         mobileMenu.inert = true;
         navToggle.classList.remove('open');
         navToggle.setAttribute('aria-expanded', 'false');
-  
+      }
+    });
+
+    const isMobileFastPath = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobileFastPath) {
+      const revealQueue = [];
+      let rafQueued = false;
+      const commitReveal = () => {
+        rafQueued = false;
+        revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
+          item.style.setProperty('--stg', Math.min(i, 5));
+          item.classList.add('visible');
+        });
+      };
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { revealQueue.push(e.target); observer.unobserve(e.target); } });
+        if (revealQueue.length && !rafQueued) { rafQueued = true; requestAnimationFrame(commitReveal); }
+      }, { threshold: 0.08, rootMargin: '120px 0px 0px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
   </script>
 </body>
 

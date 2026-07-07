@@ -485,8 +485,16 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
     }
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity var(--m-reveal) var(--ease), transform var(--m-reveal) var(--ease);
+      transition-delay: calc(var(--stg, 0) * 70ms);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    @media (max-width: 768px) { .reveal { opacity: 1; transform: none; transition: none; } }
     @media (max-width: 960px) {
       .nav-links { display: none; }
       .nav-toggle { display: block; }
@@ -602,13 +610,13 @@
 
         <p>En mi caso, la respuesta más bonita es esta:</p>
 
-        <p class="art-quote">cruza la puerta de la vinoteca.</p>
+        <p class="art-quote reveal">cruza la puerta de la vinoteca.</p>
 
-        <h2>Cuando alguien dice: "te vi en Instagram"</h2>
+        <h2 class="reveal">Cuando alguien dice: "te vi en Instagram"</h2>
 
         <p>Hay una frase que se ha vuelto muy especial para mí:</p>
 
-        <p class="art-quote">"Te vi en Instagram."</p>
+        <p class="art-quote reveal">"Te vi en Instagram."</p>
 
         <p>A veces la dice alguien que llega por primera vez.</p>
 
@@ -630,7 +638,7 @@
 
         <p>A una botella elegida con intención.</p>
 
-        <h2>El contenido inspira, pero la experiencia transforma</h2>
+        <h2 class="reveal">El contenido inspira, pero la experiencia transforma</h2>
 
         <p>Una persona puede ver un video y aprender algo.</p>
 
@@ -658,7 +666,7 @@
 
         <p>Se convierte en experiencia.</p>
 
-        <h2>La confianza no nace en un clic</h2>
+        <h2 class="reveal">La confianza no nace en un clic</h2>
 
         <p>A veces pensamos que las redes sociales hacen todo el trabajo.</p>
 
@@ -676,7 +684,7 @@
 
         <p>Cuando puede decir:</p>
 
-        <p class="art-quote">"No sé nada de vino."</p>
+        <p class="art-quote reveal">"No sé nada de vino."</p>
 
         <p>Y recibe una respuesta amable.</p>
 
@@ -686,7 +694,7 @@
 
         <p>Ese momento no lo puede reemplazar ninguna pantalla.</p>
 
-        <h2>Del contenido a la comunidad</h2>
+        <h2 class="reveal">Del contenido a la comunidad</h2>
 
         <p>Para mí, el camino no es simplemente publicar y vender.</p>
 
@@ -722,7 +730,7 @@
 
         <p>Cuando mueve a las personas hacia un espacio, una conversación, una experiencia.</p>
 
-        <h2>Una vinoteca como ancla</h2>
+        <h2 class="reveal">Una vinoteca como ancla</h2>
 
         <p>CAVA Vinoteca nació como un espacio físico.</p>
 
@@ -758,7 +766,7 @@
 
         <p>Regreso.</p>
 
-        <h2>No todo impacto se mide en números</h2>
+        <h2 class="reveal">No todo impacto se mide en números</h2>
 
         <p>Claro que las métricas importan.</p>
 
@@ -788,7 +796,7 @@
 
         <p>Habla de cultura.</p>
 
-        <h2>El contenido no reemplaza la experiencia</h2>
+        <h2 class="reveal">El contenido no reemplaza la experiencia</h2>
 
         <p>En el mundo del vino, la experiencia sigue siendo esencial.</p>
 
@@ -812,13 +820,13 @@
 
         <p>Debe decir:</p>
 
-        <p class="art-quote">"Venga, conversemos."</p>
+        <p class="art-quote reveal">"Venga, conversemos."</p>
 
-        <p class="art-quote">"Venga, pruebe."</p>
+        <p class="art-quote reveal">"Venga, pruebe."</p>
 
-        <p class="art-quote">"Venga, descubra."</p>
+        <p class="art-quote reveal">"Venga, descubra."</p>
 
-        <h2>Construir algo real en tiempos de contenido rápido</h2>
+        <h2 class="reveal">Construir algo real en tiempos de contenido rápido</h2>
 
         <p>Vivimos en una época donde todo pasa muy rápido.</p>
 
@@ -850,7 +858,7 @@
 
         <p>Y cuando el contenido logra llevar a una persona desde la pantalla hasta una experiencia que recuerda, entonces sí está cumpliendo su propósito.</p>
 
-        <h2>Del scroll al primer encuentro real</h2>
+        <h2 class="reveal">Del scroll al primer encuentro real</h2>
 
         <p>Si llegaste hasta acá desde una publicación o un video, el contenido ya hizo su parte.</p>
 
@@ -964,6 +972,24 @@
         navToggle.setAttribute('aria-expanded', 'false');
       }
     });
+
+    const isMobileFastPath = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobileFastPath) {
+      const revealQueue = [];
+      let rafQueued = false;
+      const commitReveal = () => {
+        rafQueued = false;
+        revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
+          item.style.setProperty('--stg', Math.min(i, 5));
+          item.classList.add('visible');
+        });
+      };
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { revealQueue.push(e.target); observer.unobserve(e.target); } });
+        if (revealQueue.length && !rafQueued) { rafQueued = true; requestAnimationFrame(commitReveal); }
+      }, { threshold: 0.08, rootMargin: '120px 0px 0px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
   </script>
 </body>
 

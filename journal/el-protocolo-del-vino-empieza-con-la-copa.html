@@ -336,7 +336,10 @@
     .wa svg { width: 24px; height: 24px; fill: currentColor; }
     .skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
     .skip-link:focus { position: fixed; left: 1rem; top: 1rem; width: auto; height: auto; padding: .75rem 1.25rem; background: var(--gold); color: var(--navy-deep); z-index: 9999; font-size: .85rem; letter-spacing: .1em; border-radius: 4px; }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; } }
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity var(--m-reveal) var(--ease), transform var(--m-reveal) var(--ease); transition-delay: calc(var(--stg, 0) * 70ms); }
+    .reveal.visible { opacity: 1; transform: none; }
+    @media (max-width: 768px) { .reveal { opacity: 1; transform: none; transition: none; } }
     @media (max-width: 960px) { .nav-links { display: none; } .nav-toggle { display: block; } .nav { padding-left: clamp(1rem, 5vw, 1.5rem); padding-right: clamp(1rem, 5vw, 1.5rem); } .footer-inner { flex-wrap: wrap; justify-content: center; text-align: center; } }
     @media (max-width: 640px) { .art-author-inner { flex-direction: column; } .art-more { text-align: left; } .art-footnav-inner { flex-direction: column; gap: 2rem; } }
     @media (max-width: 480px) { .art-prose p.art-quote { padding-left: 1rem; } }
@@ -432,13 +435,13 @@
 
         <p>Porque si vemos el tamaño de nuestro territorio y lo comparamos con la cantidad de vino que se mueve en el país, es bastante interesante. El turismo influye muchísimo — muchas personas que nos visitan ya tienen el vino incorporado en su rutina. Pero más allá del turismo, hay algo que he venido observando hace tiempo desde <a href="/" style="color: var(--gold); text-decoration: underline; text-underline-offset: 3px;">CAVA Vinoteca</a> en Pérez Zeledón, y que hoy puedo decir con seguridad que confirmé.</p>
 
-        <h2>Desde la mesa de CAVA en Pérez Zeledón</h2>
+        <h2 class="reveal">Desde la mesa de CAVA en Pérez Zeledón</h2>
 
         <p>En CAVA, esta conversación no nace desde una sala de teoría. Nace en la mesa, cuando alguien llega con curiosidad, elige una botella del muro o se sienta por primera vez en una <a href="/cata-de-vinos-perez-zeledon" style="color: var(--gold); text-decoration: underline; text-underline-offset: 3px;">experiencia de vino en Pérez Zeledón</a>. Ahí el protocolo deja de sentirse como etiqueta distante y se convierte en una forma de hospitalidad: una manera de ayudar a que la persona se sienta ubicada, cómoda y acompañada.</p>
 
         <p>Ese contexto importa porque Costa Rica no construye cultura del vino copiando los gestos de otros mercados. La construye desde espacios reales, conversaciones pequeñas y anfitriones que saben traducir el lenguaje del vino sin volverlo rígido. Por eso esta edición ampliada coloca la publicación de Vinetur dentro del ecosistema de CAVA: no para cambiar la tesis, sino para mostrar cómo esa idea se vive en una vinoteca de la Zona Sur.</p>
 
-        <h2>El tico no le tiene miedo al vino</h2>
+        <h2 class="reveal">El tico no le tiene miedo al vino</h2>
 
         <p>Y esto me parece importante decirlo.</p>
 
@@ -448,7 +451,7 @@
 
         <p>Entonces, si el producto está disponible y hay interés en consumirlo... ¿qué es lo que realmente intimida?</p>
 
-        <h2>El protocolo sí intimida</h2>
+        <h2 class="reveal">El protocolo sí intimida</h2>
 
         <p>Lo que intimida no es el vino. Es el protocolo alrededor del vino. Y muchas veces ese protocolo empieza con algo muy sencillo: la copa.</p>
 
@@ -456,15 +459,15 @@
 
         <p>Y la realidad es que sí hay una forma — pero es mucho más sencilla de lo que parece.</p>
 
-        <h2>Pensemos primero en algo cotidiano: la cuchara</h2>
+        <h2 class="reveal">Pensemos primero en algo cotidiano: la cuchara</h2>
 
         <p>Desde niños nos enseñaron a sostener la cuchara de cierta manera. Nunca nos dieron una explicación larguísima. Simplemente aprendimos que había una forma más cómoda, más delicada y más armoniosa de hacerlo.</p>
 
         <p>¿Se puede comer agarrándola diferente? Sí. ¿Igual funciona? También. Pero existe una manera que hace que el movimiento sea más natural y que socialmente ya entendemos como parte de los buenos modales — igual que decir con permiso o dar las gracias. Son cosas pequeñas que forman parte de convivir.</p>
 
-        <p class="art-quote">"Con la copa pasa exactamente igual que con la cuchara: existe una forma más armoniosa, y aprenderla es mucho más sencillo de lo que parece."</p>
+        <p class="art-quote reveal">"Con la copa pasa exactamente igual que con la cuchara: existe una forma más armoniosa, y aprenderla es mucho más sencillo de lo que parece."</p>
 
-        <h2>La copa tiene tres partes</h2>
+        <h2 class="reveal">La copa tiene tres partes</h2>
 
         <p>La copa se divide en tres: el <strong style="color: var(--ivory); font-weight: 400;">cáliz</strong> (donde va el vino), el <strong style="color: var(--ivory); font-weight: 400;">tallo</strong> (la parte del centro) y la <strong style="color: var(--ivory); font-weight: 400;">base</strong> (la parte inferior).</p>
 
@@ -474,11 +477,11 @@
 
         <p>En las <a href="/cata-de-vinos-perez-zeledon" style="color: var(--gold); text-decoration: underline; text-underline-offset: 3px;">catas de CAVA Vinoteca en Pérez Zeledón</a>, esta es una de las primeras conversaciones que tenemos — no como protocolo que memorizar, sino como contexto que hace que todo se sienta más cercano y natural.</p>
 
-        <h2>La analogía que más me gusta</h2>
+        <h2 class="reveal">La analogía que más me gusta</h2>
 
         <p>A veces pienso en la copa como un lente de ver. Tiene que estar limpia, sin grasa, sin manchas, sin nada que interfiera. Igual que unos lentes bien limpios ayudan a ver mejor, una copa limpia permite apreciar el color del vino, su brillo, cómo se mueve dentro del cristal. Eso también forma parte del disfrute.</p>
 
-        <h2>El vino no debería sentirse complicado</h2>
+        <h2 class="reveal">El vino no debería sentirse complicado</h2>
 
         <p>Sí: existe protocolo. Sí: hay una forma correcta. Y está bien comunicarla. Pero también es importante recordar algo: en su casa, en su espacio y en su momento, usted puede disfrutar el vino como quiera. En copa, servirse un poquito, incluso tomarlo en un vaso si así le nace. No pasa nada — el vino sigue siendo para disfrutarse.</p>
 
@@ -487,7 +490,7 @@
         <p>Porque Costa Rica ya tiene vino. Tiene acceso, tiene variedad, tiene personas interesadas en probar y descubrir. Y si hay ganas de acercarse al vino, vale la pena hacerlo sentir cada vez más cercano, más sencillo y menos intimidante. Eso es exactamente lo que buscamos en <a href="/nazareth" style="color: var(--gold); text-decoration: underline; text-underline-offset: 3px;">CAVA Vinoteca</a>, desde la dirección enológica y la hospitalidad que Nazareth Padilla Montero ha venido construyendo desde Pérez Zeledón.</p>
 
         <section class="art-faq" aria-labelledby="faq-title">
-          <h2 id="faq-title">Preguntas frecuentes sobre la copa de vino</h2>
+          <h2 id="faq-title" class="reveal">Preguntas frecuentes sobre la copa de vino</h2>
           <details>
             <summary>¿Cómo se sostiene una copa de vino?</summary>
             <p>En un ambiente social, la copa se sostiene por el tallo o por la base. Ese gesto ayuda a no calentar el vino con la mano y mantiene la copa más cómoda, limpia y estable.</p>
@@ -599,6 +602,24 @@
         navToggle.setAttribute('aria-expanded', 'false');
       }
     });
+
+    const isMobileFastPath = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobileFastPath) {
+      const revealQueue = [];
+      let rafQueued = false;
+      const commitReveal = () => {
+        rafQueued = false;
+        revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
+          item.style.setProperty('--stg', Math.min(i, 5));
+          item.classList.add('visible');
+        });
+      };
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { revealQueue.push(e.target); observer.unobserve(e.target); } });
+        if (revealQueue.length && !rafQueued) { rafQueued = true; requestAnimationFrame(commitReveal); }
+      }, { threshold: 0.08, rootMargin: '120px 0px 0px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
   </script>
 </body>
 
