@@ -544,7 +544,9 @@ transition: color .25s var(--ease);
 color: var(--gold-soft);
 }
 
-.nav-links a:focus-visible {
+.nav-links a:focus-visible,
+.mobile-menu a:focus-visible,
+.nav-toggle:focus-visible {
 outline: 2px solid var(--gold);
 outline-offset: 2px;
 }
@@ -1037,6 +1039,12 @@ gap: .5rem;
 .link-card:hover {
 border-color: var(--gold);
 background: rgba(184, 151, 90, .07);
+}
+
+.link-card:focus-visible {
+outline: 2px solid var(--gold);
+outline-offset: 3px;
+border-radius: 4px;
 }
 
 .link-card-platform {
