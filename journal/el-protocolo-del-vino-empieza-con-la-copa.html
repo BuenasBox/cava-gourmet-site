@@ -285,6 +285,13 @@
     .art-meta-info { font-size: .62rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(246,239,227,.5); text-align: left; }
     .art-meta-info strong { color: var(--gold-soft); font-weight: 400; display: block; margin-bottom: .2rem; }
     .art-cover { margin: 0; overflow: hidden; max-height: 540px; background: var(--charcoal); }
+    @media (prefers-reduced-motion: no-preference) {
+      @view-transition { navigation: auto; }
+      ::view-transition-old(root) { animation-duration: var(--m-veil); animation-timing-function: var(--ease); }
+      ::view-transition-new(root) { animation-duration: var(--m-veil); animation-timing-function: var(--ease); }
+      .nav .cava-monogram { view-transition-name: cava-seal; }
+      .art-cover { view-transition-name: art-protocolo-copa; }
+    }
     .art-cover img { width: 100%; object-fit: cover; display: block; max-height: 540px; }
     .art-breadcrumb { padding: 1.1rem var(--pad); background: var(--charcoal-2); border-bottom: 1px solid var(--line); }
     .art-breadcrumb-inner { max-width: 720px; margin: 0 auto; display: flex; align-items: center; gap: .6rem; font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; color: rgba(246,239,227,.38); }

@@ -330,6 +330,13 @@
     .art-meta-info strong { color: var(--gold-soft); font-weight: 400; display: block; margin-bottom: .2rem; }
 
     .art-cover { margin: 0; overflow: hidden; max-height: 540px; background: var(--charcoal); }
+    @media (prefers-reduced-motion: no-preference) {
+      @view-transition { navigation: auto; }
+      ::view-transition-old(root) { animation-duration: var(--m-veil); animation-timing-function: var(--ease); }
+      ::view-transition-new(root) { animation-duration: var(--m-veil); animation-timing-function: var(--ease); }
+      .nav .cava-monogram { view-transition-name: cava-seal; }
+      .art-cover { view-transition-name: art-contenido-digital; }
+    }
     .art-cover img { width: 100%; object-fit: cover; display: block; max-height: 540px; }
 
     .art-breadcrumb {

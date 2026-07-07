@@ -366,6 +366,26 @@
     }
     .blog-card:hover .blog-card-img img { opacity: 1; filter: saturate(1); }
     .blog-card-img:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+    /* ==========================================
+       VIEW TRANSITIONS (Sprint 12) — momento estrella: portada de lista -> portada de articulo.
+       Un nombre unico por tarjeta (via [href]), debe coincidir exacto con
+       el .art-cover de su articulo correspondiente.
+    ========================================== */
+    @media (prefers-reduced-motion: no-preference) {
+      @view-transition { navigation: auto; }
+      ::view-transition-old(root) { animation-duration: var(--m-veil); animation-timing-function: var(--ease); }
+      ::view-transition-new(root) { animation-duration: var(--m-veil); animation-timing-function: var(--ease); }
+      .nav .cava-monogram { view-transition-name: cava-seal; }
+      a.blog-card-img[href="/journal/vino-y-gastronomia-costarricense"] { view-transition-name: art-vino-gastronomia; }
+      a.blog-card-img[href="/journal/el-after-office-y-la-botella-compartida"] { view-transition-name: art-after-office; }
+      a.blog-card-img[href="/journal/el-protocolo-del-vino-empieza-con-la-copa"] { view-transition-name: art-protocolo-copa; }
+      a.blog-card-img[href="/journal/que-significa-cuerpo-en-el-vino"] { view-transition-name: art-cuerpo-vino; }
+      a.blog-card-img[href="/journal/el-miedo-silencioso-de-no-saber-de-vino"] { view-transition-name: art-miedo-vino; }
+      a.blog-card-img[href="/journal/como-se-construye-cultura-del-vino"] { view-transition-name: art-cultura-vino; }
+      a.blog-card-img[href="/journal/vino-menos-elitismo-mas-experiencia"] { view-transition-name: art-menos-elitismo; }
+      a.blog-card-img[href="/journal/contenido-digital-experiencia-real-vinoteca-costa-rica"] { view-transition-name: art-contenido-digital; }
+    }
     .blog-card-body { display: flex; flex-direction: column; min-width: 0; }
     .blog-card-cat {
       font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
