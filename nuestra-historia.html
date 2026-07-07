@@ -654,6 +654,8 @@
       text-transform: uppercase;
       color: #8a6530;
       margin-bottom: .75rem;
+      --label-cool: #6b6255;
+      --label-warm: #8a6530;
     }
 
     /* ==========================================
@@ -673,8 +675,8 @@
           animation-range: entry 0% entry 60%;
         }
         @keyframes revealNumbered {
-          from { transform: scale(.5) translateX(-10px); opacity: .25; }
-          to { transform: scale(1) translateX(0); opacity: 1; }
+          from { transform: scale(.5) translateX(-10px); opacity: .25; color: var(--label-cool); }
+          to { transform: scale(1) translateX(0); opacity: 1; color: var(--label-warm); }
         }
       }
     }
@@ -730,6 +732,17 @@
         }
       }
     }
+
+    /* ==========================================
+       VIEW TRANSITIONS (Sprint 11/12) — sello compartido con el resto del sitio.
+       El nombre debe coincidir exactamente con el de index.html.
+    ========================================== */
+    @media (prefers-reduced-motion: no-preference) {
+      @view-transition { navigation: auto; }
+      ::view-transition-old(root) { animation-duration: var(--m-veil); animation-timing-function: var(--ease); }
+      ::view-transition-new(root) { animation-duration: var(--m-veil); animation-timing-function: var(--ease); }
+      .nav .cava-monogram { view-transition-name: cava-seal; }
+    }
     .geo-cascade {
       font-family: var(--serif);
       font-style: italic;
@@ -783,7 +796,11 @@
     }
     .historia-wset .historia-prose p:last-child { margin-bottom: 0; }
     .historia-wset .capitulo { color: var(--ivory); }
-    .historia-wset .cap-label { color: var(--gold); }
+    .historia-wset .cap-label {
+      color: var(--gold);
+      --label-cool: var(--muted);
+      --label-warm: var(--gold);
+    }
     .wset-milestone {
       margin-top: clamp(2rem, 4vw, 3rem);
       padding: clamp(1.5rem, 3vw, 2.25rem);
@@ -833,7 +850,11 @@
     }
     .historia-masque .historia-prose p:last-child { margin-bottom: 0; }
     .historia-masque .capitulo { color: var(--ivory); }
-    .historia-masque .cap-label { color: var(--gold); }
+    .historia-masque .cap-label {
+      color: var(--gold);
+      --label-cool: var(--muted);
+      --label-warm: var(--gold);
+    }
     .pilares-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
