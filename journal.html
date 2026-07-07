@@ -456,7 +456,7 @@
     /* ==========================================
        REVEAL
     ========================================== */
-    .reveal { opacity: 0; transform: translateY(14px); transition: opacity var(--m-reveal) var(--ease), transform var(--m-reveal) var(--ease); }
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity var(--m-reveal) var(--ease), transform var(--m-reveal) var(--ease); transition-delay: calc(var(--stg, 0) * 70ms); }
     .reveal.visible { opacity: 1; transform: none; }
 
     /* ==========================================
@@ -898,8 +898,18 @@
 
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     if (!isMobile) {
+      const revealQueue = [];
+      let rafQueued = false;
+      const commitReveal = () => {
+        rafQueued = false;
+        revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
+          item.style.setProperty('--stg', Math.min(i, 5));
+          item.classList.add('visible');
+        });
+      };
       const observer = new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+        entries.forEach(e => { if (e.isIntersecting) { revealQueue.push(e.target); observer.unobserve(e.target); } });
+        if (revealQueue.length && !rafQueued) { rafQueued = true; requestAnimationFrame(commitReveal); }
       }, { threshold: 0.05, rootMargin: '120px 0px 160px 0px' });
       document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     }
