@@ -655,6 +655,29 @@
       color: #8a6530;
       margin-bottom: .75rem;
     }
+
+    /* ==========================================
+       REVEAL NUMBERED (utilidad transversal, Sprint 12)
+       Marcador numerico de capitulo ligado a scroll-timeline.
+       Base: siempre visible (fallback Firefox / sin soporte).
+    ========================================== */
+    .reveal-numbered {
+      transform: none;
+      opacity: 1;
+    }
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .reveal-numbered {
+          animation: revealNumbered linear both;
+          animation-timeline: view();
+          animation-range: entry 0% entry 60%;
+        }
+        @keyframes revealNumbered {
+          from { transform: scale(.5) translateX(-10px); opacity: .25; }
+          to { transform: scale(1) translateX(0); opacity: 1; }
+        }
+      }
+    }
     .capitulo {
       font-family: var(--display);
       font-size: clamp(1.85rem, 3.8vw, 2.9rem);
@@ -1343,7 +1366,7 @@
       <div class="wrap">
         <div class="historia-prose">
 
-          <span class="cap-label reveal">01</span>
+          <span class="cap-label reveal reveal-numbered">01</span>
           <h2 class="capitulo reveal" id="cap1-title">Cuando CAVA<br>todavía no era CAVA</h2>
 
           <p class="reveal">El 15 de mayo de 2023, en Pérez Zeledón, Costa Rica, comenzó una historia que nunca había sido planeada.</p>
@@ -1409,7 +1432,7 @@
 
           <hr class="cap-divider reveal">
 
-          <span class="cap-label reveal">02</span>
+          <span class="cap-label reveal reveal-numbered">02</span>
           <h2 class="capitulo reveal" id="cap2-title">La transformación de una licorera tradicional<br>en una vinoteca boutique</h2>
           <p class="subcapitulo reveal">Construir algo que todavía no existía</p>
 
@@ -1445,7 +1468,7 @@
 
           <hr class="cap-divider reveal">
 
-          <span class="cap-label reveal">03</span>
+          <span class="cap-label reveal reveal-numbered">03</span>
           <h2 class="capitulo reveal" id="cap3-title">Aprender vino mientras<br>el negocio ya existía</h2>
           <p class="subcapitulo reveal">El inicio autodidacta de Nazareth Padilla Montero</p>
 
@@ -1500,7 +1523,7 @@
 
           <hr class="cap-divider reveal">
 
-          <span class="cap-label reveal">04</span>
+          <span class="cap-label reveal reveal-numbered">04</span>
           <h2 class="capitulo reveal" id="cap4-title">Comunicar el vino<br>en costarricense</h2>
           <p class="subcapitulo reveal">El vino explicado desde la vida cotidiana</p>
 
@@ -1551,7 +1574,7 @@
       <div class="wrap">
         <div class="historia-prose">
 
-          <span class="cap-label reveal">05</span>
+          <span class="cap-label reveal reveal-numbered">05</span>
           <h2 class="capitulo reveal" id="wset-title">El descubrimiento de WSET<br>y el inicio de una nueva etapa</h2>
           <p class="subcapitulo reveal" style="color: rgba(246,239,227,.55);">De la formación autodidacta al reconocimiento académico internacional</p>
 
@@ -1585,7 +1608,7 @@
       <div class="wrap">
         <div class="historia-prose">
 
-          <span class="cap-label reveal">06</span>
+          <span class="cap-label reveal reveal-numbered">06</span>
           <h2 class="capitulo reveal" id="masque-title">Más que<br>una tienda de vinos</h2>
           <p class="subcapitulo reveal" style="color: rgba(246,239,227,.5);">Una experiencia del vino diseñada para quedarse</p>
 
@@ -1625,7 +1648,7 @@
       <div class="wrap">
         <div class="historia-prose">
 
-          <span class="cap-label reveal">07</span>
+          <span class="cap-label reveal reveal-numbered">07</span>
           <h2 class="capitulo reveal" id="exp-section-title">Experiencias<br>en CAVA Vinoteca</h2>
 
           <div class="exp-item reveal">
