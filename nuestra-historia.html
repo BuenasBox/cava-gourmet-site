@@ -684,6 +684,29 @@
       margin: clamp(2rem, 4vw, 3rem) 0;
       color: #4d4238;
     }
+
+    /* ==========================================
+       QUOTE EMPHASIS (utilidad transversal, Sprint 12)
+       Enfasis de cita aislada al entrar en viewport.
+       Base: siempre visible (fallback Firefox / sin soporte).
+    ========================================== */
+    .quote-emphasis {
+      transform: none;
+      opacity: 1;
+    }
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .quote-emphasis {
+          animation: quoteEmphasis linear both;
+          animation-timeline: view();
+          animation-range: entry 0% center 60%;
+        }
+        @keyframes quoteEmphasis {
+          from { transform: scale(.96); opacity: .65; }
+          to { transform: scale(1); opacity: 1; }
+        }
+      }
+    }
     .geo-cascade {
       font-family: var(--serif);
       font-style: italic;
@@ -1337,7 +1360,7 @@
 
           <p class="reveal">Y ese día, mientras iba en el carro junto a quien hoy es su esposo, hizo una oración que todavía recuerda perfectamente.</p>
 
-          <blockquote class="oracion reveal">
+          <blockquote class="oracion reveal quote-emphasis">
             "Por favor, deme una oportunidad. Yo voy a dar todo de mí. No sé en qué, no sé cómo, pero estoy segura de que usted va a poner en mis manos lo que considera que es para mí."
           </blockquote>
 
