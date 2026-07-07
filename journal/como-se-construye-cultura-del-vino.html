@@ -339,6 +339,47 @@
       .nav .cava-monogram { view-transition-name: cava-seal; }
       .art-cover { view-transition-name: art-cultura-vino; }
     }
+
+    /* ==========================================
+       READING PROGRESS (Sprint 12) — barra fija atada al scroll del documento.
+       Base: invisible (scaleX 0) si no hay soporte real de scroll-timeline.
+    ========================================== */
+    .read-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 100%;
+      transform-origin: left; transform: scaleX(0);
+      background: var(--gold); z-index: 1001; pointer-events: none;
+    }
+    @supports (animation-timeline: scroll()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .read-progress {
+          animation: readProgress linear both;
+          animation-timeline: scroll(root block);
+        }
+        @keyframes readProgress {
+          from { transform: scaleX(0); }
+          to { transform: scaleX(1); }
+        }
+      }
+    }
+
+    /* ==========================================
+       QUOTE EMPHASIS (utilidad transversal, Sprint 12 Fase 1)
+       Enfasis de cita aislada al entrar en viewport.
+    ========================================== */
+    .quote-emphasis { transform: none; opacity: 1; }
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .quote-emphasis {
+          animation: quoteEmphasis linear both;
+          animation-timeline: view();
+          animation-range: entry 0% center 60%;
+        }
+        @keyframes quoteEmphasis {
+          from { transform: scale(.96); opacity: .65; }
+          to { transform: scale(1); opacity: 1; }
+        }
+      }
+    }
     .art-cover img { width: 100%; object-fit: cover; display: block; max-height: 540px; }
 
     .art-breadcrumb {
@@ -530,6 +571,7 @@
 
 <body>
   <a href="#art-main" class="skip-link">Saltar al contenido</a>
+  <div class="read-progress" aria-hidden="true"></div>
 
   <header class="nav" id="nav">
     <a href="/" class="brand" aria-label="CAVA Vinoteca — Ir al inicio">
@@ -618,7 +660,7 @@
 
         <p>La primera pregunta suele ser mucho más sencilla:</p>
 
-        <p class="art-quote reveal">"¿Por dónde empiezo?"</p>
+        <p class="art-quote reveal quote-emphasis">"¿Por dónde empiezo?"</p>
 
         <p>Y la verdad es que esa pregunta lo resume todo.</p>
 
@@ -679,7 +721,7 @@
 
         <p>Debería ser un espacio donde una persona pueda decir:</p>
 
-        <p class="art-quote reveal">"No sé nada de vino, pero quiero aprender".</p>
+        <p class="art-quote reveal quote-emphasis">"No sé nada de vino, pero quiero aprender".</p>
 
         <p>Y que esa frase no suene como una debilidad, sino como el mejor punto de partida.</p>
 
@@ -817,7 +859,7 @@
 
         <p>Que alguien que antes decía "yo no sé de vino" pueda decir después:</p>
 
-        <p class="art-quote reveal">"quiero probar algo nuevo".</p>
+        <p class="art-quote reveal quote-emphasis">"quiero probar algo nuevo".</p>
 
         <p>Que alguien que solo compraba para regalar empiece a comprar para compartir.</p>
 

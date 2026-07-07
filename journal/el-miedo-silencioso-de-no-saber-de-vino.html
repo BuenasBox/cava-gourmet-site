@@ -225,6 +225,47 @@
       .nav .cava-monogram { view-transition-name: cava-seal; }
       .art-cover { view-transition-name: art-miedo-vino; }
     }
+
+    /* ==========================================
+       READING PROGRESS (Sprint 12) — barra fija atada al scroll del documento.
+       Base: invisible (scaleX 0) si no hay soporte real de scroll-timeline.
+    ========================================== */
+    .read-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 100%;
+      transform-origin: left; transform: scaleX(0);
+      background: var(--gold); z-index: 1001; pointer-events: none;
+    }
+    @supports (animation-timeline: scroll()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .read-progress {
+          animation: readProgress linear both;
+          animation-timeline: scroll(root block);
+        }
+        @keyframes readProgress {
+          from { transform: scaleX(0); }
+          to { transform: scaleX(1); }
+        }
+      }
+    }
+
+    /* ==========================================
+       QUOTE EMPHASIS (utilidad transversal, Sprint 12 Fase 1)
+       Enfasis de cita aislada al entrar en viewport.
+    ========================================== */
+    .quote-emphasis { transform: none; opacity: 1; }
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .quote-emphasis {
+          animation: quoteEmphasis linear both;
+          animation-timeline: view();
+          animation-range: entry 0% center 60%;
+        }
+        @keyframes quoteEmphasis {
+          from { transform: scale(.96); opacity: .65; }
+          to { transform: scale(1); opacity: 1; }
+        }
+      }
+    }
     .art-cover img { width: 100%; object-fit: cover; display: block; max-height: 540px; }
     .art-breadcrumb { padding: 1.1rem var(--pad); background: var(--charcoal-2); border-bottom: 1px solid var(--line); }
     .art-breadcrumb-inner { max-width: 720px; margin: 0 auto; display: flex; align-items: center; gap: .6rem; font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; color: rgba(246,239,227,.38); }
@@ -282,6 +323,7 @@
 
 <body>
   <a href="#art-main" class="skip-link">Saltar al contenido</a>
+  <div class="read-progress" aria-hidden="true"></div>
 
   <header class="nav" id="nav">
     <a href="/" class="brand" aria-label="CAVA Vinoteca — Ir al inicio">
@@ -373,7 +415,7 @@
 
         <p>No porque el vino sea realmente complicado, sino porque durante años se construyó alrededor de él una idea de sofisticación profundamente asociada al conocimiento técnico, al protocolo y a ciertos códigos sociales que muchos consumidores sienten ajenos.</p>
 
-        <p class="art-quote reveal">"Me da miedo escoger mal."</p>
+        <p class="art-quote reveal quote-emphasis">"Me da miedo escoger mal."</p>
 
         <p>En Costa Rica es común escuchar frases como: <em>"Yo no sé nada de vino."</em> <em>"Ojalá alguien me recomiende algo."</em> Y aunque pocas personas admiten sentirse intimidadas, la inseguridad aparece constantemente en el comportamiento del consumidor — en la indecisión frente a la carta, en la delegación inmediata de la elección, en la dependencia de la primera recomendación que aparezca.</p>
 
@@ -399,7 +441,7 @@
 
         <p>En CAVA Vinoteca lo vemos cada semana en el <a href="/after-office-vino-perez-zeledon" style="color: var(--gold); text-decoration: underline; text-underline-offset: 3px;">After Office</a>: personas que llegan sin vocabulario técnico y se van con una botella descorchada, una conversación real y la sensación de que el vino también les pertenece a ellas.</p>
 
-        <p class="art-quote reveal">"Antes de convertirse en símbolo de sofisticación, el vino fue mesa compartida, pausa y conexión."</p>
+        <p class="art-quote reveal quote-emphasis">"Antes de convertirse en símbolo de sofisticación, el vino fue mesa compartida, pausa y conexión."</p>
 
         <p>Y quizá el verdadero desafío para la industria no sea enseñar a las personas a hablar de vino. Quizá sea lograr que más personas sientan que también pertenecen a esa conversación.</p>
 

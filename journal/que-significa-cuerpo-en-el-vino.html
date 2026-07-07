@@ -225,6 +225,47 @@
       .nav .cava-monogram { view-transition-name: cava-seal; }
       .art-cover { view-transition-name: art-cuerpo-vino; }
     }
+
+    /* ==========================================
+       READING PROGRESS (Sprint 12) — barra fija atada al scroll del documento.
+       Base: invisible (scaleX 0) si no hay soporte real de scroll-timeline.
+    ========================================== */
+    .read-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 100%;
+      transform-origin: left; transform: scaleX(0);
+      background: var(--gold); z-index: 1001; pointer-events: none;
+    }
+    @supports (animation-timeline: scroll()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .read-progress {
+          animation: readProgress linear both;
+          animation-timeline: scroll(root block);
+        }
+        @keyframes readProgress {
+          from { transform: scaleX(0); }
+          to { transform: scaleX(1); }
+        }
+      }
+    }
+
+    /* ==========================================
+       QUOTE EMPHASIS (utilidad transversal, Sprint 12 Fase 1)
+       Enfasis de cita aislada al entrar en viewport.
+    ========================================== */
+    .quote-emphasis { transform: none; opacity: 1; }
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .quote-emphasis {
+          animation: quoteEmphasis linear both;
+          animation-timeline: view();
+          animation-range: entry 0% center 60%;
+        }
+        @keyframes quoteEmphasis {
+          from { transform: scale(.96); opacity: .65; }
+          to { transform: scale(1); opacity: 1; }
+        }
+      }
+    }
     .art-cover picture { display: block; }
     .art-cover img { width: 100%; object-fit: cover; display: block; max-height: 540px; }
     .art-breadcrumb { padding: 1.1rem var(--pad); background: var(--charcoal-2); border-bottom: 1px solid var(--line); }
@@ -284,6 +325,7 @@
 
 <body>
   <a href="#art-main" class="skip-link">Saltar al contenido</a>
+  <div class="read-progress" aria-hidden="true"></div>
 
   <header class="nav" id="nav">
     <a href="/" class="brand" aria-label="CAVA Gourmet Market — Ir al inicio">
@@ -378,7 +420,7 @@
 
         <h2 class="reveal">El error más común: confundir cuerpo con calidad</h2>
 
-        <p class="art-quote reveal">El cuerpo de un vino no dice si vale la pena abrirlo. Dice cómo se va a sentir en boca.</p>
+        <p class="art-quote reveal quote-emphasis">El cuerpo de un vino no dice si vale la pena abrirlo. Dice cómo se va a sentir en boca.</p>
 
         <p>Mucha gente aprendió que un vino "con cuerpo" es un vino serio, y que uno ligero es menor. Eso no es cierto, pero es comprensible: si alguien probó un tinto muy ligero que le pareció aguado, es natural concluir que más cuerpo equivale a mejor vino.</p>
 
