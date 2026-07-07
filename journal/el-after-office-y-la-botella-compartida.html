@@ -240,6 +240,7 @@
     .art-prose p.art-quote { font-family: var(--display); font-size: clamp(1.25rem, 2.4vw, 1.65rem); line-height: 1.32; letter-spacing: -.01em; color: var(--ivory); padding: 1.35rem 0 1.35rem 1.5rem; border-left: 2px solid var(--gold); margin: 1.8rem 0 1.8rem; }
     .art-prose a { color: var(--gold-soft); text-underline-offset: 3px; text-decoration: underline; transition: color .2s; }
     .art-prose a:hover { color: var(--ivory); }
+    .art-prose a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
     .art-prose p.art-closing { font-family: var(--serif); font-size: clamp(1.1rem, 1.75vw, 1.3rem); line-height: 1.85; color: rgba(246,239,227,.82); margin-bottom: .6rem; }
     .art-prose p.art-closing-single { font-family: var(--display); font-weight: 300; font-size: clamp(1.35rem, 2.8vw, 1.8rem); letter-spacing: -.01em; line-height: 1.2; color: var(--ivory); margin: 1.8rem 0 1rem; }
     .art-author { background: var(--charcoal-2); border-top: 1px solid var(--line); padding: clamp(3rem, 5.5vw, 4.5rem) var(--pad); }
@@ -252,15 +253,18 @@
     .art-author-link { display: inline-flex; align-items: center; gap: .4rem; font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-soft); transition: gap .25s var(--ease), color .25s var(--ease); }
     .art-author-link::after { content: "→"; }
     .art-author-link:hover { gap: .7rem; color: var(--gold); }
+    .art-author-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     .art-footnav { padding: clamp(2.5rem, 5vw, 4rem) var(--pad) clamp(3.5rem, 6vw, 5.5rem); background: var(--charcoal); border-top: 1px solid var(--line); }
     .art-footnav-inner { max-width: 700px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
     .art-back { display: inline-flex; align-items: center; gap: .5rem; font-size: .6rem; letter-spacing: .22em; text-transform: uppercase; color: rgba(246,239,227,.5); transition: color .25s var(--ease), gap .25s var(--ease); }
     .art-back::before { content: "←"; }
     .art-back:hover { color: var(--gold-soft); gap: .8rem; }
+    .art-back:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     .art-more { display: flex; flex-direction: column; gap: .6rem; text-align: right; }
     .art-more-label { font-size: .55rem; letter-spacing: .28em; text-transform: uppercase; color: rgba(246,239,227,.3); }
     .art-more-link { font-family: var(--serif); font-size: clamp(.95rem, 1.5vw, 1.1rem); color: rgba(246,239,227,.62); transition: color .25s var(--ease); line-height: 1.4; }
     .art-more-link:hover { color: var(--gold-soft); }
+    .art-more-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     footer { background: #060b11; border-top: 1px solid rgba(184, 151, 90, .14); padding: 2.2rem var(--pad); }
     .footer-inner { max-width: var(--max); margin: 0 auto; display: flex; justify-content: space-between; gap: 1rem; align-items: center; color: rgba(246, 239, 227, .68); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; flex-wrap: wrap; }
     .footer-brand { display: inline-flex; align-items: center; gap: .75rem; }

@@ -373,6 +373,7 @@
     }
     .art-prose a { color: var(--gold-soft); text-decoration: underline; text-decoration-color: rgba(215,184,121,.4); text-underline-offset: 3px; transition: color .2s, text-decoration-color .2s; }
     .art-prose a:hover { color: var(--gold); text-decoration-color: var(--gold); }
+    .art-prose a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 
     .art-author {
       background: var(--charcoal-2);
@@ -411,6 +412,7 @@
     }
     .art-author-link::after { content: "→"; }
     .art-author-link:hover { gap: .7rem; color: var(--gold); }
+    .art-author-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
     .art-footnav {
       padding: clamp(2.5rem, 5vw, 4rem) var(--pad) clamp(3.5rem, 6vw, 5.5rem);
@@ -430,6 +432,7 @@
     }
     .art-back::before { content: "←"; }
     .art-back:hover { color: var(--gold-soft); gap: .8rem; }
+    .art-back:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     .art-more {
       display: flex; flex-direction: column; gap: .6rem; text-align: right;
     }
@@ -444,6 +447,7 @@
       line-height: 1.4;
     }
     .art-more-link:hover { color: var(--gold-soft); }
+    .art-more-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
     footer {
       background: #060b11;
