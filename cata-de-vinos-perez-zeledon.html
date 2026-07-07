@@ -971,7 +971,8 @@
     .reveal {
       opacity: 0;
       transform: translateY(28px);
-      transition: opacity .75s var(--ease), transform .75s var(--ease);
+      transition: opacity var(--m-reveal) var(--ease), transform var(--m-reveal) var(--ease);
+      transition-delay: calc(var(--stg, 0) * 70ms);
       contain: layout style;
       will-change: opacity, transform;
     }
@@ -988,6 +989,7 @@
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        transition-delay: 0s !important;
         scroll-behavior: auto !important;
       }
     }
@@ -1795,7 +1797,10 @@
 
     const commitReveal = () => {
       rafQueued = false;
-      revealQueue.splice(0, revealQueue.length).forEach(item => item.classList.add('visible'));
+      revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
+        item.style.setProperty('--stg', Math.min(i, 5));
+        item.classList.add('visible');
+      });
     };
 
     const observer = new IntersectionObserver(entries => {
