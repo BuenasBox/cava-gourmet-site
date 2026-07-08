@@ -861,6 +861,44 @@
     .form-group.has-error input,
     .form-group.has-error select { border-color: rgba(180,70,70,.65); }
     .form-group.has-error .form-error { display: block; }
+
+    /* ==========================================
+       FLOATING LABEL (Sprint 12) — solo campos con placeholder real
+       (nombre, whatsapp, correo, mensaje). select/date se quedan con
+       label estatica: :placeholder-shown no aplica de forma fiable
+       a esos controles nativos.
+    ========================================== */
+    .form-group.floating { position: relative; }
+    .form-group.floating label {
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      font-size: .98rem;
+      letter-spacing: normal;
+      text-transform: none;
+      color: rgba(246,239,227,.4);
+      pointer-events: none;
+      transition: top var(--m-surface) var(--ease), font-size var(--m-surface) var(--ease),
+                  color var(--m-surface) var(--ease), letter-spacing var(--m-surface) var(--ease);
+    }
+    .form-group.floating input,
+    .form-group.floating textarea { padding-top: 1.35rem; padding-bottom: .35rem; }
+    .form-group.floating textarea { padding-top: 1.6rem; }
+    .form-group.floating input:not(:focus)::placeholder,
+    .form-group.floating textarea:not(:focus)::placeholder { color: transparent; }
+    .form-group.floating input:focus + label,
+    .form-group.floating input:not(:placeholder-shown) + label,
+    .form-group.floating textarea:focus + label,
+    .form-group.floating textarea:not(:placeholder-shown) + label {
+      top: .45rem;
+      font-size: .6rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .form-group.floating label { transition: none; }
+    }
     .form-footer { margin-top: 1.75rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
     .form-footer .btn { width: 100%; max-width: 420px; padding: 1.1rem 2rem; font-size: .75rem; }
     .form-note { font-size: .72rem; color: rgba(246,239,227,.4); text-align: center; }
@@ -1472,30 +1510,30 @@
           <form id="cata-form" novalidate aria-label="Formulario de solicitud de cata de vinos">
             <div class="form-grid">
 
-              <div class="form-group" id="group-nombre">
+              <div class="form-group floating" id="group-nombre">
+                <input type="text" id="f-nombre" name="nombre"
+                  placeholder="Tu nombre completo" autocomplete="name" required>
                 <label for="f-nombre">
                   Nombre <span class="req" aria-hidden="true">*</span>
                 </label>
-                <input type="text" id="f-nombre" name="nombre"
-                  placeholder="Tu nombre completo" autocomplete="name" required>
                 <span class="form-error" role="alert">Por favor ingresa tu nombre.</span>
               </div>
 
-              <div class="form-group" id="group-whatsapp">
+              <div class="form-group floating" id="group-whatsapp">
+                <input type="tel" id="f-whatsapp" name="whatsapp"
+                  placeholder="+506 8000 0000" autocomplete="tel" required>
                 <label for="f-whatsapp">
                   WhatsApp <span class="req" aria-hidden="true">*</span>
                 </label>
-                <input type="tel" id="f-whatsapp" name="whatsapp"
-                  placeholder="+506 8000 0000" autocomplete="tel" required>
                 <span class="form-error" role="alert">Por favor ingresa tu número de WhatsApp.</span>
               </div>
 
-              <div class="form-group" id="group-correo">
+              <div class="form-group floating" id="group-correo">
+                <input type="email" id="f-correo" name="correo"
+                  placeholder="tu@correo.com" autocomplete="email">
                 <label for="f-correo">
                   Correo electrónico <span class="opt">— opcional</span>
                 </label>
-                <input type="email" id="f-correo" name="correo"
-                  placeholder="tu@correo.com" autocomplete="email">
               </div>
 
               <div class="form-group" id="group-personas">
@@ -1530,10 +1568,10 @@
                 <input type="date" id="f-fecha" name="fecha">
               </div>
 
-              <div class="form-group full" id="group-mensaje">
-                <label for="f-mensaje">Mensaje adicional</label>
+              <div class="form-group full floating" id="group-mensaje">
                 <textarea id="f-mensaje" name="mensaje"
                   placeholder="Cuéntanos algo más sobre lo que imaginas para tu experiencia…"></textarea>
+                <label for="f-mensaje">Mensaje adicional</label>
               </div>
 
             </div>
