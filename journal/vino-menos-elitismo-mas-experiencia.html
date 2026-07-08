@@ -131,7 +131,8 @@
           "https://www.linkedin.com/in/nazarethpm",
           "https://www.vinetur.com/nazarethwinejourney/",
           "https://www.facebook.com/nazarethwinejourney",
-          "https://www.tiktok.com/@nazarethwinejourney"
+          "https://www.tiktok.com/@nazarethwinejourney",
+          "https://www.wikidata.org/wiki/Q139959656"
         ]
       },
       {
@@ -157,21 +158,23 @@
   </script>
 
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://vitals.vercel-insights.com;">
+    content="default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://vitals.vercel-insights.com;">
   <meta name="referrer" content="strict-origin-when-cross-origin" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="preload" as="font" type="font/woff2" href="../Assets/fonts/alifira-wordmark.woff2" crossorigin>
   <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=optional"
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap"
     onload="this.rel='stylesheet'">
   <noscript>
     <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=optional">
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap">
   </noscript>
 
   <style>
+    @font-face { font-family: "Alifira"; src: url("/Assets/fonts/alifira-wordmark.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
     :root {
       --ivory: #f6efe3;
       --ivory-2: #eadcc3;
@@ -185,6 +188,7 @@
       --display: "Bodoni Moda", Georgia, serif;
       --serif: "Cormorant Garamond", Georgia, serif;
       --sans: "Jost", system-ui, -apple-system, sans-serif;
+      --wordmark: "Alifira", system-ui, -apple-system, sans-serif;
       --ease: cubic-bezier(.22, .61, .36, 1);
       --m-touch: .09s;
       --m-press: .18s;
@@ -203,6 +207,22 @@
       --d-vignette: radial-gradient(ellipse at 50% 42%, transparent 58%, rgba(0,0,0,.16));
       --max: 1240px;
       --pad: clamp(1.35rem, 4vw, 4.5rem);
+      --fs-display: clamp(4.2rem, 12vw, 11rem);
+      --fs-h1: clamp(2.5rem, 5vw, 4.2rem);
+      --fs-h2: clamp(2rem, 3.6vw, 3.2rem);
+      --fs-h3: clamp(1.6rem, 2.8vw, 2.4rem);
+      --fs-h4: clamp(1.2rem, 2.2vw, 1.8rem);
+      --fs-lead: clamp(1.18rem, 2vw, 1.5rem);
+      --fs-body: clamp(1.08rem, 1.65vw, 1.32rem);
+      --fs-body-sm: .98rem;
+      --fs-eyebrow: .9rem;
+      --fs-overline: .66rem;
+      --fs-ui: .74rem;
+      --track-hero: -.035em;
+      --track-head: -.022em;
+      --track-head-sm: -.015em;
+      --track-label: .28em;
+      --track-ui: .18em;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { overflow-x: hidden; scroll-padding-top: 84px; }
@@ -234,7 +254,7 @@
       display: inline-flex; align-items: center; justify-content: center;
       gap: .75rem; border: 1px solid transparent;
       padding: .8rem 1.4rem; min-height: 44px;
-      font-size: .66rem; letter-spacing: .2em; text-transform: uppercase;
+      font-size: var(--fs-overline); letter-spacing: var(--track-ui); text-transform: uppercase;
       font-weight: 400; cursor: pointer; border-radius: 4px;
       transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease);
     }
@@ -261,10 +281,10 @@
     .brand { display: inline-flex; align-items: center; gap: .85rem; }
     .cava-monogram { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .cava-monogram img { width: 100%; height: 100%; display: block; object-fit: contain; mix-blend-mode: screen; }
-    .brand-wordmark { font-family: var(--display); font-size: .9rem; letter-spacing: .14em; font-weight: 300; }
+    .brand-wordmark { font-family: var(--wordmark); font-size: 1.02rem; letter-spacing: .14em; text-transform: uppercase; line-height: 1; }
     .nav-links { display: flex; gap: clamp(1rem, 3vw, 2.6rem); align-items: center; }
     .nav-links a {
-      font-size: .66rem; letter-spacing: .2em; text-transform: uppercase;
+      font-size: var(--fs-overline); letter-spacing: var(--track-ui); text-transform: uppercase;
       color: rgba(246, 239, 227, .78); transition: color .25s var(--ease);
     }
     .nav-links a:hover { color: var(--gold-soft); }
@@ -508,7 +528,7 @@
       max-width: var(--max); margin: 0 auto;
       display: flex; justify-content: space-between; gap: 1rem;
       align-items: center; color: rgba(246, 239, 227, .68);
-      font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; flex-wrap: wrap;
+      font-size: var(--fs-ui); letter-spacing: var(--track-ui); text-transform: uppercase; flex-wrap: wrap;
     }
     .footer-brand { display: inline-flex; align-items: center; gap: .75rem; }
     .footer-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
@@ -567,7 +587,7 @@
   <header class="nav" id="nav">
     <a href="/" class="brand" aria-label="CAVA Vinoteca — Ir al inicio">
       <div class="cava-monogram">
-        <img src="/Assets/logo-cava-mark.webp" alt="" aria-hidden="true" width="34" height="34" loading="eager">
+        <img src="../Assets/logo-cava-mark.webp" alt="" aria-hidden="true" width="34" height="34" loading="eager">
       </div>
       <span class="brand-wordmark">CAVA Vinoteca</span>
     </a>
@@ -605,7 +625,7 @@
         <h1>Por qué el vino necesita menos elitismo y más experiencia</h1>
         <div class="art-meta">
           <div class="naz-thumb">
-            <img src="/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp"
+            <img src="../Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp"
               alt="Nazareth Padilla Montero" width="44" height="44" loading="eager">
           </div>
           <div class="art-meta-info">
@@ -618,10 +638,10 @@
 
     <figure class="art-cover" aria-hidden="true">
       <img
-        src="/Assets/images/05-cava-vinoteca-artisan-wine-detail-1280.webp"
-        srcset="/Assets/images/05-cava-vinoteca-artisan-wine-detail-480.webp 480w,
-                /Assets/images/05-cava-vinoteca-artisan-wine-detail-800.webp 800w,
-                /Assets/images/05-cava-vinoteca-artisan-wine-detail-1280.webp 1280w"
+        src="../Assets/images/05-cava-vinoteca-artisan-wine-detail-1280.webp"
+        srcset="../Assets/images/05-cava-vinoteca-artisan-wine-detail-480.webp 480w,
+                ../Assets/images/05-cava-vinoteca-artisan-wine-detail-800.webp 800w,
+                ../Assets/images/05-cava-vinoteca-artisan-wine-detail-1280.webp 1280w"
         sizes="100vw"
         alt="Detalle artesanal de vino en CAVA Gourmet Market, Pérez Zeledón"
         width="1280" height="853"
@@ -895,7 +915,7 @@
     <section class="art-author" aria-label="Sobre la autora">
       <div class="art-author-inner">
         <div class="art-author-img">
-          <img src="/Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp"
+          <img src="../Assets/images/06-nazareth-wine-journey-wset-cava-vinoteca-800.webp"
             alt="Nazareth Padilla Montero" width="74" height="74" loading="lazy">
         </div>
         <div>
@@ -930,7 +950,7 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
-        <span style="font-family: var(--display); font-size: .9rem; letter-spacing: .1em; font-weight: 300;">CAVA</span>
+        <span class="brand-wordmark">CAVA</span>
         <span>Gourmet Market · Vinoteca · Pérez Zeledón · Costa Rica</span>
       </div>
       <nav class="footer-links" aria-label="Links del footer">
