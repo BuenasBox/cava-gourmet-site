@@ -571,7 +571,7 @@
         width="1280" height="720" loading="eager" fetchpriority="high" decoding="async">
       <video class="blog-hero-video" data-video-hero
         poster="Assets/Videos/journal-breathes-poster.jpg"
-        muted loop playsinline preload="none" aria-hidden="true">
+        muted loop playsinline autoplay preload="auto" aria-hidden="true">
         <source src="Assets/Videos/journal-breathes-hevc-web.mp4" type="video/mp4; codecs=hvc1.1.6.L93.B0">
         <source src="Assets/Videos/journal-breathes-h264-web.mp4" type="video/mp4; codecs=avc1.640020">
       </video>
@@ -963,28 +963,21 @@
     }
 
     // Sprint 12 addendum (pendiente de aprobacion) — "The Journal Breathes":
-    // carga el video del hero solo si no hay reduced-motion, no hay
-    // Save-Data, y el hero esta por entrar en viewport.
+    // el <video> autoplay nativo (muted+playsinline+autoplay) ya lo
+    // reproduce de inmediato al cargar la pagina, en loop continuo, sin
+    // esperar a JS. Reduced-motion ya lo oculta via CSS. Esto solo
+    // protege datos moviles: si el usuario activo Save-Data, se corta
+    // la carga y se apaga el video, quedando el poster como fondo.
     (function () {
       const hero = document.querySelector('[data-video-hero]');
       if (!hero) return;
-
-      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const saveData = navigator.connection && navigator.connection.saveData;
-      if (reducedMotion || saveData) return;
-
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            hero.preload = 'auto';
-            hero.load();
-            hero.play().catch(() => {});
-            io.disconnect();
-          }
-        });
-      }, { rootMargin: '200px' });
-
-      io.observe(hero);
+      if (navigator.connection && navigator.connection.saveData) {
+        hero.pause();
+        hero.removeAttribute('src');
+        hero.querySelectorAll('source').forEach((s) => s.removeAttribute('src'));
+        hero.load();
+        hero.style.display = 'none';
+      }
     })();
   </script>
 </body>
