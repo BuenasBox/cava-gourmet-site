@@ -173,6 +173,7 @@
       --section: clamp(5rem, 9vw, 8rem);
       --fs-display: clamp(4.2rem, 12vw, 11rem);
       --fs-h1: clamp(2.5rem, 5vw, 4.2rem);
+      --fs-h1-hero: clamp(2.55rem, 6vw, 5.6rem);
       --fs-h2: clamp(2rem, 3.6vw, 3.2rem);
       --fs-h3: clamp(1.6rem, 2.8vw, 2.4rem);
       --fs-h4: clamp(1.2rem, 2.2vw, 1.8rem);
@@ -227,7 +228,7 @@
     .label::before { content: ""; width: 28px; height: 1px; background: currentColor; opacity: .75; }
     .title {
       font-family: var(--display); font-weight: 300; line-height: .98;
-      letter-spacing: var(--track-head); font-size: var(--fs-h1);
+      letter-spacing: var(--track-head); font-size: var(--fs-h1-hero);
     }
     .title em { color: var(--gold-soft); font-style: normal; }
     .copy {
@@ -238,7 +239,7 @@
       display: inline-flex; align-items: center; justify-content: center;
       gap: .75rem; border: 1px solid transparent;
       padding: .8rem 1.4rem; min-height: 44px;
-      font-size: var(--fs-ui); letter-spacing: var(--track-ui); text-transform: uppercase;
+      font-size: var(--fs-overline); letter-spacing: var(--track-ui); text-transform: uppercase;
       font-weight: 400; cursor: pointer; border-radius: 4px;
       transition: background var(--m-surface) var(--ease), color var(--m-surface) var(--ease), border-color var(--m-surface) var(--ease), transform var(--m-press) var(--ease);
     }
