@@ -573,6 +573,42 @@
     }
 
     /* ==========================================
+       RITMO ESPACIAL (Sprint 12) — "la noche se mueve a su propio ritmo".
+       Solo en el triptico de escritorio (>960px): el numeral de cada
+       tarjeta entra desde un punto distinto (arriba/abajo alternado),
+       un compas visual sobre las 3 tarjetas. Se transforma unicamente
+       el numeral (aria-hidden, decorativo) — nunca .exp-card ni
+       .exp-cards, para no romper el borde compartido de 1px del grid.
+    ========================================== */
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) and (min-width: 961px) {
+        .exp-card:nth-child(1) .exp-number {
+          animation: ritmoBeatA linear both;
+          animation-timeline: view();
+          animation-range: entry 10% entry 70%;
+        }
+        .exp-card:nth-child(2) .exp-number {
+          animation: ritmoBeatB linear both;
+          animation-timeline: view();
+          animation-range: entry 10% entry 70%;
+        }
+        .exp-card:nth-child(3) .exp-number {
+          animation: ritmoBeatA linear both;
+          animation-timeline: view();
+          animation-range: entry 10% entry 70%;
+        }
+        @keyframes ritmoBeatA {
+          from { transform: translate(-10px, -14px); opacity: .4; }
+          to { transform: translate(0, 0); opacity: 1; }
+        }
+        @keyframes ritmoBeatB {
+          from { transform: translate(10px, 14px); opacity: .4; }
+          to { transform: translate(0, 0); opacity: 1; }
+        }
+      }
+    }
+
+    /* ==========================================
        PARA QUIÉN ES (uses incluye classes)
     ========================================== */
     .incluye {
