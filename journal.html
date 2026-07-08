@@ -289,19 +289,40 @@
       position: relative; overflow: hidden;
     }
     .blog-hero::before {
-      content: ""; position: absolute; inset: 0; opacity: .5;
+      content: ""; position: absolute; inset: 0; opacity: .5; z-index: 2;
       background: repeating-linear-gradient(180deg, transparent 0 35px, rgba(246,239,227,.035) 35px 36px);
       mask-image: radial-gradient(ellipse at 32% 45%, black, transparent 72%);
       pointer-events: none;
     }
     .blog-hero::after {
-      content: ""; position: absolute; top: 0; bottom: 0;
+      content: ""; position: absolute; top: 0; bottom: 0; z-index: 2;
       left: calc(max(var(--pad), (100% - var(--max)) / 2 + var(--pad)) - 1.6rem);
       width: 1px;
       background: linear-gradient(180deg, transparent, rgba(184,151,90,.4) 32%, rgba(184,151,90,.16));
       pointer-events: none;
     }
-    .blog-hero .wrap { position: relative; z-index: 2; max-width: 860px; }
+    .blog-hero .wrap { position: relative; z-index: 3; max-width: 860px; }
+
+    /* ==========================================
+       SPRINT 12 ADDENDUM — "The Journal Breathes" (living painting)
+       Video ambiental en el hero. Regla de Tecnologia Nueva: aprobado
+       explicitamente fuera de la caja de herramientas nativa porque es
+       contenido generativo real, no simulable con CSS.
+       Orden de capas: poster/video (0) < scrim (1) < textura/linea (2) < contenido (3).
+    ========================================== */
+    .blog-hero-poster,
+    .blog-hero-video {
+      position: absolute; inset: 0; z-index: 0;
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .blog-hero-scrim {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(180deg, rgba(9,20,32,.4), rgba(9,8,7,.78));
+      pointer-events: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .blog-hero-video { display: none; }
+    }
     .blog-hero .title { font-size: clamp(3.2rem, 9vw, 7.5rem); }
     .blog-hero .title em { font-style: italic; }
     .blog-hero .copy { max-width: 46ch; margin-top: 1.5rem; text-wrap: pretty; }
@@ -548,6 +569,15 @@
 
     <!-- HERO -->
     <section class="blog-hero" aria-labelledby="journal-title">
+      <img class="blog-hero-poster" src="Assets/Videos/journal-breathes-poster.jpg" alt="" aria-hidden="true"
+        width="1280" height="720" loading="eager" fetchpriority="high" decoding="async">
+      <video class="blog-hero-video" data-video-hero
+        poster="Assets/Videos/journal-breathes-poster.jpg"
+        muted loop playsinline preload="none" aria-hidden="true">
+        <source src="Assets/Videos/journal-breathes-hevc-web.mp4" type="video/mp4; codecs=hvc1.1.6.L93.B0">
+        <source src="Assets/Videos/journal-breathes-h264-web.mp4" type="video/mp4; codecs=avc1.640020">
+      </video>
+      <div class="blog-hero-scrim" aria-hidden="true"></div>
       <div class="wrap">
         <p class="label">CAVA Gourmet Market · Pérez Zeledón</p>
         <h1 class="title" id="journal-title">Conversaciones <em>sobre vino</em></h1>
@@ -933,6 +963,31 @@
       }, { threshold: 0.05, rootMargin: '120px 0px 160px 0px' });
       document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     }
+
+    // Sprint 12 addendum — "The Journal Breathes": carga el video del hero
+    // solo si el usuario no pidio reduced-motion, no esta en Save-Data, y
+    // el hero esta por entrar en viewport. Sin esto, nunca se toca la red.
+    (function () {
+      const hero = document.querySelector('[data-video-hero]');
+      if (!hero) return;
+
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const saveData = navigator.connection && navigator.connection.saveData;
+      if (reducedMotion || saveData) return;
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            hero.preload = 'auto';
+            hero.load();
+            hero.play().catch(() => {});
+            io.disconnect();
+          }
+        });
+      }, { rootMargin: '200px' });
+
+      io.observe(hero);
+    })();
   </script>
 </body>
 
