@@ -17,7 +17,6 @@
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="manifest" href="/site.webmanifest">
   <meta property="og:type" content="profile" />
   <meta property="og:site_name" content="CAVA Gourmet" />
   <meta property="og:url" content="https://www.cavagourmet.com/nazareth" />
@@ -2038,6 +2037,14 @@ color: rgba(246, 239, 227, 0.82);
 
     if (document.readyState === 'complete') { requestAnimationFrame(initReveal); }
     else { window.addEventListener('load', () => requestAnimationFrame(initReveal), { once: true }); }
+  </script>
+  <script>
+    window.addEventListener('load', () => {
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = '/site.webmanifest';
+      document.head.appendChild(link);
+    }, { once: true });
   </script>
 
 </body>
