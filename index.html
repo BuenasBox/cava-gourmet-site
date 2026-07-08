@@ -750,7 +750,7 @@
         aria-label="Facebook CAVA Vinoteca">Facebook</a>
       <a href="/admin/enofilios-panel" rel="nofollow"
         aria-label="Crear tarjeta de miembros en el panel privado de CAVA"
-        style="opacity:.52;">Crear tarjeta de miembros</a>
+        style="color:rgba(246,239,227,.52);">Crear tarjeta de miembros</a>
       <span>© 2026</span>
     </nav>
     </div>
@@ -772,6 +772,7 @@
     const mobileMenu = document.getElementById('mobileMenu');
     const ritualReveal = document.getElementById('ritualReveal');
     const ritualMsg = document.getElementById('ritualMsg');
+    const runWhenIdle = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 1));
 
     let scrollTimeout;
     const handleScroll = () => {
@@ -841,44 +842,46 @@
     if (isMobileFastPath) {
       document.documentElement.classList.add('reveal-no-animation');
     }
-    const heroRevealItems = revealItems.filter(item => item.closest('#inicio') !== null);
-    if (!isMobileFastPath) { heroRevealItems.forEach(item => item.classList.add('visible')); }
+    if (!isMobileFastPath) {
+      const heroRevealItems = revealItems.filter(item => item.closest('#inicio') !== null);
+      heroRevealItems.forEach(item => item.classList.add('visible'));
 
-    const revealCandidates = revealItems.filter(item => !heroRevealItems.includes(item));
-    const revealQueue = [];
-    let rafQueued = false;
+      const revealCandidates = revealItems.filter(item => !heroRevealItems.includes(item));
+      const revealQueue = [];
+      let rafQueued = false;
 
-    const commitReveal = () => {
-      rafQueued = false;
-      revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
-        item.style.setProperty('--stg', Math.min(i, 5));
-        item.classList.add('visible');
-      });
-    };
+      const commitReveal = () => {
+        rafQueued = false;
+        revealQueue.splice(0, revealQueue.length).forEach((item, i) => {
+          item.style.setProperty('--stg', Math.min(i, 5));
+          item.classList.add('visible');
+        });
+      };
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          revealQueue.push(entry.target);
-          observer.unobserve(entry.target);
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            revealQueue.push(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+        if (revealQueue.length && !rafQueued) {
+          rafQueued = true;
+          requestAnimationFrame(commitReveal);
         }
-      });
-      if (revealQueue.length && !rafQueued) {
-        rafQueued = true;
-        requestAnimationFrame(commitReveal);
+      }, { threshold: 0.05, rootMargin: '120px 0px 160px 0px' });
+
+      const initReveal = () => {
+        if (!revealCandidates.length) { return; }
+
+        revealCandidates.forEach(item => observer.observe(item));
+      };
+
+      if (document.readyState === 'complete') {
+        runWhenIdle(() => requestAnimationFrame(initReveal));
+      } else {
+        window.addEventListener('load', () => runWhenIdle(() => requestAnimationFrame(initReveal)), { once: true });
       }
-    }, { threshold: 0.05, rootMargin: '120px 0px 160px 0px' });
-
-    const initReveal = () => {
-      if (isMobileFastPath) { return; }
-
-      revealCandidates.forEach(item => observer.observe(item));
-    };
-
-    if (document.readyState === 'complete') {
-      requestAnimationFrame(initReveal);
-    } else {
-      window.addEventListener('load', () => requestAnimationFrame(initReveal), { once: true });
     }
   </script>
 </body>
