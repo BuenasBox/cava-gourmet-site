@@ -16,7 +16,7 @@
 
 # Regla global: todos los crawlers — acceso completo con señales IA explícitas
 User-agent: *
-Content-signal: search=yes, ai-input=yes, ai-train=yes
+# Content-signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 Disallow: /admin/
 Disallow: /Repaldos%20Index/
@@ -56,7 +56,7 @@ User-agent: Amazonbot
 # Common Crawl
 User-agent: CCBot
 
-Content-signal: search=yes, ai-input=yes, ai-train=yes
+# Content-signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 Disallow: /admin/
 Disallow: /Repaldos%20Index/
