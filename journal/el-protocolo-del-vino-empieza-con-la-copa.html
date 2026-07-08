@@ -213,28 +213,34 @@
   </script>
 
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://vitals.vercel-insights.com;">
+    content="default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://vitals.vercel-insights.com;">
   <meta name="referrer" content="strict-origin-when-cross-origin" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="preload" as="font" type="font/woff2" href="/Assets/fonts/alifira-wordmark.woff2" crossorigin>
   <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=optional"
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap"
     onload="this.rel='stylesheet'">
   <noscript>
     <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=optional">
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap">
   </noscript>
 
   <style>
+    @font-face { font-family: "Alifira"; src: url("/Assets/fonts/alifira-wordmark.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
     :root {
       --ivory: #f6efe3; --ivory-2: #eadcc3; --gold: #b8975a; --gold-soft: #d7b879;
       --navy: #162b43; --navy-deep: #091522; --charcoal: #12100d; --charcoal-2: #1b1813;
       --line: rgba(184, 151, 90, 0.23);
       --display: "Bodoni Moda", Georgia, serif; --serif: "Cormorant Garamond", Georgia, serif;
       --sans: "Jost", system-ui, -apple-system, sans-serif;
+      --wordmark: "Alifira", system-ui, -apple-system, sans-serif;
       --ease: cubic-bezier(.22, .61, .36, 1); --max: 1240px; --pad: clamp(1.35rem, 4vw, 4.5rem);
+      --fs-display: clamp(4.2rem, 12vw, 11rem); --fs-h1: clamp(2.5rem, 5vw, 4.2rem); --fs-h2: clamp(2rem, 3.6vw, 3.2rem); --fs-h3: clamp(1.6rem, 2.8vw, 2.4rem); --fs-h4: clamp(1.2rem, 2.2vw, 1.8rem);
+      --fs-lead: clamp(1.18rem, 2vw, 1.5rem); --fs-body: clamp(1.08rem, 1.65vw, 1.32rem); --fs-body-sm: .98rem; --fs-eyebrow: .9rem; --fs-overline: .66rem; --fs-ui: .74rem;
+      --track-hero: -.035em; --track-head: -.022em; --track-head-sm: -.015em; --track-label: .28em; --track-ui: .18em;
       --m-touch: .09s; --m-press: .18s; --m-surface: .3s; --m-veil: .7s; --m-reveal: .95s; --m-breath: 1.8s;
       --d-window: 68% 20%; --d-light: 215,184,121; --d-edge: rgba(246,239,227,.07); --d-edge-soft: rgba(246,239,227,.04);
       --d-shadow-1: 0 12px 32px rgba(0,0,0,.18); --d-shadow-2: 0 22px 48px rgba(0,0,0,.24); --d-shadow-3: 0 34px 90px rgba(0,0,0,.3);
@@ -248,7 +254,7 @@
     button { font: inherit; }
     img { max-width: 100%; display: block; }
     body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999; opacity: .55; background-image: radial-gradient(ellipse at var(--d-window), rgba(var(--d-light),.05), transparent 42%), radial-gradient(ellipse at 50% 118%, rgba(0,0,0,.16), transparent 58%); }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .75rem; border: 1px solid transparent; padding: .8rem 1.4rem; min-height: 44px; font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 400; cursor: pointer; border-radius: 4px; transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .75rem; border: 1px solid transparent; padding: .8rem 1.4rem; min-height: 44px; font-size: var(--fs-ui); letter-spacing: var(--track-ui); text-transform: uppercase; font-weight: 400; cursor: pointer; border-radius: 4px; transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease); }
     .btn:hover { transform: translateY(-1px); }
     .btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
     .btn.gold { background: var(--gold); color: var(--navy-deep); border-color: var(--gold); }
@@ -258,9 +264,9 @@
     .brand { display: inline-flex; align-items: center; gap: .85rem; }
     .cava-monogram { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .cava-monogram img { width: 100%; height: 100%; display: block; object-fit: contain; mix-blend-mode: screen; }
-    .brand-wordmark { font-family: var(--display); font-size: .9rem; letter-spacing: .14em; font-weight: 300; }
+    .brand-wordmark { font-family: var(--wordmark); font-size: 1.02rem; letter-spacing: .14em; text-transform: uppercase; line-height: 1; }
     .nav-links { display: flex; gap: clamp(1rem, 3vw, 2.6rem); align-items: center; }
-    .nav-links a { font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(246, 239, 227, .78); transition: color .25s var(--ease); }
+    .nav-links a { font-size: var(--fs-overline); letter-spacing: var(--track-ui); text-transform: uppercase; color: rgba(246, 239, 227, .78); transition: color .25s var(--ease); }
     .nav-links a:hover { color: var(--gold-soft); }
     .nav-links a[aria-current="page"] { color: var(--gold-soft); }
     .nav-links a:focus-visible, .nav-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
@@ -375,7 +381,7 @@
     .art-more-link:hover { color: var(--gold-soft); }
     .art-more-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
     footer { background: #060b11; border-top: 1px solid rgba(184, 151, 90, .14); padding: 2.2rem var(--pad); }
-    .footer-inner { max-width: var(--max); margin: 0 auto; display: flex; justify-content: space-between; gap: 1rem; align-items: center; color: rgba(246, 239, 227, .68); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; flex-wrap: wrap; }
+    .footer-inner { max-width: var(--max); margin: 0 auto; display: flex; justify-content: space-between; gap: 1rem; align-items: center; color: rgba(246, 239, 227, .68); font-size: var(--fs-ui); letter-spacing: var(--track-ui); text-transform: uppercase; flex-wrap: wrap; }
     .footer-brand { display: inline-flex; align-items: center; gap: .75rem; }
     .footer-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
     .footer-links a:hover { color: var(--gold-soft); }
@@ -596,7 +602,7 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
-        <span style="font-family: var(--display); font-size: .9rem; letter-spacing: .1em; font-weight: 300;">CAVA</span>
+        <span class="brand-wordmark">CAVA</span>
         <span>Gourmet Market · Vinoteca · Pérez Zeledón · Costa Rica</span>
       </div>
       <nav class="footer-links" aria-label="Links del footer">

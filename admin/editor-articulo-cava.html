@@ -7,14 +7,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" href="/Assets/fonts/alifira-wordmark.woff2" crossorigin>
   <style>
+    @font-face { font-family: "Alifira"; src: url("/Assets/fonts/alifira-wordmark.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
     :root {
       --ivory:#f6efe3;--ivory-2:#eadcc3;--gold:#b8975a;--gold-soft:#d7b879;
       --navy:#162b43;--navy-deep:#091522;--charcoal:#12100d;--charcoal-2:#1b1813;
       --line:rgba(184,151,90,.2);
       --display:"Bodoni Moda",Georgia,serif;--serif:"Cormorant Garamond",Georgia,serif;
-      --sans:"Jost",system-ui,sans-serif;--ease:cubic-bezier(.22,.61,.36,1);
+      --sans:"Jost",system-ui,sans-serif;--wordmark:"Alifira",system-ui,-apple-system,sans-serif;--ease:cubic-bezier(.22,.61,.36,1);
     }
+    .brand-wordmark{font-family:var(--wordmark);font-size:1.02rem;letter-spacing:.14em;text-transform:uppercase;line-height:1}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{background:var(--charcoal);color:var(--ivory);font-family:var(--sans);font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh}
@@ -1303,7 +1306,7 @@ Al terminar, lista exactamente los archivos modificados para revisión.`;
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=optional">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap">
   <link rel="stylesheet" href="/Assets/css/main.css">
 </head>
 <body>
@@ -1380,7 +1383,7 @@ Al terminar, lista exactamente los archivos modificados para revisión.`;
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
-        <span style="font-family:'Bodoni Moda',Georgia,serif;font-size:.9rem;letter-spacing:.1em;font-weight:300">CAVA</span>
+        <span class="brand-wordmark">CAVA</span>
         <span>Gourmet Market · Vinoteca · Pérez Zeledón · Costa Rica</span>
       </div>
       <nav class="footer-links" aria-label="Links del footer">

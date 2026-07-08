@@ -281,7 +281,7 @@
 </script>
 
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://vitals.vercel-insights.com;">
+    content="default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://vitals.vercel-insights.com;">
 
   <link rel="preload" as="image"
     href="Assets/images/nazareth-padilla-montero-comunicadora-vino-cava-costa-rica-800.webp"
@@ -292,15 +292,17 @@
     type="image/webp">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="/Assets/fonts/alifira-wordmark.woff2" crossorigin>
   <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=optional"
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap"
     onload="this.rel='stylesheet'">
   <noscript>
     <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=optional">
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap">
   </noscript>
 
     <style>
+@font-face { font-family: "Alifira"; src: url("/Assets/fonts/alifira-wordmark.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 :root {
 --ivory: #f6efe3;
 --ivory-2: #eadcc3;
@@ -318,6 +320,7 @@
 --display: "Bodoni Moda", Georgia, serif;
 --serif: "Cormorant Garamond", Georgia, serif;
 --sans: "Jost", system-ui, -apple-system, sans-serif;
+--wordmark: "Alifira", system-ui, -apple-system, sans-serif;
 --ease: cubic-bezier(.22, .61, .36, 1);
 --m-touch: .09s;
 --m-press: .18s;
@@ -337,6 +340,22 @@
 --max: 1240px;
 --pad: clamp(1.35rem, 4vw, 4.5rem);
 --section: clamp(5rem, 9vw, 8rem);
+--fs-display: clamp(4.2rem, 12vw, 11rem);
+--fs-h1: clamp(2.5rem, 5vw, 4.2rem);
+--fs-h2: clamp(2rem, 3.6vw, 3.2rem);
+--fs-h3: clamp(1.6rem, 2.8vw, 2.4rem);
+--fs-h4: clamp(1.2rem, 2.2vw, 1.8rem);
+--fs-lead: clamp(1.18rem, 2vw, 1.5rem);
+--fs-body: clamp(1.08rem, 1.65vw, 1.32rem);
+--fs-body-sm: .98rem;
+--fs-eyebrow: .9rem;
+--fs-overline: .66rem;
+--fs-ui: .74rem;
+--track-hero: -.035em;
+--track-head: -.022em;
+--track-head-sm: -.015em;
+--track-label: .28em;
+--track-ui: .18em;
 
 }
 
@@ -400,8 +419,8 @@ display: inline-flex;
 align-items: center;
 gap: .85rem;
 color: var(--gold);
-font-size: .62rem;
-letter-spacing: .32em;
+font-size: var(--fs-overline);
+letter-spacing: var(--track-label);
 text-transform: uppercase;
 margin-bottom: 1.35rem;
 font-weight: 400;
@@ -419,8 +438,8 @@ opacity: .75;
 font-family: var(--display);
 font-weight: 300;
 line-height: .98;
-letter-spacing: -.025em;
-font-size: clamp(2.55rem, 6vw, 5.6rem);
+letter-spacing: var(--track-head);
+font-size: var(--fs-h1);
 }
 
 .title em {
@@ -430,7 +449,7 @@ font-style: normal;
 
 .copy {
 font-family: var(--serif);
-font-size: clamp(1.08rem, 1.65vw, 1.32rem);
+font-size: var(--fs-body);
 line-height: 1.75;
 color: rgba(246, 239, 227, .78);
 }
@@ -443,8 +462,8 @@ gap: .75rem;
 border: 1px solid transparent;
 padding: 1rem 1.55rem;
 min-height: 48px;
-font-size: .72rem;
-letter-spacing: .22em;
+font-size: var(--fs-ui);
+letter-spacing: var(--track-ui);
 text-transform: uppercase;
 font-weight: 400;
 cursor: pointer;
@@ -518,19 +537,6 @@ gap: .85rem;
 mix-blend-mode: screen;
 }
 
-.brand-mark {
-width: 34px;
-height: 34px;
-border: 1px solid rgba(184, 151, 90, .65);
-border-radius: 50%;
-display: grid;
-place-items: center;
-color: var(--gold-soft);
-font-family: var(--display);
-font-style: italic;
-font-size: 1.25rem;
-}
-
 .nav-links {
 display: flex;
 gap: clamp(1rem, 3vw, 2.6rem);
@@ -538,8 +544,8 @@ align-items: center;
 }
 
 .nav-links a {
-font-size: .66rem;
-letter-spacing: .2em;
+font-size: var(--fs-overline);
+letter-spacing: var(--track-ui);
 text-transform: uppercase;
 color: rgba(246, 239, 227, .78);
 transition: color .25s var(--ease);
@@ -705,8 +711,8 @@ flex-direction: column;
 align-items: center;
 gap: .7rem;
 color: rgba(246, 239, 227, .52);
-font-size: .62rem;
-letter-spacing: .22em;
+font-size: var(--fs-overline);
+letter-spacing: var(--track-label);
 text-transform: uppercase;
 }
 
@@ -904,14 +910,14 @@ margin-bottom: 1.1rem;
 .pillar h3 {
 font-family: var(--display);
 font-weight: 300;
-font-size: clamp(1.4rem, 2.2vw, 2rem);
+font-size: var(--fs-h3);
 margin-bottom: .8rem;
 line-height: 1;
 }
 
 .pillar p {
 color: rgba(246, 239, 227, .62);
-font-size: .96rem;
+font-size: var(--fs-body-sm);
 line-height: 1.6;
 }
 
@@ -1139,8 +1145,8 @@ gap: 1rem;
 align-items: center;
 flex-wrap: wrap;
 color: rgba(246, 239, 227, .68);
-font-size: .72rem;
-letter-spacing: .14em;
+font-size: var(--fs-ui);
+letter-spacing: var(--track-ui);
 text-transform: uppercase;
 }
 
@@ -1379,6 +1385,9 @@ color: #6f4e1f;
 color: #4b4034;
 }
 
+.brand-wordmark { font-family: var(--wordmark); font-size: 1.02rem; letter-spacing: .14em; text-transform: uppercase; line-height: 1; }
+.nav .brand-wordmark { color: rgba(246,239,227,.78); }
+.footer-brand .brand-name { font-family: var(--wordmark); letter-spacing: .12em; }
 .footer-inner,
 .footer-inner span,
 .footer-brand .brand-name {
@@ -1397,8 +1406,7 @@ color: rgba(246, 239, 227, 0.82);
   <header class="nav" id="nav">
     <a href="https://www.cavagourmet.com/" class="brand" aria-label="CAVA Gourmet — Ir al inicio">
       <img src="Assets/logo-cava-mark.webp" alt="" aria-hidden="true" width="34" height="34" loading="eager">
-      <span
-        style="font-family: var(--sans); font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(246,239,227,.78);">CAVA
+      <span class="brand-wordmark">CAVA
         Gourmet</span>
     </a>
     <nav class="nav-links" aria-label="Navegación de página">
