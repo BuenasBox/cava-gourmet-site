@@ -541,9 +541,13 @@
       font-size: clamp(2.8rem, 7vw, 6.2rem);
       font-weight: 300;
       line-height: .92;
+      min-height: calc(clamp(2.8rem, 7vw, 6.2rem) * 4 * 0.92);
       letter-spacing: -.03em;
     }
     .hero h1 em { color: var(--gold-soft); font-style: normal; display: block; }
+    @media (max-width: 960px) {
+      .hero h1 { min-height: calc(clamp(2.8rem, 7vw, 6.2rem) * 2 * 0.92); }
+    }
     .hero-sub {
       font-family: var(--serif);
       font-style: italic;
