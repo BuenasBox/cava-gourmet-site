@@ -876,6 +876,32 @@
       --label-cool: var(--muted);
       --label-warm: var(--gold);
     }
+    /* Mark cinema — sello bronce (filosofía). El video tiene fondo opaco
+       (13,12,11) más oscuro que --charcoal-2 (27,24,19): con `lighten` el
+       fondo del clip pierde contra el fondo de la sección y desaparece;
+       el bronce, más claro, sobrevive. No sustituir por screen/opacity. */
+    .mark-cinema {
+      position: relative;
+      width: min(42vmin, 380px);
+      aspect-ratio: 1;
+      margin: 0 auto clamp(2rem, 4vw, 3.5rem);
+    }
+    .mark-cinema__video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      mix-blend-mode: lighten;
+      -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 56%, transparent 78%);
+              mask-image: radial-gradient(circle at 50% 50%, #000 56%, transparent 78%);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .mark-cinema__video { display: none; }
+      .mark-cinema {
+        background: var(--charcoal-2) url("Assets/Videos/cava-mark-noir-poster.jpg") center/cover;
+        mix-blend-mode: lighten;
+      }
+    }
     .pilares-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1652,6 +1678,17 @@
       <div class="wrap">
         <div class="historia-prose">
 
+          <div class="mark-cinema" aria-hidden="true">
+            <video class="mark-cinema__video" data-mark-cinema
+                   width="720" height="720"
+                   muted loop playsinline preload="none"
+                   poster="Assets/Videos/cava-mark-noir-poster.jpg"
+                   disablepictureinpicture disableremoteplayback>
+              <source src="Assets/Videos/cava-mark-noir.webm" type="video/webm">
+              <source src="Assets/Videos/cava-mark-noir.mp4" type="video/mp4">
+            </video>
+          </div>
+
           <span class="cap-label reveal reveal-numbered">06</span>
           <h2 class="capitulo reveal" id="masque-title">Más que<br>una tienda de vinos</h2>
           <p class="subcapitulo reveal" style="color: rgba(246,239,227,.5);">Una experiencia del vino diseñada para quedarse</p>
@@ -2152,6 +2189,24 @@
     } else {
       window.addEventListener('load', () => requestAnimationFrame(initReveal), { once: true });
     }
+
+    /* === Mark cinema — sello bronce (filosofía) === */
+    (function () {
+      const el = document.querySelector('[data-mark-cinema]');
+      if (!el) return;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (navigator.connection && navigator.connection.saveData) {
+        el.querySelectorAll('source').forEach(s => s.removeAttribute('src'));
+        el.load(); el.style.display = 'none'; return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { el.play().catch(() => {}); }
+          else { el.pause(); }
+        });
+      }, { threshold: 0.25 });
+      io.observe(el);
+    })();
   </script>
 </body>
 
