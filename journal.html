@@ -390,11 +390,11 @@
       border-top: 1px solid var(--line);
       transition: background var(--m-surface) var(--ease);
     }
-    .blog-card:first-child {
+    .blog-grid > [role="listitem"]:first-child .blog-card {
       border-top: 0; padding-top: .5rem;
       grid-template-columns: minmax(0, 1fr) 380px;
     }
-    .blog-card:last-child { border-bottom: 1px solid var(--line); }
+    .blog-grid > [role="listitem"]:last-child .blog-card { border-bottom: 1px solid var(--line); }
     .blog-card-img {
       aspect-ratio: 3/2; overflow: hidden; order: 2; align-self: center;
       border-radius: 2px; box-shadow: 0 16px 38px rgba(0,0,0,.24);
@@ -445,7 +445,7 @@
       color: var(--ivory); margin-bottom: 1rem;
       text-wrap: pretty;
     }
-    .blog-card:first-child .blog-card-title { font-size: clamp(1.9rem, 3.2vw, 2.9rem); }
+    .blog-grid > [role="listitem"]:first-child .blog-card-title { font-size: clamp(1.9rem, 3.2vw, 2.9rem); }
     .blog-card-title a { transition: color var(--m-surface) var(--ease); }
     .blog-card-title a:hover { color: var(--gold-soft); }
     .blog-card-title a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
@@ -536,7 +536,7 @@
       .footer-inner { flex-wrap: wrap; justify-content: center; text-align: center; }
     }
     @media (max-width: 880px) {
-      .blog-card, .blog-card:first-child { grid-template-columns: 1fr; gap: 1.4rem; }
+      .blog-card, .blog-grid > [role="listitem"]:first-child .blog-card { grid-template-columns: 1fr; gap: 1.4rem; }
       .blog-card-body { order: 1; }
       .blog-card-img { order: 2; max-width: 480px; align-self: start; }
     }
@@ -630,7 +630,8 @@
         <div class="blog-grid" role="list">
 
           <!-- Card 8 — más reciente primero -->
-          <article class="blog-card reveal" role="listitem">
+          <div role="listitem">
+          <article class="blog-card reveal">
             <a href="/journal/vino-y-gastronomia-costarricense"
               class="blog-card-img"
               aria-label="Leer: Vino y gastronomía costarricense: cuando el contraste es más honesto que las reglas">
@@ -661,9 +662,11 @@
               </div>
             </div>
           </article>
+          </div>
 
           <!-- Card 7 -->
-          <article class="blog-card reveal" role="listitem">
+          <div role="listitem">
+          <article class="blog-card reveal">
             <a href="/journal/el-after-office-y-la-botella-compartida"
               class="blog-card-img"
               aria-label="Leer: Por qué el after office con vino no es solo una copa">
@@ -694,9 +697,11 @@
               </div>
             </div>
           </article>
+          </div>
 
           <!-- Card 6 -->
-          <article class="blog-card reveal" role="listitem">
+          <div role="listitem">
+          <article class="blog-card reveal">
             <a href="/journal/el-protocolo-del-vino-empieza-con-la-copa"
               class="blog-card-img"
               aria-label="Leer: La copa de VINO y la cuchara tienen más en común de lo que parece">
@@ -727,9 +732,11 @@
               </div>
             </div>
           </article>
+          </div>
 
           <!-- Card 5 -->
-          <article class="blog-card reveal" role="listitem">
+          <div role="listitem">
+          <article class="blog-card reveal">
             <a href="/journal/que-significa-cuerpo-en-el-vino"
               class="blog-card-img"
               aria-label="Leer: Qué significa que un vino tenga cuerpo">
@@ -760,9 +767,11 @@
               </div>
             </div>
           </article>
+          </div>
 
           <!-- Card 4 -->
-          <article class="blog-card reveal" role="listitem">
+          <div role="listitem">
+          <article class="blog-card reveal">
             <a href="/journal/el-miedo-silencioso-de-no-saber-de-vino"
               class="blog-card-img"
               aria-label="Leer: El miedo silencioso de no saber de vino">
@@ -793,9 +802,11 @@
               </div>
             </div>
           </article>
+          </div>
 
           <!-- Card 1 -->
-          <article class="blog-card reveal" role="listitem">
+          <div role="listitem">
+          <article class="blog-card reveal">
             <a href="/journal/como-se-construye-cultura-del-vino"
               class="blog-card-img"
               aria-label="Leer: Cómo se construye cultura del vino en un país sin tradición vitivinícola">
@@ -826,9 +837,11 @@
               </div>
             </div>
           </article>
+          </div>
 
           <!-- Card 2 -->
-          <article class="blog-card reveal" role="listitem">
+          <div role="listitem">
+          <article class="blog-card reveal">
             <a href="/journal/vino-menos-elitismo-mas-experiencia"
               class="blog-card-img"
               aria-label="Leer: Por qué el vino necesita menos elitismo y más experiencia">
@@ -859,9 +872,11 @@
               </div>
             </div>
           </article>
+          </div>
 
           <!-- Card 3 -->
-          <article class="blog-card reveal" role="listitem">
+          <div role="listitem">
+          <article class="blog-card reveal">
             <a href="/journal/contenido-digital-experiencia-real-vinoteca-costa-rica"
               class="blog-card-img"
               aria-label="Leer: De contenido digital a experiencia real en una vinoteca">
@@ -892,6 +907,7 @@
               </div>
             </div>
           </article>
+          </div>
 
         </div>
       </div>
