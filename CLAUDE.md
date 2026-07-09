@@ -20,6 +20,9 @@ precedencia es:
 4. `.claude/skills/cava-page-builder/SKILL.md` — skill de construcción de páginas.
 5. `SKILL.md` (raíz) — CAVA Luxury Audit Skill. No modificar.
 
+Capa 0 (workspace): `../.claude/CLAUDE.md` — estándares generales del workspace.
+Es una capa subordinada: nunca prevalece sobre las capas 1–5 de este repo.
+
 Cuando haya aparente conflicto entre capas: **preservar primero, consultar al
 usuario antes de resolver por cuenta propia.**
 
