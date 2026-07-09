@@ -33,3 +33,12 @@ Thumbs.db
 
 # Vercel — configuración local generada automáticamente
 .vercel/
+
+# Assets de marca aprobados pero NO integrados aún (sin sección editorial asignada).
+# Ignorados a propósito para que no aparezcan como pendientes en Source Control
+# y no se suban por accidente. Quitar estas líneas cuando se apruebe su integración.
+cava-mark-light.webm
+cava-mark-light.mp4
+cava-mark-light-poster.jpg
+cava-mark-hero.avif
+cava-mark-hero.webp
