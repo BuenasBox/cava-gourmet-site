@@ -19,7 +19,7 @@ User-agent: *
 # Content-signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 Disallow: /admin/
-Disallow: /Repaldos%20Index/
+Disallow: /Respaldos%20Index/
 
 # Buscadores principales
 User-agent: Googlebot
@@ -59,7 +59,7 @@ User-agent: CCBot
 # Content-signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 Disallow: /admin/
-Disallow: /Repaldos%20Index/
+Disallow: /Respaldos%20Index/
 
 # llms.txt: https://www.cavagourmet.com/llms.txt
 Sitemap: https://www.cavagourmet.com/sitemap.xml
