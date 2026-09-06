@@ -6,6 +6,22 @@ Hosted en Vercel + Cloudflare · https://www.cavagourmet.com
 
 ---
 
+## SUPABASE — MANDATORY FIRST READ
+
+Before analyzing, auditing or modifying anything related to Supabase, Auth,
+RLS, environment variables or CSP, read `SUPABASE-PROJECT-MAP.md`.
+
+Authoritative mapping:
+
+- CAVA Gourmet → `rbfctmcfweckbpgxlkqf` (`cava-after-office`) — the only active CAVA project
+- EpistemicLab → `hylknjjhmxsuuwbsslkr` — separate system, not CAVA
+- `qkmgzyxknhhkucndbdsh` → legacy / NXDOMAIN, historical debt only
+
+Do not rediscover or reinterpret this mapping without new evidence. The
+"dual Supabase project / split brain" finding is a confirmed false positive.
+
+---
+
 ## Relación con otros archivos de instrucciones
 
 Este proyecto tiene múltiples capas de instrucciones para agentes. El orden de
