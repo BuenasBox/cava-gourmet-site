@@ -13,14 +13,14 @@
 > correr un escaneo actualizado en SecurityHeaders.com.
 > No modificar configuración de seguridad basándose únicamente en este documento.
 >
-> **Nota Supabase (no eliminar sin verificar):** La CSP en `vercel.json` incluye
-> dos project IDs de Supabase en `connect-src`:
-> - `qkmgzyxknhhkucndbdsh.supabase.co` — proyecto principal (prod)
-> - `rbfctmcfweckbpgxlkqf.supabase.co` — segundo proyecto (confirmar rol en Vercel Dashboard antes de eliminar)
->
-> No remover ninguno de los dos dominios de la CSP sin confirmar en producción
-> cuál está activo. Ambos pueden ser necesarios durante una migración o
-> para entornos distintos.
+> **Nota Supabase — RECONCILIADO 2026-09-06 (ver `SUPABASE-PROJECT-MAP.md`):**
+> CAVA tiene **un solo** proyecto Supabase activo:
+> `rbfctmcfweckbpgxlkqf.supabase.co` (`cava-after-office`).
+> `qkmgzyxknhhkucndbdsh.supabase.co` es una **referencia legacy / NXDOMAIN**
+> (no resuelve, sin datos); fue retirada del `connect-src` de la CSP en
+> `vercel.json` en la Fase 0A. El texto original de esta nota, que lo llamaba
+> "proyecto principal (prod)", era **INCORRECTO**. No existe "dual Supabase" en
+> CAVA — ese hallazgo quedó descartado como falso positivo.
 
 ---
 
@@ -158,7 +158,13 @@ Result:
 - The admin page exposes only the Supabase anon key through `/api/auth_config`, which is expected for Supabase Auth client usage.
 - Sensitive API actions still require `Authorization: Bearer <access_token>` plus backend admin role validation.
 
-Production `/api/auth_config` currently returns Supabase project URL `https://qkmgzyxknhhkucndbdsh.supabase.co`.
+Production `/api/auth_config` returns Supabase project URL
+`https://rbfctmcfweckbpgxlkqf.supabase.co`.
+*(Reconciliado 2026-09-06: el valor original de esta línea, `qkmgzyxknhhkucndbdsh`,
+era histórico/incorrecto. Ver `SUPABASE-PROJECT-MAP.md`.)*
+*(Nota 2026-09-06: `supabaseAnonKey` está actualmente vacía en producción porque
+la variable `SUPABASE_ANON_KEY` no está definida en Vercel — su restauración es
+el objetivo de la Fase 0A.)*
 
 ### Existing meta CSP
 
@@ -266,19 +272,26 @@ Console/loading smoke check:
 
 ### Required environment variables
 
-Required for production:
+> **Reconciliado 2026-09-06 — estado real en Vercel (ver `SUPABASE-PROJECT-MAP.md` §7):**
+> `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` y `CAVA_ALLOWED_ORIGINS`
+> **NO están definidas** actualmente. El backend funciona porque `SUPABASE_KEY`
+> actúa como service-role y `_auth.py` tiene una lista de orígenes hardcodeada.
+> **`SUPABASE_ANON_KEY` (anon/publishable key pública, NO service-role) debe
+> configurarse** para que los paneles admin (`/api/auth_config`) vuelvan a
+> funcionar — es el objetivo de la Fase 0A.
 
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `GOOGLE_WALLET_KEY`
-- `HMAC_SECRET`
-- `CAVA_ALLOWED_ORIGINS`
+Objetivo de configuración para producción:
 
-Legacy / compatibility variables still referenced by existing code:
+- `SUPABASE_URL` — `rbfctmcfweckbpgxlkqf` *(presente)*
+- `SUPABASE_ANON_KEY` — anon/publishable key **pública** del proyecto *(ausente — restaurar)*
+- `SUPABASE_KEY` — service-role key *(presente; funciona como fallback de `SUPABASE_SERVICE_ROLE_KEY`, que está ausente — no migrar el nombre en esta fase)*
+- `GOOGLE_WALLET_KEY` *(presente)*
+- `HMAC_SECRET` *(presente)*
+- `SCAN_PIN` *(presente; solo servidor)*
+- `CAVA_ALLOWED_ORIGINS` *(ausente; `_auth.py` usa default hardcodeado — CORS verificado OK)*
 
-- `SUPABASE_KEY`: fallback for service-role behavior in some API modules. Prefer confirming it is service-role only server-side, or migrating all backend modules to `SUPABASE_SERVICE_ROLE_KEY`.
-- `SCAN_PIN`: referenced by the scan/admin-adjacent flow and should remain server-side only.
+`SUPABASE_ANON_KEY` es **pública por diseño** (se sirve al navegador). No
+confundirla con `SUPABASE_KEY` (service-role), que nunca debe salir del servidor.
 
 Current `CAVA_ALLOWED_ORIGINS` should include production origins and intentional local development origins only, for example:
 

@@ -2,15 +2,22 @@
 
 Run these checks after deploying changes to production.
 
+> **Reconciliado 2026-09-06 — ver `SUPABASE-PROJECT-MAP.md`.** Proyecto Supabase
+> de CAVA: `rbfctmcfweckbpgxlkqf` (`cava-after-office`), único activo.
+> Estado real de env vars: `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` y
+> `CAVA_ALLOWED_ORIGINS` **no están definidas**; el backend funciona con
+> `SUPABASE_KEY` (service-role) y defaults hardcodeados. Restaurar
+> `SUPABASE_ANON_KEY` (anon/publishable **pública**) es el objetivo de la Fase 0A.
+
 ## Required Environment
 
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY` or existing `SUPABASE_KEY` with service-role privileges
+- `SUPABASE_URL` (`rbfctmcfweckbpgxlkqf`)
+- `SUPABASE_ANON_KEY` — anon/publishable key **pública** *(a restaurar)*
+- `SUPABASE_KEY` — service-role key *(presente; fallback de `SUPABASE_SERVICE_ROLE_KEY`)*
 - `GOOGLE_WALLET_KEY`
 - `HMAC_SECRET`
 - `SCAN_PIN`
-- `CAVA_ALLOWED_ORIGINS`
+- `CAVA_ALLOWED_ORIGINS` *(ausente; default hardcodeado en `_auth.py`)*
 
 ## Supabase Admin Role Table
 
