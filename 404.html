@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+
+  <title>Página no encontrada (404) | CAVA Gourmet Market</title>
+  <meta name="description"
+    content="La página que buscabas no está aquí. Volvé al inicio, al Journal o a las experiencias de CAVA Gourmet Market, vinoteca en Pérez Zeledón, Costa Rica." />
+  <meta name="theme-color" content="#091522" />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+  <!-- Google Fonts (non-blocking) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="preload" as="font" type="font/woff2" href="/Assets/fonts/alifira-wordmark.woff2" crossorigin>
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap"
+    onload="this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap">
+  </noscript>
+
+  <style>
+    @font-face { font-family: "Alifira"; src: url("/Assets/fonts/alifira-wordmark.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+
+    :root {
+      --ivory: #f6efe3;
+      --ivory-2: #eadcc3;
+      --champagne: #d9c49a;
+      --gold: #b8975a;
+      --gold-soft: #d7b879;
+      --navy: #162b43;
+      --navy-deep: #091522;
+      --charcoal: #12100d;
+      --charcoal-2: #1b1813;
+      --wine: #4a1720;
+      --muted: #8d8272;
+      --line: rgba(184, 151, 90, 0.23);
+      --display: "Bodoni Moda", Georgia, serif;
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --sans: "Jost", system-ui, -apple-system, sans-serif;
+      --wordmark: "Alifira", system-ui, -apple-system, sans-serif;
+      --ease: cubic-bezier(.22, .61, .36, 1);
+      --m-touch: .09s;
+      --m-press: .18s;
+      --m-surface: .3s;
+      --m-veil: .7s;
+      --m-reveal: .95s;
+      --m-breath: 1.8s;
+      --d-window: 72% 18%;
+      --d-light: 215,184,121;
+      --max: 1240px;
+      --pad: clamp(1.35rem, 4vw, 4.5rem);
+      --fs-h1-hero: clamp(2.55rem, 6vw, 5.6rem);
+      --fs-lead: clamp(1.18rem, 2vw, 1.5rem);
+      --fs-body: clamp(1.08rem, 1.65vw, 1.32rem);
+      --fs-overline: .66rem;
+      --fs-ui: .74rem;
+      --track-head: -.022em;
+      --track-label: .28em;
+      --track-ui: .18em;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    ::selection { background: var(--gold); color: var(--navy-deep); }
+    html, body { overflow-x: hidden; scroll-padding-top: 84px; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body {
+      background: var(--charcoal);
+      color: var(--ivory);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    img { max-width: 100%; display: block; }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: .55;
+      background-image:
+        radial-gradient(ellipse at var(--d-window), rgba(var(--d-light),.05), transparent 42%),
+        radial-gradient(ellipse at 50% 118%, rgba(0,0,0,.16), transparent 58%);
+    }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); width: 100%; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: .75rem; border: 1px solid transparent;
+      padding: .8rem 1.4rem; min-height: 44px;
+      font-size: var(--fs-overline); letter-spacing: var(--track-ui); text-transform: uppercase;
+      font-weight: 400; cursor: pointer; border-radius: 4px;
+      transition: background var(--m-surface) var(--ease), color var(--m-surface) var(--ease), border-color var(--m-surface) var(--ease), transform var(--m-press) var(--ease);
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .btn.gold { background: var(--gold); color: var(--navy-deep); border-color: var(--gold); }
+    .btn.gold:hover { background: var(--gold-soft); border-color: var(--gold-soft); }
+    .btn.ghost { color: var(--ivory); border-color: rgba(246, 239, 227, .28); background: transparent; }
+    .btn.ghost:hover { border-color: var(--gold); color: var(--gold-soft); }
+
+    /* NAVIGATION */
+    .nav {
+      position: fixed; z-index: 1000;
+      top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.35rem var(--pad);
+      transition: background var(--m-surface) var(--ease), padding var(--m-surface) var(--ease), border-color var(--m-surface) var(--ease);
+      border-bottom: 1px solid transparent;
+      background: rgba(9, 21, 34, .22);
+      backdrop-filter: blur(6px);
+    }
+    .nav.scrolled {
+      padding-top: .9rem; padding-bottom: .9rem;
+      background: rgba(9, 21, 34, .94);
+      border-color: rgba(184, 151, 90, .18);
+    }
+    .brand { display: inline-flex; align-items: center; gap: .85rem; }
+    .cava-monogram { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .cava-monogram__svg { width: 100%; height: 100%; display: block; color: var(--gold-soft); transition: color var(--m-surface) var(--ease); }
+    .brand:hover .cava-monogram__svg { color: var(--gold); }
+    .nav.scrolled .cava-monogram__svg { color: var(--gold); }
+    .brand-wordmark { font-family: var(--wordmark); font-size: 1.02rem; letter-spacing: .14em; text-transform: uppercase; line-height: 1; }
+    .nav-links { display: flex; gap: clamp(1rem, 3vw, 2.6rem); align-items: center; }
+    .nav-links a {
+      font-size: var(--fs-overline); letter-spacing: var(--track-ui); text-transform: uppercase;
+      color: rgba(246, 239, 227, .78); transition: color var(--m-surface) var(--ease);
+    }
+    .nav-links a:hover { color: var(--gold-soft); }
+    .nav-links a:focus-visible, .nav-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .nav-toggle {
+      display: none; background: none; border: 0;
+      color: var(--ivory); width: 36px; height: 36px; cursor: pointer;
+    }
+    .nav-toggle span { display: block; height: 1px; background: currentColor; margin: 6px 0; transition: transform var(--m-surface) var(--ease), opacity var(--m-surface) var(--ease); }
+    .nav-toggle.open span:first-child { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:last-child { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(9, 21, 34, .98); opacity: 0; visibility: hidden;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1.4rem;
+      transition: opacity var(--m-surface) var(--ease), visibility var(--m-surface) var(--ease);
+    }
+    .mobile-menu.open { opacity: 1; visibility: visible; }
+    .mobile-menu a { font-family: var(--display); font-size: clamp(1.8rem, 8vw, 3rem); color: var(--ivory); }
+    .mobile-menu a:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+    /* 404 CONTENT */
+    .e404 {
+      flex: 1 0 auto;
+      display: flex; align-items: center;
+      padding: clamp(9rem, 16vw, 13rem) 0 clamp(4.5rem, 9vw, 8rem);
+      background:
+        radial-gradient(circle at 72% 18%, rgba(184,151,90,.13), transparent 30%),
+        radial-gradient(circle at 12% 82%, rgba(74,23,32,.45), transparent 36%),
+        linear-gradient(155deg, #0a1624 0%, #11100e 60%, #090807 100%);
+    }
+    .e404-inner { max-width: 720px; }
+    .e404-label {
+      display: inline-flex; align-items: center; gap: .85rem;
+      color: var(--gold); font-size: var(--fs-overline); letter-spacing: var(--track-label);
+      text-transform: uppercase; margin-bottom: 1.5rem; font-weight: 400;
+    }
+    .e404-label::before { content: ""; width: 28px; height: 1px; background: currentColor; opacity: .75; }
+    .e404 h1 {
+      font-family: var(--display); font-weight: 300; line-height: 1.02;
+      letter-spacing: var(--track-head); font-size: var(--fs-h1-hero);
+      margin-bottom: 1.4rem;
+    }
+    .e404 h1 em { color: var(--gold-soft); font-style: normal; }
+    .e404 p {
+      font-family: var(--serif); font-size: var(--fs-lead);
+      line-height: 1.75; color: rgba(246, 239, 227, .78);
+      max-width: 52ch; margin-bottom: 2.4rem;
+    }
+    .e404-actions { display: flex; flex-wrap: wrap; gap: .9rem; }
+    .e404-more {
+      margin-top: 2.6rem; padding-top: 1.6rem;
+      border-top: 1px solid var(--line);
+      display: flex; flex-wrap: wrap; gap: 1.4rem;
+    }
+    .e404-more a {
+      font-size: var(--fs-ui); letter-spacing: var(--track-ui); text-transform: uppercase;
+      color: rgba(246, 239, 227, .7); padding-bottom: .2rem;
+      border-bottom: 1px solid transparent;
+      transition: color var(--m-surface) var(--ease), border-color var(--m-surface) var(--ease);
+    }
+    .e404-more a:hover { color: var(--gold-soft); border-color: var(--gold-soft); }
+    .e404-more a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+    /* FOOTER */
+    footer {
+      background: #060b11;
+      border-top: 1px solid rgba(184, 151, 90, .14);
+      padding: 2.2rem var(--pad);
+      flex-shrink: 0;
+    }
+    .footer-inner {
+      max-width: var(--max); margin: 0 auto;
+      display: flex; justify-content: space-between; gap: 1rem;
+      align-items: center; color: rgba(246, 239, 227, .68);
+      font-size: var(--fs-ui); letter-spacing: var(--track-ui); text-transform: uppercase; flex-wrap: wrap;
+    }
+    .footer-brand { display: inline-flex; align-items: center; gap: .75rem; }
+    .footer-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+    .footer-links a:hover { color: var(--gold-soft); }
+    .footer-links a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+    /* WHATSAPP FAB */
+    .wa {
+      position: fixed; right: 1.4rem; bottom: 1.4rem; z-index: 1001;
+      background: var(--gold); color: var(--navy-deep);
+      width: 54px; height: 54px; border-radius: 50%;
+      display: grid; place-items: center;
+      box-shadow: 0 18px 35px rgba(0,0,0,.28);
+      transition: transform var(--m-press) var(--ease), background var(--m-surface) var(--ease);
+    }
+    .wa:hover { transform: translateY(-2px); background: var(--gold-soft); }
+    .wa:focus-visible { outline: 2px solid var(--ivory); outline-offset: 3px; }
+    .wa svg { width: 24px; height: 24px; fill: currentColor; }
+
+    /* SKIP LINK */
+    .skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    .skip-link:focus {
+      position: fixed; left: 1rem; top: 1rem; width: auto; height: auto;
+      padding: .75rem 1.25rem; background: var(--gold); color: var(--navy-deep);
+      z-index: 9999; font-size: .85rem; letter-spacing: .1em; border-radius: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
+    }
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: block; }
+      .nav { padding-left: clamp(1rem, 5vw, 1.5rem); padding-right: clamp(1rem, 5vw, 1.5rem); }
+      .footer-inner { flex-wrap: wrap; justify-content: center; text-align: center; }
+    }
+    @media (max-width: 600px) { .wrap { padding: 0 1.5rem; } }
+  </style>
+</head>
+
+<body>
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+  <header class="nav" id="nav">
+    <a href="/" class="brand" aria-label="CAVA Vinoteca — Ir al inicio">
+      <div class="cava-monogram">
+<svg xmlns="http://www.w3.org/2000/svg" class="cava-monogram__svg" viewBox="340 361.54 387.14 387.14" fill="currentColor" aria-hidden="true" focusable="false">
+          <path fill-rule="nonzero" d="M 521.679688 619.019531 C 507.964844 635.238281 487.480469 645.546875 464.578125 645.546875 C 437.304688 645.546875 413.453125 630.9375 400.394531 609.125 C 394.210938 600.722656 388.875 591.058594 384.804688 580.355469 C 367.371094 534.515625 379.550781 487.347656 412.007812 475.003906 C 433.847656 466.695312 459.296875 476.296875 478.925781 497.421875 C 480.421875 497.710938 481.898438 498.0625 483.359375 498.441406 L 530.214844 498.441406 C 511.65625 472.191406 481.085938 455.03125 446.492188 455.03125 C 389.886719 455.03125 344 500.921875 344 557.523438 C 344 614.128906 389.886719 660.015625 446.492188 660.015625 C 480.023438 660.015625 509.789062 643.910156 528.488281 619.019531 Z M 521.679688 619.019531"/>
+          <path fill-rule="nonzero" d="M 545.460938 491.207031 C 559.175781 474.988281 579.660156 464.679688 602.5625 464.679688 C 629.835938 464.679688 653.6875 479.289062 666.746094 501.101562 C 672.929688 509.503906 678.261719 519.167969 682.332031 529.871094 C 699.765625 575.710839 687.589844 622.878906 655.132812 635.222656 C 633.292969 643.53125 607.84375 633.929688 588.214844 612.804688 C 586.71875 612.515625 585.242188 612.164062 583.78125 611.785156 L 536.925781 611.785156 C 555.484375 638.035156 586.054688 655.195312 620.648438 655.195312 C 677.253906 655.195312 723.140625 609.304688 723.140625 552.703125 C 723.140625 496.097656 677.253906 450.210938 620.648438 450.210938 C 587.117188 450.210938 557.351562 466.316406 538.652344 491.207031 Z M 545.460938 491.207031"/>
+          <path fill-rule="nonzero" d="M 469.664062 543.222656 C 453.445312 529.507812 443.136719 509.023438 443.136719 486.121094 C 443.136719 458.847656 457.746094 434.996094 479.558594 421.9375 C 487.960938 415.753906 497.625 410.421875 508.328125 406.351562 C 554.167969 388.914062 601.335938 401.09375 613.679688 433.550781 C 621.984375 455.390625 612.386719 480.839844 591.261719 500.46875 C 590.972656 501.964844 590.621094 503.441406 590.242188 504.902344 L 590.242188 551.757812 C 616.492188 533.199219 633.648438 502.628906 633.648438 468.035156 C 633.648438 411.429688 587.761719 365.542969 531.15625 365.542969 C 474.554688 365.542969 428.667969 411.429688 428.667969 468.035156 C 428.667969 501.566406 444.769531 531.332031 469.664062 550.03125 Z M 469.664062 543.222656"/>
+          <path fill-rule="nonzero" d="M 597.476562 567.003906 C 613.695312 580.71875 624.003906 601.203125 624.003906 624.105469 C 624.003906 651.378906 609.394531 675.230469 587.578125 688.289062 C 579.179688 694.472656 569.511719 699.804688 558.8125 703.875 C 512.96875 721.3125 465.800781 709.132812 453.460938 676.675781 C 445.152344 654.835938 454.753906 629.386719 475.875 609.757812 C 476.167969 608.261719 476.519531 606.785156 476.898438 605.324219 L 476.898438 558.46875 C 450.648438 577.027344 433.488281 607.597656 433.488281 642.191406 C 433.488281 698.796875 479.375 744.683594 535.980469 744.683594 C 592.585938 744.683594 638.472656 698.796875 638.472656 642.191406 C 638.472656 608.660156 622.371094 578.894531 597.476562 560.195312 Z M 597.476562 567.003906"/>
+        </svg>
+      </div>
+      <span class="brand-wordmark">CAVA Vinoteca</span>
+    </a>
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="/">Inicio</a>
+      <a href="/nuestra-historia">Nuestra Historia</a>
+      <a href="/cata-de-vinos-perez-zeledon">Experiencias</a>
+      <a href="/nazareth">Nazareth</a>
+      <a href="/journal">Journal</a>
+      <a href="https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa"
+        class="btn gold" target="_blank" rel="noopener noreferrer"
+        style="padding:.55rem 1.15rem; font-size:.6rem; border-radius:4px;">Reservar</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" type="button"
+      aria-label="Abrir menú" aria-controls="mobileMenu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Menú móvil" inert>
+    <a href="/">Inicio</a>
+    <a href="/nuestra-historia">Nuestra Historia</a>
+    <a href="/cata-de-vinos-perez-zeledon">Experiencias</a>
+    <a href="/nazareth">Nazareth</a>
+    <a href="/journal">Journal</a>
+    <a href="/after-office-vino-perez-zeledon">After Office</a>
+  </nav>
+
+  <main class="e404" id="main-content">
+    <div class="wrap">
+      <div class="e404-inner">
+        <p class="e404-label">Error 404</p>
+        <h1>Esta página <em>no está en la mesa</em></h1>
+        <p>
+          El enlace que seguiste no lleva a ningún lado, o la página se movió.
+          No te preocupes: la copa sigue servida. Volvé al inicio o seguí por
+          alguno de estos caminos.
+        </p>
+        <div class="e404-actions">
+          <a href="/" class="btn gold">Volver al inicio</a>
+          <a href="/journal" class="btn ghost">Leer el Journal</a>
+        </div>
+        <div class="e404-more">
+          <a href="/cata-de-vinos-perez-zeledon">Catas y experiencias</a>
+          <a href="/after-office-vino-perez-zeledon">After Office</a>
+          <a href="/nazareth">Conocé a Nazareth</a>
+          <a href="https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa"
+            target="_blank" rel="noopener noreferrer">Escribinos por WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-wordmark">CAVA</span>
+        <span>Gourmet Market · Vinoteca · Pérez Zeledón · Costa Rica</span>
+      </div>
+      <nav class="footer-links" aria-label="Links del footer">
+        <a href="/">Inicio</a>
+        <a href="/nuestra-historia">Nuestra Historia</a>
+        <a href="/nazareth">Nazareth</a>
+        <a href="/journal">Journal</a>
+        <a href="https://www.instagram.com/cavapz" target="_blank" rel="noopener noreferrer"
+          aria-label="Instagram CAVA Vinoteca">Instagram</a>
+        <a href="https://www.facebook.com/cavapz" target="_blank" rel="noopener noreferrer"
+          aria-label="Facebook CAVA Vinoteca">Facebook</a>
+        <span>© 2026</span>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- WhatsApp FAB -->
+  <a href="https://wa.me/50686325260?text=Hola%20CAVA%2C%20quiero%20solicitar%20un%20lugar%20en%20la%20mesa"
+    class="wa" target="_blank" rel="noopener noreferrer"
+    aria-label="Contactar CAVA por WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.119.553 4.105 1.52 5.83L.058 23.5l5.83-1.49A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.93 0-3.74-.523-5.29-1.435l-.38-.225-3.94 1.008.999-3.85-.246-.393A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+    </svg>
+  </a>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    const navToggle = document.getElementById('navToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    navToggle.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('open');
+      navToggle.classList.toggle('open', open);
+      mobileMenu.inert = !open;
+      navToggle.setAttribute('aria-expanded', String(open));
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      mobileMenu.inert = true;
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }));
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+        mobileMenu.classList.remove('open');
+        mobileMenu.inert = true;
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  </script>
+</body>
+
+</html>
