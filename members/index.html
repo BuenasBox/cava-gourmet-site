@@ -184,6 +184,8 @@
   </div>
 </div>
 
+<!-- QR generado localmente (sin servicios de terceros) — qrcode-generator 2.0.4, MIT, Kazuhiko Arase -->
+<script src="/Assets/js/qrcode-generator-2.0.4.js"></script>
 <script>
   const FALLBACK = {
     invitado:   ["Acceso al grupo WhatsApp de CAVA"],
@@ -269,16 +271,28 @@
       document.getElementById("progress-bar").style.width = progreso.pct + "%";
     }, 200);
 
-    // QR
-    const qrData = encodeURIComponent(m.scan_url);
-    document.getElementById("qr-img").src =
-      `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${qrData}&margin=8`;
+    // QR — generado en el navegador; el token nunca sale hacia un tercero
+    const qr = qrcode(0, "M");
+    qr.addData(m.scan_url);
+    qr.make();
+    document.getElementById("qr-img").src = qr.createDataURL(4, 16);
 
     // Benefits
     const beneficios = getBeneficiosActivos(nivelK, config);
-    document.getElementById("benefits-list").innerHTML = beneficios.map(b =>
-      `<div class="benefit-item"><div class="benefit-dot"></div><div class="benefit-text">${b}</div></div>`
-    ).join("");
+    const benefitsList = document.getElementById("benefits-list");
+    benefitsList.textContent = "";
+    beneficios.forEach(b => {
+      const item = document.createElement("div");
+      item.className = "benefit-item";
+      const dot = document.createElement("div");
+      dot.className = "benefit-dot";
+      const text = document.createElement("div");
+      text.className = "benefit-text";
+      text.textContent = b;
+      item.appendChild(dot);
+      item.appendChild(text);
+      benefitsList.appendChild(item);
+    });
 
     // Promo
     if (promoActiva) {
