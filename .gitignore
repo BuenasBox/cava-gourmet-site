@@ -47,3 +47,7 @@ cava-mark-hero.webp
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Curated professional photo set — the 43 files below are force-added and
+# tracked; this rule keeps *new* drops in the folder out of accidental commits.
+Assets/images/professional/
