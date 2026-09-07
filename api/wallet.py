@@ -1,5 +1,6 @@
 import json
 import os
+import logging
 import time
 import jwt
 import hmac
@@ -9,20 +10,18 @@ import urllib.parse
 from http.server import BaseHTTPRequestHandler
 try:
     from ._auth import AuthError, add_cors_headers, handle_options, require_admin, require_server_config, respond_auth_error
+    from ._member_token import validar_token
 except ImportError:
     from _auth import AuthError, add_cors_headers, handle_options, require_admin, require_server_config, respond_auth_error
+    from _member_token import validar_token
 
 ISSUER_ID    = "3388000000023147327"
 CLASS_SUFFIX = "AfterOfficeClub"
-SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://rbfctmcfweckbpgxlkqf.supabase.co").rstrip("/")
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY", "")
 HMAC_SECRET  = os.environ.get("HMAC_SECRET", "")
 
-def validar_token(email, token):
-    if not HMAC_SECRET:
-        return False
-    expected = hmac.new(HMAC_SECRET.encode(), email.encode(), hashlib.sha256).hexdigest()
-    return hmac.compare_digest(expected, token)
+logger = logging.getLogger("cava.wallet")
 
 def get_google_token():
     key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
@@ -57,7 +56,7 @@ def get_nombre_from_supabase(email):
             if rows:
                 return rows[0].get("nombre", email)
     except Exception:
-        pass
+        logger.warning("wallet: no se pudo leer el nombre del miembro; se usa el email", exc_info=True)
     return email
 
 def ensure_loyalty_object(email, nombre):
@@ -103,8 +102,9 @@ def ensure_loyalty_object(email, nombre):
     try:
         with urllib.request.urlopen(req, timeout=12) as r:
             r.read()
-    except urllib.error.HTTPError:
-        pass  # 409 = already exists is fine; other errors don't block redirect
+    except urllib.error.HTTPError as exc:
+        if exc.code != 409:  # 409 = already exists is fine
+            logger.warning("wallet: crear loyaltyObject devolvió HTTP %s (no bloquea el redirect)", exc.code)
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):

@@ -6,11 +6,13 @@ import urllib.parse
 from http.server import BaseHTTPRequestHandler
 try:
     from ._auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
+    from ._levels import calcular_nivel
 except ImportError:
     from _auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
+    from _levels import calcular_nivel
 
-SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://rbfctmcfweckbpgxlkqf.supabase.co").rstrip("/")
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY", "")
 ISSUER_ID    = "3388000000023147327"
 LOGO_URL     = "https://raw.githubusercontent.com/BuenasBox/cava-gourmet-site/refs/heads/master/Assets/Logo-Cava.png"
 
@@ -29,12 +31,6 @@ def supabase_request(method, endpoint, body=None):
             return json.loads(r.read())
     except urllib.error.HTTPError as e:
         return {"error": e.read().decode()}
-
-def calcular_nivel(exp, es_enofilo=False):
-    if es_enofilo and exp >= 25: return "🔐 Enófilo"
-    if exp >= 10: return "🍷 Entusiasta"
-    if exp >= 3:  return "🌱 Neófito"
-    return "🚪 Invitado"
 
 def mensaje_progreso(exp, es_enofilo=False):
     if es_enofilo:   return "Bienvenido al círculo interno. 🔐"

@@ -1,21 +1,26 @@
 import json
 import os
+import logging
 import hmac
 import hashlib
 import time
 import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
+try:
+    from ._member_token import validar_token
+    from ._levels import calcular_nivel
+except ImportError:
+    from _member_token import validar_token
+    from _levels import calcular_nivel
 
-SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+logger = logging.getLogger("cava.scan")
+
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://rbfctmcfweckbpgxlkqf.supabase.co").rstrip("/")
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY", "")
 HMAC_SECRET  = os.environ.get("HMAC_SECRET", "")
 SCAN_PIN     = os.environ.get("SCAN_PIN", "")
 ISSUER_ID    = "3388000000023147327"
-
-def validar_token(email, token):
-    expected = hmac.new(HMAC_SECRET.encode(), email.encode(), hashlib.sha256).hexdigest()
-    return hmac.compare_digest(expected, token)
 
 def supabase_request(method, endpoint, body=None):
     url     = f"{SUPABASE_URL}/rest/v1/{endpoint}"
@@ -33,12 +38,6 @@ def supabase_request(method, endpoint, body=None):
             return json.loads(raw) if raw.strip() else {}
     except urllib.error.HTTPError as e:
         return {"error": e.read().decode()}
-
-def calcular_nivel(exp, es_enofilo=False):
-    if es_enofilo and exp >= 25: return "🔐 Enófilo"
-    if exp >= 10: return "🍷 Entusiasta"
-    if exp >= 3:  return "🌱 Neófito"
-    return "🚪 Invitado"
 
 def mensaje_progreso(exp, es_enofilo=False):
     if es_enofilo:  return "Parte del círculo interno de CAVA. 🔐"
@@ -87,7 +86,7 @@ def actualizar_wallet(email, exp, es_enofilo):
         with urllib.request.urlopen(req, timeout=12) as r:
             r.read()
     except Exception:
-        pass
+        logger.exception("scan: no se pudo actualizar el objeto de Google Wallet")
 
 def _styles():
     return """
