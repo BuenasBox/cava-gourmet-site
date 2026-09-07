@@ -82,6 +82,32 @@ Las carpetas `_Archivo` contienen imagenes potencialmente utiles, pero por peso,
 - Hay activos optimizados WebP suficientes para empezar, pero con riesgo de reutilizacion si se usan en demasiados articulos.
 - Falta convencion formal para derivar imagenes editoriales del Journal con `-480`, `-800`, `-1280`, `-1920`.
 
+---
+
+## Actualización 2026-09-06 — post Fase 1 (Audit Roadmap)
+
+Fase 1 generó cuatro derivados WebP 1280 en `Assets/images/Nazareth/` y archivó
+sus JPG originales. **Las filas de la tabla de arriba que citan esos cuatro JPG
+originales quedan superadas — usar el derivado WebP.**
+
+| Derivado WebP (usar este) | Peso | Original archivado (NO usar) | Artículo asignado |
+| --- | --- | --- | --- |
+| `Assets/images/Nazareth/nazareth-padilla-muro-vinos-cava-vinoteca-1280.webp` | 63 KB | `…/muro-vinos-cava-vinoteca.jpg` → `_Archivo/` | `/journal/como-se-construye-cultura-del-vino` (OG + schema + sitemap) |
+| `Assets/images/Nazareth/nazareth-padilla-copa-vino-cata-cava-gourmet-1280.webp` | 58 KB | `…/copa-vino-cata-cava-gourmet.jpg` → `_Archivo/` | `/journal/vino-menos-elitismo-mas-experiencia` (OG + schema + sitemap) |
+| `Assets/images/Nazareth/nazareth-padilla-cava-vinoteca-ambiente-lounge-1280.webp` | 95 KB | `…/cava-vinoteca-ambiente-lounge.jpg` → `_Archivo/` | `/journal/contenido-digital-experiencia-real-vinoteca-costa-rica` (OG + schema + sitemap) |
+| `Assets/images/Nazareth/nazareth-padilla-botella-vino-blanco-cava-gourmet-1280.webp` | 95 KB | `…/botella-vino-blanco-cava-gourmet.jpg` → `_Archivo/` | sin asignar — disponible para artículo de vino blanco / frescura / acidez |
+
+Notas:
+
+- Los cuatro derivados fueron generados con `cwebp -q 80` a lado largo 1280,
+  sin recorte. No tienen set responsive `-480/-800`; para uso inline añadir un
+  `srcset` sólo si el artículo lo requiere.
+- `_Archivo/` está en `.gitignore` — los originales se preservan localmente pero
+  no se despliegan.
+- Fase 1 también retiró `Assets/images/Logos/{1,3,4,5,8,10,11,13,14,15,16,17,18,19,22,23,26,27,28,29}.png`
+  y `Assets/16.jpg` (no usados). La fila "Logos/*.png" de la tabla de descartes
+  sigue vigente para los que quedan.
+
 ## Recomendacion operativa
 
 Para cada articulo nuevo del Journal, registrar en su brief:
