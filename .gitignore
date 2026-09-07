@@ -27,9 +27,8 @@ Thumbs.db
 /security-reports/
 
 # Variables de entorno — nunca subir al repo
-.env
-.env.local
-.env.*.local
+# `.env*` cubre .env, .env.local, .env.production, .env.preview, etc.
+.env*
 
 # Vercel — configuración local generada automáticamente
 .vercel/
