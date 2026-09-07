@@ -77,11 +77,18 @@ Ahora Nazareth o quien administre el control podrá acceder con ese email/contra
 
 ## 3. Variables de entorno
 
-El archivo `/api/auth_config.py` ya está configurado para usar las variables de entorno:
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
+> **Nota 2026-09-06 (ver `SUPABASE-PROJECT-MAP.md`):** el proyecto Supabase de
+> CAVA es `rbfctmcfweckbpgxlkqf` (`cava-after-office`), el único activo.
+> `SUPABASE_ANON_KEY` debe contener la **anon/publishable key pública** del
+> proyecto (NO su URL, NO la service-role key). A esta fecha `SUPABASE_ANON_KEY`
+> **no está definida** en Vercel, por lo que `/api/auth_config` devuelve una key
+> vacía y los paneles admin no inicializan.
 
-En Vercel, asegúrate de que estén definidas en **Settings > Environment Variables**.
+El archivo `/api/auth_config.py` usa las variables de entorno:
+- `SUPABASE_URL` — `https://rbfctmcfweckbpgxlkqf.supabase.co`
+- `SUPABASE_ANON_KEY` — anon/publishable key pública del proyecto
+
+En Vercel, defínelas en **Settings > Environment Variables**.
 
 ## 4. Estructura de datos
 

@@ -1,5 +1,19 @@
 # AGENTS
 
+## SUPABASE — MANDATORY FIRST READ
+
+Before analyzing, auditing or modifying anything related to Supabase, Auth,
+RLS, environment variables or CSP, read `SUPABASE-PROJECT-MAP.md`.
+
+Authoritative mapping:
+
+- CAVA Gourmet → `rbfctmcfweckbpgxlkqf` (`cava-after-office`) — the only active CAVA project
+- EpistemicLab → `hylknjjhmxsuuwbsslkr` — separate system, not CAVA
+- `qkmgzyxknhhkucndbdsh` → legacy / NXDOMAIN, historical debt only
+
+Do not rediscover or reinterpret this mapping without new evidence. The
+"dual Supabase project / split brain" finding is a confirmed false positive.
+
 ## Project overview
 - Multi-page vanilla HTML/CSS/JS site for CAVA Vinoteca / CAVA Gourmet Market.
 - Hosted on Vercel + Cloudflare at `https://www.cavagourmet.com`.
@@ -17,7 +31,8 @@ Actúa por defecto como senior web engineer + technical SEO auditor + Core Web V
 - `sitemap.xml`
 - `vercel.json` — headers, redirects, CSP (fuente de verdad de infraestructura)
 - `JOURNAL-REGISTRY.md` — estado editorial activo del Journal
-- `SECURITY-HARDENING.md` — snapshot histórico de seguridad
+- `SUPABASE-PROJECT-MAP.md` — mapa autoritativo de proyectos Supabase (leer antes de cualquier trabajo Supabase/Auth/RLS/CSP)
+- `SECURITY-HARDENING.md` — snapshot histórico de seguridad (2026-05-25; ver `SUPABASE-PROJECT-MAP.md` para el estado actual del project ref)
 - `admin/SECURITY-TESTS.md` — pruebas de seguridad QA
 - `.github/copilot-instructions.md` — instrucciones para GitHub Copilot
 
