@@ -162,9 +162,9 @@ Production `/api/auth_config` returns Supabase project URL
 `https://rbfctmcfweckbpgxlkqf.supabase.co`.
 *(Reconciliado 2026-09-06: el valor original de esta línea, `qkmgzyxknhhkucndbdsh`,
 era histórico/incorrecto. Ver `SUPABASE-PROJECT-MAP.md`.)*
-*(Nota 2026-09-06: `supabaseAnonKey` está actualmente vacía en producción porque
-la variable `SUPABASE_ANON_KEY` no está definida en Vercel — su restauración es
-el objetivo de la Fase 0A.)*
+*(Nota 2026-09-07: `SUPABASE_ANON_KEY` (publishable key) fue configurada en
+Preview + Production en la Fase 0A. `/api/auth_config` sirve la key y los
+paneles admin están restaurados. Ver `SUPABASE-PROJECT-MAP.md` §8.)*
 
 ### Existing meta CSP
 
