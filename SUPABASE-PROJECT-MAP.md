@@ -160,7 +160,7 @@ la publishable/anon key aparezca en el frontend **no** es una fuga de secreto.
 |---|---|---|
 | `SUPABASE_URL` | ✅ `rbfctmcfweckbpgxlkqf` | correcta |
 | `SUPABASE_KEY` | ✅ service-role funcional | actúa como service-role; nomenclatura legacy (esperado: `SUPABASE_SERVICE_ROLE_KEY`) — **no cambiar ahora** |
-| `SUPABASE_ANON_KEY` | ❌ ausente | leída por `api/auth_config.py`; su ausencia deja los paneles admin fuera de servicio |
+| `SUPABASE_ANON_KEY` | ✅ configurada (Preview + Production, Secret) — **publishable key** `sb_publishable_…` | leída por `api/auth_config.py`; restaurada en Fase 0A (2026-09-07). Es **pública por diseño**, no service-role. |
 | `SUPABASE_SERVICE_ROLE_KEY` | ❌ ausente | `api/_auth.py` cae a `SUPABASE_KEY` |
 | `CAVA_ALLOWED_ORIGINS` | ❌ ausente | `api/_auth.py` usa lista hardcodeada por defecto; CORS verificado OK |
 | `HMAC_SECRET`, `SCAN_PIN`, `GOOGLE_WALLET_KEY` | ✅ presentes | — |
@@ -176,3 +176,10 @@ la publishable/anon key aparezca en el frontend **no** es una fuga de secreto.
   `qkmgzyxknhhkucndbdsh` = legacy/NXDOMAIN, EpistemicLab = separado.
   `SECURITY-HARDENING.md` (snapshot 2026-05-25) queda marcado como histórico en
   lo referente al project ref.
+- **2026-09-07** — Fase 0A cerrada en producción (PR #6, merge `54538b7`):
+  `SUPABASE_ANON_KEY` (publishable key) configurada en Preview + Production →
+  `/api/auth_config` sirve la key → paneles admin (`enofilios-panel`,
+  `cava_control_v3`) **restaurados**. `qkmgzyxknhhkucndbdsh` retirado del
+  `connect-src` de la CSP en `vercel.json`. Auth settings verificados en
+  producción: email signup DISABLED, anonymous sign-ins DISABLED. RLS anon
+  verificado en las 5 tablas: 0 filas visibles.
