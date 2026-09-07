@@ -42,3 +42,8 @@ cava-mark-light.mp4
 cava-mark-light-poster.jpg
 cava-mark-hero.avif
 cava-mark-hero.webp
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/

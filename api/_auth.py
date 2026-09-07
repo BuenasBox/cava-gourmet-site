@@ -157,10 +157,16 @@ def get_admin_profile(user_id):
 
 
 def audit(handler, ctx, result="ok", action=None, object_type=None, object_id=None):
-    """Best-effort admin action trail. No-op unless ADMIN_AUDIT=1.
+    """Best-effort admin audit row. No-op unless ADMIN_AUDIT=1.
 
     Never raises and never blocks the request on failure. Stores only the
-    actor's own id/email plus the request line — no tokens, no PII.
+    actor's own id/email + the request line + Origin -- no tokens, no PII.
+
+    Two call sites, by design:
+      * require_admin() logs result="authorized" -- this request passed the
+        admin gate. It does NOT assert the downstream action succeeded.
+      * a mutating endpoint calls this again AFTER its write, with
+        result="ok"/"error" and a specific action/object_type/object_id.
     """
     if not AUDIT_ENABLED:
         return
@@ -207,7 +213,7 @@ def require_admin(handler):
     if not profile or profile.get("role") not in ("owner", "admin"):
         raise AuthError(403, "Admin requerido")
     ctx = {"user": user, "profile": profile}
-    audit(handler, ctx)
+    audit(handler, ctx, result="authorized")
     return ctx
 
 
