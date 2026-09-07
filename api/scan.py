@@ -22,6 +22,90 @@ HMAC_SECRET  = os.environ.get("HMAC_SECRET", "")
 SCAN_PIN     = os.environ.get("SCAN_PIN", "")
 ISSUER_ID    = "3388000000023147327"
 
+# --- Fase 0B.3: server-side rate limit / lockout / dedupe -------------------
+# Inert until SCAN_HARDENING=1 AND the scan_attempts table exists
+# (supabase/migrations/20260906_0002_scan_attempts.sql). Fail-open: any error
+# in the guard lets the request through so a misconfig can't lock out staff.
+SCAN_HARDENING       = os.environ.get("SCAN_HARDENING") == "1"
+_COOLDOWN_MIN        = int(os.environ.get("SCAN_COOLDOWN_MIN", "30") or "30")
+_MAX_FAILS           = int(os.environ.get("SCAN_MAX_FAILS", "5") or "5")
+_LOCKOUT_MIN         = int(os.environ.get("SCAN_LOCKOUT_MIN", "15") or "15")
+_RATE_MAX            = int(os.environ.get("SCAN_RATE_MAX", "30") or "30")
+_RATE_WINDOW_MIN     = int(os.environ.get("SCAN_RATE_WINDOW_MIN", "10") or "10")
+
+
+def _token_hash(token):
+    return hashlib.sha256(token.encode()).hexdigest()
+
+
+def _client_ip(handler):
+    fwd = (handler.headers.get("x-forwarded-for") or "").split(",")[0].strip()
+    return fwd or None
+
+
+def _iso_minutes_ago(minutes):
+    return time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(time.time() - minutes * 60))
+
+
+def scan_guard_check(token_hash):
+    """(allowed, reason). Fail-open on any error."""
+    if not SCAN_HARDENING:
+        return True, "ok"
+    try:
+        window = max(_COOLDOWN_MIN, _LOCKOUT_MIN, _RATE_WINDOW_MIN)
+        since = _iso_minutes_ago(window)
+        rows = supabase_request(
+            "GET",
+            f"scan_attempts?token_hash=eq.{urllib.parse.quote(token_hash)}"
+            f"&created_at=gte.{urllib.parse.quote(since)}"
+            "&select=reason,created_at&order=created_at.desc",
+        )
+        if isinstance(rows, dict) or not isinstance(rows, list):
+            return True, "ok"  # table missing / error -> don't block
+        now = time.time()
+
+        def age_min(r):
+            # created_at comes back as ISO from PostgREST (UTC by default).
+            # Verify the offset handling here during the 0B.3 smoke test before
+            # relying on the fine-grained windows; the coarse DB filter above
+            # already bounds every row to <= `window` minutes.
+            try:
+                t = time.strptime(r["created_at"][:19], "%Y-%m-%dT%H:%M:%S")
+                return (now - (time.mktime(t) - time.timezone)) / 60.0
+            except Exception:
+                return 1e9
+
+        if any(r.get("reason") == "ok" and age_min(r) <= _COOLDOWN_MIN for r in rows):
+            return False, "cooldown"
+        if sum(1 for r in rows if age_min(r) <= _RATE_WINDOW_MIN) >= _RATE_MAX:
+            return False, "rate"
+        fails = sum(
+            1 for r in rows
+            if r.get("reason") == "bad_pin" and age_min(r) <= _LOCKOUT_MIN
+        )
+        if fails >= _MAX_FAILS:
+            return False, "locked"
+        return True, "ok"
+    except Exception:
+        logger.warning("scan_guard: check falló, se permite el intento", exc_info=True)
+        return True, "ok"
+
+
+def scan_record(token_hash, ip, success, reason):
+    if not SCAN_HARDENING:
+        return
+    try:
+        supabase_request("POST", "scan_attempts", {
+            "token_hash": token_hash,
+            "ip": ip,
+            "success": bool(success),
+            "reason": reason,
+        })
+    except Exception:
+        logger.warning("scan_guard: no se pudo registrar el intento", exc_info=True)
+# --------------------------------------------------------------------------
+
+
 def supabase_request(method, endpoint, body=None):
     url     = f"{SUPABASE_URL}/rest/v1/{endpoint}"
     headers = {
@@ -156,7 +240,17 @@ class handler(BaseHTTPRequestHandler):
         if not validar_token(email, token):
             self._html(403, self._page_error("Código QR no válido"))
             return
+
+        token_hash = _token_hash(token)
+        client_ip  = _client_ip(self)
+        allowed, why = scan_guard_check(token_hash)
+        if not allowed:
+            scan_record(token_hash, client_ip, False, why)
+            self._html(429, self._page_error("Demasiados intentos. Esperá unos minutos e intentá de nuevo."))
+            return
+
         if not SCAN_PIN or pin != SCAN_PIN:
+            scan_record(token_hash, client_ip, False, "bad_pin")
             # Re-fetch member to show form again with error
             result = supabase_request("GET", f"miembros?email=eq.{urllib.parse.quote(email)}&select=nombre,experiencias,es_enofilo")
             if result and not isinstance(result, dict):
@@ -184,6 +278,7 @@ class handler(BaseHTTPRequestHandler):
             "experiencias": nuevas_exp,
             "historial":    historial
         })
+        scan_record(token_hash, client_ip, True, "ok")
         actualizar_wallet(email, nuevas_exp, miembro.get("es_enofilo", False))
 
         nivel    = calcular_nivel(nuevas_exp, miembro.get("es_enofilo", False))
