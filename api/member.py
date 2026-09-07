@@ -1,5 +1,6 @@
 import json
 import os
+import logging
 import hmac
 import hashlib
 import urllib.request
@@ -7,25 +8,19 @@ import urllib.parse
 from http.server import BaseHTTPRequestHandler
 try:
     from ._auth import AuthError, add_cors_headers, handle_options, require_admin, require_server_config, respond_auth_error
+    from ._member_token import generar_token, validar_token
+    from ._levels import calcular_nivel
 except ImportError:
     from _auth import AuthError, add_cors_headers, handle_options, require_admin, require_server_config, respond_auth_error
+    from _member_token import generar_token, validar_token
+    from _levels import calcular_nivel
 
-SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://rbfctmcfweckbpgxlkqf.supabase.co").rstrip("/")
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY", "")
 HMAC_SECRET  = os.environ.get("HMAC_SECRET", "")
 BASE_URL     = "https://www.cavagourmet.com"
 
-def generar_token(email):
-    return hmac.new(HMAC_SECRET.encode(), email.encode(), hashlib.sha256).hexdigest()
-
-def validar_token(email, token):
-    return hmac.compare_digest(generar_token(email), token)
-
-def calcular_nivel(exp, es_enofilo=False):
-    if es_enofilo and exp >= 25: return "🔐 Enófilo"
-    if exp >= 10: return "🍷 Entusiasta"
-    if exp >= 3:  return "🌱 Neófito"
-    return "🚪 Invitado"
+logger = logging.getLogger("cava.member")
 
 def get_miembro(email):
     url     = f"{SUPABASE_URL}/rest/v1/miembros?email=eq.{urllib.parse.quote(email)}&select=*"
@@ -36,6 +31,7 @@ def get_miembro(email):
             rows = json.loads(r.read())
             return rows[0] if rows else None
     except Exception:
+        logger.exception("member: no se pudo leer el miembro desde Supabase")
         return None
 
 class handler(BaseHTTPRequestHandler):

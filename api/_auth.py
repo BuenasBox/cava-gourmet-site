@@ -1,11 +1,15 @@
 import json
+import logging
 import os
 import urllib.parse
 import urllib.request
 
 
+logger = logging.getLogger("cava.auth")
+
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://rbfctmcfweckbpgxlkqf.supabase.co").rstrip("/")
 SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY", "")
+AUDIT_ENABLED = os.environ.get("ADMIN_AUDIT") == "1"
 ALLOWED_ORIGINS = {
     origin.strip().rstrip("/")
     for origin in os.environ.get(
@@ -152,6 +156,46 @@ def get_admin_profile(user_id):
     return rows[0] if rows else None
 
 
+def audit(handler, ctx, result="ok", action=None, object_type=None, object_id=None):
+    """Best-effort admin action trail. No-op unless ADMIN_AUDIT=1.
+
+    Never raises and never blocks the request on failure. Stores only the
+    actor's own id/email plus the request line — no tokens, no PII.
+    """
+    if not AUDIT_ENABLED:
+        return
+    try:
+        ctx = ctx or {}
+        profile = ctx.get("profile") or {}
+        user = ctx.get("user") or {}
+        path = urllib.parse.urlparse(handler.path).path
+        row = {
+            "actor_user_id": user.get("id") or profile.get("user_id"),
+            "actor_email": profile.get("email") or user.get("email"),
+            "action": action or f"{getattr(handler, 'command', '?')} {path}",
+            "object_type": object_type,
+            "object_id": None if object_id is None else str(object_id),
+            "result": result,
+            "origin": handler.headers.get("Origin"),
+        }
+        body = json.dumps({k: v for k, v in row.items() if v is not None}).encode()
+        req = urllib.request.Request(
+            f"{SUPABASE_URL}/rest/v1/admin_audit_log",
+            data=body,
+            method="POST",
+            headers={
+                "apikey": SERVICE_ROLE_KEY,
+                "Authorization": f"Bearer {SERVICE_ROLE_KEY}",
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal",
+            },
+        )
+        with urllib.request.urlopen(req, timeout=5) as response:
+            response.read()
+    except Exception:
+        logger.warning("audit: no se pudo registrar la acción admin", exc_info=True)
+
+
 def require_admin(handler):
     require_allowed_origin(handler)
     token = get_bearer_token(handler)
@@ -162,7 +206,9 @@ def require_admin(handler):
     profile = get_admin_profile(user_id)
     if not profile or profile.get("role") not in ("owner", "admin"):
         raise AuthError(403, "Admin requerido")
-    return {"user": user, "profile": profile}
+    ctx = {"user": user, "profile": profile}
+    audit(handler, ctx)
+    return ctx
 
 
 def respond_auth_error(handler, error, methods="GET, POST, PATCH, DELETE, OPTIONS"):

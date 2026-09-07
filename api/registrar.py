@@ -9,8 +9,8 @@ try:
 except ImportError:
     from _auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
 
-SUPABASE_URL = "https://rbfctmcfweckbpgxlkqf.supabase.co"
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://rbfctmcfweckbpgxlkqf.supabase.co").rstrip("/")
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY", "")
 ISSUER_ID    = "3388000000023147327"
 CLASS_SUFFIX = "AfterOfficeClub"
 
