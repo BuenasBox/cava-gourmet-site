@@ -36,23 +36,26 @@ def _v2_sig(email, exp):
     return hmac.new(HMAC_SECRET.encode(), msg, hashlib.sha256).hexdigest()
 
 
-def _v1_sunset_passed():
+def _v1_sunset_passed(now=None):
     if not _V1_SUNSET:
         return False
     try:
         y, m, d = (int(x) for x in _V1_SUNSET.split("-"))
-        # Costa Rica is UTC-6, no DST. Compare at local midday for safety.
-        return time.time() > time.mktime((y, m, d, 12, 0, 0, 0, 0, -1)) + 6 * 3600
+        # Costa Rica is UTC-6, no DST. Sunset takes effect at local midnight,
+        # i.e. epoch = (that calendar day 00:00 UTC) + 6h.
+        import calendar
+        cutoff = calendar.timegm((y, m, d, 0, 0, 0)) + 6 * 3600
+        return (time.time() if now is None else now) > cutoff
     except (ValueError, TypeError):
         return False
 
 
-def generar_token_v2(email, ttl_days=None):
+def generar_token_v2(email, ttl_days=None, now=None):
     """Issue a fresh V2 token for `email`. Empty string if misconfigured."""
     if not HMAC_SECRET:
         return ""
     ttl = (ttl_days or _V2_TTL_DAYS) * 86400
-    exp = int(time.time()) + ttl
+    exp = int(time.time() if now is None else now) + ttl
     return f"v2.{exp}.{_v2_sig(email, exp)}"
 
 
@@ -69,10 +72,11 @@ def generar_token(email):
     return _v1_sig(email)
 
 
-def validar_token(email, token):
+def validar_token(email, token, now=None):
     """Constant-time check of a member token (V1 or V2)."""
     if not HMAC_SECRET or not token:
         return False
+    ref = time.time() if now is None else now
 
     if token.startswith("v2."):
         parts = token.split(".")
@@ -83,11 +87,11 @@ def validar_token(email, token):
             exp = int(exp_str)
         except (ValueError, TypeError):
             return False
-        if exp < int(time.time()):
+        if exp < int(ref):
             return False  # expired
         return hmac.compare_digest(_v2_sig(email, exp), sig)
 
     # V1
-    if _v1_sunset_passed():
+    if _v1_sunset_passed(ref):
         return False
     return hmac.compare_digest(_v1_sig(email), token)

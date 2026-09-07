@@ -6,6 +6,7 @@ import hashlib
 import time
 import urllib.request
 import urllib.parse
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler
 try:
     from ._member_token import validar_token
@@ -24,14 +25,36 @@ ISSUER_ID    = "3388000000023147327"
 
 # --- Fase 0B.3: server-side rate limit / lockout / dedupe -------------------
 # Inert until SCAN_HARDENING=1 AND the scan_attempts table exists
-# (supabase/migrations/20260906_0002_scan_attempts.sql). Fail-open: any error
-# in the guard lets the request through so a misconfig can't lock out staff.
+# (supabase/migrations/20260906_0002_scan_attempts.sql).
+#
+# Scoping:
+#   token  -> success cooldown (dedupe double-registration), per-token rate,
+#             per-token PIN-lockout
+#   IP     -> cross-token request rate, cross-token PIN-lockout  (stops one
+#             attacker cycling many stolen/guessed tokens from one host)
+#
+# Fail-open policy: ONLY a genuine infrastructure failure (the ledger fetch
+# raised — table missing, network, 5xx) lets the request through. A ledger
+# that answers and yields a block decision blocks. This means a misconfig
+# can't lock out CAVA staff, but a real limit is enforced.
 SCAN_HARDENING       = os.environ.get("SCAN_HARDENING") == "1"
-_COOLDOWN_MIN        = int(os.environ.get("SCAN_COOLDOWN_MIN", "30") or "30")
-_MAX_FAILS           = int(os.environ.get("SCAN_MAX_FAILS", "5") or "5")
-_LOCKOUT_MIN         = int(os.environ.get("SCAN_LOCKOUT_MIN", "15") or "15")
-_RATE_MAX            = int(os.environ.get("SCAN_RATE_MAX", "30") or "30")
-_RATE_WINDOW_MIN     = int(os.environ.get("SCAN_RATE_WINDOW_MIN", "10") or "10")
+
+
+def _guard_cfg():
+    def _int(name, default):
+        try:
+            return int(os.environ.get(name, "") or default)
+        except (TypeError, ValueError):
+            return default
+    return {
+        "cooldown_min":    _int("SCAN_COOLDOWN_MIN", 30),
+        "rate_window_min": _int("SCAN_RATE_WINDOW_MIN", 10),
+        "rate_max_token":  _int("SCAN_RATE_MAX", 30),
+        "rate_max_ip":     _int("SCAN_RATE_MAX_IP", 60),
+        "lockout_min":     _int("SCAN_LOCKOUT_MIN", 15),
+        "max_fails_token": _int("SCAN_MAX_FAILS", 5),
+        "max_fails_ip":    _int("SCAN_MAX_FAILS_IP", 15),
+    }
 
 
 def _token_hash(token):
@@ -47,48 +70,77 @@ def _iso_minutes_ago(minutes):
     return time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(time.time() - minutes * 60))
 
 
-def scan_guard_check(token_hash):
-    """(allowed, reason). Fail-open on any error."""
+def _parse_ts(value):
+    """PostgREST timestamptz (ISO, UTC) -> epoch seconds. Assumes UTC if naive."""
+    s = str(value).strip().replace("Z", "+00:00")
+    dt = datetime.fromisoformat(s)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.timestamp()
+
+
+def evaluate_scan_guard(now_ts, token_rows, ip_rows, cfg):
+    """Pure decision. `token_rows`/`ip_rows` are lists of {"reason", "ts"} (ts
+    = epoch seconds). `ip_rows` may be None (no client IP). Returns
+    (allowed: bool, reason: str). No I/O — unit-tested in api/tests/."""
+
+    def within(rows, minutes):
+        cut = now_ts - minutes * 60
+        return [r for r in rows if r.get("ts", 0) >= cut]
+
+    if any(r.get("reason") == "ok" for r in within(token_rows, cfg["cooldown_min"])):
+        return False, "cooldown"
+    if len(within(token_rows, cfg["rate_window_min"])) >= cfg["rate_max_token"]:
+        return False, "rate_token"
+    if sum(1 for r in within(token_rows, cfg["lockout_min"]) if r.get("reason") == "bad_pin") >= cfg["max_fails_token"]:
+        return False, "locked_token"
+    if ip_rows is not None:
+        if len(within(ip_rows, cfg["rate_window_min"])) >= cfg["rate_max_ip"]:
+            return False, "rate_ip"
+        if sum(1 for r in within(ip_rows, cfg["lockout_min"]) if r.get("reason") == "bad_pin") >= cfg["max_fails_ip"]:
+            return False, "locked_ip"
+    return True, "ok"
+
+
+def _fetch_attempts(field, value, since_iso):
+    """Raises on infra failure (table missing / network). [] means 0 rows."""
+    res = supabase_request(
+        "GET",
+        f"scan_attempts?{field}=eq.{urllib.parse.quote(value)}"
+        f"&created_at=gte.{urllib.parse.quote(since_iso)}"
+        "&select=reason,created_at&order=created_at.desc&limit=500",
+    )
+    if not isinstance(res, list):
+        raise RuntimeError("scan_attempts fetch failed: %r" % (res,))
+    rows = []
+    for r in res:
+        try:
+            rows.append({"reason": r.get("reason"), "ts": _parse_ts(r["created_at"])})
+        except Exception:
+            continue
+    return rows
+
+
+def scan_guard_check(token_hash, ip):
+    """(allowed, reason). Fail-open only on infrastructure failure."""
     if not SCAN_HARDENING:
         return True, "ok"
+    cfg = _guard_cfg()
+    widest = max(cfg["cooldown_min"], cfg["lockout_min"], cfg["rate_window_min"])
+    since = _iso_minutes_ago(widest)
     try:
-        window = max(_COOLDOWN_MIN, _LOCKOUT_MIN, _RATE_WINDOW_MIN)
-        since = _iso_minutes_ago(window)
-        rows = supabase_request(
-            "GET",
-            f"scan_attempts?token_hash=eq.{urllib.parse.quote(token_hash)}"
-            f"&created_at=gte.{urllib.parse.quote(since)}"
-            "&select=reason,created_at&order=created_at.desc",
-        )
-        if isinstance(rows, dict) or not isinstance(rows, list):
-            return True, "ok"  # table missing / error -> don't block
-        now = time.time()
-
-        def age_min(r):
-            # created_at comes back as ISO from PostgREST (UTC by default).
-            # Verify the offset handling here during the 0B.3 smoke test before
-            # relying on the fine-grained windows; the coarse DB filter above
-            # already bounds every row to <= `window` minutes.
-            try:
-                t = time.strptime(r["created_at"][:19], "%Y-%m-%dT%H:%M:%S")
-                return (now - (time.mktime(t) - time.timezone)) / 60.0
-            except Exception:
-                return 1e9
-
-        if any(r.get("reason") == "ok" and age_min(r) <= _COOLDOWN_MIN for r in rows):
-            return False, "cooldown"
-        if sum(1 for r in rows if age_min(r) <= _RATE_WINDOW_MIN) >= _RATE_MAX:
-            return False, "rate"
-        fails = sum(
-            1 for r in rows
-            if r.get("reason") == "bad_pin" and age_min(r) <= _LOCKOUT_MIN
-        )
-        if fails >= _MAX_FAILS:
-            return False, "locked"
-        return True, "ok"
+        token_rows = _fetch_attempts("token_hash", token_hash, since)
     except Exception:
-        logger.warning("scan_guard: check falló, se permite el intento", exc_info=True)
-        return True, "ok"
+        logger.warning("scan_guard: token ledger fetch failed -> fail-open", exc_info=True)
+        return True, "infra"
+    ip_rows = None
+    if ip:
+        try:
+            ip_rows = _fetch_attempts("ip", ip, since)
+        except Exception:
+            logger.warning("scan_guard: ip ledger fetch failed -> ip checks skipped", exc_info=True)
+            ip_rows = None
+    return evaluate_scan_guard(time.time(), token_rows, ip_rows, cfg)
 
 
 def scan_record(token_hash, ip, success, reason):
@@ -243,7 +295,7 @@ class handler(BaseHTTPRequestHandler):
 
         token_hash = _token_hash(token)
         client_ip  = _client_ip(self)
-        allowed, why = scan_guard_check(token_hash)
+        allowed, why = scan_guard_check(token_hash, client_ip)
         if not allowed:
             scan_record(token_hash, client_ip, False, why)
             self._html(429, self._page_error("Demasiados intentos. Esperá unos minutos e intentá de nuevo."))

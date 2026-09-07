@@ -4,9 +4,9 @@ import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
 try:
-    from ._auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
+    from ._auth import AuthError, add_cors_headers, audit, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
 except ImportError:
-    from _auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
+    from _auth import AuthError, add_cors_headers, audit, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://rbfctmcfweckbpgxlkqf.supabase.co").rstrip("/")
 SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY", "")
@@ -52,7 +52,7 @@ class handler(BaseHTTPRequestHandler):
     def do_PATCH(self):
         try:
             require_server_config(SUPABASE_URL=SUPABASE_URL, SUPABASE_KEY=SUPABASE_KEY)
-            require_admin(self)
+            ctx = require_admin(self)
             data = read_json_body(self)
         except AuthError as exc:
             respond_auth_error(self, exc, methods="GET, PATCH, OPTIONS")
@@ -68,11 +68,17 @@ class handler(BaseHTTPRequestHandler):
             self._json(400, {"ok": False, "error": "Clave de configuración no permitida"})
             return
 
-        supabase_request(
+        res = supabase_request(
             "PATCH",
             f"configuracion?clave=eq.{urllib.parse.quote(clave)}",
             {"valor": valor}
         )
+        failed = isinstance(res, dict) and "error" in res
+        audit(self, ctx, result="error" if failed else "ok",
+              action="config.update", object_type="configuracion", object_id=clave)
+        if failed:
+            self._json(502, {"ok": False, "error": "No se pudo guardar la configuración"})
+            return
         self._json(200, {"ok": True})
 
     def do_OPTIONS(self):
