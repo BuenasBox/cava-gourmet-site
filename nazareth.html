@@ -1398,6 +1398,39 @@ color: rgba(246, 239, 227, 0.82);
 @media(max-width:768px){.reveal{opacity:1;transform:none;transition:none}}
 </style>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+  <script>
+  /* CTA + intent tracking - Vercel Analytics custom events (Fase 4.1). No PII. */
+  (function () {
+    var path = (location.pathname || "/").replace(/\/+$/, "") || "/";
+    function ev(name, extra) {
+      try {
+        if (window.va) window.va("event", Object.assign({ name: name, page: path }, extra || {}));
+      } catch (e) {}
+    }
+    document.addEventListener("click", function (e) {
+      var el = e.target && e.target.closest ? e.target.closest("a, button") : null;
+      if (!el) return;
+      var cta = el.getAttribute("data-cta");
+      if (cta) { ev("cta_" + cta); return; }
+      var href = (el.getAttribute("href") || "").toLowerCase();
+      if (!href) return;
+      if (href.indexOf("wa.me/") > -1 || href.indexOf("api.whatsapp.com") > -1) {
+        ev("cta_whatsapp", { to: href.indexOf("50688483983") > -1 ? "nazareth" : "cava" });
+      } else if (href.indexOf("pay.google.com") > -1 || href.indexOf("/api/wallet") > -1) {
+        ev("cta_wallet");
+      } else if (href.indexOf("/cata-de-vinos") > -1) {
+        ev("cta_cata");
+      } else if (href.indexOf("/after-office-vino") > -1) {
+        ev("cta_afteroffice");
+      } else if (href === "/nazareth" || href.indexOf("cavagourmet.com/nazareth") > -1) {
+        ev("cta_nazareth");
+      } else if (/\/journal\/[a-z0-9-]+(?:$|[?#/])/.test(href)) {
+        var m = href.split("/journal/")[1];
+        ev("nav_journal_article", { slug: (m || "").split(/[?#/]/)[0] });
+      }
+    }, { passive: true });
+  })();
+  </script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
