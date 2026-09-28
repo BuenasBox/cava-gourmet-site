@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Editor de Artículo — CAVA Vinoteca</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/dist/umd/supabase.js" integrity="sha384-CLZeq1dk8+Uzrs7TVvBUdlFoV5F0DMqgRoeHa8g5wJcuPe5SkVfEvdxB0ZuzlnBQ" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -225,6 +227,17 @@
 
     .divider{height:1px;background:var(--line);margin:1.25rem 0}
 
+    .auth-overlay{position:fixed;inset:0;z-index:2000;background:radial-gradient(circle at 70% 20%,rgba(184,151,90,.12),transparent 32%),var(--navy-deep);display:grid;place-items:center;padding:1.5rem}
+    .auth-overlay[hidden]{display:none}
+    .auth-card{width:min(430px,100%);padding:2rem;border:1px solid var(--line);border-radius:8px;background:rgba(18,16,13,.92);box-shadow:0 24px 80px rgba(0,0,0,.42)}
+    .auth-card h1{font-family:var(--display);font-weight:300;font-size:1.65rem;margin-bottom:.45rem}
+    .auth-card p{font-size:.78rem;color:rgba(246,239,227,.55);margin-bottom:1.25rem}
+    .auth-card input{width:100%;margin:.4rem 0;padding:.8rem;border:1px solid var(--line);border-radius:4px;background:rgba(255,255,255,.04);color:var(--ivory);font:inherit}
+    .auth-card .btn{width:100%;justify-content:center;margin-top:.75rem}
+    .auth-error{min-height:1.3rem;margin-top:.7rem;color:#e07070;font-size:.72rem}
+    .publish-state{font-size:.68rem;color:rgba(246,239,227,.55);max-width:250px;line-height:1.35}
+    .publish-state.success{color:#7ed4a7}.publish-state.error{color:#e07070}
+
     @media(max-width:960px){
       .editor-layout{grid-template-columns:1fr}
       .sidebar{position:static;max-height:none}
@@ -233,6 +246,18 @@
   </style>
 </head>
 <body>
+
+<div class="auth-overlay" id="authOverlay">
+  <form class="auth-card" id="loginForm">
+    <div class="editor-brand" style="margin-bottom:1.2rem">CAVA Vinoteca · Journal</div>
+    <h1>Acceso editorial</h1>
+    <p>Inicia sesión con tu cuenta administrativa para escribir y publicar.</p>
+    <input type="email" id="loginEmail" autocomplete="username" placeholder="Correo electrónico" required>
+    <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Contraseña" required>
+    <button class="btn btn-gold" id="loginBtn" type="submit">Entrar al editor</button>
+    <div class="auth-error" id="loginError" role="alert"></div>
+  </form>
+</div>
 
 <!-- HEADER -->
 <header class="editor-header">
@@ -249,18 +274,12 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       Vista previa
     </button>
-    <button class="btn btn-outline" onclick="verCodigo()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-      Ver código generado
-    </button>
-    <button class="btn btn-gold" onclick="generarHTMLFinal()">
+    <button class="btn btn-outline" type="button" onclick="saveDraft(true)">Guardar borrador</button>
+    <button class="btn btn-gold" id="publishBtn" type="button" onclick="publicarEnJournal()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-      Generar HTML final
+      Publicar en Journal
     </button>
-    <button class="btn btn-claude" onclick="abrirPublicarClaude()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
-      Publicar con Claude
-    </button>
+    <span class="publish-state" id="publishState" aria-live="polite"></span>
   </div>
 </header>
 
@@ -281,11 +300,9 @@
         <div class="guide-step" data-step="3"><div class="step-num">3</div><div class="step-text">Revisa el título SEO y descripción</div></div>
         <div class="guide-step" data-step="4"><div class="step-num">4</div><div class="step-text">Sube la imagen de portada (opcional)</div></div>
         <div class="guide-step" data-step="5"><div class="step-num">5</div><div class="step-text">Escribe el artículo en el editor</div></div>
-        <div class="guide-step" data-step="6"><div class="step-num">6</div><div class="step-text">Presiona "Generar HTML final"</div></div>
-        <div class="guide-step" data-step="7"><div class="step-num">7</div><div class="step-text">Copia el código generado</div></div>
-        <div class="guide-step" data-step="8"><div class="step-num">8</div><div class="step-text">Crea el archivo en VS Code dentro de <span style="font-family:monospace;color:var(--gold-soft)">/journal/</span></div></div>
-        <div class="guide-step" data-step="9"><div class="step-num">9</div><div class="step-text">Nómbralo: <span style="font-family:monospace;color:var(--gold-soft)" id="guideFilename">nombre-articulo.html</span></div></div>
-        <div class="guide-step" data-step="10"><div class="step-num">10</div><div class="step-text">Sube la imagen a <span style="font-family:monospace;color:var(--gold-soft)">/Assets/images/Nazareth/</span></div></div>
+        <div class="guide-step" data-step="6"><div class="step-num">6</div><div class="step-text">Revisa el checklist y la vista previa</div></div>
+        <div class="guide-step" data-step="7"><div class="step-num">7</div><div class="step-text">Presiona “Publicar en Journal”</div></div>
+        <div class="guide-step" data-step="8"><div class="step-num">8</div><div class="step-text">Espera la confirmación y abre el artículo publicado</div></div>
       </div>
     </div>
 
@@ -356,7 +373,7 @@
         </div>
         <div class="field">
           <label>Extracto para la tarjeta del blog</label>
-          <textarea id="artExcerpt" rows="2" placeholder="Una frase que invite a leer el artículo…"></textarea>
+          <textarea id="artExcerpt" rows="2" placeholder="Una frase que invite a leer el artículo…" oninput="updateAll()"></textarea>
         </div>
       </div>
 
@@ -390,10 +407,7 @@
           <label>Descripción de la imagen (alt)</label>
           <input type="text" id="artImgAlt" placeholder="Describe la foto brevemente…" oninput="updateAll()" />
         </div>
-        <label class="no-image-toggle">
-          <input type="checkbox" id="noImageCheck" onchange="toggleNoImage()" />
-          <span>Publicar sin imagen de portada</span>
-        </label>
+        <div class="field-hint">La imagen es obligatoria. El sistema crea automáticamente los tamaños para web y redes sociales.</div>
       </div>
 
       <!-- RELACIONADOS -->
@@ -401,7 +415,7 @@
         <div class="sidebar-title">Artículos relacionados</div>
         <div class="field">
           <label>Artículo relacionado 1</label>
-          <select id="relArticle1">
+          <select id="relArticle1" onchange="updateAll()">
             <option value="">— Elige un artículo —</option>
             <option value="/journal/como-se-construye-cultura-del-vino">Cómo se construye cultura del vino</option>
             <option value="/journal/vino-menos-elitismo-mas-experiencia">Menos elitismo, más experiencia</option>
@@ -412,7 +426,7 @@
         </div>
         <div class="field">
           <label>Artículo relacionado 2</label>
-          <select id="relArticle2">
+          <select id="relArticle2" onchange="updateAll()">
             <option value="">— Elige un artículo —</option>
             <option value="/journal/como-se-construye-cultura-del-vino">Cómo se construye cultura del vino</option>
             <option value="/journal/vino-menos-elitismo-mas-experiencia">Menos elitismo, más experiencia</option>
@@ -502,11 +516,11 @@
     <div class="seo-checklist">
       <div class="seo-checklist-title">Checklist antes de publicar</div>
       <div class="seo-item"><div class="seo-dot" id="chk-title"></div><span class="seo-item-text" id="txt-title">El título tiene al menos 5 palabras</span></div>
-      <div class="seo-item"><div class="seo-dot" id="chk-desc"></div><span class="seo-item-text" id="txt-desc">La descripción tiene mínimo 80 caracteres</span></div>
+      <div class="seo-item"><div class="seo-dot" id="chk-desc"></div><span class="seo-item-text" id="txt-desc">La descripción tiene entre 100 y 165 caracteres</span></div>
       <div class="seo-item"><div class="seo-dot" id="chk-img"></div><span class="seo-item-text" id="txt-img">La imagen tiene descripción (alt text)</span></div>
       <div class="seo-item"><div class="seo-dot" id="chk-h2"></div><span class="seo-item-text" id="txt-h2">El artículo tiene al menos 2 subtítulos</span></div>
-      <div class="seo-item"><div class="seo-dot" id="chk-words"></div><span class="seo-item-text" id="txt-words">Mínimo 300 palabras escritas</span></div>
-      <div class="seo-item"><div class="seo-dot" id="chk-link"></div><span class="seo-item-text" id="txt-link">Incluye al menos 1 enlace interno</span></div>
+      <div class="seo-item"><div class="seo-dot" id="chk-words"></div><span class="seo-item-text" id="txt-words">Mínimo 400 palabras escritas</span></div>
+      <div class="seo-item"><div class="seo-dot" id="chk-link"></div><span class="seo-item-text" id="txt-link">Incluye al menos 1 enlace a otra página de CAVA</span></div>
       <div class="seo-item"><div class="seo-dot" id="chk-quote"></div><span class="seo-item-text" id="txt-quote">Tiene frase destacada o cita</span></div>
     </div>
   </main>
@@ -539,23 +553,11 @@
 <!-- MODAL: GENERAR FINAL -->
 <div class="modal-overlay" id="generateModal">
   <div class="modal">
-    <div class="modal-title">Generar HTML final</div>
-    <div class="modal-subtitle">Revisa el checklist. Los ítems en rojo necesitan atención antes de publicar.</div>
+    <div class="modal-title">Antes de publicar</div>
+    <div class="modal-subtitle">Completa los puntos marcados en rojo. El editor se encargará de crear y actualizar todos los archivos.</div>
     <div id="generateChecklist"></div>
-    <div class="inst-block">
-      <div class="inst-title">Qué hacer con el código generado</div>
-      <div class="inst-step"><div class="inst-num">1</div><div>Usa el botón <span class="inst-code">Publicar con Claude</span> para disparar el pipeline completo del Journal</div></div>
-      <div class="inst-step"><div class="inst-num">2</div><div>Claude ejecuta el skill <span class="inst-code">/journal-article-builder</span> con los datos del formulario</div></div>
-      <div class="inst-step"><div class="inst-num">3</div><div>Verifica el HTML generado y aprueba el Publication Gate</div></div>
-      <div class="inst-step"><div class="inst-num">4</div><div>Confirma la fase de publicación — Claude actualiza <span class="inst-code">journal.html</span>, <span class="inst-code">sitemap.xml</span> y registros</div></div>
-      <div class="inst-step"><div class="inst-num">5</div><div>Commit y push — el artículo aparece en producción</div></div>
-    </div>
     <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal('generateModal')">Seguir editando</button>
-      <button class="btn btn-gold" id="confirmGenerateBtn" onclick="confirmarGenerar()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        Generar y ver HTML
-      </button>
+      <button class="btn btn-gold" onclick="closeModal('generateModal')">Seguir editando</button>
     </div>
   </div>
 </div>
@@ -631,6 +633,10 @@
   let imgExt = 'webp';
   let generatedHTML = '';
   let currentStep = 1;
+  let supabaseAdmin = null;
+  let adminSession = null;
+  let draftTimer = null;
+  const DRAFT_KEY = 'cava-journal-draft-v2';
 
   // ── PROMPT DINÁMICO — lee los datos del formulario en el momento de abrir el modal ──
   function buildClaudePrompt() {
@@ -852,11 +858,194 @@ Al terminar, lista exactamente los archivos modificados para revisión.`;
     });
   }
 
-  // ── INIT ──
-  document.addEventListener('DOMContentLoaded', () => {
+  // ── SESIÓN, BORRADOR Y PUBLICACIÓN ──
+  document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('artDate').value = new Date().toISOString().split('T')[0];
+    restoreDraft();
     updateAll();
+    document.getElementById('loginForm').addEventListener('submit', loginAdmin);
+    try {
+      const cfgRes = await fetch('/api/auth_config');
+      const cfg = await cfgRes.json();
+      if (!cfgRes.ok || !cfg.supabaseUrl || !cfg.supabaseAnonKey) throw new Error('Configuración de acceso incompleta');
+      supabaseAdmin = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+      const { data } = await supabaseAdmin.auth.getSession();
+      setAdminSession(data.session || null);
+      supabaseAdmin.auth.onAuthStateChange((_event, session) => setAdminSession(session));
+    } catch (error) {
+      document.getElementById('loginError').textContent = error.message || 'No se pudo iniciar el acceso administrativo.';
+    }
   });
+
+  function setAdminSession(session) {
+    adminSession = session;
+    document.getElementById('authOverlay').hidden = !!session;
+    if (session) loadPublishedArticles();
+  }
+
+  async function loginAdmin(event) {
+    event.preventDefault();
+    const button = document.getElementById('loginBtn');
+    const errorBox = document.getElementById('loginError');
+    button.disabled = true;
+    button.textContent = 'Ingresando…';
+    errorBox.textContent = '';
+    try {
+      if (!supabaseAdmin) throw new Error('El servicio de acceso todavía no está listo.');
+      const { data, error } = await supabaseAdmin.auth.signInWithPassword({
+        email: document.getElementById('loginEmail').value.trim(),
+        password: document.getElementById('loginPassword').value,
+      });
+      if (error) throw error;
+      setAdminSession(data.session);
+    } catch (error) {
+      errorBox.textContent = 'No pudimos iniciar sesión. Revisa el correo y la contraseña.';
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Entrar al editor';
+    }
+  }
+
+  async function adminFetch(url, options = {}) {
+    if (!adminSession?.access_token) throw new Error('La sesión administrativa venció. Vuelve a iniciar sesión.');
+    const headers = new Headers(options.headers || {});
+    headers.set('Authorization', 'Bearer ' + adminSession.access_token);
+    if (options.body) headers.set('Content-Type', 'application/json');
+    return fetch(url, { ...options, headers });
+  }
+
+  async function loadPublishedArticles() {
+    try {
+      const response = await adminFetch('/api/journal_publish');
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'No se pudo cargar el Journal');
+      const selects = [document.getElementById('relArticle1'), document.getElementById('relArticle2')];
+      const selected = selects.map(select => select.value);
+      selects.forEach((select, index) => {
+        select.innerHTML = '<option value="">— Elige un artículo —</option>' + data.articles
+          .map(article => `<option value="${escapeHTML(article.url)}">${escapeHTML(article.title)}</option>`).join('');
+        const desired = select.dataset.restoreValue || selected[index];
+        if ([...select.options].some(option => option.value === desired)) select.value = desired;
+        delete select.dataset.restoreValue;
+      });
+      setPublishState('Editor conectado · publicación disponible');
+    } catch (error) {
+      setPublishState(error.message, 'error');
+    }
+  }
+
+  function draftData() {
+    const ids = ['artTitle','artCategory','artDate','artSlug','artSeoTitle','artMetaDesc','artKeywords','artExcerpt','artImgAlt','artQuote','relArticle1','relArticle2'];
+    return Object.fromEntries(ids.map(id => [id, document.getElementById(id).value]).concat([
+      ['bodyHtml', document.getElementById('editorBody').innerHTML],
+      ['slugEdited', slugEdited],
+    ]));
+  }
+
+  function saveDraft(showConfirmation = false) {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData()));
+    if (showConfirmation) showToast('Borrador guardado en este navegador', 'success');
+  }
+
+  function scheduleDraftSave() {
+    window.clearTimeout(draftTimer);
+    draftTimer = window.setTimeout(() => saveDraft(false), 500);
+  }
+
+  function restoreDraft() {
+    try {
+      const draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+      if (!draft) return;
+      Object.entries(draft).forEach(([id, value]) => {
+        const field = document.getElementById(id);
+        if (field && id !== 'bodyHtml') {
+          field.value = value;
+          if (field.tagName === 'SELECT' && field.value !== value) field.dataset.restoreValue = value;
+        }
+      });
+      document.getElementById('editorBody').innerHTML = draft.bodyHtml || '';
+      slugEdited = !!draft.slugEdited;
+      updateSlugDisplay(document.getElementById('artSlug').value);
+      updateWordCount();
+      showToast('Recuperamos tu último borrador', 'info');
+    } catch (_) {
+      localStorage.removeItem(DRAFT_KEY);
+    }
+  }
+
+  function setPublishState(message, type = '') {
+    const state = document.getElementById('publishState');
+    state.textContent = message;
+    state.className = 'publish-state ' + type;
+  }
+
+  function selectedRelatedTitle(selectId) {
+    const select = document.getElementById(selectId);
+    return select.options[select.selectedIndex]?.textContent || '';
+  }
+
+  async function buildArticlePayload() {
+    const imageInput = document.getElementById('coverImageInput');
+    if (!imageInput.files[0]) throw new Error('Selecciona una imagen de portada');
+    return {
+      title: document.getElementById('artTitle').value.trim(),
+      category: document.getElementById('artCategory').value,
+      date: document.getElementById('artDate').value,
+      slug: document.getElementById('artSlug').value.trim(),
+      seoTitle: document.getElementById('artSeoTitle').value.trim(),
+      metaDescription: document.getElementById('artMetaDesc').value.trim(),
+      keywords: document.getElementById('artKeywords').value.split(',').map(x => x.trim()).filter(Boolean),
+      excerpt: document.getElementById('artExcerpt').value.trim(),
+      imageAlt: document.getElementById('artImgAlt').value.trim(),
+      imageData: await fileAsDataUrl(imageInput.files[0]),
+      bodyHtml: document.getElementById('editorBody').innerHTML,
+      related: [document.getElementById('relArticle1').value, document.getElementById('relArticle2').value],
+      relatedTitles: [selectedRelatedTitle('relArticle1'), selectedRelatedTitle('relArticle2')],
+    };
+  }
+
+  async function publicarEnJournal() {
+    const checks = buildPublishChecklist();
+    if (!checks.ready) {
+      generarHTMLFinal();
+      showToast('Completa los puntos pendientes antes de publicar', 'error');
+      return;
+    }
+    if (!adminSession) {
+      document.getElementById('authOverlay').hidden = false;
+      return;
+    }
+    const button = document.getElementById('publishBtn');
+    button.disabled = true;
+    button.lastChild.textContent = ' Publicando…';
+    setPublishState('Creando artículo, imágenes y registros…');
+    saveDraft(false);
+    try {
+      const payload = await buildArticlePayload();
+      const response = await adminFetch('/api/journal_publish', { method: 'POST', body: JSON.stringify(payload) });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'No se pudo publicar el artículo');
+      localStorage.removeItem(DRAFT_KEY);
+      setPublishState('Publicado · Vercel está desplegando los cambios', 'success');
+      showToast('Artículo publicado y registros actualizados', 'success');
+      window.setTimeout(() => window.open(data.url, '_blank', 'noopener'), 1200);
+    } catch (error) {
+      setPublishState(error.message, 'error');
+      showToast(error.message, 'error');
+    } finally {
+      button.disabled = false;
+      button.lastChild.textContent = ' Publicar en Journal';
+    }
+  }
+
+  function fileAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
 
   // ── ESCAPE / SANITIZACIÓN ──
   function escapeHTML(str) {
@@ -900,7 +1089,6 @@ Al terminar, lista exactamente los archivos modificados para revisión.`;
     const safe = s || '…';
     document.getElementById('slugUrl').textContent = `cavagourmet.com/journal/${safe}`;
     document.getElementById('slugFile').textContent = s ? `${s}.html` : 'nombre-articulo.html';
-    document.getElementById('guideFilename').textContent = s ? `${s}.html` : 'nombre-articulo.html';
     const mf = document.getElementById('modalFilename');
     const mi = document.getElementById('modalImgName');
     if (mf) mf.textContent = s ? `${s}.html` : 'nombre-articulo.html';
@@ -980,7 +1168,7 @@ Al terminar, lista exactamente los archivos modificados para revisión.`;
     const title = document.getElementById('artTitle').value.trim();
     const desc = document.getElementById('artMetaDesc').value.trim();
     const alt = document.getElementById('artImgAlt').value.trim();
-    const noImg = document.getElementById('noImageCheck').checked;
+    const noImg = false;
     const body = document.getElementById('editorBody');
     const html = body.innerHTML;
     const words = (body.innerText || '').trim().split(/\s+/).filter(x => x.length > 0).length;
@@ -993,11 +1181,11 @@ Al terminar, lista exactamente los archivos modificados para revisión.`;
       document.getElementById('txt-' + id).className = 'seo-item-text ' + (ok ? 'ok' : '');
     };
     set('title', title.split(/\s+/).length >= 5);
-    set('desc', desc.length >= 80);
+    set('desc', desc.length >= 100 && desc.length <= 165);
     set('img', noImg || alt.length > 0);
     set('h2', h2count >= 2);
-    set('words', words >= 300);
-    set('link', linkcount >= 1);
+    set('words', words >= 400);
+    set('link', /href=["']\/(?!journal(?:\/|["']))/i.test(html));
     set('quote', quote.length > 0 || hasQuoteInBody);
   }
 
@@ -1026,13 +1214,37 @@ Al terminar, lista exactamente los archivos modificados para revisión.`;
     });
   }
 
-  function updateAll() { updateChecklist(); updateGuide(); }
+  function updateAll() { updateChecklist(); updateGuide(); scheduleDraftSave(); }
 
   // ── PREVIEW ──
-  function previewArticle() {
-    const html = generateHTML();
-    const w = window.open('', '_blank');
-    w.document.write(html); w.document.close();
+  async function previewArticle() {
+    const checks = buildPublishChecklist();
+    if (!checks.ready) {
+      generarHTMLFinal();
+      showToast('Completa el checklist para generar la vista previa exacta', 'error');
+      return;
+    }
+    const previewWindow = window.open('', '_blank');
+    if (!previewWindow) {
+      showToast('Permite ventanas emergentes para abrir la vista previa', 'error');
+      return;
+    }
+    previewWindow.document.write('<p style="font-family:sans-serif;padding:2rem">Generando vista previa…</p>');
+    try {
+      const payload = await buildArticlePayload();
+      payload.preview = true;
+      const response = await adminFetch('/api/journal_publish', { method: 'POST', body: JSON.stringify(payload) });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'No se pudo generar la vista previa');
+      const imagePattern = new RegExp(`\\.\\./Assets/images/journal/${payload.slug}-(?:640|960|1280)\\.webp`, 'g');
+      const previewHtml = data.html.replace(imagePattern, payload.imageData);
+      previewWindow.document.open();
+      previewWindow.document.write(previewHtml);
+      previewWindow.document.close();
+    } catch (error) {
+      previewWindow.close();
+      showToast(error.message, 'error');
+    }
   }
 
   // ── VER CÓDIGO ──
@@ -1056,8 +1268,6 @@ Al terminar, lista exactamente los archivos modificados para revisión.`;
     if (mi) mi.textContent = slug ? `${slug}.${imgExt}` : `nombre-articulo.${imgExt}`;
     const checks = buildPublishChecklist();
     document.getElementById('generateChecklist').innerHTML = checks.html;
-    // Ajuste: solo habilita si checklist está completo
-    document.getElementById('confirmGenerateBtn').disabled = !checks.ready;
     openModal('generateModal');
   }
 
@@ -1069,13 +1279,22 @@ Al terminar, lista exactamente los archivos modificados para revisión.`;
     const seo = document.getElementById('artSeoTitle').value.trim();
     const desc = document.getElementById('artMetaDesc').value.trim();
     const words = (document.getElementById('editorBody').innerText || '').trim().split(/\s+/).filter(x => x.length > 0).length;
+    const image = document.getElementById('coverImageInput').files[0];
+    const related1 = document.getElementById('relArticle1').value;
+    const related2 = document.getElementById('relArticle2').value;
+    const bodyHtml = document.getElementById('editorBody').innerHTML;
     const items = [
-      { label: 'Título del artículo', ok: title.length > 0 },
+      { label: 'Título del artículo (al menos 4 palabras)', ok: title.split(/\s+/).filter(Boolean).length >= 4 },
       { label: 'Categoría y fecha', ok: !!(cat && date) },
       { label: 'Slug (URL del artículo)', ok: slug.length > 0 },
-      { label: 'Título SEO', ok: seo.length > 0 },
-      { label: 'Meta descripción (mín. 80 caracteres)', ok: desc.length >= 80 },
-      { label: `Mínimo 300 palabras (tienes ${words})`, ok: words >= 300 },
+      { label: 'Título SEO (35–70 caracteres)', ok: seo.length >= 35 && seo.length <= 70 },
+      { label: 'Meta descripción (100–165 caracteres)', ok: desc.length >= 100 && desc.length <= 165 },
+      { label: 'Extracto para la portada del Journal', ok: document.getElementById('artExcerpt').value.trim().length >= 60 },
+      { label: 'Imagen de portada de al menos 1280 × 630', ok: !!image },
+      { label: `Mínimo 400 palabras (tienes ${words})`, ok: words >= 400 },
+      { label: 'Al menos 2 subtítulos H2', ok: (bodyHtml.match(/<h2\b/gi) || []).length >= 2 },
+      { label: 'Enlace a otra página de CAVA', ok: /href=["']\/(?!journal(?:\/|["']))/i.test(bodyHtml) },
+      { label: 'Dos artículos relacionados diferentes', ok: !!related1 && !!related2 && related1 !== related2 },
     ];
     const html = items.map(i => `
       <div style="display:flex;align-items:center;gap:.75rem;padding:.5rem 0;border-bottom:1px solid rgba(184,151,90,.08);font-size:.78rem">
@@ -1174,7 +1393,7 @@ Al terminar, lista exactamente los archivos modificados para revisión.`;
     const metaDescJSON = escapeJSON(document.getElementById('artMetaDesc').value || '');
     const keywords  = escapeHTML(document.getElementById('artKeywords').value || '');
     const imgAlt    = escapeHTML(document.getElementById('artImgAlt').value || title);
-    const noImg     = document.getElementById('noImageCheck').checked;
+    const noImg     = false;
     const quote     = document.getElementById('artQuote').value.trim();
     const body      = document.getElementById('editorBody').innerHTML || '';
     const rel1      = document.getElementById('relArticle1').value;

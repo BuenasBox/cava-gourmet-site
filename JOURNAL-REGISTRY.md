@@ -1,7 +1,7 @@
 # JOURNAL REGISTRY — CAVA Gourmet Market / Nazareth Wine Journey
 > Estado editorial vivo del Journal. Actualizar con cada artículo nuevo o editado.
-> Última actualización: 2026-06-01
-> Artículos publicados: 7 · En borrador: 0
+> Última actualización: 2026-09-28
+> Artículos publicados: 8 · En borrador: 0
 
 ---
 
@@ -292,6 +292,26 @@ Antes de publicar un artículo de Journal, verificar:
 | **Imagen** | `Assets/images/02-cava-vinoteca-private-tasting-table-1280.webp` · OG: `02-cava-vinoteca-private-tasting-table-og-1200x630.jpg` (197 KB) |
 | **Vinetur** | No |
 | **Riesgo de canibalización** | Medio — complementario con landing `/after-office-vino-perez-zeledon` (diferenciados: landing = servicio, Journal = reflexión cultural). Riesgo futuro con id:20 e id:92 de data/pages.json cuando se construyan. |
+| **Status** | Publicado ✅ |
+
+---
+
+### ART-008 · Vino y gastronomía costarricense
+
+| Campo | Valor |
+|---|---|
+| **Slug** | `/journal/vino-y-gastronomia-costarricense` |
+| **Título completo** | Vino y gastronomía costarricense: cuando el contraste es más honesto que las reglas |
+| **Fecha publicación** | 2026-06-02 |
+| **Fecha última edición** | 2026-06-02 |
+| **Tipo** | Análisis editorial · adaptación de publicación en Vinetur |
+| **Cluster temático** | Maridaje con gastronomía costarricense |
+| **Intención de búsqueda** | Informacional / cultural / local |
+| **Keywords primarias** | vino y gastronomía costarricense, maridaje Costa Rica |
+| **Entidad reforzada** | Nazareth Padilla Montero · CAVA Vinoteca · gastronomía costarricense |
+| **Artículos relacionados** | ART-005 · ART-001 |
+| **Imagen** | `Assets/images/professional/03-cava-vinoteca-charcuterie-experience-1280.webp` |
+| **Vinetur** | Sí · versión editorial ampliada en CAVA |
 | **Status** | Publicado ✅ |
 
 ---
