@@ -1,4 +1,7 @@
-# SOP — Pipeline Editorial CAVA Journal
+# SOP — Publicación editorial CAVA Journal
+
+> El flujo vigente está documentado en [PUBLICAR-JOURNAL.md](PUBLICAR-JOURNAL.md).
+> El editor ya publica directamente; las instrucciones históricas con prompts de Claude Code que aparecen abajo se conservan solo como referencia del flujo anterior.
 
 Procedimiento operativo estándar para crear y publicar artículos del Journal
 usando el editor admin y Claude Code.

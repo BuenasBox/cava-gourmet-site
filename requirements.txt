@@ -1,2 +1,3 @@
 PyJWT==2.*
 cryptography==42.*
+Pillow==11.*

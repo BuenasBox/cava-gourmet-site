@@ -1,5 +1,7 @@
 # Cómo publicar un nuevo artículo en el blog de CavaGourmet
 
+> Documento histórico. El procedimiento vigente no requiere editar archivos: consulta [PUBLICAR-JOURNAL.md](PUBLICAR-JOURNAL.md) y usa `/admin/editor-articulo-cava`.
+
 Este documento explica, paso a paso, cómo agregar un nuevo artículo al blog sin necesidad de saber programación. Solo necesitas seguir el orden.
 
 ---
