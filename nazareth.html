@@ -990,6 +990,21 @@ text-transform: uppercase;
 color: var(--gold);
 }
 
+.cava-card-copy p a {
+color: var(--gold-soft);
+font-size: inherit;
+letter-spacing: normal;
+text-transform: none;
+text-decoration: underline;
+text-underline-offset: 3px;
+text-decoration-color: rgba(184, 151, 90, .45);
+}
+
+.cava-card-copy p a:hover {
+color: var(--gold);
+text-decoration-color: var(--gold);
+}
+
 .temas {
 background: var(--charcoal-2);
 }
@@ -1415,7 +1430,7 @@ color: rgba(246, 239, 227, 0.82);
       var href = (el.getAttribute("href") || "").toLowerCase();
       if (!href) return;
       if (href.indexOf("wa.me/") > -1 || href.indexOf("api.whatsapp.com") > -1) {
-        ev("cta_whatsapp", { to: href.indexOf("50688483983") > -1 ? "nazareth" : "cava" });
+        ev("cta_whatsapp", { to: href.indexOf("50684483983") > -1 ? "nazareth" : "cava" });
       } else if (href.indexOf("pay.google.com") > -1 || href.indexOf("/api/wallet") > -1) {
         ev("cta_wallet");
       } else if (href.indexOf("/cata-de-vinos") > -1) {
@@ -1674,10 +1689,11 @@ color: rgba(246, 239, 227, 0.82);
             <p>Una vinoteca en Pérez Zeledón, Costa Rica, donde el vino del muro llega a la mesa compartida. El lugar
               donde Nazareth da vida a su filosofía: el vino explicado sin complicaciones, en conversación con las
               personas.</p>
-            <p>Es el espacio físico desde el cual se han gestado las experiencias de Nazareth Wine Journey: las catas,
-              las veladas, los After Office y las conversaciones que han acompañado a cientos de personas a acercarse al
-              vino por primera vez.</p>
-            <a href="https://www.cavagourmet.com/" target="_blank" rel="noopener">Ver CAVA Gourmet Market →</a>
+            <p>Es el espacio físico desde el cual se han gestado las experiencias de Nazareth Wine Journey:
+              <a href="https://www.cavagourmet.com/cata-de-vinos-perez-zeledon">las catas</a>, las veladas,
+              <a href="https://www.cavagourmet.com/after-office-vino-perez-zeledon">los After Office</a> y las
+              conversaciones que han acompañado a cientos de personas a acercarse al vino por primera vez.</p>
+            <a href="https://www.cavagourmet.com/">Ver CAVA Gourmet Market →</a>
           </div>
         </div>
       </div>
