@@ -44,6 +44,26 @@
     .btn-gold{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);width:100%;justify-content:center;margin-top:.75rem}
     .btn-gold:hover:not(:disabled){background:var(--gold-soft)}
     .auth-error{min-height:1.3rem;margin-top:.7rem;color:#e07070;font-size:.72rem}
+    .admin-users{background:var(--navy-deep);border:1px solid var(--line);border-radius:6px;padding:1.5rem}
+    .admin-table{width:100%;border-collapse:collapse;margin-bottom:1.5rem}
+    .admin-table th{text-align:left;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);padding-bottom:.6rem;border-bottom:1px solid var(--line)}
+    .admin-table td{padding:.6rem 0;border-bottom:1px solid rgba(184,151,90,.08);font-size:.8rem}
+    .pill{display:inline-block;padding:.15rem .55rem;border-radius:3px;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase}
+    .pill-active{background:rgba(74,156,111,.15);color:#7ed4a7}
+    .pill-inactive{background:rgba(192,57,43,.15);color:#e07070}
+    .btn-outline{background:transparent;color:var(--gold-soft);border-color:var(--gold);padding:.4rem .85rem;font-size:.6rem}
+    .btn-outline:hover{background:rgba(184,151,90,.1)}
+    .invite-form{display:grid;grid-template-columns:1fr 1fr auto auto;gap:.6rem;align-items:end;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--line)}
+    .invite-form label{display:block;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(246,239,227,.5);margin-bottom:.35rem}
+    .invite-form input,.invite-form select{width:100%;padding:.6rem;border:1px solid var(--line);border-radius:3px;background:rgba(255,255,255,.04);color:var(--ivory);font:inherit;font-size:.8rem}
+    .invite-form input[type="password"]{display:none}
+    .invite-form.mode-create input[type="password"]{display:block}
+    .activity-list{list-style:none;margin-top:2rem;font-size:.75rem;color:rgba(246,239,227,.55)}
+    .activity-list li{padding:.5rem 0;border-bottom:1px solid rgba(184,151,90,.08)}
+    .form-msg{grid-column:1/-1;font-size:.72rem;min-height:1.2rem}
+    .form-msg.error{color:#e07070}
+    .form-msg.success{color:#7ed4a7}
+    @media(max-width:700px){.invite-form{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -88,7 +108,40 @@
     </a>
   </div>
 
-  <div id="adminUsersSection" hidden></div>
+  <div id="adminUsersSection" hidden>
+    <div class="section-title">Usuarios admin</div>
+    <div class="admin-users">
+      <table class="admin-table">
+        <thead>
+          <tr><th>Correo</th><th>Rol</th><th>Estado</th><th></th></tr>
+        </thead>
+        <tbody id="adminUsersBody"></tbody>
+      </table>
+
+      <form class="invite-form" id="inviteForm">
+        <div>
+          <label>Correo</label>
+          <input type="email" id="inviteEmail" required>
+        </div>
+        <div>
+          <label>Rol</label>
+          <select id="inviteRole">
+            <option value="admin">admin</option>
+            <option value="owner">owner</option>
+          </select>
+        </div>
+        <div>
+          <label><input type="checkbox" id="inviteModeCreate" onchange="toggleInviteMode()"> Contraseña directa</label>
+          <input type="password" id="invitePassword" placeholder="Contraseña (mín. 8 caracteres)">
+        </div>
+        <button class="btn btn-gold" type="submit" style="margin-top:0">Invitar</button>
+        <div class="form-msg" id="inviteMsg"></div>
+      </form>
+    </div>
+
+    <div class="section-title" style="margin-top:2rem">Actividad reciente</div>
+    <ul class="activity-list" id="activityList"></ul>
+  </div>
 </main>
 
 <script>
@@ -113,7 +166,98 @@
   function setAdminSession(session) {
     adminSession = session;
     document.getElementById('authOverlay').hidden = !!session;
+    if (session) loadAdminUsers();
   }
+
+  function escapeHTML(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function toggleInviteMode() {
+    document.getElementById('inviteForm').classList.toggle('mode-create', document.getElementById('inviteModeCreate').checked);
+  }
+
+  async function loadAdminUsers() {
+    try {
+      const response = await adminFetch('/api/admin_users');
+      if (response.status === 403) {
+        document.getElementById('adminUsersSection').hidden = true;
+        return;
+      }
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'No se pudo cargar la lista de administradores');
+      document.getElementById('adminUsersSection').hidden = false;
+      renderAdmins(data.admins);
+      renderActivity(data.recent_activity);
+    } catch (error) {
+      document.getElementById('adminUsersSection').hidden = true;
+    }
+  }
+
+  function renderAdmins(admins) {
+    const body = document.getElementById('adminUsersBody');
+    body.innerHTML = admins.map(a => `
+      <tr>
+        <td>${escapeHTML(a.email)}</td>
+        <td>${escapeHTML(a.role)}</td>
+        <td><span class="pill ${a.active ? 'pill-active' : 'pill-inactive'}">${a.active ? 'Activo' : 'Inactivo'}</span></td>
+        <td><button class="btn btn-outline" onclick="toggleActive('${a.user_id}', ${!a.active})">${a.active ? 'Desactivar' : 'Reactivar'}</button></td>
+      </tr>
+    `).join('');
+  }
+
+  function renderActivity(items) {
+    const list = document.getElementById('activityList');
+    if (!items.length) {
+      list.innerHTML = '<li>Sin actividad registrada todavía.</li>';
+      return;
+    }
+    list.innerHTML = items.map(item => `
+      <li>${escapeHTML(item.action)} — ${escapeHTML(item.actor_email || 'desconocido')} — ${escapeHTML(item.result)} — ${new Date(item.created_at).toLocaleString('es-CR')}</li>
+    `).join('');
+  }
+
+  async function toggleActive(userId, nextActive) {
+    try {
+      const response = await adminFetch('/api/admin_users', {
+        method: 'PATCH',
+        body: JSON.stringify({ user_id: userId, active: nextActive }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'No se pudo actualizar');
+      loadAdminUsers();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  document.getElementById('inviteForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const msg = document.getElementById('inviteMsg');
+    msg.textContent = '';
+    msg.className = 'form-msg';
+    const mode = document.getElementById('inviteModeCreate').checked ? 'create' : 'invite';
+    const payload = {
+      email: document.getElementById('inviteEmail').value.trim(),
+      role: document.getElementById('inviteRole').value,
+      mode,
+      password: mode === 'create' ? document.getElementById('invitePassword').value : undefined,
+    };
+    try {
+      const response = await adminFetch('/api/admin_users', { method: 'POST', body: JSON.stringify(payload) });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'No se pudo crear la cuenta');
+      msg.textContent = mode === 'invite' ? 'Invitación enviada.' : 'Cuenta creada.';
+      msg.className = 'form-msg success';
+      document.getElementById('inviteForm').reset();
+      loadAdminUsers();
+    } catch (error) {
+      msg.textContent = error.message;
+      msg.className = 'form-msg error';
+    }
+  });
 
   async function loginAdmin(event) {
     event.preventDefault();
