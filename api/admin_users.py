@@ -170,8 +170,10 @@ class handler(BaseHTTPRequestHandler):
             })
         except AuthError as exc:
             respond_auth_error(self, exc, methods="GET, POST, PATCH, OPTIONS")
-        except SupabaseError as exc:
+        except SupabaseError:
             self._json(502, {"ok": False, "error": "No se pudo consultar Supabase"})
+        except Exception:
+            self._json(500, {"ok": False, "error": "No se pudo completar la solicitud"})
 
     def do_POST(self):
         ctx = None
@@ -212,6 +214,8 @@ class handler(BaseHTTPRequestHandler):
                 })
         except (ValueError, json.JSONDecodeError):
             self._json(400, {"ok": False, "error": "Solicitud inválida"})
+        except Exception:
+            self._json(500, {"ok": False, "error": "No se pudo completar la solicitud"})
 
     def do_PATCH(self):
         ctx = None
@@ -225,14 +229,20 @@ class handler(BaseHTTPRequestHandler):
                 return
             data = json.loads(self.rfile.read(length))
             target_user_id = str(data.get("user_id") or "")
-            new_active = bool(data.get("active"))
             if not target_user_id:
                 self._json(400, {"ok": False, "error": "Falta user_id"})
                 return
+            if not isinstance(data.get("active"), bool):
+                self._json(400, {"ok": False, "error": "El campo active debe ser verdadero o falso"})
+                return
+            new_active = data["active"]
 
             actor_user_id = (ctx.get("user") or {}).get("id")
             guard_self_deactivate(target_user_id, actor_user_id)
             admins = list_admin_profiles()
+            if not any(a["user_id"] == target_user_id for a in admins):
+                self._json(404, {"ok": False, "error": "No se encontró ese administrador"})
+                return
             guard_last_owner(admins, target_user_id, new_active)
 
             updated = update_admin_active(target_user_id, new_active)
@@ -250,6 +260,8 @@ class handler(BaseHTTPRequestHandler):
             self._json(502, {"ok": False, "error": "No se pudo actualizar el estado del administrador"})
         except (ValueError, json.JSONDecodeError):
             self._json(400, {"ok": False, "error": "Solicitud inválida"})
+        except Exception:
+            self._json(500, {"ok": False, "error": "No se pudo completar la solicitud"})
 
     def do_OPTIONS(self):
         handle_options(self, methods="GET, POST, PATCH, OPTIONS")
