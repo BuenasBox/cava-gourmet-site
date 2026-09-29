@@ -4,10 +4,32 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+from http.server import BaseHTTPRequestHandler
+
 try:
-    from ._auth import SUPABASE_URL, SERVICE_ROLE_KEY
+    from ._auth import (
+        AuthError,
+        SERVICE_ROLE_KEY,
+        SUPABASE_URL,
+        add_cors_headers,
+        audit,
+        handle_options,
+        require_admin,
+        require_server_config,
+        respond_auth_error,
+    )
 except ImportError:
-    from _auth import SUPABASE_URL, SERVICE_ROLE_KEY
+    from _auth import (
+        AuthError,
+        SERVICE_ROLE_KEY,
+        SUPABASE_URL,
+        add_cors_headers,
+        audit,
+        handle_options,
+        require_admin,
+        require_server_config,
+        respond_auth_error,
+    )
 
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
@@ -124,3 +146,120 @@ def create_user_with_password(email, password):
     url = f"{SUPABASE_URL}/auth/v1/admin/users"
     result = _request(url, "POST", {"email": email, "password": password, "email_confirm": True})
     return result["id"]
+
+
+MAX_BODY_BYTES = 64 * 1024
+
+
+def _require_owner(ctx):
+    if (ctx.get("profile") or {}).get("role") != "owner":
+        raise AuthError(403, "Solo el rol owner puede gestionar administradores")
+
+
+class handler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        ctx = None
+        try:
+            require_server_config(SUPABASE_URL=SUPABASE_URL, SERVICE_ROLE_KEY=SERVICE_ROLE_KEY)
+            ctx = require_admin(self)
+            _require_owner(ctx)
+            self._json(200, {
+                "ok": True,
+                "admins": list_admin_profiles(),
+                "recent_activity": list_recent_activity(),
+            })
+        except AuthError as exc:
+            respond_auth_error(self, exc, methods="GET, POST, PATCH, OPTIONS")
+        except SupabaseError as exc:
+            self._json(502, {"ok": False, "error": "No se pudo consultar Supabase"})
+
+    def do_POST(self):
+        ctx = None
+        try:
+            require_server_config(SUPABASE_URL=SUPABASE_URL, SERVICE_ROLE_KEY=SERVICE_ROLE_KEY)
+            ctx = require_admin(self)
+            _require_owner(ctx)
+            length = int(self.headers.get("Content-Length", "0"))
+            if length <= 0 or length > MAX_BODY_BYTES:
+                self._json(413, {"ok": False, "error": "Solicitud demasiado grande"})
+                return
+            data = json.loads(self.rfile.read(length))
+            payload = validate_invite_payload(data)
+
+            if payload["mode"] == "invite":
+                new_user_id = invite_user(payload["email"])
+            else:
+                new_user_id = create_user_with_password(payload["email"], payload["password"])
+            insert_admin_profile(new_user_id, payload["email"], payload["role"])
+
+            audit(self, ctx, result="ok", action=f"admin_users.{payload['mode']}",
+                  object_type="admin_profile", object_id=payload["email"])
+            self._json(201, {"ok": True, "user_id": new_user_id, "email": payload["email"]})
+        except AuthError as exc:
+            respond_auth_error(self, exc, methods="GET, POST, PATCH, OPTIONS")
+        except ValidationError as exc:
+            self._json(400, {"ok": False, "error": exc.message})
+        except SupabaseError as exc:
+            if ctx:
+                audit(self, ctx, result="error", action="admin_users.invite_or_create",
+                      object_type="admin_profile")
+            if exc.status == 422:
+                self._json(409, {"ok": False, "error": "Ya existe una cuenta con ese correo"})
+            else:
+                self._json(502, {
+                    "ok": False,
+                    "error": "No se pudo enviar la invitación — intenta crear la cuenta con contraseña directa",
+                })
+        except (ValueError, json.JSONDecodeError):
+            self._json(400, {"ok": False, "error": "Solicitud inválida"})
+
+    def do_PATCH(self):
+        ctx = None
+        try:
+            require_server_config(SUPABASE_URL=SUPABASE_URL, SERVICE_ROLE_KEY=SERVICE_ROLE_KEY)
+            ctx = require_admin(self)
+            _require_owner(ctx)
+            length = int(self.headers.get("Content-Length", "0"))
+            if length <= 0 or length > MAX_BODY_BYTES:
+                self._json(413, {"ok": False, "error": "Solicitud demasiado grande"})
+                return
+            data = json.loads(self.rfile.read(length))
+            target_user_id = str(data.get("user_id") or "")
+            new_active = bool(data.get("active"))
+            if not target_user_id:
+                self._json(400, {"ok": False, "error": "Falta user_id"})
+                return
+
+            actor_user_id = (ctx.get("user") or {}).get("id")
+            guard_self_deactivate(target_user_id, actor_user_id)
+            admins = list_admin_profiles()
+            guard_last_owner(admins, target_user_id, new_active)
+
+            updated = update_admin_active(target_user_id, new_active)
+            audit(self, ctx, result="ok",
+                  action="admin_users.reactivate" if new_active else "admin_users.deactivate",
+                  object_type="admin_profile", object_id=target_user_id)
+            self._json(200, {"ok": True, "admin": updated})
+        except AuthError as exc:
+            respond_auth_error(self, exc, methods="GET, POST, PATCH, OPTIONS")
+        except ValidationError as exc:
+            self._json(400, {"ok": False, "error": exc.message})
+        except SupabaseError:
+            if ctx:
+                audit(self, ctx, result="error", action="admin_users.set_active", object_type="admin_profile")
+            self._json(502, {"ok": False, "error": "No se pudo actualizar el estado del administrador"})
+        except (ValueError, json.JSONDecodeError):
+            self._json(400, {"ok": False, "error": "Solicitud inválida"})
+
+    def do_OPTIONS(self):
+        handle_options(self, methods="GET, POST, PATCH, OPTIONS")
+
+    def _json(self, status, body):
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        add_cors_headers(self, methods="GET, POST, PATCH, OPTIONS")
+        self.end_headers()
+        self.wfile.write(json.dumps(body, ensure_ascii=False).encode("utf-8"))
+
+    def log_message(self, *args):
+        pass
