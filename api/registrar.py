@@ -6,8 +6,14 @@ import urllib.request
 import urllib.parse
 try:
     from ._auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
+    from ._dates import costa_rica_today
+    from ._google_wallet import get_google_token
+    from ._levels import calcular_nivel
 except ImportError:
     from _auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
+    from _dates import costa_rica_today
+    from _google_wallet import get_google_token
+    from _levels import calcular_nivel
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://rbfctmcfweckbpgxlkqf.supabase.co").rstrip("/")
 SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY", "")
@@ -30,27 +36,6 @@ def supabase_request(method, endpoint, body=None):
     except urllib.error.HTTPError as e:
         return {"error": e.read().decode()}
 
-def get_google_token():
-    import jwt
-    key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
-    now      = int(time.time())
-    claims   = {
-        "iss":   key_data.get("client_email", ""),
-        "sub":   key_data.get("client_email", ""),
-        "aud":   "https://oauth2.googleapis.com/token",
-        "iat":   now,
-        "exp":   now + 3600,
-        "scope": "https://www.googleapis.com/auth/wallet_object.issuer"
-    }
-    token = jwt.encode(claims, key_data.get("private_key", ""), algorithm="RS256")
-    data  = urllib.parse.urlencode({
-        "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        "assertion":  token
-    }).encode()
-    req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data)
-    with urllib.request.urlopen(req, timeout=12) as r:
-        return json.loads(r.read())["access_token"]
-
 def crear_loyalty_object(email, nombre):
     access_token = get_google_token()
     safe_id      = email.replace("@", "_at_").replace(".", "_")
@@ -67,7 +52,7 @@ def crear_loyalty_object(email, nombre):
             "label":   "Experiencias"
         },
         "secondaryLoyaltyPoints": {
-            "balance": {"string": "🚪 Invitado"},
+            "balance": {"string": calcular_nivel(0, False)},
             "label":   "Nivel"
         }
     }, ensure_ascii=False).encode()
@@ -111,7 +96,7 @@ class handler(BaseHTTPRequestHandler):
 
         email        = data.get("email","").strip().lower()
         nombre       = data.get("nombre","").strip()
-        fecha        = data.get("fecha_ingreso", time.strftime("%d/%m/%Y"))
+        fecha        = data.get("fecha_ingreso", costa_rica_today())
         referido_por = data.get("referido_por") or None
 
         if not email or not nombre:
@@ -160,7 +145,7 @@ class handler(BaseHTTPRequestHandler):
         except Exception:
             link = ""
 
-        self._respond(200, {"ok": True, "nivel": "🚪 Invitado", "link": link})
+        self._respond(200, {"ok": True, "nivel": calcular_nivel(0, False), "link": link})
 
     def do_OPTIONS(self):
         handle_options(self, methods="POST, OPTIONS")

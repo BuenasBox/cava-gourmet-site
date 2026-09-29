@@ -10,9 +10,11 @@ import urllib.parse
 from http.server import BaseHTTPRequestHandler
 try:
     from ._auth import AuthError, add_cors_headers, handle_options, require_admin, require_server_config, respond_auth_error
+    from ._google_wallet import get_google_token
     from ._member_token import validar_token
 except ImportError:
     from _auth import AuthError, add_cors_headers, handle_options, require_admin, require_server_config, respond_auth_error
+    from _google_wallet import get_google_token
     from _member_token import validar_token
 
 ISSUER_ID    = "3388000000023147327"
@@ -22,26 +24,6 @@ SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SU
 HMAC_SECRET  = os.environ.get("HMAC_SECRET", "")
 
 logger = logging.getLogger("cava.wallet")
-
-def get_google_token():
-    key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
-    now      = int(time.time())
-    claims   = {
-        "iss":   key_data.get("client_email", ""),
-        "sub":   key_data.get("client_email", ""),
-        "aud":   "https://oauth2.googleapis.com/token",
-        "iat":   now,
-        "exp":   now + 3600,
-        "scope": "https://www.googleapis.com/auth/wallet_object.issuer"
-    }
-    token = jwt.encode(claims, key_data.get("private_key", ""), algorithm="RS256")
-    data  = urllib.parse.urlencode({
-        "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        "assertion":  token
-    }).encode()
-    req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data)
-    with urllib.request.urlopen(req, timeout=12) as r:
-        return json.loads(r.read())["access_token"]
 
 def get_nombre_from_supabase(email):
     url     = f"{SUPABASE_URL}/rest/v1/miembros?email=eq.{urllib.parse.quote(email)}&select=nombre"
