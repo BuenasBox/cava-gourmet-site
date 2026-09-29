@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — CAVA Vinoteca</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/dist/umd/supabase.js" integrity="sha384-CLZeq1dk8+Uzrs7TVvBUdlFoV5F0DMqgRoeHa8g5wJcuPe5SkVfEvdxB0ZuzlnBQ" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ivory:#f6efe3;--ivory-2:#eadcc3;--gold:#b8975a;--gold-soft:#d7b879;
+      --navy:#162b43;--navy-deep:#091522;--charcoal:#12100d;--charcoal-2:#1b1813;
+      --line:rgba(184,151,90,.2);
+      --display:"Bodoni Moda",Georgia,serif;--serif:"Cormorant Garamond",Georgia,serif;
+      --sans:"Jost",system-ui,sans-serif;--ease:cubic-bezier(.22,.61,.36,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--charcoal);color:var(--ivory);font-family:var(--sans);font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+    .page-header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(9,21,34,.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+    .page-brand{display:flex;align-items:center;gap:.75rem;font-family:var(--display);font-size:.9rem;letter-spacing:.14em;font-weight:300;color:var(--gold-soft)}
+    .page-badge{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(246,239,227,.4);border:1px solid var(--line);padding:.25rem .75rem;border-radius:2px}
+
+    main{max-width:960px;margin:0 auto;padding:2.5rem 2rem 4rem}
+    .section-title{font-family:var(--display);font-size:1.1rem;font-weight:300;color:var(--ivory-2);letter-spacing:.02em;margin-bottom:1.25rem}
+
+    .tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-bottom:3rem}
+    .tool-card{display:block;padding:1.5rem;background:var(--navy-deep);border:1px solid var(--line);border-radius:6px;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s}
+    .tool-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .tool-card-title{font-family:var(--display);font-size:1.05rem;color:var(--ivory-2);margin-bottom:.4rem}
+    .tool-card-desc{font-size:.78rem;color:rgba(246,239,227,.5);line-height:1.5}
+
+    .auth-overlay{position:fixed;inset:0;z-index:2000;background:radial-gradient(circle at 70% 20%,rgba(184,151,90,.12),transparent 32%),var(--navy-deep);display:grid;place-items:center;padding:1.5rem}
+    .auth-overlay[hidden]{display:none}
+    .auth-card{width:min(430px,100%);padding:2rem;border:1px solid var(--line);border-radius:8px;background:rgba(18,16,13,.92);box-shadow:0 24px 80px rgba(0,0,0,.42)}
+    .auth-card h1{font-family:var(--display);font-weight:300;font-size:1.65rem;margin-bottom:.45rem}
+    .auth-card p{font-size:.78rem;color:rgba(246,239,227,.55);margin-bottom:1.25rem}
+    .auth-card input{width:100%;margin:.4rem 0;padding:.8rem;border:1px solid var(--line);border-radius:4px;background:rgba(255,255,255,.04);color:var(--ivory);font:inherit}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.25rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;font-weight:400;cursor:pointer;border-radius:3px;border:1px solid transparent;transition:all .25s var(--ease);font-family:var(--sans);white-space:nowrap}
+    .btn:disabled{opacity:.4;cursor:not-allowed}
+    .btn-gold{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);width:100%;justify-content:center;margin-top:.75rem}
+    .btn-gold:hover:not(:disabled){background:var(--gold-soft)}
+    .auth-error{min-height:1.3rem;margin-top:.7rem;color:#e07070;font-size:.72rem}
+    .admin-users{background:var(--navy-deep);border:1px solid var(--line);border-radius:6px;padding:1.5rem}
+    .admin-table{width:100%;border-collapse:collapse;margin-bottom:1.5rem}
+    .admin-table th{text-align:left;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);padding-bottom:.6rem;border-bottom:1px solid var(--line)}
+    .admin-table td{padding:.6rem 0;border-bottom:1px solid rgba(184,151,90,.08);font-size:.8rem}
+    .pill{display:inline-block;padding:.15rem .55rem;border-radius:3px;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase}
+    .pill-active{background:rgba(74,156,111,.15);color:#7ed4a7}
+    .pill-inactive{background:rgba(192,57,43,.15);color:#e07070}
+    .btn-outline{background:transparent;color:var(--gold-soft);border-color:var(--gold);padding:.4rem .85rem;font-size:.6rem}
+    .btn-outline:hover{background:rgba(184,151,90,.1)}
+    .invite-form{display:grid;grid-template-columns:1fr 1fr auto auto;gap:.6rem;align-items:end;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--line)}
+    .invite-form label{display:block;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(246,239,227,.5);margin-bottom:.35rem}
+    .invite-form input,.invite-form select{width:100%;padding:.6rem;border:1px solid var(--line);border-radius:3px;background:rgba(255,255,255,.04);color:var(--ivory);font:inherit;font-size:.8rem}
+    .invite-form input[type="password"]{display:none}
+    .invite-form.mode-create input[type="password"]{display:block}
+    .activity-list{list-style:none;margin-top:2rem;font-size:.75rem;color:rgba(246,239,227,.55)}
+    .activity-list li{padding:.5rem 0;border-bottom:1px solid rgba(184,151,90,.08)}
+    .form-msg{grid-column:1/-1;font-size:.72rem;min-height:1.2rem}
+    .form-msg.error{color:#e07070}
+    .form-msg.success{color:#7ed4a7}
+    @media(max-width:700px){.invite-form{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<div class="auth-overlay" id="authOverlay">
+  <form class="auth-card" id="loginForm">
+    <div class="page-brand" style="margin-bottom:1.2rem">CAVA Vinoteca · Admin</div>
+    <h1>Acceso administrativo</h1>
+    <p>Inicia sesión con tu cuenta administrativa para continuar.</p>
+    <input type="email" id="loginEmail" autocomplete="username" placeholder="Correo electrónico" required>
+    <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Contraseña" required>
+    <button class="btn btn-gold" id="loginBtn" type="submit">Entrar al Admin</button>
+    <div class="auth-error" id="loginError" role="alert"></div>
+  </form>
+</div>
+
+<header class="page-header">
+  <div class="page-brand">
+    <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="8" stroke="#b8975a" stroke-width="1.2"/>
+      <circle cx="20" cy="20" r="16" stroke="#b8975a" stroke-width=".6" stroke-dasharray="3 3"/>
+    </svg>
+    CAVA Vinoteca
+  </div>
+  <span class="page-badge">Admin — Uso interno</span>
+</header>
+
+<main>
+  <div class="section-title">Herramientas</div>
+  <div class="tool-grid">
+    <a class="tool-card" href="/admin/editor-articulo-cava">
+      <div class="tool-card-title">Journal</div>
+      <div class="tool-card-desc">Escribir, revisar y publicar artículos del Journal.</div>
+    </a>
+    <a class="tool-card" href="/admin/cava_control_v3">
+      <div class="tool-card-title">Control de Consignación</div>
+      <div class="tool-card-desc">Inventario, ventas y pagos por proveedor.</div>
+    </a>
+    <a class="tool-card" href="/admin/enofilios-panel">
+      <div class="tool-card-title">Enofilios</div>
+      <div class="tool-card-desc">Membresías, tarjetas y experiencias registradas.</div>
+    </a>
+  </div>
+
+  <div id="adminUsersSection" hidden>
+    <div class="section-title">Usuarios admin</div>
+    <div class="admin-users">
+      <table class="admin-table">
+        <thead>
+          <tr><th>Correo</th><th>Rol</th><th>Estado</th><th></th></tr>
+        </thead>
+        <tbody id="adminUsersBody"></tbody>
+      </table>
+
+      <form class="invite-form" id="inviteForm">
+        <div>
+          <label>Correo</label>
+          <input type="email" id="inviteEmail" required>
+        </div>
+        <div>
+          <label>Rol</label>
+          <select id="inviteRole">
+            <option value="admin">admin</option>
+            <option value="owner">owner</option>
+          </select>
+        </div>
+        <div>
+          <label><input type="checkbox" id="inviteModeCreate" onchange="toggleInviteMode()"> Contraseña directa</label>
+          <input type="password" id="invitePassword" placeholder="Contraseña (mín. 8 caracteres)">
+        </div>
+        <button class="btn btn-gold" type="submit" style="margin-top:0">Invitar</button>
+        <div class="form-msg" id="inviteMsg"></div>
+      </form>
+    </div>
+
+    <div class="section-title" style="margin-top:2rem">Actividad reciente</div>
+    <ul class="activity-list" id="activityList"></ul>
+  </div>
+</main>
+
+<script>
+  let supabaseAdmin = null;
+  let adminSession = null;
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    document.getElementById('loginForm').addEventListener('submit', loginAdmin);
+    try {
+      const cfgRes = await fetch('/api/auth_config');
+      const cfg = await cfgRes.json();
+      if (!cfgRes.ok || !cfg.supabaseUrl || !cfg.supabaseAnonKey) throw new Error('Configuración de acceso incompleta');
+      supabaseAdmin = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+      const { data } = await supabaseAdmin.auth.getSession();
+      setAdminSession(data.session || null);
+      supabaseAdmin.auth.onAuthStateChange((_event, session) => setAdminSession(session));
+    } catch (error) {
+      document.getElementById('loginError').textContent = error.message || 'No se pudo iniciar el acceso administrativo.';
+    }
+  });
+
+  function setAdminSession(session) {
+    adminSession = session;
+    document.getElementById('authOverlay').hidden = !!session;
+    if (session) loadAdminUsers();
+  }
+
+  function escapeHTML(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function toggleInviteMode() {
+    document.getElementById('inviteForm').classList.toggle('mode-create', document.getElementById('inviteModeCreate').checked);
+  }
+
+  async function loadAdminUsers() {
+    try {
+      const response = await adminFetch('/api/admin_users');
+      if (response.status === 403) {
+        document.getElementById('adminUsersSection').hidden = true;
+        return;
+      }
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'No se pudo cargar la lista de administradores');
+      document.getElementById('adminUsersSection').hidden = false;
+      renderAdmins(data.admins);
+      renderActivity(data.recent_activity);
+    } catch (error) {
+      document.getElementById('adminUsersSection').hidden = true;
+    }
+  }
+
+  function renderAdmins(admins) {
+    const body = document.getElementById('adminUsersBody');
+    body.innerHTML = admins.map(a => `
+      <tr>
+        <td>${escapeHTML(a.email)}</td>
+        <td>${escapeHTML(a.role)}</td>
+        <td><span class="pill ${a.active ? 'pill-active' : 'pill-inactive'}">${a.active ? 'Activo' : 'Inactivo'}</span></td>
+        <td><button class="btn btn-outline" onclick="toggleActive('${a.user_id}', ${!a.active})">${a.active ? 'Desactivar' : 'Reactivar'}</button></td>
+      </tr>
+    `).join('');
+  }
+
+  function renderActivity(items) {
+    const list = document.getElementById('activityList');
+    if (!items.length) {
+      list.innerHTML = '<li>Sin actividad registrada todavía.</li>';
+      return;
+    }
+    list.innerHTML = items.map(item => `
+      <li>${escapeHTML(item.action)} — ${escapeHTML(item.actor_email || 'desconocido')} — ${escapeHTML(item.result)} — ${new Date(item.created_at).toLocaleString('es-CR')}</li>
+    `).join('');
+  }
+
+  async function toggleActive(userId, nextActive) {
+    try {
+      const response = await adminFetch('/api/admin_users', {
+        method: 'PATCH',
+        body: JSON.stringify({ user_id: userId, active: nextActive }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'No se pudo actualizar');
+      loadAdminUsers();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  document.getElementById('inviteForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const msg = document.getElementById('inviteMsg');
+    msg.textContent = '';
+    msg.className = 'form-msg';
+    const mode = document.getElementById('inviteModeCreate').checked ? 'create' : 'invite';
+    const payload = {
+      email: document.getElementById('inviteEmail').value.trim(),
+      role: document.getElementById('inviteRole').value,
+      mode,
+      password: mode === 'create' ? document.getElementById('invitePassword').value : undefined,
+    };
+    try {
+      const response = await adminFetch('/api/admin_users', { method: 'POST', body: JSON.stringify(payload) });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'No se pudo crear la cuenta');
+      msg.textContent = mode === 'invite' ? 'Invitación enviada.' : 'Cuenta creada.';
+      msg.className = 'form-msg success';
+      document.getElementById('inviteForm').reset();
+      loadAdminUsers();
+    } catch (error) {
+      msg.textContent = error.message;
+      msg.className = 'form-msg error';
+    }
+  });
+
+  async function loginAdmin(event) {
+    event.preventDefault();
+    const button = document.getElementById('loginBtn');
+    const errorBox = document.getElementById('loginError');
+    button.disabled = true;
+    button.textContent = 'Ingresando…';
+    errorBox.textContent = '';
+    try {
+      if (!supabaseAdmin) throw new Error('El servicio de acceso todavía no está listo.');
+      const { data, error } = await supabaseAdmin.auth.signInWithPassword({
+        email: document.getElementById('loginEmail').value.trim(),
+        password: document.getElementById('loginPassword').value,
+      });
+      if (error) throw error;
+      setAdminSession(data.session);
+    } catch (error) {
+      errorBox.textContent = 'No pudimos iniciar sesión. Revisa el correo y la contraseña.';
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Entrar al Admin';
+    }
+  }
+
+  async function adminFetch(url, options = {}) {
+    if (!adminSession?.access_token) throw new Error('La sesión administrativa venció. Vuelve a iniciar sesión.');
+    const headers = new Headers(options.headers || {});
+    headers.set('Authorization', 'Bearer ' + adminSession.access_token);
+    if (options.body) headers.set('Content-Type', 'application/json');
+    return fetch(url, { ...options, headers });
+  }
+</script>
+</body>
+</html>
