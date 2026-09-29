@@ -1,14 +1,17 @@
 import json
 import os
-import time
 import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
 try:
     from ._auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
+    from ._dates import costa_rica_today
+    from ._google_wallet import get_google_token
     from ._levels import calcular_nivel
 except ImportError:
     from _auth import AuthError, add_cors_headers, handle_options, read_json_body, require_admin, require_server_config, respond_auth_error
+    from _dates import costa_rica_today
+    from _google_wallet import get_google_token
     from _levels import calcular_nivel
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://rbfctmcfweckbpgxlkqf.supabase.co").rstrip("/")
@@ -38,27 +41,6 @@ def mensaje_progreso(exp, es_enofilo=False):
     if exp >= 10:    return f"Te faltan {25 - exp} experiencias para ser candidato a Enófilo."
     if exp >= 3:     return f"Te faltan {10 - exp} experiencias para Entusiasta."
     return f"Te faltan {3 - exp} experiencias para Neófito."
-
-def get_google_token():
-    import jwt
-    key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
-    now      = int(time.time())
-    claims   = {
-        "iss":   key_data.get("client_email", ""),
-        "sub":   key_data.get("client_email", ""),
-        "aud":   "https://oauth2.googleapis.com/token",
-        "iat":   now,
-        "exp":   now + 3600,
-        "scope": "https://www.googleapis.com/auth/wallet_object.issuer"
-    }
-    token = jwt.encode(claims, key_data.get("private_key", ""), algorithm="RS256")
-    data  = urllib.parse.urlencode({
-        "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        "assertion":  token
-    }).encode()
-    req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data)
-    with urllib.request.urlopen(req, timeout=12) as r:
-        return json.loads(r.read())["access_token"]
 
 def actualizar_wallet(miembro):
     try:
@@ -111,7 +93,7 @@ class handler(BaseHTTPRequestHandler):
         miembro    = result[0]
         nuevas_exp = miembro["experiencias"] + 1
         historial  = miembro.get("historial") or []
-        historial.append({"fecha": time.strftime("%d/%m/%Y"), "nota": nota})
+        historial.append({"fecha": costa_rica_today(), "nota": nota})
 
         supabase_request("PATCH", f"miembros?email=eq.{email}", {
             "experiencias": nuevas_exp,

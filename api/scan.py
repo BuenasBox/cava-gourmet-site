@@ -9,9 +9,13 @@ import urllib.parse
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler
 try:
+    from ._dates import costa_rica_today
+    from ._google_wallet import get_google_token
     from ._member_token import validar_token
     from ._levels import calcular_nivel
 except ImportError:
+    from _dates import costa_rica_today
+    from _google_wallet import get_google_token
     from _member_token import validar_token
     from _levels import calcular_nivel
 
@@ -182,27 +186,6 @@ def mensaje_progreso(exp, es_enofilo=False):
     if exp >= 3:    return f"Faltan {10 - exp} para Entusiasta 🍷"
     return f"Faltan {3 - exp} para Neófito 🌱"
 
-def get_google_token():
-    import jwt
-    key_data = json.loads(os.environ.get("GOOGLE_WALLET_KEY", "{}"))
-    now      = int(time.time())
-    claims   = {
-        "iss":   key_data.get("client_email", ""),
-        "sub":   key_data.get("client_email", ""),
-        "aud":   "https://oauth2.googleapis.com/token",
-        "iat":   now,
-        "exp":   now + 3600,
-        "scope": "https://www.googleapis.com/auth/wallet_object.issuer"
-    }
-    token = jwt.encode(claims, key_data.get("private_key", ""), algorithm="RS256")
-    data  = urllib.parse.urlencode({
-        "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
-        "assertion":  token
-    }).encode()
-    req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data)
-    with urllib.request.urlopen(req, timeout=12) as r:
-        return json.loads(r.read())["access_token"]
-
 def actualizar_wallet(email, exp, es_enofilo):
     try:
         nivel     = calcular_nivel(exp, es_enofilo)
@@ -301,7 +284,7 @@ class handler(BaseHTTPRequestHandler):
             self._html(429, self._page_error("Demasiados intentos. Esperá unos minutos e intentá de nuevo."))
             return
 
-        if not SCAN_PIN or pin != SCAN_PIN:
+        if not SCAN_PIN or not hmac.compare_digest(pin, SCAN_PIN):
             scan_record(token_hash, client_ip, False, "bad_pin")
             # Re-fetch member to show form again with error
             result = supabase_request("GET", f"miembros?email=eq.{urllib.parse.quote(email)}&select=nombre,experiencias,es_enofilo")
@@ -324,7 +307,7 @@ class handler(BaseHTTPRequestHandler):
         nombre     = miembro.get("nombre", "")
         nuevas_exp = miembro["experiencias"] + 1
         historial  = miembro.get("historial") or []
-        historial.append({"fecha": time.strftime("%d/%m/%Y"), "nota": "Enofilios Cava — After Office"})
+        historial.append({"fecha": costa_rica_today(), "nota": "Enofilios Cava — After Office"})
 
         supabase_request("PATCH", f"miembros?email=eq.{urllib.parse.quote(email)}", {
             "experiencias": nuevas_exp,
