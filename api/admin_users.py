@@ -14,6 +14,7 @@ try:
         add_cors_headers,
         audit,
         handle_options,
+        read_json_body,
         require_admin,
         require_server_config,
         respond_auth_error,
@@ -26,6 +27,7 @@ except ImportError:
         add_cors_headers,
         audit,
         handle_options,
+        read_json_body,
         require_admin,
         require_server_config,
         respond_auth_error,
@@ -181,18 +183,27 @@ class handler(BaseHTTPRequestHandler):
             require_server_config(SUPABASE_URL=SUPABASE_URL, SERVICE_ROLE_KEY=SERVICE_ROLE_KEY)
             ctx = require_admin(self)
             _require_owner(ctx)
-            length = int(self.headers.get("Content-Length", "0"))
-            if length <= 0 or length > MAX_BODY_BYTES:
-                self._json(413, {"ok": False, "error": "Solicitud demasiado grande"})
-                return
-            data = json.loads(self.rfile.read(length))
+            data = read_json_body(self, max_bytes=MAX_BODY_BYTES)
             payload = validate_invite_payload(data)
 
             if payload["mode"] == "invite":
                 new_user_id = invite_user(payload["email"])
             else:
                 new_user_id = create_user_with_password(payload["email"], payload["password"])
-            insert_admin_profile(new_user_id, payload["email"], payload["role"])
+
+            try:
+                insert_admin_profile(new_user_id, payload["email"], payload["role"])
+            except SupabaseError:
+                audit(self, ctx, result="error", action="admin_users.orphaned_auth_user",
+                      object_type="admin_profile", object_id=new_user_id)
+                self._json(502, {
+                    "ok": False,
+                    "error": (
+                        "Se creó el acceso pero no se pudo activarlo como administrador. "
+                        "Contacta soporte con este identificador: " + new_user_id
+                    ),
+                })
+                return
 
             audit(self, ctx, result="ok", action=f"admin_users.{payload['mode']}",
                   object_type="admin_profile", object_id=payload["email"])
@@ -212,8 +223,6 @@ class handler(BaseHTTPRequestHandler):
                     "ok": False,
                     "error": "No se pudo enviar la invitación — intenta crear la cuenta con contraseña directa",
                 })
-        except (ValueError, json.JSONDecodeError):
-            self._json(400, {"ok": False, "error": "Solicitud inválida"})
         except Exception:
             self._json(500, {"ok": False, "error": "No se pudo completar la solicitud"})
 
@@ -223,11 +232,7 @@ class handler(BaseHTTPRequestHandler):
             require_server_config(SUPABASE_URL=SUPABASE_URL, SERVICE_ROLE_KEY=SERVICE_ROLE_KEY)
             ctx = require_admin(self)
             _require_owner(ctx)
-            length = int(self.headers.get("Content-Length", "0"))
-            if length <= 0 or length > MAX_BODY_BYTES:
-                self._json(413, {"ok": False, "error": "Solicitud demasiado grande"})
-                return
-            data = json.loads(self.rfile.read(length))
+            data = read_json_body(self, max_bytes=MAX_BODY_BYTES)
             target_user_id = str(data.get("user_id") or "")
             if not target_user_id:
                 self._json(400, {"ok": False, "error": "Falta user_id"})
@@ -238,12 +243,20 @@ class handler(BaseHTTPRequestHandler):
             new_active = data["active"]
 
             actor_user_id = (ctx.get("user") or {}).get("id")
-            guard_self_deactivate(target_user_id, actor_user_id)
             admins = list_admin_profiles()
             if not any(a["user_id"] == target_user_id for a in admins):
+                audit(self, ctx, result="denied", action="admin_users.set_active",
+                      object_type="admin_profile", object_id=target_user_id)
                 self._json(404, {"ok": False, "error": "No se encontró ese administrador"})
                 return
-            guard_last_owner(admins, target_user_id, new_active)
+            try:
+                guard_self_deactivate(target_user_id, actor_user_id)
+                guard_last_owner(admins, target_user_id, new_active)
+            except ValidationError as exc:
+                audit(self, ctx, result="denied", action="admin_users.set_active",
+                      object_type="admin_profile", object_id=target_user_id)
+                self._json(400, {"ok": False, "error": exc.message})
+                return
 
             updated = update_admin_active(target_user_id, new_active)
             audit(self, ctx, result="ok",
@@ -252,14 +265,10 @@ class handler(BaseHTTPRequestHandler):
             self._json(200, {"ok": True, "admin": updated})
         except AuthError as exc:
             respond_auth_error(self, exc, methods="GET, POST, PATCH, OPTIONS")
-        except ValidationError as exc:
-            self._json(400, {"ok": False, "error": exc.message})
         except SupabaseError:
             if ctx:
                 audit(self, ctx, result="error", action="admin_users.set_active", object_type="admin_profile")
             self._json(502, {"ok": False, "error": "No se pudo actualizar el estado del administrador"})
-        except (ValueError, json.JSONDecodeError):
-            self._json(400, {"ok": False, "error": "Solicitud inválida"})
         except Exception:
             self._json(500, {"ok": False, "error": "No se pudo completar la solicitud"})
 

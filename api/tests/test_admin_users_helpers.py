@@ -101,3 +101,23 @@ def test_guard_last_owner_ignores_non_owner_targets():
 def test_guard_last_owner_allows_reactivating():
     admins = [{"user_id": "owner1", "role": "owner", "active": False}]
     au.guard_last_owner(admins, "owner1", True)
+
+
+def test_require_owner_allows_owner():
+    au._require_owner({"profile": {"role": "owner"}})
+
+
+def test_require_owner_blocks_admin():
+    try:
+        au._require_owner({"profile": {"role": "admin"}})
+        assert False, "debió lanzar AuthError"
+    except au.AuthError as exc:
+        assert exc.status == 403
+
+
+def test_require_owner_blocks_missing_profile():
+    try:
+        au._require_owner({"profile": None})
+        assert False, "debió lanzar AuthError"
+    except au.AuthError as exc:
+        assert exc.status == 403
