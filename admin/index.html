@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — CAVA Vinoteca</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/dist/umd/supabase.js" integrity="sha384-CLZeq1dk8+Uzrs7TVvBUdlFoV5F0DMqgRoeHa8g5wJcuPe5SkVfEvdxB0ZuzlnBQ" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,300;6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ivory:#f6efe3;--ivory-2:#eadcc3;--gold:#b8975a;--gold-soft:#d7b879;
+      --navy:#162b43;--navy-deep:#091522;--charcoal:#12100d;--charcoal-2:#1b1813;
+      --line:rgba(184,151,90,.2);
+      --display:"Bodoni Moda",Georgia,serif;--serif:"Cormorant Garamond",Georgia,serif;
+      --sans:"Jost",system-ui,sans-serif;--ease:cubic-bezier(.22,.61,.36,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--charcoal);color:var(--ivory);font-family:var(--sans);font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+    .page-header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(9,21,34,.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+    .page-brand{display:flex;align-items:center;gap:.75rem;font-family:var(--display);font-size:.9rem;letter-spacing:.14em;font-weight:300;color:var(--gold-soft)}
+    .page-badge{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(246,239,227,.4);border:1px solid var(--line);padding:.25rem .75rem;border-radius:2px}
+
+    main{max-width:960px;margin:0 auto;padding:2.5rem 2rem 4rem}
+    .section-title{font-family:var(--display);font-size:1.1rem;font-weight:300;color:var(--ivory-2);letter-spacing:.02em;margin-bottom:1.25rem}
+
+    .tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-bottom:3rem}
+    .tool-card{display:block;padding:1.5rem;background:var(--navy-deep);border:1px solid var(--line);border-radius:6px;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s}
+    .tool-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .tool-card-title{font-family:var(--display);font-size:1.05rem;color:var(--ivory-2);margin-bottom:.4rem}
+    .tool-card-desc{font-size:.78rem;color:rgba(246,239,227,.5);line-height:1.5}
+
+    .auth-overlay{position:fixed;inset:0;z-index:2000;background:radial-gradient(circle at 70% 20%,rgba(184,151,90,.12),transparent 32%),var(--navy-deep);display:grid;place-items:center;padding:1.5rem}
+    .auth-overlay[hidden]{display:none}
+    .auth-card{width:min(430px,100%);padding:2rem;border:1px solid var(--line);border-radius:8px;background:rgba(18,16,13,.92);box-shadow:0 24px 80px rgba(0,0,0,.42)}
+    .auth-card h1{font-family:var(--display);font-weight:300;font-size:1.65rem;margin-bottom:.45rem}
+    .auth-card p{font-size:.78rem;color:rgba(246,239,227,.55);margin-bottom:1.25rem}
+    .auth-card input{width:100%;margin:.4rem 0;padding:.8rem;border:1px solid var(--line);border-radius:4px;background:rgba(255,255,255,.04);color:var(--ivory);font:inherit}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.25rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;font-weight:400;cursor:pointer;border-radius:3px;border:1px solid transparent;transition:all .25s var(--ease);font-family:var(--sans);white-space:nowrap}
+    .btn:disabled{opacity:.4;cursor:not-allowed}
+    .btn-gold{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);width:100%;justify-content:center;margin-top:.75rem}
+    .btn-gold:hover:not(:disabled){background:var(--gold-soft)}
+    .auth-error{min-height:1.3rem;margin-top:.7rem;color:#e07070;font-size:.72rem}
+  </style>
+</head>
+<body>
+
+<div class="auth-overlay" id="authOverlay">
+  <form class="auth-card" id="loginForm">
+    <div class="page-brand" style="margin-bottom:1.2rem">CAVA Vinoteca · Admin</div>
+    <h1>Acceso administrativo</h1>
+    <p>Inicia sesión con tu cuenta administrativa para continuar.</p>
+    <input type="email" id="loginEmail" autocomplete="username" placeholder="Correo electrónico" required>
+    <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Contraseña" required>
+    <button class="btn btn-gold" id="loginBtn" type="submit">Entrar al Admin</button>
+    <div class="auth-error" id="loginError" role="alert"></div>
+  </form>
+</div>
+
+<header class="page-header">
+  <div class="page-brand">
+    <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="8" stroke="#b8975a" stroke-width="1.2"/>
+      <circle cx="20" cy="20" r="16" stroke="#b8975a" stroke-width=".6" stroke-dasharray="3 3"/>
+    </svg>
+    CAVA Vinoteca
+  </div>
+  <span class="page-badge">Admin — Uso interno</span>
+</header>
+
+<main>
+  <div class="section-title">Herramientas</div>
+  <div class="tool-grid">
+    <a class="tool-card" href="/admin/editor-articulo-cava">
+      <div class="tool-card-title">Journal</div>
+      <div class="tool-card-desc">Escribir, revisar y publicar artículos del Journal.</div>
+    </a>
+    <a class="tool-card" href="/admin/cava_control_v3">
+      <div class="tool-card-title">Control de Consignación</div>
+      <div class="tool-card-desc">Inventario, ventas y pagos por proveedor.</div>
+    </a>
+    <a class="tool-card" href="/admin/enofilios-panel">
+      <div class="tool-card-title">Enofilios</div>
+      <div class="tool-card-desc">Membresías, tarjetas y experiencias registradas.</div>
+    </a>
+  </div>
+
+  <div id="adminUsersSection" hidden></div>
+</main>
+
+<script>
+  let supabaseAdmin = null;
+  let adminSession = null;
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    document.getElementById('loginForm').addEventListener('submit', loginAdmin);
+    try {
+      const cfgRes = await fetch('/api/auth_config');
+      const cfg = await cfgRes.json();
+      if (!cfgRes.ok || !cfg.supabaseUrl || !cfg.supabaseAnonKey) throw new Error('Configuración de acceso incompleta');
+      supabaseAdmin = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+      const { data } = await supabaseAdmin.auth.getSession();
+      setAdminSession(data.session || null);
+      supabaseAdmin.auth.onAuthStateChange((_event, session) => setAdminSession(session));
+    } catch (error) {
+      document.getElementById('loginError').textContent = error.message || 'No se pudo iniciar el acceso administrativo.';
+    }
+  });
+
+  function setAdminSession(session) {
+    adminSession = session;
+    document.getElementById('authOverlay').hidden = !!session;
+  }
+
+  async function loginAdmin(event) {
+    event.preventDefault();
+    const button = document.getElementById('loginBtn');
+    const errorBox = document.getElementById('loginError');
+    button.disabled = true;
+    button.textContent = 'Ingresando…';
+    errorBox.textContent = '';
+    try {
+      if (!supabaseAdmin) throw new Error('El servicio de acceso todavía no está listo.');
+      const { data, error } = await supabaseAdmin.auth.signInWithPassword({
+        email: document.getElementById('loginEmail').value.trim(),
+        password: document.getElementById('loginPassword').value,
+      });
+      if (error) throw error;
+      setAdminSession(data.session);
+    } catch (error) {
+      errorBox.textContent = 'No pudimos iniciar sesión. Revisa el correo y la contraseña.';
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Entrar al Admin';
+    }
+  }
+
+  async function adminFetch(url, options = {}) {
+    if (!adminSession?.access_token) throw new Error('La sesión administrativa venció. Vuelve a iniciar sesión.');
+    const headers = new Headers(options.headers || {});
+    headers.set('Authorization', 'Bearer ' + adminSession.access_token);
+    if (options.body) headers.set('Content-Type', 'application/json');
+    return fetch(url, { ...options, headers });
+  }
+</script>
+</body>
+</html>
