@@ -92,7 +92,7 @@ const music=new TensionMusic();
 // anything that depends on the post-mutation DOM — focus, measuring layout — must wait for `ready` instead of
 // running synchronously after startViewTransition() is invoked.
 function withTransition(mutate,after){
-  if(!main.childElementCount||reduceMotion()||!document.startViewTransition){mutate();after&&after();return;}
+  if(main.hasAttribute("data-prerender")||!main.childElementCount||reduceMotion()||!document.startViewTransition){mutate();main.removeAttribute("data-prerender");after&&after();return;}
   const transition=document.startViewTransition(mutate);
   transition.ready.then(after||(()=>{})).catch(()=>{after&&after();});
 }
