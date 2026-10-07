@@ -1,0 +1,103 @@
+:root{--ivory:#f6efe3;--ivory-2:#eadcc3;--champagne:#d9c49a;--gold:#b8975a;--gold-soft:#d7b879;--navy:#162b43;--navy-deep:#091522;--charcoal:#12100d;--charcoal-2:#1b1813;--wine:#4a1720;--text:#221e18;--muted:#8d8272;--line:rgba(184,151,90,0.23);--display:"Bodoni Moda",Georgia,serif;--serif:"Cormorant Garamond",Georgia,serif;--sans:"Jost",system-ui,-apple-system,sans-serif;--wordmark:"Alifira",system-ui,-apple-system,sans-serif;--ease:cubic-bezier(.22,.61,.36,1);--m-touch:.09s;--m-press:.18s;--m-surface:.3s;--m-veil:.7s;--m-reveal:.95s;--m-breath:1.8s;--d-window:76% 14%;--d-light:215,184,121;--d-edge:rgba(246,239,227,.07);--d-edge-soft:rgba(246,239,227,.04);--d-air:rgba(246,239,227,.03);--d-shadow-1:0 12px 32px rgba(0,0,0,.18);--d-shadow-2:0 22px 48px rgba(0,0,0,.24);--d-shadow-3:0 34px 90px rgba(0,0,0,.3);--d-seam:inset 0 56px 72px -56px rgba(0,0,0,.38);--d-vignette:radial-gradient(ellipse at 50% 42%,transparent 58%,rgba(0,0,0,.16));--max:1240px;--pad:clamp(1.35rem,4vw,4.5rem);--section:clamp(6rem,11vw,10rem);--fs-display:clamp(4.2rem,12vw,11rem);--fs-h1:clamp(2.5rem,5vw,4.2rem);--fs-h2:clamp(2rem,3.6vw,3.2rem);--fs-h3:clamp(1.6rem,2.8vw,2.4rem);--fs-h4:clamp(1.2rem,2.2vw,1.8rem);--fs-lead:clamp(1.18rem,2vw,1.5rem);--fs-body:clamp(1.08rem,1.65vw,1.32rem);--fs-body-sm:.98rem;--fs-eyebrow:.9rem;--fs-overline:.8rem;--fs-ui:.85rem;--track-hero:-.035em;--track-head:-.022em;--track-head-sm:-.015em;--track-label:.28em;--track-ui:.18em;}
+.nav{position:fixed;z-index:1000;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1.35rem var(--pad);transition:background var(--m-surface) var(--ease),padding var(--m-surface) var(--ease),border-color var(--m-surface) var(--ease),box-shadow var(--m-surface) var(--ease);border-bottom:1px solid transparent;background:rgba(9,21,34,.22);backdrop-filter:blur(8px);}.nav.scrolled{padding-top:.9rem;padding-bottom:.9rem;background:rgba(9,21,34,.94);border-color:rgba(184,151,90,.18);box-shadow:var(--d-shadow-1);}.brand{display:inline-flex;align-items:center;gap:.85rem;min-width:170px;transition:opacity var(--m-surface) var(--ease);}.brand:hover{opacity:.82;}.cava-monogram{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}.cava-monogram__svg{width:100%;height:100%;display:block;color:var(--gold-soft);transition:color var(--m-surface) var(--ease);}.brand:hover .cava-monogram__svg{color:var(--gold);}.nav.scrolled .cava-monogram__svg{color:var(--gold);}.hero-branding{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:.85rem;margin:2rem 0 0;}.hero-mark-image{max-width:180px;width:clamp(120px,20vw,180px);height:auto;}.hero-branding-label{font-family:var(--serif);color:rgba(246,239,227,.72);font-size:var(--fs-eyebrow);text-transform:uppercase;letter-spacing:var(--track-label);}.footer-brand{display:inline-flex;align-items:center;gap:.75rem;}.brand-wordmark{font-family:var(--wordmark);font-size:1.02rem;letter-spacing:.14em;text-transform:uppercase;line-height:1;}.footer-brand span{font-family:var(--wordmark);letter-spacing:.12em;}.footer-logo{max-height:24px;width:auto;}.footer-brand img{mix-blend-mode:screen;}.nav-links{display:flex;gap:clamp(1rem,3vw,2.6rem);align-items:center;}.nav-links a{position:relative;padding-bottom:.3rem;font-size:var(--fs-overline);letter-spacing:var(--track-ui);text-transform:uppercase;color:rgba(246,239,227,.78);transition:color var(--m-surface) var(--ease);}.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold-soft);transform:scaleX(0);transform-origin:left;transition:transform var(--m-surface) var(--ease);}.nav-links a:hover{color:var(--gold-soft);}.nav-links a:hover::after{transform:scaleX(1);}.nav-toggle{display:none;background:none;border:0;color:var(--ivory);width:36px;height:36px;cursor:pointer;}.nav-toggle span{display:block;height:1px;background:currentColor;margin:6px 0;transition:transform var(--m-surface) var(--ease),opacity var(--m-surface) var(--ease);}.nav-toggle.open span:first-child{transform:translateY(7px) rotate(45deg);}.nav-toggle.open span:last-child{transform:translateY(-7px) rotate(-45deg);}.mobile-menu{position:fixed;inset:0;z-index:999;background:rgba(9,21,34,.98);opacity:0;visibility:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.4rem;transition:opacity var(--m-surface) var(--ease),visibility var(--m-surface) var(--ease);}.mobile-menu.open{opacity:1;visibility:visible;}.mobile-menu a{font-family:var(--display);font-size:clamp(1.8rem,8vw,3rem);color:var(--ivory);}
+footer{background:#060b11;border-top:1px solid rgba(184,151,90,.14);padding:2.2rem var(--pad);}.footer-inner{max-width:var(--max);margin:0 auto;display:flex;justify-content:space-between;gap:1rem;align-items:center;color:rgba(246,239,227,.68);font-size:var(--fs-ui);letter-spacing:var(--track-ui);text-transform:uppercase;flex-wrap:wrap;}.footer-links{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;}.footer-links a:hover{color:var(--gold-soft);}
+/* Local shell adaptation; source: BuenasBox/cava-gourmet-site/index.html. */
+@font-face{font-family:Alifira;src:url('/Assets/fonts/alifira-wordmark.woff2') format('woff2');font-weight:400;font-display:swap}
+:root{--bg:var(--charcoal);--panel:#1b1813;--stage:#15120e;--paper:var(--ivory);--ink:var(--navy-deep);--muted:#bcb09e;--mint:#b7cfb3;--red:#f0aa96;--line:rgba(184,151,90,.26);--d-window:76% 14%}
+body{background:radial-gradient(ellipse at 76% 12%,rgba(215,184,121,.12),transparent 40%),radial-gradient(ellipse at 5% 40%,rgba(74,23,32,.2),transparent 35%),var(--charcoal);-webkit-font-smoothing:antialiased}
+html{scroll-padding-top:100px}
+.nav{background:rgba(9,21,34,.94)}
+.nav .brand{font-weight:400;font-size:1rem;letter-spacing:normal}
+.nav a,.mobile-menu a,.footer-links a{line-height:1.6}
+.nav .brand-wordmark{white-space:nowrap}
+.nav-toggle{min-width:44px;min-height:44px}
+.mobile-menu{overflow-y:auto;padding:100px 24px 32px;gap:1rem}
+.mobile-menu a{min-height:44px}
+.topbar{margin-top:86px;max-width:1240px;padding:16px 5%;font-size:12px;gap:14px}
+.game-label{font-family:var(--serif);font-size:20px;color:var(--gold-soft);letter-spacing:.04em}
+.game-toolbar-note{color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.topbar #sound{margin-left:auto;display:inline-flex;align-items:center;gap:8px;min-height:44px}
+.home,.game{max-width:1240px}
+.home{padding-top:54px}
+.hero-copy h1{font-family:var(--display);font-weight:400;letter-spacing:-.04em}
+.hero-copy .tagline{font-family:var(--serif);font-style:italic;font-size:28px;color:var(--gold-soft)}
+.hero-copy>p,.result>p,.pick-text,.points-why,.twist-content>p,.howto{color:#d9cebc}
+.primary{background:var(--gold);border-radius:4px;font-weight:600;color:var(--navy-deep);min-height:48px}
+.primary:hover{background:var(--gold-soft)}
+.quiet{border-radius:4px;min-height:44px}
+.scene-preview{background:radial-gradient(ellipse at 55% 30%,rgba(215,184,121,.16),transparent 60%),linear-gradient(145deg,#282119,#0d1118);box-shadow:var(--d-shadow-3)}
+.preview-clue{background:#14120feb}
+.preview-clue b{color:var(--gold-soft)}
+.mission-card{background:linear-gradient(150deg,#211c16,#151310);border-radius:8px}
+.mission-card .number{color:var(--gold-soft)}
+.mission-card p{font-size:13px;line-height:1.5}
+.track-heading{font-weight:500;color:var(--gold-soft)}
+.mission-card h3{font:25px var(--serif);margin:7px 0}
+.mission-list{scroll-margin-top:110px}
+.hud,.decision-bar,.chip,.evidence-box,.breakdown li{background:#111821}
+.hud .quiet{min-width:44px;min-height:44px}
+.counter small{font-size:10px}
+.mission-brief{background:rgba(184,151,90,.06)}
+.table{background:radial-gradient(ellipse at 60% 24%,rgba(215,184,121,.12),transparent 68%),#1b1813}
+.table-top{font-size:10px}
+.bottle-art{width:min(100%,160px);aspect-ratio:160/360}
+.bottle-slot.active .bottle-art{width:min(100%,200px);aspect-ratio:160/360}
+.bottle-meta .object-id{background:#15120e}
+.bottle-meta strong{font-size:17px}
+.bottle-slot:not(.active) .bottle-meta strong{font-size:14px}
+.zone-hotspot .zone-dot{background:#15120ee6;color:var(--gold-soft);width:36px;height:36px;opacity:.95}
+.zone-hotspot:hover .zone-dot,.zone-hotspot:focus-visible .zone-dot{background:#231d16;border-color:var(--gold-soft)}
+.zone-hotspot{min-width:44px;min-height:44px}
+.flip-btn,.twist-option,.presets button,select{background:#111821;min-height:44px}
+.insight{background:#22251e;border-color:rgba(183,207,179,.4)}
+.notebook{background:linear-gradient(135deg,#f6efe3,#eadcc3);color:#221e18}
+.notebook .eyebrow,.result-rule .eyebrow,.clue-empty{color:#635844}
+.clue-entry{font-size:13px;padding-left:44px}
+.clue-entry b{font-size:13px}
+.clue-entry span{color:#504b40}
+.clue-entry .dot{color:#386748}
+.pin-btn{top:3px;width:44px;height:44px;color:#6c604c}
+.pin-btn[aria-pressed=true]{color:#855021}
+.notebook .notes-toggle{color:#221e18}
+.result-rule{color:#221e18}
+.result-rule small{color:#595141}
+.twist-art{background:radial-gradient(ellipse,rgba(184,151,90,.18),transparent 65%),#111821}
+.twist-art>svg:not(.ui-icon){height:140px;width:85px}
+.twist-content>p{line-height:1.65}
+.ui-icon{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.18em;flex-shrink:0;pointer-events:none}
+.result-emblem .ui-icon{width:44px;height:44px}
+.twist-symbol .ui-icon{width:64px;height:64px}
+.symbol .ui-icon{width:26px;height:26px}
+.brief-icon .ui-icon{width:24px;height:24px}
+.zone-dot .ui-icon{width:18px;height:18px}
+.sel-badge{pointer-events:none}
+.sel-badge .ui-icon{width:12px;height:12px}
+.bottle-slot.active .bottle-art .sel-badge{top:-6px}
+.menu-open{overflow:hidden}
+.pin-btn .ui-icon{width:18px;height:18px}
+.preview-clue .ui-icon{width:24px;height:24px}
+.cava-context{max-width:1240px;margin:auto;padding:50px 5%;border-top:1px solid var(--line)}
+.cava-context[hidden]{display:none}
+.cava-context h2{font:36px var(--serif);font-weight:400}
+.cava-context h3{font:25px var(--serif);margin:24px 0 8px}
+.cava-context p{color:#d9cebc;font-size:15px;line-height:1.8;max-width:70ch}
+.cava-context a{color:var(--gold-soft);text-decoration:underline;text-underline-offset:4px}
+.cava-context .context-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.cava-context .primary{color:var(--navy-deep);display:inline-flex;margin-top:12px;text-decoration:none}
+footer .footer-brand img{mix-blend-mode:normal}
+footer{margin-top:36px}
+.footer-inner{font-size:12px}
+.footer-links{gap:1rem}
+.footer-links a{min-height:44px;display:inline-flex;align-items:center}
+.footer-brand span{white-space:nowrap}
+.skip:focus{position:fixed;z-index:1100}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--gold-soft);outline-offset:4px}
+.notebook button:focus-visible{outline-color:#765722}
+@media(min-width:961px) and (max-width:1200px){.nav-links{gap:1rem}.nav-links a{font-size:11px;letter-spacing:.08em}}
+@media(max-width:960px){.nav-links{display:none}.nav-toggle{display:block}.nav{padding:16px 5%}.footer-inner{justify-content:center;text-align:center}.footer-links{justify-content:center}.cava-context .context-grid{grid-template-columns:1fr;gap:20px}}
+@media(max-width:680px){.topbar{margin-top:78px;padding:12px 5%}.game-toolbar-note{display:none}.game-label{font-size:18px}.home{padding-top:28px}.hero-copy h1{font-size:72px}.hero-copy .tagline{font-size:25px}.hero-actions{flex-wrap:wrap}.mission-card h3{font-size:24px}.cava-context{padding-top:28px}.result-emblem .ui-icon{width:36px;height:36px}.counter small{font-size:9px}.hud .quiet{font-size:11px}.steps li{font-size:11px}.flip-btn{font-size:12px}.notebook .notes-toggle{font-size:13px;min-height:44px}.howto-btn{min-height:44px}.wager button{font-size:12px;min-height:44px}.clue-entry{padding-left:44px}.nav .brand-wordmark{font-size:15px}.table-top{letter-spacing:.08em}}
+@media(prefers-reduced-motion:reduce){.mobile-menu,.nav,.nav-toggle span{transition:none}.primary:hover,.mission-card:hover{transform:none}}
+@media(max-width:680px){.bottle-slot.active .bottle-art{width:min(100%,150px);aspect-ratio:160/360}.bottle-slot:not(.active) .bottle-art{aspect-ratio:160/360}}
+
+
+.hero-copy h1 .game-descriptor{display:block;margin-top:1rem;font-family:var(--sans);font-size:14px;line-height:1.5;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
